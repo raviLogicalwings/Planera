@@ -1,0 +1,146 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="BaseMargin">
+        <item name="android:layout_marginTop">@dimen/layout_margin_top</item>
+        <item name="android:layout_marginBottom">@dimen/layout_margin_top</item>
+        <item name="android:layout_marginLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:layout_marginRight">@dimen/activity_horizontal_margin</item>
+    </style>
+
+    <style name="ButtonText">
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="InputEditTextStyle">
+        <item name="android:textSize">@dimen/edit_text_size</item>
+    </style>
+
+
+    <!--Text Sizes-->
+    <style name="ExtraLargeText">
+        <item name="android:textSize">@dimen/extra_large_text_size</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="ExtraLargeTextBlack">
+        <item name="android:textSize">@dimen/extra_large_text_size</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+
+    <style name="ExtraLargeTextBold">
+        <item name="android:textSize">@dimen/extra_large_text_size</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="LargeText">
+        <item name="android:textSize">@dimen/large_text_size</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="LargeTextBlack">
+        <item name="android:textSize">@dimen/large_text_size</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+
+    <style name="LargeTextBold">
+        <item name="android:textSize">@dimen/large_text_size</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="MediumText">
+        <item name="android:textSize">@dimen/medium_text_size</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="MediumTextBlack">
+        <item name="android:textSize">@dimen/medium_text_size</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+
+    <style name="MediumTextBold">
+        <item name="android:textSize">@dimen/medium_text_size</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="NormalText">
+        <item name="android:textSize">@dimen/normal_text_size</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="NormalTextBlack">
+        <item name="android:textSize">@dimen/normal_text_size</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+
+    <style name="NormalTextBold">
+        <item name="android:textSize">@dimen/normal_text_size</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="CardViewStyle" parent="CardView">
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="cardBackgroundColor">@color/colorPrimary</item>
+
+    </style>
+
+    <style name="MySwitch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">@color/colorPrimary</item>
+
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">@color/colorPrimary</item>
+
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">@color/colorGray</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <style name="FullScreenDialogStyle" parent="android:Theme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+    <!--<style name="Base.CardView" parent="android:Widget">-->
+    <!--<item name="cardCornerRadius">@dimen/cardview_default_radius</item>-->
+    <!--<item name="cardElevation">@dimen/cardview_default_elevation</item>-->
+    <!--<item name="cardMaxElevation">@dimen/cardview_default_elevation</item>-->
+    <!--<item name="cardUseCompatPadding">false</item>-->
+    <!--<item name="cardPreventCornerOverlap">true</item>-->
+    <!--</style>-->
+
+</resources>

@@ -1,0 +1,48 @@
+<LinearLayout android:orientation="vertical"
+    android:layout_gravity="center"
+    style="@style/BaseMargin"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <TextView
+            android:padding="@dimen/drawable_padding"
+            android:layout_width="wrap_content"
+            android:id="@+id/text_territory_patch"
+            android:text="Ahmedabad"
+            style="@style/MediumTextBlack"
+            android:textColor="@color/colorGray"
+            android:layout_height="wrap_content" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:id="@+id/input_layout_user_name"
+            android:layout_height="wrap_content">
+
+            <EditText
+
+                style="@style/InputEditTextStyle"
+                android:layout_width="match_parent"
+                android:hint="Enter Gift Name"
+                android:id="@+id/edit_text_name"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                />
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <Button
+
+            android:id="@+id/button_update_gift"
+            android:padding="10dp"
+            style="@style/ButtonText"
+            android:background="@color/colorPrimary"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="20dp"
+            android:layout_gravity="right"
+            android:text="Update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>

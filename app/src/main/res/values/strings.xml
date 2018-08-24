@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">Planera  App</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="user_name">User Name</string>
+    <string name="password">Password</string>
+    <string name="forget_password">Forget Password?</string>
+    <string name="sign_in">Sign In</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="mobile">Mobile Number</string>
+    <string name="gender">Gender</string>
+    <string name="email">Email</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="already_have_an_account_sign_in">Already have an account? Sign in</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="invalid_input">Invalid Input.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="brands_fragment">Brand</string>
+    <string name="POB_fragment">POB</string>
+    <string name="gift_fragment">GIFT</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="new_password">New Password</string>
+    <string name="choose">choose</string>
+    <string name="confirm">Confirm</string>
+    <string name="no_internet">No Internet Connection !!</string>
+    <!--====================================================================================-->
+
+    <!--Google Places Api Key-->
+    <style name="google_places_api_key">AIzaSyAKoSFtnNQG4KAHilYHstYay5s-1Pp33xs</style>
+
+    <!--=======================================================================================-->
+    <!--Category of Brands-->
+
+    <string-array name="brand_category">
+        <item>Low</item>
+        <item>Regular</item>
+        <item>Super</item>
+    </string-array>
+    <string name="title_activity_admin_panel">AdminPanelActivity</string>
+    <string name="gujrat">Gujrat</string>
+    <string name="title_activity_single_list">SingleListActivity</string>
+    <string name="ranbaxy">Ranbaxy</string>
+    <string name="first_name">First Name</string>
+    <string name="_9669893930">9669893930</string>
+    <string name="title_activity_update_chemist">ActivityUpdateChemist</string>
+    <string name="title_activity_add_chemist">ActivityAddChemist</string>
+</resources>

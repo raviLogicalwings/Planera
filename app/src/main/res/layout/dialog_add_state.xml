@@ -1,0 +1,47 @@
+<LinearLayout android:orientation="vertical"
+    style="@style/BaseMargin"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <Spinner
+            android:layout_marginTop="20dp"
+            android:id="@+id/spinner_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </Spinner>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_marginTop="30dp"
+            android:padding="5dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:id="@+id/input_layout_user_name"
+            android:layout_height="wrap_content">
+
+            <EditText
+
+                style="@style/InputEditTextStyle"
+                android:layout_width="match_parent"
+                android:hint="Enter Territory Name"
+                android:id="@+id/edit_text_name"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                />
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <Button
+
+            android:id="@+id/button_state_add"
+            android:padding="10dp"
+            style="@style/ButtonText"
+            android:background="@color/colorPrimary"
+            android:layout_marginTop="30dp"
+
+            android:layout_gravity="right"
+            android:text="Add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
