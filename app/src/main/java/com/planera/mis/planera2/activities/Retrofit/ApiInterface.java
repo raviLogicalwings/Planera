@@ -1,5 +1,7 @@
 package com.planera.mis.planera2.activities.Retrofit;
 
+import android.support.v4.widget.SlidingPaneLayout;
+
 import com.planera.mis.planera2.activities.models.BrandsListResponse;
 import com.planera.mis.planera2.activities.models.ChemistListResponse;
 import com.planera.mis.planera2.activities.models.ChemistResponse;
@@ -12,6 +14,7 @@ import com.planera.mis.planera2.activities.models.GooglePlacesModel.GooglePlaces
 import com.planera.mis.planera2.activities.models.LoginResponse;
 import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.models.PatchListResponse;
+import com.planera.mis.planera2.activities.models.Plans;
 import com.planera.mis.planera2.activities.models.PlansListResponce;
 import com.planera.mis.planera2.activities.models.RegistrationResponse;
 import com.planera.mis.planera2.activities.models.StateListResponse;
@@ -87,6 +90,9 @@ public interface ApiInterface {
 
     @POST(AppConstants.ADD_CHEMIST)
     Call<ChemistResponse> addChemist(@Header("Authorization") String token, @Body Chemists chemists);
+
+    @POST(AppConstants.ADD_PLAN)
+        Call<MainResponse> addPlan(@Header("Authorization") String token, @Body Plans plans);
 
     @GET(AppConstants.DELETE_STATE)
     Call<MainResponse> deleteState(@Header("Authorization") String token, @Query("StateId") int stateId);

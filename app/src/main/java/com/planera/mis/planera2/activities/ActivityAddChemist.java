@@ -1,5 +1,7 @@
 package com.planera.mis.planera2.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
@@ -382,7 +384,9 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
             public void onResponse(Call<ChemistResponse> call, Response<ChemistResponse> response) {
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-                    Toast.makeText(ActivityAddChemist.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    Intent intentSingleList = new Intent(ActivityAddChemist.this, SingleListActivity.class);
+                    setResult(Activity.RESULT_OK, intentSingleList);
+                    finish();
                 }
                 else{
                     Toast.makeText(ActivityAddChemist.this, response.body().getMessage(), Toast.LENGTH_LONG).show();

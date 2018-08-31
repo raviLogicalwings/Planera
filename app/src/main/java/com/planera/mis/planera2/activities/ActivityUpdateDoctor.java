@@ -1,5 +1,6 @@
 package com.planera.mis.planera2.activities;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -337,9 +338,7 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                     Intent intent = new Intent(ActivityUpdateDoctor.this, SingleListActivity.class);
-                    intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.DOCTOR_FRAGMENT);
-                    startActivity(intent);
-                    Toast.makeText(ActivityUpdateDoctor.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    setResult(Activity.RESULT_OK, intent);
                     finish();
                 }
                 else{

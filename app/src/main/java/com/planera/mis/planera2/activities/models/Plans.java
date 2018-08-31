@@ -6,13 +6,13 @@ import com.google.gson.annotations.SerializedName;
 public class Plans{
 
 	@SerializedName("DoctorId")
-	private int doctorId;
+	private String doctorId;
 
 	@SerializedName("Status")
 	private String status;
 
 	@SerializedName("TerritoryId")
-	private int territoryId;
+	private String territoryId;
 
 	@SerializedName("Month")
 	private String month;
@@ -21,31 +21,31 @@ public class Plans{
 	private String year;
 
 	@SerializedName("UserId")
-	private int userId;
+	private String userId;
 
 	@SerializedName("PatchName")
 	private String patchName;
 
 	@SerializedName("PlanId")
-	private int planId;
+	private String planId;
 
 	@SerializedName("Calls")
 	private String calls;
 
 	@SerializedName("PatchId")
-	private int patchId;
+	private String patchId;
 
 	@SerializedName("ChemistsId")
-	private int chemistsId;
+	private String chemistsId;
 
 	@SerializedName("Remark")
 	private String remark;
 
-	public void setDoctorId(int doctorId){
+	public void setDoctorId(String doctorId){
 		this.doctorId = doctorId;
 	}
 
-	public int getDoctorId(){
+	public String getDoctorId(){
 		return doctorId;
 	}
 
@@ -57,11 +57,11 @@ public class Plans{
 		return status;
 	}
 
-	public void setTerritoryId(int territoryId){
+	public void setTerritoryId(String territoryId){
 		this.territoryId = territoryId;
 	}
 
-	public int getTerritoryId(){
+	public String getTerritoryId(){
 		return territoryId;
 	}
 
@@ -81,11 +81,11 @@ public class Plans{
 		return year;
 	}
 
-	public void setUserId(int userId){
+	public void setUserId(String userId){
 		this.userId = userId;
 	}
 
-	public int getUserId(){
+	public String getUserId(){
 		return userId;
 	}
 
@@ -97,11 +97,11 @@ public class Plans{
 		return patchName;
 	}
 
-	public void setPlanId(int planId){
+	public void setPlanId(String planId){
 		this.planId = planId;
 	}
 
-	public int getPlanId(){
+	public String getPlanId(){
 		return planId;
 	}
 
@@ -113,19 +113,19 @@ public class Plans{
 		return calls;
 	}
 
-	public void setPatchId(int patchId){
+	public void setPatchId(String patchId){
 		this.patchId = patchId;
 	}
 
-	public int getPatchId(){
+	public String getPatchId(){
 		return patchId;
 	}
 
-	public void setChemistsId(int chemistsId){
+	public void setChemistsId(String chemistsId){
 		this.chemistsId = chemistsId;
 	}
 
-	public int getChemistsId(){
+	public String getChemistsId(){
 		return chemistsId;
 	}
 

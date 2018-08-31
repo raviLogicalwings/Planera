@@ -32,6 +32,7 @@ public class AppConstants {
     public static final String ADD_PRODUCTS= "product/addProduct";
     public static final String ADD_DOCTORS = "doctor/addDoctor";
     public static final String ADD_CHEMIST = "chemist/addChemist";
+    public static final String ADD_PLAN = "plan/addPlan";
 
     public static final String DELETE_STATE = "state/deleteState";
     public static final String DELETE_GIFT = "gift/deleteGift";
@@ -145,10 +146,12 @@ public class AppConstants {
     public static final int DOCTOR_FRAGMENT = 6;
     public static final int CHEMIST_FRAGMENT = 7;
     public static final int USER_FRAGMENT = 8;
+    public static final int PLAN_FRAGMENT = 9;
     public static final String KEY_TOUCHED_FRAGMENT = "key_touched_fragment";
 
 
     public static final String IS_CHANGES = "is_changes";
+
 
 
 }

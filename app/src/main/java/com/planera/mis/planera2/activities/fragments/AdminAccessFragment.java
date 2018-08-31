@@ -23,6 +23,7 @@ public class AdminAccessFragment extends BaseFragment implements View.OnClickLis
     private CardView cardDoctor;
     private CardView cardChemist;
     private CardView cardUser;
+    private CardView cardPlans;
     public static AdminAccessFragment instance;
 
 
@@ -73,6 +74,7 @@ public class AdminAccessFragment extends BaseFragment implements View.OnClickLis
         cardDoctor = view.findViewById(R.id.card_doctor);
         cardChemist = view.findViewById(R.id.card_chemist);
         cardUser = view.findViewById(R.id.card_user);
+        cardPlans = view.findViewById(R.id.card_plans);
 
         cardState.setOnClickListener(this);
         cardTeritory.setOnClickListener(this);
@@ -82,6 +84,7 @@ public class AdminAccessFragment extends BaseFragment implements View.OnClickLis
         cardDoctor.setOnClickListener(this);
         cardChemist.setOnClickListener(this);
         cardUser.setOnClickListener(this);
+        cardPlans.setOnClickListener(this);
 
     }
 
@@ -133,6 +136,9 @@ public class AdminAccessFragment extends BaseFragment implements View.OnClickLis
             case R.id.card_user:
                 callIntent(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.USER_FRAGMENT);
                 break;
+
+            case R.id.card_plans:
+                callIntent(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.PLAN_FRAGMENT);
         }
 
     }

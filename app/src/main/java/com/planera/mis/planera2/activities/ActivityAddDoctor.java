@@ -1,10 +1,10 @@
 package com.planera.mis.planera2.activities;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -23,13 +23,11 @@ import com.planera.mis.planera2.activities.adapters.BasicCustomAdapter;
 import com.planera.mis.planera2.activities.models.DoctorResponse;
 import com.planera.mis.planera2.activities.models.Doctors;
 import com.planera.mis.planera2.activities.models.GooglePlacesModel.GooglePlaces;
-import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.models.PatchListResponse;
 import com.planera.mis.planera2.activities.models.Patches;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.InternetConnection;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -307,7 +305,7 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
 
 
     public void addDoctorsApi(String token, Doctors doctors) {
-        processDialog.showDialog(mContext, false);
+        processDialog.showDialog(ActivityAddDoctor.this, false);
         Call<DoctorResponse> call = apiInterface.addDoctor(token, doctors);
         call.enqueue(new Callback<DoctorResponse>() {
             @Override
@@ -316,10 +314,7 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
                 Log.e("Add Doctor", "onResponse: " + new Gson().toJson(response.body()));
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     Intent intent = new Intent(ActivityAddDoctor.this, SingleListActivity.class);
-                    intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.DOCTOR_FRAGMENT);
-                    intent.putExtra(AppConstants.IS_CHANGES, true);
-                    startActivity(intent);
-                    Toast.makeText(ActivityAddDoctor.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    setResult(Activity.RESULT_OK,intent);
                     finish();
                 } else {
                     Toast.makeText(ActivityAddDoctor.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
@@ -364,50 +359,6 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
 
 
 
-    public void updateDoctorsDetails(String token, Doctors doctors){
-        processDialog.showDialog(ActivityAddDoctor.this, false);
-        Call<MainResponse> call = apiInterface.updateDoctorDetails(token, doctors);
-        call.enqueue(new Callback<MainResponse>() {
-            @Override
-            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
-                processDialog.dismissDialog();
-                if (response.code()==400){
-
-                    try {
-                        Toast.makeText(mContext, response.errorBody().string(), Toast.LENGTH_LONG).show();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-                else{
-
-
-                if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-                    Intent intent = new Intent(ActivityAddDoctor.this, SingleListActivity.class);
-                    intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.DOCTOR_FRAGMENT);
-                    intent.putExtra(AppConstants.IS_CHANGES, true);
-                    startActivity(intent);
-                    isUpdateCall= false;
-                    Toast.makeText(ActivityAddDoctor.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                    finish();
-                }
-                else{
-                    Toast.makeText(ActivityAddDoctor.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
-
-                }
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MainResponse> call, Throwable t) {
-                processDialog.dismissDialog();
-                Toast.makeText(ActivityAddDoctor.this, t.getMessage(), Toast.LENGTH_LONG).show();
-
-            }
-        });
-    }
 
     public void getAddressLatLong(String input) {
         processDialog.showDialog(ActivityAddDoctor.this, false);
@@ -422,12 +373,7 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
                         doctors.setLatitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLat() + "");
                         doctors.setLatitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLng() + "");
                         Log.e("Doctors Object", "onResponse: " + new Gson().toJson(doctors));
-                        if (isUpdateCall){
-                            updateDoctorsDetails(token, doctors);
-                        }
-                        else {
                             addDoctorsApi(token, doctors);
-                        }
                     }
                 } else if (response.body().getStatus().equals(AppConstants.STATUS_ZERO_RESULTS)) {
                     Snackbar.make(rootView, "Address not found, Please Try again", Snackbar.LENGTH_LONG).show();

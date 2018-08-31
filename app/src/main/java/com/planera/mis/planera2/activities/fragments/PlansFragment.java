@@ -15,15 +15,12 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.FragmentDialog.editDialogs.EditStateDialog;
 import com.planera.mis.planera2.activities.Retrofit.ApiClient;
 import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
-import com.planera.mis.planera2.activities.adapters.StateAdapter;
+import com.planera.mis.planera2.activities.adapters.PlanListAdapter;
 import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.models.Plans;
 import com.planera.mis.planera2.activities.models.PlansListResponce;
-import com.planera.mis.planera2.activities.models.StateListResponse;
-import com.planera.mis.planera2.activities.models.States;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 
 import java.util.List;
@@ -83,7 +80,7 @@ public class PlansFragment extends BaseFragment{
     @Override
     protected void initUi() {
         super.initUi();
-        listViewPlans = view.findViewById(R.id.list_state);
+        listViewPlans = view.findViewById(R.id.list_plans);
         layoutNoData = view.findViewById(R.id.layout_no_data);
     }
 
@@ -133,7 +130,7 @@ public class PlansFragment extends BaseFragment{
                         System.out.println(plansList.size());
                         listViewPlans.setVisibility(View.VISIBLE);
                         layoutNoData.setVisibility(View.GONE);
-//                        initAdapter(plansList, listViewPlans);
+                        initAdapter(plansList, listViewPlans);
                     } else {
                         listViewPlans.setVisibility(View.GONE);
                         layoutNoData.setVisibility(View.VISIBLE);
@@ -152,33 +149,24 @@ public class PlansFragment extends BaseFragment{
 
     }
 
-//    public void initAdapter(List<Plans> plansData, RecyclerView recyclerView) {
-//
-//        StateAdapter adapter = new StateAdapter(getContext(), plansData, (postion, view) -> {
-//            switch (view.getId()) {
-//                case R.id.img_delete:
-////                    Log.e(TAG, "Clicked Item of State List: "+statesList.get(postion).getStateId() );
-//                    popupDialog(token, plansData.get(postion).getPlanId());
-////                    deleteStateApi(token, statesList.get(postion).getStateId());
-//                    break;
-//
-//                case R.id.img_edit:
-//                    EditStateDialog editStateDialog = new EditStateDialog();
-//                    Bundle bundle = new Bundle();
-//                    bundle.putString("item", plansData.get(postion).get);
-////                    bundle.putInt("id", statesList.get(postion).getStateId());
-////                    editStateDialog.setArguments(bundle);
-//                    editStateDialog.setTargetFragment(this, 0);
-//                    editStateDialog.show(getFragmentManager(), "Edit State");
-//                    break;
-//            }
-//        });
-//        setAdapter(recyclerView, adapter);
-//
-//    }
+    public void initAdapter(List<Plans> plansData, RecyclerView recyclerView) {
+
+        PlanListAdapter adapter;
+        adapter = new PlanListAdapter(getContext(), plansData, (postion, view) -> {
+            switch (view.getId()) {
+                case R.id.img_delete:
+                    break;
+
+                case R.id.img_edit:
+                    break;
+            }
+        });
+        setAdapter(recyclerView, adapter);
+
+    }
 
 
-    public void setAdapter(RecyclerView recyclerView, StateAdapter adapter) {
+    public void setAdapter(RecyclerView recyclerView, PlanListAdapter adapter) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.hasFixedSize();
         recyclerView.setAdapter(adapter);
