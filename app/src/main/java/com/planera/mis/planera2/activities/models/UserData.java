@@ -19,6 +19,9 @@ public class UserData {
 	@SerializedName("Phone2")
 	private String phone2;
 
+	@SerializedName("OTP")
+	private String otp;
+
 	@SerializedName("DOB")
 	private String dOB;
 
@@ -343,6 +346,15 @@ public class UserData {
 
 	public String getExperienceYear(){
 		return experienceYear;
+	}
+
+
+	public String getOtp() {
+		return otp;
+	}
+
+	public void setOtp(String otp) {
+		this.otp = otp;
 	}
 
 	@Override

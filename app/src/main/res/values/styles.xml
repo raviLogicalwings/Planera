@@ -32,6 +32,7 @@
     </style>
 
     <style name="InputEditTextStyle">
+        <item name="android:padding">@dimen/small_padding</item>
         <item name="android:textSize">@dimen/edit_text_size</item>
     </style>
 
@@ -142,5 +143,6 @@
     <!--<item name="cardUseCompatPadding">false</item>-->
     <!--<item name="cardPreventCornerOverlap">true</item>-->
     <!--</style>-->
+
 
 </resources>

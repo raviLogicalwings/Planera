@@ -1,5 +1,6 @@
 package com.planera.mis.planera2.activities.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -139,7 +140,8 @@ public class TerritoryListFragment extends BaseFragment implements EditTerritory
         TerritoryAdapter adapter = new TerritoryAdapter(getContext(), territorysList, (view, position) -> {
             switch (view.getId()){
                 case R.id.img_delete:
-                    deleteTerritory(token, territorysList.get(position).getTerritoryId());
+                    popupDialog(token, territorysList.get(position).getTerritoryId());
+//                    deleteTerritory(token, territorysList.get(position).getTerritoryId());
                     break;
 
                 case R.id.img_edit:
@@ -175,6 +177,26 @@ public class TerritoryListFragment extends BaseFragment implements EditTerritory
     @Override
     public void onDetach() {
         super.onDetach();
+
+    }
+
+
+    public void popupDialog( String token, int territoryId){
+        AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
+
+        alertDialog.setMessage("Are you sure you want to delete this?");
+
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", (dialogInterface, i) -> {
+            dialogInterface.cancel();
+            deleteTerritory(token, territoryId );
+        });
+
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", (dialog, which) -> {
+            dialog.cancel();
+        });
+
+        alertDialog.show();
 
     }
 

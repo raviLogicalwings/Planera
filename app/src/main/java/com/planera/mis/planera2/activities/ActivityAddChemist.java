@@ -105,6 +105,8 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
         buttonAddChemist = findViewById(R.id.button_add_chemist);
         buttonAddChemist.setOnClickListener(this);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Add Chemist's Detail");
+        toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
         prefferdMeetTime = new ArrayList<>();
         prefferdMeetTime.add("Morning");

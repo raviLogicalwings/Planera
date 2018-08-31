@@ -1,11 +1,12 @@
 <LinearLayout android:orientation="vertical"
-    android:layout_gravity="center"
     style="@style/BaseMargin"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
         <Spinner
+            android:padding="5dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
             android:id="@+id/spinner_state"
             android:layout_width="match_parent"
@@ -14,6 +15,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_marginTop="30dp"
+            android:padding="5dp"
+            android:layout_gravity="center_horizontal"
             android:layout_width="match_parent"
             android:id="@+id/input_layout_user_name"
             android:layout_height="wrap_content">
@@ -38,9 +41,8 @@
             style="@style/ButtonText"
             android:background="@color/colorPrimary"
             android:layout_marginTop="30dp"
-            android:layout_marginRight="20dp"
             android:layout_gravity="right"
             android:text="Add"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

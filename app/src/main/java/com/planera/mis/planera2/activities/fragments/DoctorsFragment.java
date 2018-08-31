@@ -1,8 +1,10 @@
 package com.planera.mis.planera2.activities.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,6 +25,8 @@ import com.planera.mis.planera2.activities.models.DoctorsListResponce;
 import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 import java.util.List;
+import java.util.logging.Level;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -95,17 +99,19 @@ public class DoctorsFragment extends BaseFragment{
                 Log.e(TAG, "onResponse: "+new Gson().toJson(response.body()));
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                     doctorsList = response.body().getData();
-                    if (doctorsList.size()>0) {
-                        System.out.println(doctorsList.size());
+                    if (doctorsList!=null) {
                         listViewDoctors.setVisibility(View.VISIBLE);
+                        layoutNoData.setVisibility(View.GONE);
+                        System.out.println(doctorsList.size());
+
                         initAdapter(doctorsList, listViewDoctors);
                     }
-                    {
-                        listViewDoctors.setVisibility(View.GONE);
-                        layoutNoData.setVisibility(View.VISIBLE);
-                    }
-
             }
+            else{
+                    layoutNoData.setVisibility(View.VISIBLE);
+                    listViewDoctors.setVisibility(View.GONE);
+                    Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
+                }
 
 
             }
@@ -123,7 +129,7 @@ public class DoctorsFragment extends BaseFragment{
         DoctorsListAdapter adapter = new DoctorsListAdapter(mContext, list, (view, position) -> {
             switch (view.getId()){
                 case R.id.img_doctor_delete:
-                    deleteDoctorApi(token, doctorsList.get(position).getDoctorId());
+                    popupDialog(token, doctorsList.get(position).getDoctorId());
                     break;
 
                 case R.id.img_doctor_edit:
@@ -180,6 +186,26 @@ public class DoctorsFragment extends BaseFragment{
     @Override
     public void onDetach() {
         super.onDetach();
+
+    }
+
+
+    public void popupDialog( String token, int doctorId){
+        AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
+
+        alertDialog.setMessage("Are you sure you want to delete this?");
+
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", (dialogInterface, i) -> {
+            dialogInterface.cancel();
+            deleteDoctorApi(token, doctorId );
+        });
+
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", (dialog, which) -> {
+            dialog.cancel();
+        });
+
+        alertDialog.show();
 
     }
 

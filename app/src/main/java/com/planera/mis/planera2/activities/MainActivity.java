@@ -56,9 +56,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void initUi() {
         super.initUi();
-        navigation  = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation  = findViewById(R.id.navigation);
         BottomNavigationViewHelper.removeShiftMode(navigation);
-        mTextMessage = (TextView) findViewById(R.id.message);
+        mTextMessage = findViewById(R.id.message);
     }
 
     @Override

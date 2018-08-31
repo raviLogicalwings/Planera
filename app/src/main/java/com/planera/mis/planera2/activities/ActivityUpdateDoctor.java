@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -19,8 +18,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.adapters.BasicCustomAdapter;
-import com.planera.mis.planera2.activities.models.DoctorResponse;
 import com.planera.mis.planera2.activities.models.Doctors;
 import com.planera.mis.planera2.activities.models.GooglePlacesModel.GooglePlaces;
 import com.planera.mis.planera2.activities.models.MainResponse;
@@ -29,7 +26,6 @@ import com.planera.mis.planera2.activities.models.Patches;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.InternetConnection;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -38,9 +34,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ActivityAddDoctor extends BaseActivity implements View.OnClickListener{
+public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickListener{
     private Doctors doctors;
-    private List<String> prefferdMeetTime;
+    private List<String> prefferedMeetTime;
     private List<String> meetFequrency;
     private List<Patches> patches;
     private AppBarLayout appBar;
@@ -65,13 +61,11 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
     private EditText textDoctorState;
     private EditText textDoctorPincode;
     private Button buttonAddDoctor;
-    private BasicCustomAdapter patchBasicAdapter;
     private String dateOfBirthString;
     int meetTime;
     int meetFreq;
     int patchId;
     int doctorId;
-    private boolean isUpdateCall;
     String firstNameStr, middleNameStr, lastNameStr, emailStr, dobStr, qualificationStr, specializationStr, phoneStr,
             address1Str, address2Str, address3Str, address4Str, districtStr, cityStr, stateStr, pincodeStr;
 
@@ -113,12 +107,10 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
         buttonAddDoctor.setOnClickListener(this);
         textDoctorDob.setOnClickListener(this);
         setSupportActionBar(toolbarDoctor);
-
-        toolbarDoctor.setNavigationOnClickListener(view -> onBackPressed());
-        getSupportActionBar().setTitle("Add Doctor's Detail");
-        prefferdMeetTime = new ArrayList<>();
-        prefferdMeetTime.add("Morning");
-        prefferdMeetTime.add("Evening");
+        getSupportActionBar().setTitle("Update Doctor's Detail");
+        prefferedMeetTime = new ArrayList<>();
+        prefferedMeetTime.add("Morning");
+        prefferedMeetTime.add("Evening");
         meetFequrency = new ArrayList<>();
         meetFequrency.add("1");
         meetFequrency.add("2");
@@ -127,7 +119,7 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
         meetFequrency.add("5");
 
         setArrayAdapter(meetFequrency, spinnerFrequency);
-        setArrayAdapter(prefferdMeetTime, spinnerMeetTime);
+        setArrayAdapter(prefferedMeetTime, spinnerMeetTime);
 
         if (intent != null) {
             loadFromIntent(intent);
@@ -141,7 +133,7 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
         spinnerMeetTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (prefferdMeetTime.get(i).equals(AppConstants.KEY_MORNING_TIME)) {
+                if (prefferedMeetTime.get(i).equals(AppConstants.KEY_MORNING_TIME)) {
                     meetTime = AppConstants.MORNING;
                 } else {
                     meetTime = AppConstants.EVENING;
@@ -151,7 +143,7 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                if (prefferdMeetTime.get(adapterView.getSelectedItemPosition()).equals(AppConstants.KEY_MORNING_TIME)) {
+                if (prefferedMeetTime.get(adapterView.getSelectedItemPosition()).equals(AppConstants.KEY_MORNING_TIME)) {
                     meetTime = AppConstants.MORNING;
                 } else {
                     meetTime = AppConstants.EVENING;
@@ -174,7 +166,6 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
         });
 
         getPatchList(token);
-        spinnerPatchId.setAdapter(patchBasicAdapter);
 
         spinnerPatchId.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -269,71 +260,44 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
             if (doctorId!=0){
                 doctors.setDoctorId(doctorId);
 
-                }
             }
-            doctors.setMeetFrequency(meetFreq + "");
-            doctors.setPreferredMeetTime(meetTime + "");
-            doctors.setFirstName(firstNameStr);
-            doctors.setMiddleName(middleNameStr);
-            doctors.setLastName(lastNameStr);
-            doctors.setDOB(dobStr);
-            doctors.setPhone(phoneStr);
-            doctors.setEmail(emailStr);
-            doctors.setPhone(phoneStr);
-            doctors.setAddress1(address1Str);
-            doctors.setAddress2(address2Str);
-            doctors.setAddress3(address3Str);
-            doctors.setAddress4(address4Str);
-            doctors.setCity(cityStr);
-            doctors.setDistrict(districtStr);
-            doctors.setQualifications(qualificationStr);
-            doctors.setSpecializations(specializationStr);
-            doctors.setPincode(pincodeStr);
-            doctors.setState(stateStr);
-            doctors.setPatchId(patchId + "");
-            doctors.setStatus("1");
-            doctors.setCRM("1");
+        }
+        doctors.setMeetFrequency(meetFreq + "");
+        doctors.setPreferredMeetTime(meetTime + "");
+        doctors.setFirstName(firstNameStr);
+        doctors.setMiddleName(middleNameStr);
+        doctors.setLastName(lastNameStr);
+        doctors.setDOB(dobStr);
+        doctors.setPhone(phoneStr);
+        doctors.setEmail(emailStr);
+        doctors.setPhone(phoneStr);
+        doctors.setAddress1(address1Str);
+        doctors.setAddress2(address2Str);
+        doctors.setAddress3(address3Str);
+        doctors.setAddress4(address4Str);
+        doctors.setCity(cityStr);
+        doctors.setDistrict(districtStr);
+        doctors.setQualifications(qualificationStr);
+        doctors.setSpecializations(specializationStr);
+        doctors.setPincode(pincodeStr);
+        doctors.setState(stateStr);
+        doctors.setPatchId(patchId + "");
+        doctors.setStatus("1");
+        doctors.setCRM("1");
 
 
-            if (InternetConnection.isNetworkAvailable(ActivityAddDoctor.this)) {
+        if (InternetConnection.isNetworkAvailable(ActivityUpdateDoctor.this)) {
 
-                    getAddressLatLong(address1Str + ", " + pincodeStr);
+            getAddressLatLong(address1Str + ", " + pincodeStr);
 
-            } else {
-                Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
-            }
+        } else {
+            Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+        }
 
     }
 
 
-    public void addDoctorsApi(String token, Doctors doctors) {
-        processDialog.showDialog(mContext, false);
-        Call<DoctorResponse> call = apiInterface.addDoctor(token, doctors);
-        call.enqueue(new Callback<DoctorResponse>() {
-            @Override
-            public void onResponse(Call<DoctorResponse> call, Response<DoctorResponse> response) {
-                processDialog.dismissDialog();
-                Log.e("Add Doctor", "onResponse: " + new Gson().toJson(response.body()));
-                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
-                    Intent intent = new Intent(ActivityAddDoctor.this, SingleListActivity.class);
-                    intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.DOCTOR_FRAGMENT);
-                    intent.putExtra(AppConstants.IS_CHANGES, true);
-                    startActivity(intent);
-                    Toast.makeText(ActivityAddDoctor.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                    finish();
-                } else {
-                    Toast.makeText(ActivityAddDoctor.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
 
-            @Override
-            public void onFailure(Call<DoctorResponse> call, Throwable t) {
-                processDialog.dismissDialog();
-                Toast.makeText(ActivityAddDoctor.this, t.getMessage(), Toast.LENGTH_LONG).show();
-
-            }
-        });
-    }
 
     public void getPatchList(String token) {
         Call<PatchListResponse> call = apiInterface.patchList(token);
@@ -356,7 +320,7 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
 
             @Override
             public void onFailure(Call<PatchListResponse> call, Throwable t) {
-                Toast.makeText(ActivityAddDoctor.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(ActivityUpdateDoctor.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -365,37 +329,21 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
 
 
     public void updateDoctorsDetails(String token, Doctors doctors){
-        processDialog.showDialog(ActivityAddDoctor.this, false);
+        processDialog.showDialog(ActivityUpdateDoctor.this, false);
         Call<MainResponse> call = apiInterface.updateDoctorDetails(token, doctors);
         call.enqueue(new Callback<MainResponse>() {
             @Override
             public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
                 processDialog.dismissDialog();
-                if (response.code()==400){
-
-                    try {
-                        Toast.makeText(mContext, response.errorBody().string(), Toast.LENGTH_LONG).show();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-                else{
-
-
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-                    Intent intent = new Intent(ActivityAddDoctor.this, SingleListActivity.class);
+                    Intent intent = new Intent(ActivityUpdateDoctor.this, SingleListActivity.class);
                     intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.DOCTOR_FRAGMENT);
-                    intent.putExtra(AppConstants.IS_CHANGES, true);
                     startActivity(intent);
-                    isUpdateCall= false;
-                    Toast.makeText(ActivityAddDoctor.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(ActivityUpdateDoctor.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
                     finish();
                 }
                 else{
-                    Toast.makeText(ActivityAddDoctor.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
-
-                }
+                    Toast.makeText(ActivityUpdateDoctor.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
 
                 }
             }
@@ -403,14 +351,14 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
             @Override
             public void onFailure(Call<MainResponse> call, Throwable t) {
                 processDialog.dismissDialog();
-                Toast.makeText(ActivityAddDoctor.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(ActivityUpdateDoctor.this, t.getMessage(), Toast.LENGTH_LONG).show();
 
             }
         });
     }
 
     public void getAddressLatLong(String input) {
-        processDialog.showDialog(ActivityAddDoctor.this, false);
+        processDialog.showDialog(ActivityUpdateDoctor.this, false);
         Call<GooglePlaces> call = apiInterfaceForGooglePalces.getPlaceLatLong(input, AppConstants.INPUT_TYPE, AppConstants.FIELDS, AppConstants.KEY_GOOGLE_PLACES);
         call.enqueue(new Callback<GooglePlaces>() {
             @Override
@@ -422,12 +370,9 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
                         doctors.setLatitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLat() + "");
                         doctors.setLatitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLng() + "");
                         Log.e("Doctors Object", "onResponse: " + new Gson().toJson(doctors));
-                        if (isUpdateCall){
+
                             updateDoctorsDetails(token, doctors);
-                        }
-                        else {
-                            addDoctorsApi(token, doctors);
-                        }
+
                     }
                 } else if (response.body().getStatus().equals(AppConstants.STATUS_ZERO_RESULTS)) {
                     Snackbar.make(rootView, "Address not found, Please Try again", Snackbar.LENGTH_LONG).show();
@@ -441,14 +386,13 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
             public void onFailure(Call<GooglePlaces> call, Throwable t) {
                 processDialog.dismissDialog();
                 Log.e("AddDoctorActivity", "onFailure: " + t.getMessage());
-                Toast.makeText(ActivityAddDoctor.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActivityUpdateDoctor.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
 
     public void loadFromIntent(Intent intent) {
-        isUpdateCall = true;
         textDoctorFirstName.setText(intent.getStringExtra(AppConstants.FIRST_NAME));
         textDoctorMiddleName.setText(intent.getStringExtra(AppConstants.MIDDLE_NAME));
         textDoctorLastName.setText(intent.getStringExtra(AppConstants.LAST_NAME));
@@ -485,11 +429,11 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
         int month = dateOfBirth.get(Calendar.MONTH);
         int day = dateOfBirth.get(Calendar.DATE);
         DatePickerDialog.OnDateSetListener listener = (view, year1, monthOfYear, dayOfMonth) -> {
-           monthOfYear++;
+            monthOfYear++;
             dateOfBirthString = year1 + "-" + monthOfYear + "-" + dayOfMonth;
             textDoctorDob.setText(dateOfBirthString);
         };
-        DatePickerDialog dpDialog = new DatePickerDialog(ActivityAddDoctor.this, listener, year, month, day);
+        DatePickerDialog dpDialog = new DatePickerDialog(ActivityUpdateDoctor.this, listener, year, month, day);
         dpDialog.show();
 
     }

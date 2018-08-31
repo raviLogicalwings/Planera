@@ -3,6 +3,7 @@ package com.planera.mis.planera2.activities.fragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,6 +20,8 @@ import com.planera.mis.planera2.activities.Retrofit.ApiClient;
 import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
 import com.planera.mis.planera2.activities.adapters.StateAdapter;
 import com.planera.mis.planera2.activities.models.MainResponse;
+import com.planera.mis.planera2.activities.models.Plans;
+import com.planera.mis.planera2.activities.models.PlansListResponce;
 import com.planera.mis.planera2.activities.models.StateListResponse;
 import com.planera.mis.planera2.activities.models.States;
 import com.planera.mis.planera2.activities.utils.AppConstants;
@@ -31,22 +34,22 @@ import retrofit2.Response;
 
 import static android.content.ContentValues.TAG;
 
-public class StateListFragment extends BaseFragment implements EditStateDialog.OnDismissEditDialogListener {
-    public static StateListFragment instance;
+public class PlansFragment extends BaseFragment{
+    public static PlansFragment instance;
     private View view;
     private ApiInterface apiInterface;
-    private List<States> statesList = null;
-    private RecyclerView listViewStates;
+    private List<Plans> plansList = null;
+    private RecyclerView listViewPlans;
     private LinearLayout layoutNoData;
 
 
-    public StateListFragment() {
+    public PlansFragment() {
 
     }
 
-    public static android.support.v4.app.Fragment newInstance() {
+    public static Fragment newInstance() {
         if (instance == null) {
-            instance = new StateListFragment();
+            instance = new PlansFragment();
         }
 
         return instance;
@@ -62,7 +65,7 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_state_list, container, false);
+        view = inflater.inflate(R.layout.fragment_plans_list, container, false);
         initUi();
         initData();
         return view;
@@ -80,7 +83,7 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
     @Override
     protected void initUi() {
         super.initUi();
-        listViewStates = view.findViewById(R.id.list_state);
+        listViewPlans = view.findViewById(R.id.list_state);
         layoutNoData = view.findViewById(R.id.layout_no_data);
     }
 
@@ -95,7 +98,7 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
                 if (response!= null){
                     if (response.body().getStatusCode()== AppConstants.RESULT_OK){
                         Toast.makeText(mContext, response.body().getMessage(),Toast.LENGTH_LONG).show();
-                        manager.beginTransaction().detach(StateListFragment.this).attach(StateListFragment.this).commit();
+                        manager.beginTransaction().detach(PlansFragment.this).attach(PlansFragment.this).commit();
                     }
                     else{
                         Toast.makeText(mContext, response.body().getMessage(),Toast.LENGTH_LONG).show();
@@ -118,21 +121,21 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
 
     public void getStatesList(String token) {
         processDialog.showDialog(mContext, false);
-        Call<StateListResponse> call = apiInterface.statesListApi(token);
-        call.enqueue(new Callback<StateListResponse>() {
+        Call<PlansListResponce> call = apiInterface.planList(token);
+        call.enqueue(new Callback<PlansListResponce>() {
             @Override
-            public void onResponse(Call<StateListResponse> call, Response<StateListResponse> response) {
+            public void onResponse(Call<PlansListResponce> call, Response<PlansListResponce> response) {
                 processDialog.dismissDialog();
                 Log.e(TAG, "onResponse: " + new Gson().toJson(response.body()));
                 if (response != null) {
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
-                        statesList = response.body().getData();
-                        System.out.println(statesList.size());
-                        listViewStates.setVisibility(View.VISIBLE);
+                        plansList = response.body().getData();
+                        System.out.println(plansList.size());
+                        listViewPlans.setVisibility(View.VISIBLE);
                         layoutNoData.setVisibility(View.GONE);
-                        initAdapter(statesList, listViewStates);
+//                        initAdapter(plansList, listViewPlans);
                     } else {
-                        listViewStates.setVisibility(View.GONE);
+                        listViewPlans.setVisibility(View.GONE);
                         layoutNoData.setVisibility(View.VISIBLE);
                     }
 
@@ -141,7 +144,7 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
             }
 
             @Override
-            public void onFailure(Call<StateListResponse> call, Throwable t) {
+            public void onFailure(Call<PlansListResponce> call, Throwable t) {
                 processDialog.dismissDialog();
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -149,30 +152,30 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
 
     }
 
-    public void initAdapter(List<States> statesData, RecyclerView recyclerView) {
-
-        StateAdapter adapter = new StateAdapter(getContext(), statesData, (postion, view) -> {
-            switch (view.getId()) {
-                case R.id.img_delete:
-//                    Log.e(TAG, "Clicked Item of State List: "+statesList.get(postion).getStateId() );
-                    popupDialog(token, statesList.get(postion).getStateId());
-//                    deleteStateApi(token, statesList.get(postion).getStateId());
-                    break;
-
-                case R.id.img_edit:
-                    EditStateDialog editStateDialog = new EditStateDialog();
-                            Bundle bundle = new Bundle();
-                            bundle.putString("item", statesList.get(postion).getName());
-                            bundle.putInt("id", statesList.get(postion).getStateId());
-                            editStateDialog.setArguments(bundle);
-                            editStateDialog.setTargetFragment(this, 0);
-                    editStateDialog.show(getFragmentManager(), "Edit State");
-                    break;
-            }
-        });
-        setAdapter(recyclerView, adapter);
-
-    }
+//    public void initAdapter(List<Plans> plansData, RecyclerView recyclerView) {
+//
+//        StateAdapter adapter = new StateAdapter(getContext(), plansData, (postion, view) -> {
+//            switch (view.getId()) {
+//                case R.id.img_delete:
+////                    Log.e(TAG, "Clicked Item of State List: "+statesList.get(postion).getStateId() );
+//                    popupDialog(token, plansData.get(postion).getPlanId());
+////                    deleteStateApi(token, statesList.get(postion).getStateId());
+//                    break;
+//
+//                case R.id.img_edit:
+//                    EditStateDialog editStateDialog = new EditStateDialog();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString("item", plansData.get(postion).get);
+////                    bundle.putInt("id", statesList.get(postion).getStateId());
+////                    editStateDialog.setArguments(bundle);
+//                    editStateDialog.setTargetFragment(this, 0);
+//                    editStateDialog.show(getFragmentManager(), "Edit State");
+//                    break;
+//            }
+//        });
+//        setAdapter(recyclerView, adapter);
+//
+//    }
 
 
     public void setAdapter(RecyclerView recyclerView, StateAdapter adapter) {
@@ -214,9 +217,6 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
     }
 
 
-    @Override
-    public void onDismissEditDialog() {
-        getFragmentManager().beginTransaction().detach(this).attach(this).commit();
-    }
+
 
 }

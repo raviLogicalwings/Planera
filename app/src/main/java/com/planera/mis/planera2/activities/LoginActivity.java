@@ -100,7 +100,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode()== AppConstants.RESULT_OK){
-                    Toast.makeText(LoginActivity.this, response.body().getData().getToken(), Toast.LENGTH_LONG).show();
+//                    Toast.makeText(LoginActivity.this, response.body().getData().getToken(), Toast.LENGTH_LONG).show();
                     connector.setString(AppConstants.TOKEN, response.body().getData().getToken());
                     connector.setBoolean(AppConstants.IS_LOGIN, true);
                     Intent intentHome = new Intent(LoginActivity.this, AdminPanelActivity.class);

@@ -5,10 +5,9 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/list_doctors"
+        android:id="@+id/list_users"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
 
     <LinearLayout
         android:id="@+id/layout_no_data"

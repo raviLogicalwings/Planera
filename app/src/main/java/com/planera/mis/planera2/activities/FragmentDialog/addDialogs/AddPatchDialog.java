@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -82,7 +83,9 @@ public class AddPatchDialog extends BaseDialogFragment implements View.OnClickLi
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-      return super.onCreateDialog(savedInstanceState);
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        return dialog;
 
     }
     @Override
@@ -131,7 +134,7 @@ public class AddPatchDialog extends BaseDialogFragment implements View.OnClickLi
         inputLayoutUserName = view.findViewById(R.id.input_layout_user_name);
         editTextPatch = view.findViewById(R.id.edit_text_name);
         buttonPatchAdd = view.findViewById(R.id.button_state_add);
-
+        inputLayoutUserName.setHint(getString(R.string.enter_patch_name));
         buttonPatchAdd.setOnClickListener(this);
     }
 

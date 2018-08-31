@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -85,7 +86,9 @@ public class AddStateDialog  extends BaseDialogFragment implements View.OnClickL
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return super.onCreateDialog(savedInstanceState);
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        return dialog;
 
     }
 
@@ -127,7 +130,7 @@ public class AddStateDialog  extends BaseDialogFragment implements View.OnClickL
         buttonStateAdd = view.findViewById(R.id.button_state_add);
         farziSpinner = view.findViewById(R.id.spinner_state);
         buttonStateAdd.setOnClickListener(this);
-
+        inputLayoutUserName.setHint(getString(R.string.enter_state_name));
         farziSpinner.setVisibility(View.GONE);
     }
 

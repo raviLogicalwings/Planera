@@ -1,5 +1,6 @@
 package com.planera.mis.planera2.activities.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -30,6 +31,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.support.constraint.Constraints.TAG;
 
 public class PatchListFragment extends BaseFragment implements EditPatchDialog.OnDismissEditPatchDialogListener{
     public static PatchListFragment instance;
@@ -84,6 +87,7 @@ public class PatchListFragment extends BaseFragment implements EditPatchDialog.O
 
 
     public void deletePatchApi(String token, int patchId){
+        Log.d(TAG, "deletePatchApi() called with: token = [" + token + "], patchId = [" + patchId + "]");
         processDialog.showDialog(mContext, false);
         Call<MainResponse> call = apiInterface.deletePatch(token, patchId);
         call.enqueue(new Callback<MainResponse>() {
@@ -144,7 +148,8 @@ public class PatchListFragment extends BaseFragment implements EditPatchDialog.O
             switch (view.getId()){
                 case R.id.img_delete:
                     if (InternetConnection.isNetworkAvailable(mContext)){
-                        deletePatchApi(token, patchesList.get(position).getPatchId());
+                        popupDialog(token, patchesList.get(position).getPatchId());
+//                        deletePatchApi(token, patchesList.get(position).getPatchId());
                     }
                     else{
                         Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
@@ -189,6 +194,25 @@ public class PatchListFragment extends BaseFragment implements EditPatchDialog.O
     @Override
     public void onDetach() {
         super.onDetach();
+
+    }
+
+    public void popupDialog( String token, int patchId){
+        AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
+
+        alertDialog.setMessage("Are you sure you want to delete this?");
+
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", (dialogInterface, i) -> {
+            dialogInterface.cancel();
+            deletePatchApi(token, patchId );
+        });
+
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", (dialog, which) -> {
+            dialog.cancel();
+        });
+
+        alertDialog.show();
 
     }
 

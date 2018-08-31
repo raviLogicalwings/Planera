@@ -1,38 +1,35 @@
-<android.support.v7.widget.CardView android:layout_height="300dp"
+<LinearLayout android:orientation="vertical"
+    style="@style/BaseMargin"
     android:layout_width="match_parent"
-    android:layout_gravity="center"
+    android:layout_height="200dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_gravity="center"
-        style="@style/BaseMargin"
+        android:padding="@dimen/drawable_padding"
+        android:layout_gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
-
-
-        <LinearLayout
-            android:layout_gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <TextView
             android:layout_width="wrap_content"
-            android:orientation="horizontal"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="wrap_content"
-                style="@style/NormalText"
-                android:layout_height="wrap_content"
-                android:text="Is Product"/>
-            <Switch
-                android:theme="@style/MySwitch"
-                android:id="@+id/switch_is_brand"
-                android:layout_width="wrap_content"
-                style="@style/BaseMargin"
-                android:layout_height="wrap_content" />
+            style="@style/NormalText"
+            android:layout_height="wrap_content"
+            android:text="Is Product"/>
+        <Switch
+            android:theme="@style/MySwitch"
+            android:id="@+id/switch_is_brand"
+            android:layout_width="wrap_content"
+            style="@style/BaseMargin"
+            android:layout_height="wrap_content" />
 
 
         </LinearLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_marginTop="30dp"
+            android:padding="5dp"
+            android:layout_gravity="center_horizontal"
             android:layout_width="match_parent"
             android:id="@+id/input_layout_user_name"
             android:layout_height="wrap_content">
@@ -57,10 +54,8 @@
             style="@style/ButtonText"
             android:background="@color/colorPrimary"
             android:layout_marginTop="30dp"
-            android:layout_marginRight="20dp"
             android:layout_gravity="right"
             android:text="Update"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
-</android.support.v7.widget.CardView>

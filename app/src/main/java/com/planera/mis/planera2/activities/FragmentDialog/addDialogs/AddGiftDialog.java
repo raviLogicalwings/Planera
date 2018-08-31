@@ -124,7 +124,7 @@ public class AddGiftDialog  extends BaseDialogFragment implements View.OnClickLi
         inputLayoutUserName = view.findViewById(R.id.input_layout_user_name);
         editTextName = view.findViewById(R.id.edit_text_name);
         buttonStateAdd = view.findViewById(R.id.button_state_add);
-
+        inputLayoutUserName.setHint(getString(R.string.enter_gift_name));
         spinner.setVisibility(View.GONE);
         buttonStateAdd.setOnClickListener(this);
     }

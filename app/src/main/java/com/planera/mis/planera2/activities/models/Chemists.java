@@ -4,6 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class Chemists{
 
+	@SerializedName("ChemistId")
+	int chemistId;
+
 	@SerializedName("Email")
 	private String email;
 
@@ -78,6 +81,15 @@ public class Chemists{
 
 	@SerializedName("BillingPhone1")
 	private String billingPhone1;
+
+
+	public int getChemistId() {
+		return chemistId;
+	}
+
+	public void setChemistId(int chemistId) {
+		this.chemistId = chemistId;
+	}
 
 	public void setEmail(String email){
 		this.email = email;

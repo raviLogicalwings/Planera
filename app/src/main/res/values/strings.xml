@@ -48,4 +48,9 @@
     <string name="_9669893930">9669893930</string>
     <string name="title_activity_update_chemist">ActivityUpdateChemist</string>
     <string name="title_activity_add_chemist">ActivityAddChemist</string>
+    <string name="title_activity_update_doctor">ActivityUpdateDoctor</string>
+    <string name="title_activity_update_user">ActivityUpdateUser</string>
+    <string name="enter_state_name">Enter State Name</string>
+    <string name="enter_patch_name">Enter Patch Name</string>
+    <string name="enter_gift_name">Enter Gift Name</string>
 </resources>

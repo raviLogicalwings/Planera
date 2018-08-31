@@ -21,7 +21,7 @@ public class BaseActivity extends AppCompatActivity {
     public View rootView;
 
     public ApiInterface apiInterface;
-    String token;
+    public String token;
     public Context mContext;
 
 

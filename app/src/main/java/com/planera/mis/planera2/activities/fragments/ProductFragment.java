@@ -1,5 +1,6 @@
 package com.planera.mis.planera2.activities.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -115,7 +116,8 @@ public class ProductFragment extends BaseFragment implements EditProductDialog.O
         ProductsAdapter adapter = new ProductsAdapter(mContext, brandsData, (position, view) -> {
             switch (view.getId()) {
                 case R.id.img_delete:
-                    deleteProductApi(token, productList.get(position).getProductId());
+                    popupDialog(token, productList.get(position).getProductId());
+//                    deleteProductApi(token, productList.get(position).getProductId());
                     break;
                 case R.id.img_edit:
                     EditProductDialog dialog = new EditProductDialog();
@@ -186,6 +188,24 @@ public class ProductFragment extends BaseFragment implements EditProductDialog.O
 
     }
 
+    public void popupDialog( String token, int productId){
+        AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
+
+        alertDialog.setMessage("Are you sure you want to delete this?");
+
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", (dialogInterface, i) -> {
+            dialogInterface.cancel();
+            deleteProductApi(token, productId );
+        });
+
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", (dialog, which) -> {
+            dialog.cancel();
+        });
+
+        alertDialog.show();
+
+    }
 
     @Override
     public void onDismissEditProductDialog() {

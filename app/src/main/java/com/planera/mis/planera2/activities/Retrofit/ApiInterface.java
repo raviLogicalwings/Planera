@@ -1,6 +1,7 @@
 package com.planera.mis.planera2.activities.Retrofit;
 
 import com.planera.mis.planera2.activities.models.BrandsListResponse;
+import com.planera.mis.planera2.activities.models.ChemistListResponse;
 import com.planera.mis.planera2.activities.models.ChemistResponse;
 import com.planera.mis.planera2.activities.models.Chemists;
 import com.planera.mis.planera2.activities.models.DoctorResponse;
@@ -11,10 +12,12 @@ import com.planera.mis.planera2.activities.models.GooglePlacesModel.GooglePlaces
 import com.planera.mis.planera2.activities.models.LoginResponse;
 import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.models.PatchListResponse;
+import com.planera.mis.planera2.activities.models.PlansListResponce;
 import com.planera.mis.planera2.activities.models.RegistrationResponse;
 import com.planera.mis.planera2.activities.models.StateListResponse;
 import com.planera.mis.planera2.activities.models.TerritoryListResponse;
 import com.planera.mis.planera2.activities.models.UserData;
+import com.planera.mis.planera2.activities.models.UserListResponse;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 
 import retrofit2.Call;
@@ -51,6 +54,16 @@ public interface ApiInterface {
 
     @GET(AppConstants.DOCTORS_LIST)
     Call<DoctorsListResponce> doctorsList(@Header("Authorization") String token);
+
+    @GET(AppConstants.CHEMIST_LIST)
+    Call<ChemistListResponse> chemistList(@Header("Authorization") String token);
+
+    @GET(AppConstants.USER_LIST)
+    Call<UserListResponse> usersList(@Header("Authorization") String token);
+
+
+    @GET(AppConstants.PLAN_LIST)
+    Call<PlansListResponce> planList(@Header("Authorization") String token);
 
     @GET(AppConstants.ADD_STATE)
     Call<MainResponse> addState(@Header("Authorization") String token, @Query("Name") String state);
@@ -93,6 +106,12 @@ public interface ApiInterface {
     @GET(AppConstants.DELETE_PRODUCTS)
     Call<MainResponse> deleteProduct(@Header("Authorization") String token, @Query("ProductId") int productId);
 
+    @GET(AppConstants.DELETE_USERS)
+    Call<MainResponse> deleteUser(@Header("Authorization") String token, @Query("UserId") int userId);
+
+    @GET(AppConstants.DELETE_CHEMIST)
+    Call<MainResponse> deleteChemist(@Header("Authorization") String token, @Query("ChemistId") int chemistId);
+
     @GET(AppConstants.UPDATE_STATE)
     Call<MainResponse> updateStateDetails(@Header("Authorization") String token, @Query("StateId") int stateId, @Query("Name") String name);
 
@@ -111,11 +130,16 @@ public interface ApiInterface {
     @GET(AppConstants.UPDATE_GIFT)
     Call<MainResponse> updateGItDetails(@Header("Authorization") String token, @Query("GiftId") int giftId, @Query("Name") String name);
 
-
+    @POST(AppConstants.UPDATE_CHEMIST)
+    Call<MainResponse> updateChemsit(@Header("Authorization") String token, @Body Chemists chemists);
+    @POST(AppConstants.UPDATE_USER)
+    Call<MainResponse> updateUserDetails(@Header("Authorization")String token, @Body UserData userData);
 
 
     //Google  Places api Call
     @GET(AppConstants.FIND_PALCE)
     Call<GooglePlaces> getPlaceLatLong(@Query("input") String input, @Query("inputtype") String inputType, @Query("fields") String fields, @Query("key") String key);
+
+
 }
 

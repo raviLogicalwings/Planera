@@ -20,6 +20,9 @@ public class AppConstants {
     public static final String PATCH_LIST = "patch/getAllPatches";
     public static final String DOCTORS_LIST = "doctor/getAllDoctors";
     public static final String PRODUCT_LIST = "product/getAllProducts";
+    public static final String CHEMIST_LIST = "chemist/getAllChemists";
+    public static final String USER_LIST = "user/getAllUsers";
+    public static final String PLAN_LIST ="plan/getAllPlans" ;
 
 
     public static final String ADD_STATE = "state/addState";
@@ -36,6 +39,8 @@ public class AppConstants {
     public static final String DELETE_PATCH = "patch/deletePatch";
     public static final String DELETE_DOCTORS = "doctor/deleteDoctor";
     public static final String DELETE_PRODUCTS = "product/deleteProduct";
+    public static final String DELETE_USERS = "user/deleteUser";
+    public static final String DELETE_CHEMIST = "deleteChemist";
 
     public static final String UPDATE_DOCTOR = "doctor/updateDoctor";
     public static final String UPDATE_STATE = "state/updateState";
@@ -43,6 +48,31 @@ public class AppConstants {
     public static final String UPDATE_PRODUCT = "product/updateProduct";
     public static final String UPDATE_GIFT = "gift/updateGift";
     public static final String UPDATE_PATCH = "patch/updatePatch";
+    public static final String UPDATE_CHEMIST = "chemist/updateChemist";
+    public static final String UPDATE_USER = "user/updateUser";
+
+    //User's Constant
+    public static final String EXPERIENCE_YEAR = "experience_year";
+    public static final String UPDATE_USER_KEY = "update_user";
+    public static final String LOGIN_ID = "login_id";
+    public static final String PASSWORD = "password";
+    public static final String PHONE1 = "phone1";
+    public static final String PHONE2 = "phone2";
+    public static final String EMAIL1 = "email1";
+    public static final String EMAIL2 = "email2";
+    public static final String DOJ = "doj";
+    public static final String PAN  = "pan";
+
+
+    //Chemist's Constant
+    public static final String BILLING_EMAIL ="billing_email" ;
+    public static final String BILLING_PHONE1 ="billing_phone1" ;
+    public static final String BILLING_PHONE2 ="billing_phone2" ;
+    public static final String RATING = "rating";
+    public static final String MONTHLY_VOLUME_POTENTIAL = "volume_potential";
+    public static final String SHOP_SIZE = "shop_size";
+    public static final String COMPANY_NAME ="company_name" ;
+    public static final String UPDATE_CHEMIST_KEY = "key_update_chemist";
 
 
 
@@ -68,6 +98,7 @@ public class AppConstants {
     public static final String CITY = "city";
     public static final String STATE = "state";
     public static final String PINCODE = "pincode";
+
 
 
     //Google Palces Api
@@ -113,8 +144,11 @@ public class AppConstants {
     public static final int PRODUCT_FRAGMENT = 5;
     public static final int DOCTOR_FRAGMENT = 6;
     public static final int CHEMIST_FRAGMENT = 7;
+    public static final int USER_FRAGMENT = 8;
     public static final String KEY_TOUCHED_FRAGMENT = "key_touched_fragment";
 
 
     public static final String IS_CHANGES = "is_changes";
+
+
 }

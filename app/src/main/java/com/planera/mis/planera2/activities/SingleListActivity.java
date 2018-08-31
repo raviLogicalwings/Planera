@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.FragmentDialog.addDialogs.AddGiftDialog;
@@ -23,6 +24,7 @@ import com.planera.mis.planera2.activities.fragments.PatchListFragment;
 import com.planera.mis.planera2.activities.fragments.ProductFragment;
 import com.planera.mis.planera2.activities.fragments.StateListFragment;
 import com.planera.mis.planera2.activities.fragments.TerritoryListFragment;
+import com.planera.mis.planera2.activities.fragments.UsersFragment;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 
 
@@ -102,14 +104,11 @@ AddStateDialog.OnStateDialogDismissListener,
     @Override
     protected void onResume() {
         super.onResume();
-        Intent getData = getIntent();
-        if(getData!=null){
-        comingFragment = getData.getIntExtra(AppConstants.KEY_TOUCHED_FRAGMENT, 0);
-        boolean isChanges = getData.getBooleanExtra(AppConstants.IS_CHANGES, false);
-        if(isChanges){
-            refreshFragment(comingFragment);
-        }
-        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
     }
 
     @Override
@@ -169,12 +168,21 @@ AddStateDialog.OnStateDialogDismissListener,
                         attach(DoctorsFragment.newInstance()).commit();
                 break;
 
+            case AppConstants.USER_FRAGMENT:
+                getSupportFragmentManager().beginTransaction().
+                        detach(UsersFragment.newInstance()).
+                        attach(UsersFragment.newInstance()).commit();
+                break;
+
+
+
 
         }
     }
 
     public void loadFragment(int type){
         switch (type){
+
             case AppConstants.STATE_FRAGMENT:
                 fragment = StateListFragment.newInstance();
                 getSupportActionBar().setTitle("States");
@@ -210,6 +218,12 @@ AddStateDialog.OnStateDialogDismissListener,
                 fragment = ChemistFragment.newInstance();
                 getSupportActionBar().setTitle("Chemists");
                 break;
+
+            case AppConstants.USER_FRAGMENT:
+                fragment = UsersFragment.newInstance();
+                getSupportActionBar().setTitle("Users");
+
+                break;
         }
 
       getSupportFragmentManager().beginTransaction().replace(R.id.containerSingle, fragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
@@ -219,7 +233,6 @@ AddStateDialog.OnStateDialogDismissListener,
     public void onClick(View view) {
 
     }
-
 
 
     @Override

@@ -80,11 +80,9 @@ public class ChemistListAdapter extends RecyclerView.Adapter<ChemistListAdapter.
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.img_chemist_delete:
-                    Toast.makeText(mContext, "Clicked Delete", Toast.LENGTH_SHORT).show();
                     onItemClickListener.onItemClick(view, getAdapterPosition());
                     break;
                 case R.id.img_chemist_edit:
-                    Toast.makeText(mContext, "Clicked Edit", Toast.LENGTH_SHORT).show();
                     onItemClickListener.onItemClick(view, getAdapterPosition());
                     break;
             }

@@ -1,5 +1,6 @@
 package com.planera.mis.planera2.activities.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -128,7 +129,8 @@ public class GiftListFragment extends BaseFragment implements EditGiftDialog.OnD
             public void onItemClick(int position, View view) {
                 switch (view.getId()) {
                     case R.id.img_delete:
-                    deleteGiftApi(token, giftsData.get(position).getGiftId());
+                        popupDialog(token, giftsData.get(position).getGiftId());
+//                    deleteGiftApi(token, giftsData.get(position).getGiftId());
                     break;
 
                     case R.id.img_edit:
@@ -199,6 +201,25 @@ public class GiftListFragment extends BaseFragment implements EditGiftDialog.OnD
     @Override
     public void onDetach() {
         super.onDetach();
+
+    }
+
+    public void popupDialog( String token, int giftId){
+        AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
+
+        alertDialog.setMessage("Are you sure you want to delete this?");
+
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", (dialogInterface, i) -> {
+            dialogInterface.cancel();
+            deleteGiftApi(token, giftId );
+        });
+
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", (dialog, which) -> {
+            dialog.cancel();
+        });
+
+        alertDialog.show();
 
     }
 
