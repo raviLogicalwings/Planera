@@ -17,6 +17,7 @@
 
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/layout_no_data"
         android:orientation="horizontal"
         android:gravity="center"

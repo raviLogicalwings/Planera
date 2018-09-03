@@ -41,7 +41,8 @@ public class AppConstants {
     public static final String DELETE_DOCTORS = "doctor/deleteDoctor";
     public static final String DELETE_PRODUCTS = "product/deleteProduct";
     public static final String DELETE_USERS = "user/deleteUser";
-    public static final String DELETE_CHEMIST = "deleteChemist";
+    public static final String DELETE_CHEMIST = "chemist/deleteChemist";
+    public static final String DELETE_PLAN = "plan/deletePlan";
 
     public static final String UPDATE_DOCTOR = "doctor/updateDoctor";
     public static final String UPDATE_STATE = "state/updateState";
@@ -51,6 +52,7 @@ public class AppConstants {
     public static final String UPDATE_PATCH = "patch/updatePatch";
     public static final String UPDATE_CHEMIST = "chemist/updateChemist";
     public static final String UPDATE_USER = "user/updateUser";
+    public static final String UPDATE_PLAN = "plan/updatePlan";
 
     //User's Constant
     public static final String EXPERIENCE_YEAR = "experience_year";
@@ -64,7 +66,17 @@ public class AppConstants {
     public static final String DOJ = "doj";
     public static final String PAN  = "pan";
 
-
+    // Plan's Constant
+    public static final String UPDATE_PLAN_KEY = "update_plan";
+    public static final String PATCH_ID = "patch_id";
+    public static final String DOCTOR_ID = "doctor_id";
+    public static final String CHEMIST_ID = "chemist_id";
+    public static final String USER_ID = "user_id";
+    public static final String CALLS = "patch_id";
+    public static final String REMARK = "remark";
+    public static final String MONTH = "month";
+    public static final String YEAR = "year";
+    public static final String STATUS = "status";
     //Chemist's Constant
     public static final String BILLING_EMAIL ="billing_email" ;
     public static final String BILLING_PHONE1 ="billing_phone1" ;
@@ -151,7 +163,6 @@ public class AppConstants {
 
 
     public static final String IS_CHANGES = "is_changes";
-
 
 
 }

@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.Retrofit.ApiClient;
 import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
-import com.planera.mis.planera2.activities.adapters.ActivityUpdateUser;
+import com.planera.mis.planera2.activities.ActivityUpdateUser;
 import com.planera.mis.planera2.activities.adapters.UsersListAdapter;
 import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.models.UserData;

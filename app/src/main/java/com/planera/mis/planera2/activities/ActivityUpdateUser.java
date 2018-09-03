@@ -1,4 +1,4 @@
-package com.planera.mis.planera2.activities.adapters;
+package com.planera.mis.planera2.activities;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -15,8 +15,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.BaseActivity;
-import com.planera.mis.planera2.activities.SingleListActivity;
 import com.planera.mis.planera2.activities.models.GooglePlacesModel.GooglePlaces;
 import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.models.UserData;

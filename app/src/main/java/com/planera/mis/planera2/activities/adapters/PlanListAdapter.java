@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.planera.mis.planera2.R;
@@ -53,6 +54,8 @@ public class PlanListAdapter  extends RecyclerView.Adapter<PlanListAdapter.MyPla
         private TextView textPlanDate;
         private TextView textPlanCalls;
         private TextView textPlanRemark;
+        private ImageView imgPlanDelete;
+        private ImageView imgPlanEdit;
 
 
         public MyPlansHolder(@NonNull View itemView) {
@@ -62,12 +65,23 @@ public class PlanListAdapter  extends RecyclerView.Adapter<PlanListAdapter.MyPla
             textPlanDate = itemView.findViewById(R.id.text_plan_date);
             textPlanCalls = itemView.findViewById(R.id.text_plan_calls);
             textPlanRemark = itemView.findViewById(R.id.text_plan_remark);
+            imgPlanDelete = itemView.findViewById(R.id.img_plan_delete);
+            imgPlanEdit = itemView.findViewById(R.id.img_plan_edit);
 
+            imgPlanEdit.setOnClickListener(this);
+            imgPlanDelete.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-
+            switch (v.getId()){
+                case R.id.img_plan_delete:
+                    onItemClickListener.onItemCLick(getAdapterPosition(), v);
+                    break;
+                case R.id.img_plan_edit:
+                    onItemClickListener.onItemCLick(getAdapterPosition(), v);
+                    break;
+            }
         }
     }
 

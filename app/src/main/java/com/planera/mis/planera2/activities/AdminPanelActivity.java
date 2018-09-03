@@ -9,15 +9,16 @@ import android.support.v7.widget.Toolbar;
 
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.fragments.AdminAccessFragment;
+import com.planera.mis.planera2.activities.fragments.UploadDataFragment;
 
 
 public class AdminPanelActivity extends BaseActivity {
     private BottomNavigationView adminNavigation;
     private FragmentManager fragmentManager;
     public static final int FRAGMENT_ADMIN_DASHBOARD = 1;
-    public static final int FRAGMENT_USER_CONTROL = 2;
+    public static final int FRAGMENT_UPLOAD = 2;
     public static final String KEY_ADMIN_DASHBOARD = "Admin_Dashboard";
-    public static final String KEY_USER_CONTROL = "User_Control";
+    public static final String KEY_UPLOAD_EXCEL= "uploads";
     int currentFragment ;
     private Fragment fragment;
     String TAG;
@@ -35,7 +36,7 @@ public class AdminPanelActivity extends BaseActivity {
     public void initUi() {
         super.initUi();
         adminNavigation = findViewById(R.id.admin_navigation);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.back_arrow_whit);
         adminNavigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
         setSupportActionBar(toolbar);
@@ -55,7 +56,8 @@ public class AdminPanelActivity extends BaseActivity {
                     case R.id.dashBoard:
                         loadFragment(FRAGMENT_ADMIN_DASHBOARD);
                         return true;
-                    case R.id.userControl:
+                    case R.id.uploads:
+                        loadFragment(FRAGMENT_UPLOAD);
                         return true;
                 }
                 return false;
@@ -71,8 +73,10 @@ public class AdminPanelActivity extends BaseActivity {
                  fragment= AdminAccessFragment.getInstance();
                 getSupportActionBar().setTitle("Dashboard");
                 break;
-            case FRAGMENT_USER_CONTROL:
-                TAG = KEY_USER_CONTROL;
+            case FRAGMENT_UPLOAD:
+                TAG = KEY_UPLOAD_EXCEL;
+                fragment = UploadDataFragment.getInstance();
+                getSupportActionBar().setTitle("Upload");
                 break;
 
         }

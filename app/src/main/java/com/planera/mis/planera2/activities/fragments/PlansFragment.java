@@ -2,7 +2,9 @@ package com.planera.mis.planera2.activities.fragments;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
+import com.planera.mis.planera2.activities.ActivityUpdatePlan;
 import com.planera.mis.planera2.activities.Retrofit.ApiClient;
 import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
 import com.planera.mis.planera2.activities.adapters.PlanListAdapter;
@@ -22,6 +25,7 @@ import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.models.Plans;
 import com.planera.mis.planera2.activities.models.PlansListResponce;
 import com.planera.mis.planera2.activities.utils.AppConstants;
+import com.planera.mis.planera2.activities.utils.InternetConnection;
 
 import java.util.List;
 
@@ -38,6 +42,7 @@ public class PlansFragment extends BaseFragment{
     private List<Plans> plansList = null;
     private RecyclerView listViewPlans;
     private LinearLayout layoutNoData;
+    private int selectedPlan;
 
 
     public PlansFragment() {
@@ -154,23 +159,73 @@ public class PlansFragment extends BaseFragment{
         PlanListAdapter adapter;
         adapter = new PlanListAdapter(getContext(), plansData, (postion, view) -> {
             switch (view.getId()) {
-                case R.id.img_delete:
+                case R.id.img_plan_delete:
+                    if (InternetConnection.isNetworkAvailable(mContext)){
+                        deletePlanApi(token, Integer.parseInt(plansData.get(postion).getPlanId()));
+                    }
+                    else{
+                        Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+                    }
                     break;
 
-                case R.id.img_edit:
+                case R.id.img_plan_edit:
+                    planDetailsForUpdate(postion, plansData);
                     break;
             }
         });
         setAdapter(recyclerView, adapter);
 
     }
+    public void planDetailsForUpdate(int pos, List<Plans> plansData){
+        selectedPlan= Integer.parseInt(plansData.get(pos).getPlanId());
+        Intent intentPlanCall = new Intent(mContext, ActivityUpdatePlan.class);
+        intentPlanCall.putExtra(AppConstants.UPDATE_PLAN_KEY, selectedPlan);
+        intentPlanCall.putExtra(AppConstants.PATCH_ID, plansData.get(pos).getPatchId());
+        intentPlanCall.putExtra(AppConstants.DOCTOR_ID, plansData.get(pos).getDoctorId());
+        intentPlanCall.putExtra(AppConstants.CHEMIST_ID, plansData.get(pos).getChemistsId());
+        intentPlanCall.putExtra(AppConstants.USER_ID, plansData.get(pos).getUserId());
+        intentPlanCall.putExtra(AppConstants.CALLS, plansData.get(pos).getCalls());
+        intentPlanCall.putExtra(AppConstants.REMARK, plansData.get(pos).getRemark());
+        intentPlanCall.putExtra(AppConstants.MONTH, plansData.get(pos).getMonth());
+        intentPlanCall.putExtra(AppConstants.YEAR, plansData.get(pos).getYear());
+        intentPlanCall.putExtra(AppConstants.STATUS, plansData.get(pos).getStatus());
+        mContext.startActivity(intentPlanCall);
 
+    }
 
     public void setAdapter(RecyclerView recyclerView, PlanListAdapter adapter) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.hasFixedSize();
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+    }
+
+    public void deletePlanApi(String token , int planId){
+        processDialog.showDialog(mContext, false);
+        Call<MainResponse> call = apiInterface.deletePlan(token, planId);
+        call.enqueue(new Callback<MainResponse>() {
+            @Override
+            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+                processDialog.dismissDialog();
+                Log.e(TAG, "onResponse: "+ new Gson().toJson(response.body()));
+                if (response.isSuccessful()){
+                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                        Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
+                    }
+                    else{
+                        Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MainResponse> call, Throwable t) {
+                processDialog.dismissDialog();
+                Snackbar.make(rootView, t.getMessage(), Snackbar.LENGTH_LONG).show();
+
+            }
+        });
     }
 
     @Override

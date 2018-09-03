@@ -7,6 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
+        android:layout_margin="@dimen/fab_margin"
         android:weightSum="3"
         android:layout_width="match_parent"
         android:orientation="horizontal"
@@ -36,12 +37,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""/>
-            <TextView
 
-                style="@style/NormalText"
-                android:text=""
+            <TextView
+                android:gravity="center"
+                style="@style/MediumText"
+                android:padding="5dp"
+                android:background="@drawable/bg_calls"
+                android:id="@+id/text_plan_calls"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@string/visits_2"/>
 
         </LinearLayout>
 
@@ -50,37 +55,46 @@
             android:padding="@dimen/layout_margin_top"
             android:layout_width="0dp"
             android:layout_weight="1.6"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:layout_gravity="center_horizontal"
-                style="@style/MediumText"
-                android:gravity="center"
-                android:padding="5dp"
-                android:background="@drawable/bg_calls"
-                android:id="@+id/text_plan_calls"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/visits_2"/>
-
-
-            <ImageView
-                android:padding="8dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/todo" />
 
             <TextView
                 android:padding="5dp"
                 android:id="@+id/text_plan_remark"
                 style="@style/NormalText"
                 android:textColor="@color/colorGray"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="right"
                 android:text="@string/remark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:gravity="right"
+                android:weightSum="2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/img_plan_delete"
+                    android:layout_weight="0.5"
+                    android:padding="8dp"
+                    android:src="@drawable/icon_delete"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/todo" />
+                <ImageView
+                    android:id="@+id/img_plan_edit"
+                    android:layout_weight="0.5"
+                    android:padding="8dp"
+                    android:src="@drawable/icon_edit"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/todo" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

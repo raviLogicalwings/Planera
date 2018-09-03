@@ -73,4 +73,5 @@
     <string name="jhon_deo">Jhon Deo</string>
     <string name="visits_2">Visits : 2</string>
     <string name="title_activity_crete_plan">ActivityCretePlan</string>
+    <string name="title_activity_update_plan">ActivityUpdatePlan</string>
 </resources>

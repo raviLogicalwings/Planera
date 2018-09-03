@@ -1,0 +1,71 @@
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    style="@style/BaseMargin"
+    android:layout_marginTop="?attr/actionBarSize"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:id="@+id/card_upload_plans"
+        style="@style/material_card_style"
+
+        android:layout_height="50dp">
+
+
+            <TextView
+                android:drawableStart="@drawable/icon_upload"
+                android:drawablePadding="@dimen/drawable_padding"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/LargeText"
+                android:text="Upload Plans"
+                android:drawableLeft="@drawable/icon_upload" />
+
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:id="@+id/card_upload_doctor"
+        style="@style/material_card_style"
+
+        android:layout_height="50dp">
+
+
+        <TextView
+            android:drawableStart="@drawable/icon_upload"
+            android:drawablePadding="@dimen/drawable_padding"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/LargeText"
+            android:text="Upload Doctors"
+            android:drawableLeft="@drawable/icon_upload" />
+
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:id="@+id/card_upload_chemist"
+        style="@style/material_card_style"
+
+        android:layout_height="50dp">
+
+
+        <TextView
+            android:drawableStart="@drawable/icon_upload"
+            android:drawablePadding="@dimen/drawable_padding"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/LargeText"
+            android:text="Upload Chemist"
+            android:drawableLeft="@drawable/icon_upload" />
+
+    </android.support.v7.widget.CardView>
+
+
+</LinearLayout>

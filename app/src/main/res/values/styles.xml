@@ -130,6 +130,10 @@
 
     <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="material_card_style" parent="CardView">
+        <item name="android:layout_marginTop">@dimen/standerd_top_margin</item>
+
+    </style>
 
     <style name="FullScreenDialogStyle" parent="android:Theme">
         <item name="android:windowNoTitle">true</item>

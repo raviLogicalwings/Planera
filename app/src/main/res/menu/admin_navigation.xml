@@ -7,7 +7,7 @@
         android:icon="@drawable/icon_home"/>
 
     <item
-        android:id="@+id/userControl"
-        android:title="User Control"
+        android:id="@+id/uploads"
+        android:title="Uploads"
         android:icon="@drawable/icon_user_control"/>
 </menu>

@@ -1,7 +1,5 @@
 package com.planera.mis.planera2.activities.Retrofit;
 
-import android.support.v4.widget.SlidingPaneLayout;
-
 import com.planera.mis.planera2.activities.models.BrandsListResponse;
 import com.planera.mis.planera2.activities.models.ChemistListResponse;
 import com.planera.mis.planera2.activities.models.ChemistResponse;
@@ -92,7 +90,7 @@ public interface ApiInterface {
     Call<ChemistResponse> addChemist(@Header("Authorization") String token, @Body Chemists chemists);
 
     @POST(AppConstants.ADD_PLAN)
-        Call<MainResponse> addPlan(@Header("Authorization") String token, @Body Plans plans);
+    Call<MainResponse> addPlan(@Header("Authorization") String token, @Body Plans plans);
 
     @GET(AppConstants.DELETE_STATE)
     Call<MainResponse> deleteState(@Header("Authorization") String token, @Query("StateId") int stateId);
@@ -118,6 +116,9 @@ public interface ApiInterface {
     @GET(AppConstants.DELETE_CHEMIST)
     Call<MainResponse> deleteChemist(@Header("Authorization") String token, @Query("ChemistId") int chemistId);
 
+    @GET(AppConstants.DELETE_PLAN)
+    Call<MainResponse> deletePlan (@Header("Authorization") String token, @Query("PlanId") int planId);
+
     @GET(AppConstants.UPDATE_STATE)
     Call<MainResponse> updateStateDetails(@Header("Authorization") String token, @Query("StateId") int stateId, @Query("Name") String name);
 
@@ -138,10 +139,12 @@ public interface ApiInterface {
 
     @POST(AppConstants.UPDATE_CHEMIST)
     Call<MainResponse> updateChemsit(@Header("Authorization") String token, @Body Chemists chemists);
+
     @POST(AppConstants.UPDATE_USER)
     Call<MainResponse> updateUserDetails(@Header("Authorization")String token, @Body UserData userData);
 
-
+    @POST(AppConstants.UPDATE_PLAN)
+    Call<MainResponse>  updatePlanDetails(@Header("Autorization") String token, @Body Plans plans);
     //Google  Places api Call
     @GET(AppConstants.FIND_PALCE)
     Call<GooglePlaces> getPlaceLatLong(@Query("input") String input, @Query("inputtype") String inputType, @Query("fields") String fields, @Query("key") String key);
