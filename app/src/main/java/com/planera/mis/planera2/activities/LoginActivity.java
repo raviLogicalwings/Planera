@@ -21,7 +21,6 @@ import com.planera.mis.planera2.activities.models.UserData;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.InternetConnection;
 
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
