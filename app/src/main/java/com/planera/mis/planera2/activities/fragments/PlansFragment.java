@@ -161,7 +161,7 @@ public class PlansFragment extends BaseFragment{
             switch (view.getId()) {
                 case R.id.img_plan_delete:
                     if (InternetConnection.isNetworkAvailable(mContext)){
-                        deletePlanApi(token, Integer.parseInt(plansData.get(postion).getPlanId()));
+                        popupDialog(token, Integer.parseInt(plansData.get(postion).getPlanId()));
                     }
                     else{
                         Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
@@ -240,14 +240,14 @@ public class PlansFragment extends BaseFragment{
 
     }
 
-    public void popupDialog( String token, int stateId){
+    public void popupDialog( String token, int planId){
         AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
 
         alertDialog.setMessage("Are you sure you want to delete this?");
 
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", (dialogInterface, i) -> {
             dialogInterface.cancel();
-            deleteStateApi(token, stateId );
+            deletePlanApi(token, planId );
         });
 
 

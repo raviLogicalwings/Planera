@@ -176,6 +176,7 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+                patchId = patches.get(adapterView.getSelectedItemPosition()).getPatchId();
 
             }
         });

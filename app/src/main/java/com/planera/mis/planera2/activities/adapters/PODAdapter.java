@@ -5,15 +5,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.planera.mis.planera2.R;
 
 
-public class POBAdapter extends RecyclerView.Adapter<POBAdapter.MyPobHolder> {
+public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder> {
    private Context context;
    private View holderView;
 
-    public POBAdapter(Context context) {
+    public PODAdapter(Context context) {
         this.context = context;
     }
 
@@ -33,9 +35,15 @@ public class POBAdapter extends RecyclerView.Adapter<POBAdapter.MyPobHolder> {
         return 6;
     }
 
-    public class MyPobHolder extends RecyclerView.ViewHolder {
-        public MyPobHolder(View itemView) {
+    class MyPobHolder extends RecyclerView.ViewHolder {
+        private TextView textPodProductName;
+        private EditText editPodProductValue;
+
+
+        MyPobHolder(View itemView) {
             super(itemView);
+            textPodProductName = itemView.findViewById(R.id.text_pod_product_name);
+            editPodProductValue = itemView.findViewById(R.id.edit_pod_product_value);
         }
     }
 }

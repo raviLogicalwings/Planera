@@ -31,7 +31,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Doctor Id"/>
+                    android:text="Doctor"/>
 
                 <Spinner
                     android:layout_weight="1.2"
@@ -55,7 +55,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Chemist Id"/>
+                    android:text="Chemist"/>
 
                 <Spinner
                     android:layout_weight="1.2"
@@ -79,7 +79,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="User Id"/>
+                    android:text="User"/>
 
                 <Spinner
                     android:layout_weight="1.2"
@@ -100,7 +100,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Patch id"/>
+                    android:text="Patch"/>
 
                 <Spinner
                     android:layout_weight="1.2"

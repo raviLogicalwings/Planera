@@ -10,15 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.adapters.POBAdapter;
+import com.planera.mis.planera2.activities.adapters.PODAdapter;
 
 public class PODFragment extends BaseFragment {
 
     private RecyclerView recycleViewPob;
     private View view;
-    private POBAdapter pobAdapter;
+    private PODAdapter pobAdapter;
     public PODFragment() {
-        // Required empty public constructor
     }
 
 
@@ -45,7 +44,6 @@ public class PODFragment extends BaseFragment {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
 
     }
@@ -59,11 +57,11 @@ public class PODFragment extends BaseFragment {
     @Override
     protected void initData() {
         super.initData();
-        pobAdapter = new POBAdapter(getContext());
+        pobAdapter = new PODAdapter(getContext());
         setAdapter(recycleViewPob,pobAdapter );
     }
 
-    public void setAdapter(RecyclerView recyclerView, POBAdapter adapter){
+    public void setAdapter(RecyclerView recyclerView, PODAdapter adapter){
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.hasFixedSize();
 
@@ -89,8 +87,4 @@ public class PODFragment extends BaseFragment {
     }
 
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }

@@ -11,29 +11,14 @@
         android:padding="5dp"
         android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/text_pod_product_name"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:text="Abbott"
             android:layout_height="wrap_content" />
 
         <EditText
-            android:background="@drawable/bg_input_box"
-            android:layout_width="0dp"
-            android:layout_margin="5dp"
-            android:textAlignment="center"
-            android:layout_weight="1"
-            android:maxLines="1"
-            android:layout_height="wrap_content" />
-
-        <EditText
-            android:background="@drawable/bg_input_box"
-            android:layout_width="0dp"
-            android:layout_margin="5dp"
-            android:textAlignment="center"
-            android:layout_weight="1"
-            android:maxLines="1"
-            android:layout_height="wrap_content" />
-        <EditText
+            android:id="@+id/edit_pod_product_value"
             android:textAlignment="center"
             android:background="@drawable/bg_input_box"
             android:layout_width="0dp"

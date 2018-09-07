@@ -83,7 +83,7 @@ public class ProductFragment extends BaseFragment implements EditProductDialog.O
 
 
     public void getProductsListApi(String token) {
-        Call<BrandsListResponse> call = apiInterface.brandsListApi(token);
+        Call<BrandsListResponse> call = apiInterface.brandsListApi(token, AppConstants.BRAND);
         call.enqueue(new Callback<BrandsListResponse>() {
             @Override
             public void onResponse(Call<BrandsListResponse> call, Response<BrandsListResponse> response) {

@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_height="wrap_content">
     <LinearLayout
+        android:paddingTop="15dp"
         android:layout_marginTop="@dimen/layout_margin_top"
         style="@style/BaseMargin"
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:weightSum="1"
         android:layout_height="wrap_content">
-        <CheckBox
-            android:padding="15dp"
-            android:id="@+id/check_brand"
-            android:layout_width="0dp"
-            android:shadowColor="@color/colorPrimary"
-            android:layout_weight="0.2"
-            android:layout_height="wrap_content" />
+
 
 
 
         <TextView
             android:text="Ranbaxy"
+            android:id="@+id/text_brand_name"
             style="@style/LargeTextBlack"
             android:textColor="@color/colorPrimary"
             android:layout_width="0dp"

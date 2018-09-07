@@ -27,6 +27,9 @@
     <string name="choose">choose</string>
     <string name="confirm">Confirm</string>
     <string name="no_internet">No Internet Connection !!</string>
+    <string name="low">Low</string>
+    <string name="regular">Regular</string>
+    <string name="superr">Super</string>
     <!--====================================================================================-->
 
     <!--Google Places Api Key-->
@@ -36,9 +39,6 @@
     <!--Category of Brands-->
 
     <string-array name="brand_category">
-        <item>Low</item>
-        <item>Regular</item>
-        <item>Super</item>
     </string-array>
 
     <string-array name="Months">

@@ -197,7 +197,7 @@ public class ActivityUploadPlan extends BaseActivity implements View.OnClickList
                 FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
                 StringBuilder sb = new StringBuilder();
 
-                //outter loop, loops through rows
+                //loop, loops through rows
                 for (int r = 1; r < rowsCount; r++) {
                     Row row = sheet.getRow(r);
                     int cellsCount = row.getPhysicalNumberOfCells();

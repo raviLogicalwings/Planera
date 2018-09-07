@@ -39,13 +39,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/swiper"/>
+
     <Button
+        android:id="@+id/button_confirm_product"
+        android:text="Confirm"
+        android:background="@color/colorPrimary"
         style="@style/ButtonText"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimary"
-        android:layout_marginTop="200dp"
-        android:text="@string/confirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
 
 </RelativeLayout>

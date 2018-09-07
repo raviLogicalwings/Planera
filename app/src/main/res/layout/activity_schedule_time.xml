@@ -47,6 +47,7 @@
                 android:textColor="@color/colorGray" />
 
             <TextView
+                android:id="@+id/text_customer_name"
                 style="@style/MediumText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -92,11 +93,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Session:"
+                android:text="Start Time:"
                 android:textColor="@color/colorGray" />
 
-            <Spinner
-                android:id="@+id/spinner_session"
+            <EditText
+                android:focusable="false"
+                android:id="@+id/edit_start_time"
                 style="@style/MediumText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -116,16 +118,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Session:"
+                android:text="End Time:"
                 android:textColor="@color/colorGray" />
 
-            <TextView
-                android:id="@+id/text_time"
+            <EditText
+                android:id="@+id/edit_end_time"
                 style="@style/MediumText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="20 Minutes." />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
@@ -162,7 +163,7 @@
     </LinearLayout>
     <Button
         android:layout_alignParentBottom="true"
-        android:id="@+id/button_submit"
+        android:id="@+id/button_submit_input"
         android:background="@color/colorPrimary"
         android:text="Submit"
         style="@style/ButtonText"

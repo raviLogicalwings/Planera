@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_height="wrap_content"
-    tools:context=".fragments.PODFragment">
+    android:layout_height="wrap_content">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
@@ -20,23 +19,9 @@
 
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:text="SQ"
-            style="@style/MediumTextBlack"
-            android:gravity="center"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
 
         <TextView
-            android:text="POB"
-            style="@style/MediumTextBlack"
-            android:layout_width="0dp"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:text="Rx_Level"
+            android:text="POD"
             style="@style/MediumTextBlack"
             android:layout_width="0dp"
             android:gravity="center"

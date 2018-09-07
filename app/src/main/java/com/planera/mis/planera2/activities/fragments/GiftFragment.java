@@ -17,13 +17,14 @@ import com.planera.mis.planera2.activities.adapters.GiftsAdapter;
 import com.planera.mis.planera2.activities.models.GiftListResponse;
 import com.planera.mis.planera2.activities.models.GiftsData;
 import com.planera.mis.planera2.activities.utils.AppConstants;
+
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class GiftFragment extends BaseFragment {
+public class GiftFragment extends BaseFragment{
     private RecyclerView recyclerViewGifts;
     private View view;
     private GiftsAdapter giftsAdapter;
@@ -128,6 +129,11 @@ public class GiftFragment extends BaseFragment {
         super.onDetach();
 
     }
+
+//    @Override
+//    public void onCheckInButtonClicked() {
+//        Toast.makeText(mContext, "Check In Button Clicked : Gift Fragment", Toast.LENGTH_LONG).show();
+//    }
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);

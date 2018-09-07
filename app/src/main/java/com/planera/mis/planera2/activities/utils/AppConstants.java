@@ -23,6 +23,7 @@ public class AppConstants {
     public static final String CHEMIST_LIST = "chemist/getAllChemists";
     public static final String USER_LIST = "user/getAllUsers";
     public static final String PLAN_LIST ="plan/getAllPlans" ;
+    public static final String USER_PLAN_LIST = "plan/getUserPlans";
 
 
     public static final String ADD_STATE = "state/addState";
@@ -33,6 +34,8 @@ public class AppConstants {
     public static final String ADD_DOCTORS = "doctor/addDoctor";
     public static final String ADD_CHEMIST = "chemist/addChemist";
     public static final String ADD_PLAN = "plan/addPlan";
+    public static final String ADD_INPUT_PRODUCT = "inputproduct/addInputProduct";
+    public static final String ADD_INPUT = "input/addInput";
 
     public static final String DELETE_STATE = "state/deleteState";
     public static final String DELETE_GIFT = "gift/deleteGift";
@@ -65,6 +68,15 @@ public class AppConstants {
     public static final String EMAIL2 = "email2";
     public static final String DOJ = "doj";
     public static final String PAN  = "pan";
+
+    //User's Plan constants
+    public static final int ROLE_DOCTOR = 1;
+    public static final int ROLE_CHEMIST = 2;
+    public static final String KEY_ROLE = "role";
+
+    public static final String KEY_ROLE_DOCTOR = "role_doctor";
+    public static final String KEY_ROLE_CHEMIST = "role_chemsit";
+
 
     // Plan's Constant
     public static final String UPDATE_PLAN_KEY = "update_plan";
@@ -113,6 +125,9 @@ public class AppConstants {
     public static final String PINCODE = "pincode";
 
 
+    //Brands Contanst =
+    public static final int BRAND = 1;
+    public static final int NOT_BRAND = 2;
 
     //Google Palces Api
     public static final String GOOGLE_PLACES_URL = "https://maps.googleapis.com/maps/api/";
@@ -147,7 +162,12 @@ public class AppConstants {
     public static final int INACTIVE_USER = 2;
 
     // Pager fragment count
-    public static final int FRAGMENT_COUNT = 3;
+    public static final int FRAGMENT_COUNT_FOR_DOCTOR = 2;
+    public static final int FRAGMENT_COUNT_FOR_CHEMIST = 1;
+
+    //Fragment for user Role
+    public static final int HOME_FRAGMENT = 10;
+    public static final int PROFILE_FRAGMENT = 11;
 
 
     public static final int STATE_FRAGMENT = 1;
@@ -163,6 +183,17 @@ public class AppConstants {
 
 
     public static final String IS_CHANGES = "is_changes";
+
+
+    public static final String USER = "0";
+    public static final String IS_USER = "isUser" ;
+    public static final String CUSTOMER_NAME ="customer_name" ;
+    public static final String VISIT_DATE = "visit_date";
+    public static final int USER_IN_LOCATION = 1;
+    public static final int USER_NOT_IN_LOCATION = 0;
+    public static final String KEY_IN_LOCATION = "in_location";
+    public static final String LATITUDE = "latitude";
+    public static final String LONGITUDE = "latitude";
 
 
 }

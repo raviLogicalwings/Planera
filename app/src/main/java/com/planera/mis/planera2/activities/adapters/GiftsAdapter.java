@@ -5,12 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.models.GiftsData;
-
 
 import java.util.List;
 
@@ -51,21 +50,17 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
 
     }
     public class MyGiftHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private CheckBox checkBrand;
+        private EditText editGiftQuantity;
         private TextView textGift;
 
         public MyGiftHolder(View itemView) {
             super(itemView);
-            checkBrand = itemView.findViewById(R.id.check_brand);
+            editGiftQuantity = itemView.findViewById(R.id.edit_gift_quantity);
             textGift = itemView.findViewById(R.id.text_gift);
         }
 
         @Override
         public void onClick(View view) {
-            switch (view.getId()){
-                case R.id.check_brand:
-                    break;
-            }
         }
     }
 

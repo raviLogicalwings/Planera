@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.Retrofit.ApiClient;
 import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
@@ -33,6 +35,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     private ApiInterface apiInterface;
     private UserData userData;
     public boolean isUserLogin;
+    public static final String TAG = LoginActivity.class.getSimpleName();
 
     @Override
     public void initData() {
@@ -92,18 +95,28 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     }
 
     public void callUserLoginApi(UserData userData){
-//        showProgressDialog("Xyz", "Loading...");
+        processDialog.showDialog(LoginActivity.this, false);
         Call<LoginResponse> call = apiInterface.userLoginApi(userData);
         call.enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 processDialog.dismissDialog();
+                Log.e(TAG, "onResponse: "+ new Gson().toJson(response.body()));
                 if (response.body().getStatusCode()== AppConstants.RESULT_OK){
 //                    Toast.makeText(LoginActivity.this, response.body().getData().getToken(), Toast.LENGTH_LONG).show();
                     connector.setString(AppConstants.TOKEN, response.body().getData().getToken());
                     connector.setBoolean(AppConstants.IS_LOGIN, true);
-                    Intent intentHome = new Intent(LoginActivity.this, AdminPanelActivity.class);
-                    startActivity(intentHome);
+                    if(response.body().getData().getType().equals(AppConstants.USER)) {
+                        connector.setBoolean(AppConstants.IS_USER, true);
+
+                        Intent intentHome = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intentHome);
+                    }
+                    else{
+                        connector.setBoolean(AppConstants.IS_USER, false);
+                        Intent intentHome = new Intent(LoginActivity.this, AdminPanelActivity.class);
+                        startActivity(intentHome);
+                    }
                 }
                 else{
                     Toast.makeText(LoginActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();

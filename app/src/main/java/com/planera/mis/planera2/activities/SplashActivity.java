@@ -11,6 +11,7 @@ import com.planera.mis.planera2.activities.utils.RuntimePermissionCheck;
 
 public class SplashActivity extends BaseActivity {
     public boolean isUserLogin;
+    public boolean isUser;
     public RuntimePermissionCheck permissionCheck;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +32,18 @@ public class SplashActivity extends BaseActivity {
     public void initData() {
         super.initData();
         isUserLogin = connector.getBoolean(AppConstants.IS_LOGIN);
+        isUser = connector.getBoolean(AppConstants.IS_USER);
         permissionCheck = new RuntimePermissionCheck(SplashActivity.this);
+
         if (isUserLogin){
-          Intent intent = new Intent(SplashActivity.this, AdminPanelActivity.class);
-          startActivity(intent);
+            if(isUser) {
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+            else{
+                Intent intent = new Intent(SplashActivity.this, AdminPanelActivity.class);
+                startActivity(intent);
+            }
         }
         else{
             callSplash();

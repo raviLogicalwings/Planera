@@ -6,7 +6,6 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -41,7 +40,7 @@ public class SignupActivity extends BaseActivity implements View.OnClickListener
     private ApiInterface apiInterface;
     private String userNameStr, passwordStr, confirmPasswordStr, phoneStr, emailStr;
     public UserData user;
-    public static int ON_HOLD = 3;
+    public static int ON_HOLD = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +108,7 @@ public class SignupActivity extends BaseActivity implements View.OnClickListener
             Snackbar.make(rootView, getString(R.string.invalid_input), Snackbar.LENGTH_LONG).show();
         }
 
-        else if (TextUtils.isEmpty(phoneStr) || passwordStr.length()<10){
+        else if (TextUtils.isEmpty(phoneStr)){
             inputLayoutMobile.setError("*");
             Snackbar.make(rootView, "This field can't be empty", Snackbar.LENGTH_LONG).show();
         }

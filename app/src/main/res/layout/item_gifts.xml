@@ -10,23 +10,25 @@
         android:orientation="horizontal"
         android:weightSum="1"
         android:layout_height="wrap_content">
-        <CheckBox
-            android:padding="15dp"
-            android:id="@+id/check_brand"
-            android:layout_width="0dp"
-            android:shadowColor="@color/colorPrimary"
-            android:layout_weight="0.2"
-            android:layout_height="wrap_content" />
 
         <TextView
+            android:layout_gravity="center_vertical"
             android:id="@+id/text_gift"
             android:text="Pencil BOx"
             style="@style/LargeTextBlack"
             android:textColor="@color/colorPrimary"
             android:layout_width="0dp"
-            android:layout_weight=".8"
+            android:layout_weight=".5"
             android:layout_height="wrap_content" />
-
+        <EditText
+            android:background="@drawable/bg_input_box"
+            android:id="@+id/edit_gift_quantity"
+            android:layout_width="0dp"
+            android:layout_margin="5dp"
+            android:textAlignment="center"
+            android:layout_weight="0.5"
+            android:maxLines="1"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </LinearLayout>
