@@ -17,9 +17,37 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <TextView
+                style="@style/NormalText"
+                android:text="Select For"
+                android:padding="@dimen/fab_margin"
+                android:layout_marginTop="@dimen/fab_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
+            <RadioGroup
+
+                android:id="@+id/radio_group_select"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton android:id="@+id/radio_doctor"
+                   android:layout_weight="0.5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Doctor"
+                    />
+                <RadioButton android:id="@+id/radio_chemist"
+                    android:layout_weight="0.5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chemist"
+                    />
+            </RadioGroup>
 
             <LinearLayout
+                android:id="@+id/doctor_spinner_layout"
                 android:weightSum="2"
                 android:paddingTop="@dimen/drawable_padding"
                 android:layout_width="match_parent"
@@ -43,7 +71,8 @@
             </LinearLayout>
 
             <LinearLayout
-
+                android:visibility="gone"
+                android:id="@+id/chemist_spinner_layout"
                 android:weightSum="2"
                 android:paddingTop="@dimen/drawable_padding"
                 android:layout_width="match_parent"

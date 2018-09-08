@@ -52,6 +52,10 @@
                     style="@style/LargeTextBlack"
                     android:text="Dr. Aman Kashyap"
                     android:layout_height="wrap_content" />
+
+                <RatingBar
+                    android:id="@+id/rating_bar_doctor"
+                    style="@style/rating_bar_doc"/>
                 <TextView
                     android:padding="3dp"
                     android:layout_width="wrap_content"

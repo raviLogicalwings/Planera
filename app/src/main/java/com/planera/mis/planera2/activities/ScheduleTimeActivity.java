@@ -7,17 +7,25 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.planera.mis.planera2.R;
+import com.planera.mis.planera2.activities.models.Input;
+import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.InternetConnection;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ScheduleTimeActivity extends BaseActivity implements View.OnClickListener {
     private AppBarLayout appBar;
@@ -32,24 +40,29 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
     private boolean isDoctor;
     private double longitude;
     private double latitude;
-    private int customeId;
     private int isInLocation;
+    private int planId;
+    private int userId;
     private String startTime;
     private String endTime;
     private String selectedTime;
+    private Input input;
+    private int chemistId;
+    private int docterId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule_time);
+
         initUi();
-        initUi();
+        initData();
     }
 
     @Override
     public void initUi() {
         super.initUi();
-        Intent intent = getIntent();
+
         appBar = findViewById(R.id.appBar);
         toolbarTime = findViewById(R.id.toolbarTime);
         textCustomerName = findViewById(R.id.text_customer_name);
@@ -63,16 +76,22 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
         setSupportActionBar(toolbarTime);
         getSupportActionBar().setTitle("Schedule");
         toolbarTime.setNavigationOnClickListener(view -> onBackPressed());
-        loadFormIntent(intent);
+
 
         buttonSubmitInput.setOnClickListener(this);
         editStartTime.setOnClickListener(this);
         editEndTime.setOnClickListener(this);
+
+
     }
 
     @Override
     public void initData() {
         super.initData();
+        Intent intent = getIntent();
+        input = new Input();
+        loadFormIntent(intent);
+        getCurrnetDate();
 
     }
 
@@ -96,7 +115,10 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
         }
         else{
             if (InternetConnection.isNetworkAvailable(ScheduleTimeActivity.this)){
-
+               input.setStartDate(startTimeStr);
+               input.setEndDate(endTimeStr);
+               input.setComment(feedbackStr);
+                addInputApi(token, input);
             }
             else{
                 Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
@@ -113,15 +135,46 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
         longitude = intent.getDoubleExtra(AppConstants.LATITUDE, 0.0);
         latitude  = intent.getDoubleExtra(AppConstants.LATITUDE, 0.0);
         isInLocation = intent.getIntExtra(AppConstants.KEY_IN_LOCATION, -1);
-        customeId = intent.getIntExtra(AppConstants.DOCTOR_ID, 0);
+        docterId = intent.getIntExtra(AppConstants.DOCTOR_ID, -10);
+        chemistId = intent.getIntExtra(AppConstants.CHEMIST_ID , -10);
+        userId = intent.getIntExtra(AppConstants.KEY_USER_ID, -10);
+        planId = intent.getIntExtra(AppConstants.KEY_PLAN_ID, -10);
+
+        input.setLatitude(Double.toString(latitude));
+        input.setLongitude(longitude+"");
+        input.setIsInLocation(isInLocation+"");
+        if(isDoctor){
+            input.setDoctorId(docterId+"");
+        }
+        else{
+            input.setChemistsId(chemistId+"");
+        }
+        input.setPlanId(planId+"");
+        input.setUserId(userId+"");
+
+
     }
 
     @Override
     public void onClick(View view) {
+
         switch (view.getId()){
             case R.id.button_submit_input:
-                Intent intentProduct = new Intent(ScheduleTimeActivity.this, ProductCategoryActivity.class);
-                startActivity(intentProduct);
+                startTimeStr = editStartTime.getText().toString().trim();
+                endTimeStr = editEndTime.getText().toString().trim();
+                String stTime = "20101212" + startTimeStr.replace(":", "");
+                String edTime = "20101212" + endTimeStr.replace(":", "");
+                Date inTime = new Date(Long.parseLong(stTime));
+                Date outTime = new Date(Long.parseLong(edTime));
+                if(outTime.before(inTime))
+                {
+                    Toast.makeText(ScheduleTimeActivity.this, "End time should be greater than start time", Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    Intent intentProduct = new Intent(ScheduleTimeActivity.this, ProductCategoryActivity.class);
+                    startActivity(intentProduct);
+                }
                 break;
 
             case R.id.edit_start_time:
@@ -137,7 +190,49 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
 
     }
 
+    public void addInputApi(String token, Input input){
+        processDialog.showDialog(ScheduleTimeActivity.this, false);
+        Call<MainResponse> call  = apiInterface.addInput(token, input);
+        call.enqueue(new Callback<MainResponse>() {
+            @Override
+            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+               processDialog.dismissDialog();
+                if (response.isSuccessful()){
 
+                    if (response.code() == 200){
+                        if(response.body().getStatusCode() == AppConstants.RESULT_OK){
+                            Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_INDEFINITE).show();
+                        }
+                        else{
+                            Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_INDEFINITE).show();
+
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MainResponse> call, Throwable t) {
+                processDialog.dismissDialog();
+                Snackbar.make(rootView, t.getMessage(), Snackbar.LENGTH_INDEFINITE).show();
+
+            }
+        });
+    }
+
+    public void getCurrnetDate(){
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        textVisitDate.setText(df.format(c));
+    }
+
+    boolean isTimeAfter(Date startTime, Date endTime) {
+        if (endTime.before(startTime)) { //Same way you can check with after() method also.
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     public String getDateFromDialog(){
         Calendar mCurrentTime = Calendar.getInstance();
@@ -145,16 +240,7 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
         int minute = mCurrentTime.get(Calendar.MINUTE);
         TimePickerDialog timePickerDialog = new TimePickerDialog(ScheduleTimeActivity.this,
                 (view, hourOfDay, minute1) -> {
-
-                    if (hourOfDay>12){
-                       int temHourOfDay = hourOfDay-12;
-                        selectedTime= temHourOfDay + ":" + minute1 + "PM";
-                        Log.d(selectedTime, "time");
-                    }
-                    else
-                    {
-                        selectedTime = hourOfDay + ":" + minute1 + " AM";
-                    }
+                    selectedTime = hourOfDay+":"+minute1;
                 }, hour, minute, false);
         timePickerDialog.show();
         return selectedTime;

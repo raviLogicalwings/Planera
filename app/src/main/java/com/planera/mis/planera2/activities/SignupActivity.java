@@ -168,7 +168,16 @@ public class SignupActivity extends BaseActivity implements View.OnClickListener
                 inputValidation();
                 break;
 
+            case R.id.text_sign_up:
+                backToLogin();
+                break;
+
         }
 
+    }
+
+    private void backToLogin() {
+        Intent intentLogin =  new Intent(SignupActivity.this, LoginActivity.class);
+        startActivity(intentLogin);
     }
 }

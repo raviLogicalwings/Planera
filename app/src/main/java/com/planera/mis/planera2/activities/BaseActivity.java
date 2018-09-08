@@ -1,11 +1,9 @@
 package com.planera.mis.planera2.activities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-
 
 import com.planera.mis.planera2.activities.Retrofit.ApiClient;
 import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
@@ -27,7 +25,7 @@ public class BaseActivity extends AppCompatActivity {
     public Context mContext;
 
 
-    public void initData(){
+    public void initData() {
         rootView = getWindow().getDecorView().getRootView();
         connector = PreferenceConnector.getInstance(this);
         permissionCheck = new RuntimePermissionCheck(getBaseContext());

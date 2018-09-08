@@ -23,7 +23,7 @@ public class AppConstants {
     public static final String CHEMIST_LIST = "chemist/getAllChemists";
     public static final String USER_LIST = "user/getAllUsers";
     public static final String PLAN_LIST ="plan/getAllPlans" ;
-    public static final String USER_PLAN_LIST = "plan/getUserPlans";
+    public static final String USER_PLAN_LIST = "plan/getAllPlans";
 
 
     public static final String ADD_STATE = "state/addState";
@@ -193,7 +193,9 @@ public class AppConstants {
     public static final int USER_NOT_IN_LOCATION = 0;
     public static final String KEY_IN_LOCATION = "in_location";
     public static final String LATITUDE = "latitude";
-    public static final String LONGITUDE = "latitude";
+    public static final String LONGITUDE = "longitude";
 
 
+    public static final String KEY_PLAN_ID = "plan_id";
+    public static final String KEY_USER_ID = "user_id";
 }

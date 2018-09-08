@@ -61,7 +61,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     int  isInLocation;
     double lat;
     double lng;
-    int customerId;
+    int doctorId;
+    int chemsitId;
+    int planId;
+    int userId;
 
 
     public HomeFragment() {
@@ -120,7 +123,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                       visitLat =   plansList.get(1).getChemistLatitude();
                       visitLong =  plansList.get(1).getChemistLongitude();
                     } else {
-                        Snackbar.make(rootView, "No Data Found", Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(rootView, "No Plan Available", Snackbar.LENGTH_LONG).show();
                     }
                 } else {
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
@@ -263,8 +266,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         intent.putExtra(AppConstants.CUSTOMER_NAME, getCustomerName(pos, plansList, isDoctor));
         intent.putExtra(AppConstants.VISIT_DATE, plansList.get(pos).getMonth()+"/"+plansList.get(pos).getYear());
         intent.putExtra(AppConstants.LATITUDE, lat);
-        intent.putExtra(AppConstants.DOCTOR_ID, customerId);
+        intent.putExtra(AppConstants.DOCTOR_ID, plansList.get(pos).getDoctorId());
+        intent.putExtra(AppConstants.CHEMIST_ID, plansList.get(pos).getChemistsId());
         intent.putExtra(AppConstants.LONGITUDE, lng);
+        intent.putExtra(AppConstants.KEY_PLAN_ID, plansList.get(pos).getPlanId());
+        intent.putExtra(AppConstants.KEY_USER_ID, plansList.get(pos).getUserId());
         startActivity(intent);
 
     }
@@ -282,14 +288,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
    public String getCustomerName(int pos, List<UserPlan> listPlans, boolean isDoctor){
         String customerName;
-
        if(isDoctor){
            customerName = listPlans.get(pos).getDoctorFirstName()
                    +" "+listPlans.get(pos).getDoctorMiddleName()
                    +" "+listPlans.get(pos).getDoctorLastName();
            lat = listPlans.get(pos).getDoctorLatitude();
            lng = listPlans.get(pos).getDoctorLongitude();
-           customerId = listPlans.get(pos).getDoctorId();
+
        }
        else{
            customerName = listPlans.get(pos).getChemistFirstName()
@@ -297,7 +302,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                    +" "+listPlans.get(pos).getChemistLastName();
            lat = listPlans.get(pos).getChemistLatitude();
            lng = listPlans.get(pos).getChemistLongitude();
-           customerId = listPlans.get(pos).getChemistsId();
+
        }
 
         return customerName;

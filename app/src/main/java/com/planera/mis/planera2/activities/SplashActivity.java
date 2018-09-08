@@ -3,6 +3,7 @@ package com.planera.mis.planera2.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.utils.AppConstants;
@@ -18,7 +19,11 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         initUi();
-        initData();
+        try {
+            initData();
+        } catch (Exception e) {
+            Log.e("Exception ", e.getMessage());
+        }
 
     }
 
@@ -29,24 +34,32 @@ public class SplashActivity extends BaseActivity {
     }
 
     @Override
-    public void initData() {
+    public void initData(){
         super.initData();
         isUserLogin = connector.getBoolean(AppConstants.IS_LOGIN);
         isUser = connector.getBoolean(AppConstants.IS_USER);
         permissionCheck = new RuntimePermissionCheck(SplashActivity.this);
+        if(permissionCheck.checkAndRequestMultiplePermission()) {
 
-        if (isUserLogin){
-            if(isUser) {
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-            else{
-                Intent intent = new Intent(SplashActivity.this, AdminPanelActivity.class);
-                startActivity(intent);
+            if (isUserLogin) {
+                if (isUser) {
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(SplashActivity.this, AdminPanelActivity.class);
+                    startActivity(intent);
+                }
+            } else {
+                callSplash();
             }
         }
         else{
-            callSplash();
+            try {
+                permissionCheck.requestPermissionForLocation();
+                callSplash();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
 

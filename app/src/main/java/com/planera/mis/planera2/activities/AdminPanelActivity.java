@@ -1,6 +1,7 @@
 package com.planera.mis.planera2.activities;
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.fragments.AdminAccessFragment;
 import com.planera.mis.planera2.activities.fragments.UploadDataFragment;
+import com.planera.mis.planera2.activities.utils.AppConstants;
 
 
 public class AdminPanelActivity extends BaseActivity {
@@ -59,10 +61,19 @@ public class AdminPanelActivity extends BaseActivity {
                     case R.id.uploads:
                         loadFragment(FRAGMENT_UPLOAD);
                         return true;
+
+                    case R.id.logout_admin:
+                        backToLogin();
+                        return true;
                 }
                 return false;
             };
 
+    private void backToLogin() {
+        Intent intentLogin = new Intent(AdminPanelActivity.this, LoginActivity.class);
+        connector.setBoolean(AppConstants.IS_LOGIN, false);
+        startActivity(intentLogin);
+    }
 
 
     public void loadFragment(int type){

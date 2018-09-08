@@ -1,5 +1,6 @@
 package com.planera.mis.planera2.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -38,14 +39,16 @@ public class MainActivity extends BaseActivity implements
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                   loadFragment(AppConstants.HOME_FRAGMENT);
+                  getSupportActionBar().setTitle("Visit Plan");
                     return true;
                 case R.id.navigation_meeting:
                     return true;
                 case R.id.navigation_profile:
                  loadFragment(AppConstants.PROFILE_FRAGMENT);
                     return true;
-                case R.id.navigation_report:
-                    mTextMessage.setText(R.string.title_notifications);
+                case R.id.navigation_logout:
+
+                    backToLogin();
                     return true;
             }
             return false;
@@ -96,11 +99,18 @@ public class MainActivity extends BaseActivity implements
         mTextMessage = findViewById(R.id.message);
 
 
-        appBar = (AppBarLayout) findViewById(R.id.appBar);
+        appBar = findViewById(R.id.appBar);
         toolbarProduct = (Toolbar) findViewById(R.id.toolbarProduct);
         setSupportActionBar(toolbarProduct);
+        getSupportActionBar().setTitle("Visit Plan");
         toolbarProduct.setNavigationIcon(R.drawable.back_arrow_whit);
 
+    }
+
+    public void backToLogin(){
+        connector.setBoolean(AppConstants.IS_LOGIN, false);
+        Intent intentLogin = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intentLogin);
     }
 
     @Override

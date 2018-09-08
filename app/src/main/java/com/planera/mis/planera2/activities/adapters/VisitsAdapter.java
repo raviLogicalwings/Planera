@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.planera.mis.planera2.R;
@@ -80,6 +81,7 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
             viewHolder.textDistance.setText(Math.abs(dist) + " KM");
 
         }
+        viewHolder.ratingBarDoctor.setRating(3.5f);
         viewHolder.textStatus.setText("");
         viewHolder.textNameFirstLetter.setText("");
         viewHolder.textAddress.setText(planList.get(position).getPatchName() + ", " +
@@ -96,10 +98,12 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
         private Button buttonCheckIn;
         private TextView textDistance;
         private ImageView imageCurrentLocationStatus;
+        private RatingBar ratingBarDoctor;
 
 
         VisitItemHolder(View itemView) {
             super(itemView);
+            ratingBarDoctor = itemView.findViewById(R.id.rating_bar_doctor);
             buttonCheckIn = itemView.findViewById(R.id.button_check_in);
             textNameFirstLetter = itemView.findViewById(R.id.text_name_first_letter);
             textName = itemView.findViewById(R.id.text_name);
