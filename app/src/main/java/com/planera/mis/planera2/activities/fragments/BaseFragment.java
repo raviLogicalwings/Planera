@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 
+import com.planera.mis.planera2.activities.Retrofit.ApiClient;
+import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.PreferenceConnector;
 import com.planera.mis.planera2.activities.utils.ProcessDialog;
@@ -18,6 +20,7 @@ public class BaseFragment extends Fragment {
     public PreferenceConnector connector;
     public String token;
     public Context mContext;
+    public ApiInterface apiInterface;
 
     protected void initData() {
         manager = getFragmentManager();
@@ -26,6 +29,7 @@ public class BaseFragment extends Fragment {
         token = connector.getString(AppConstants.TOKEN);
         mContext = getContext();
         processDialog = new ProcessDialog();
+        apiInterface = ApiClient.getInstance();
     }
 
     protected void initUi() {

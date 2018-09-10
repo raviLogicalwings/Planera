@@ -23,7 +23,7 @@ public class AppConstants {
     public static final String CHEMIST_LIST = "chemist/getAllChemists";
     public static final String USER_LIST = "user/getAllUsers";
     public static final String PLAN_LIST ="plan/getAllPlans" ;
-    public static final String USER_PLAN_LIST = "plan/getAllPlans";
+    public static final String USER_PLAN_LIST = "plan/getUserPlans";
 
 
     public static final String ADD_STATE = "state/addState";

@@ -12,6 +12,7 @@ import com.planera.mis.planera2.activities.models.GooglePlacesModel.GooglePlaces
 import com.planera.mis.planera2.activities.models.Input;
 import com.planera.mis.planera2.activities.models.LoginResponse;
 import com.planera.mis.planera2.activities.models.MainResponse;
+import com.planera.mis.planera2.activities.models.Orders;
 import com.planera.mis.planera2.activities.models.PatchListResponse;
 import com.planera.mis.planera2.activities.models.Plans;
 import com.planera.mis.planera2.activities.models.PlansListResponce;
@@ -22,6 +23,8 @@ import com.planera.mis.planera2.activities.models.UserData;
 import com.planera.mis.planera2.activities.models.UserListResponse;
 import com.planera.mis.planera2.activities.models.UserPlanListRespnce;
 import com.planera.mis.planera2.activities.utils.AppConstants;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -115,6 +118,9 @@ public interface ApiInterface {
                                        @Query("ProductId") int productId,
                                        @Query("InterestedLevel") String interestedLevel);
 
+
+    Call<MainResponse> addInputProductList(@Header("Authorization") String token,
+                                           @Body List<Orders> orders);
     @POST(AppConstants.ADD_INPUT)
     Call<MainResponse> addInput(@Header("Authorization") String token, @Body Input input);
 

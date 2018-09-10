@@ -32,28 +32,24 @@ public class MainActivity extends BaseActivity implements
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+            = item -> {
+                switch (item.getItemId()) {
+                    case R.id.navigation_home:
+                      loadFragment(AppConstants.HOME_FRAGMENT);
+                      getSupportActionBar().setTitle("Visit Plan");
+                        return true;
+                    case R.id.navigation_meeting:
+                        return true;
+                    case R.id.navigation_profile:
+                     loadFragment(AppConstants.PROFILE_FRAGMENT);
+                        return true;
+                    case R.id.navigation_logout:
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                  loadFragment(AppConstants.HOME_FRAGMENT);
-                  getSupportActionBar().setTitle("Visit Plan");
-                    return true;
-                case R.id.navigation_meeting:
-                    return true;
-                case R.id.navigation_profile:
-                 loadFragment(AppConstants.PROFILE_FRAGMENT);
-                    return true;
-                case R.id.navigation_logout:
-
-                    backToLogin();
-                    return true;
-            }
-            return false;
-        }
-    };
+                        backToLogin();
+                        return true;
+                }
+                return false;
+            };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -7,12 +7,14 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.models.Input;
 import com.planera.mis.planera2.activities.models.MainResponse;
@@ -37,6 +39,7 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
     private EditText editFeedback;
     private Button buttonSubmitInput;
     private String startTimeStr, endTimeStr, feedbackStr;
+    public static final String TAG = ScheduleTimeActivity.class.getSimpleName();
     private boolean isDoctor;
     private double longitude;
     private double latitude;
@@ -91,7 +94,7 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
         Intent intent = getIntent();
         input = new Input();
         loadFormIntent(intent);
-        getCurrnetDate();
+        getCurrentDate();
 
     }
 
@@ -101,17 +104,17 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
         endTimeStr = editEndTime.getText().toString().trim();
         feedbackStr = editFeedback.getText().toString().trim();
 
-        if(TextUtils.isEmpty(feedbackStr)){
-            editFeedback.requestFocus();
-            editFeedback.setError(getString(R.string.invalid_input));
+        if(TextUtils.isEmpty(startTimeStr)){
+            editStartTime.requestFocus();
+            editStartTime.setError(getString(R.string.invalid_input));
         }
         else if(TextUtils.isEmpty(endTimeStr)){
             editEndTime.requestFocus();
             editEndTime.setError(getString(R.string.invalid_input));
         }
-        else if(TextUtils.isEmpty(startTimeStr)){
-            editStartTime.requestFocus();
-            editStartTime.setError(getString(R.string.invalid_input));
+        else if(TextUtils.isEmpty(feedbackStr)){
+            editFeedback.requestFocus();
+            editFeedback.setError(getString(R.string.invalid_input));
         }
         else{
             if (InternetConnection.isNetworkAvailable(ScheduleTimeActivity.this)){
@@ -160,31 +163,15 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
 
         switch (view.getId()){
             case R.id.button_submit_input:
-                startTimeStr = editStartTime.getText().toString().trim();
-                endTimeStr = editEndTime.getText().toString().trim();
-                String stTime = "20101212" + startTimeStr.replace(":", "");
-                String edTime = "20101212" + endTimeStr.replace(":", "");
-                Date inTime = new Date(Long.parseLong(stTime));
-                Date outTime = new Date(Long.parseLong(edTime));
-                if(outTime.before(inTime))
-                {
-                    Toast.makeText(ScheduleTimeActivity.this, "End time should be greater than start time", Toast.LENGTH_LONG).show();
-                }
-                else
-                {
-                    Intent intentProduct = new Intent(ScheduleTimeActivity.this, ProductCategoryActivity.class);
-                    startActivity(intentProduct);
-                }
+                isTimeAfter();
                 break;
 
             case R.id.edit_start_time:
-                startTime = getDateFromDialog();
-                editStartTime.setText(startTime);
+                getDateFromDialog(editStartTime);
                 break;
 
             case R.id.edit_end_time:
-                endTime= getDateFromDialog();
-                editEndTime.setText(endTime);
+                getDateFromDialog(editEndTime);
                 break;
         }
 
@@ -196,12 +183,15 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
         call.enqueue(new Callback<MainResponse>() {
             @Override
             public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+                Log.e(TAG, "onResponse: "+ new Gson().toJson(response.body()));
+                Log.e(TAG, new Gson().toJson(input));
                processDialog.dismissDialog();
                 if (response.isSuccessful()){
 
                     if (response.code() == 200){
                         if(response.body().getStatusCode() == AppConstants.RESULT_OK){
-                            Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_INDEFINITE).show();
+                          Intent intent = new Intent(ScheduleTimeActivity.this, ProductCategoryActivity.class);
+                          startActivity(intent);
                         }
                         else{
                             Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_INDEFINITE).show();
@@ -220,29 +210,38 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
         });
     }
 
-    public void getCurrnetDate(){
+    public void getCurrentDate(){
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         textVisitDate.setText(df.format(c));
     }
 
-    boolean isTimeAfter(Date startTime, Date endTime) {
-        if (endTime.before(startTime)) { //Same way you can check with after() method also.
-            return false;
-        } else {
-            return true;
-        }
+   public void isTimeAfter() {
+
+
+            startTimeStr = editStartTime.getText().toString().trim();
+            endTimeStr = editEndTime.getText().toString().trim();
+            String stTime = "20101212" + startTimeStr.replace(":", "");
+            String edTime = "20101212" + endTimeStr.replace(":", "");
+            Date inTime = new Date(Long.parseLong(stTime));
+            Date outTime = new Date(Long.parseLong(edTime));
+            if (outTime.before(inTime)) {
+                Toast.makeText(ScheduleTimeActivity.this, "End time should be greater than start time", Toast.LENGTH_LONG).show();
+            } else {
+                uiValidation();
+            }
+
     }
 
-    public String getDateFromDialog(){
+    public void getDateFromDialog(TextView textView){
         Calendar mCurrentTime = Calendar.getInstance();
         int hour = mCurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mCurrentTime.get(Calendar.MINUTE);
         TimePickerDialog timePickerDialog = new TimePickerDialog(ScheduleTimeActivity.this,
                 (view, hourOfDay, minute1) -> {
                     selectedTime = hourOfDay+":"+minute1;
+                    textView.setText(selectedTime);
                 }, hour, minute, false);
         timePickerDialog.show();
-        return selectedTime;
     }
 }

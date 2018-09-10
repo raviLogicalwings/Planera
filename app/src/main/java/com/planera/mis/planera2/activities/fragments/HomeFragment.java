@@ -120,8 +120,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     Log.e(" UserPlanList : ", new Gson().toJson(plansList));
                     if (plansList != null) {
                         initAdapter(plansList, visitList);
-                      visitLat =   plansList.get(1).getChemistLatitude();
-                      visitLong =  plansList.get(1).getChemistLongitude();
+
+
+//                       visitLat =   plansList.get(1).getChemistLatitude();
+//                      visitLong =  plansList.get(1).getChemistLongitude();
                     } else {
                         Snackbar.make(rootView, "No Plan Available", Snackbar.LENGTH_LONG).show();
                     }
