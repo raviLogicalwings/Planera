@@ -67,7 +67,7 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
                    AddStateDialog dialog = new AddStateDialog();
                    dialog.show(getSupportFragmentManager(), "States");
                }
-               else if (comingFragment == AppConstants.TERITORY_FRAGMENT){
+               else if (comingFragment == AppConstants.TERRITORY_FRAGMENT){
                    AddTerritoryDialog dialog = new AddTerritoryDialog();
                    dialog.show(getSupportFragmentManager(), "Territory");
                }
@@ -152,7 +152,7 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
                         attach(PatchListFragment.newInstance()).commitAllowingStateLoss();
                 break;
 
-            case AppConstants.TERITORY_FRAGMENT:
+            case AppConstants.TERRITORY_FRAGMENT:
                 getSupportFragmentManager().beginTransaction().
                         detach(TerritoryListFragment.newInstance()).
                         attach(TerritoryListFragment.newInstance()).commitAllowingStateLoss();
@@ -220,7 +220,7 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
                 getSupportActionBar().setTitle("States");
                 break;
 
-            case AppConstants.TERITORY_FRAGMENT:
+            case AppConstants.TERRITORY_FRAGMENT:
                 fragment = TerritoryListFragment.newInstance();
                 getSupportActionBar().setTitle("Territory");
                 break;
@@ -278,7 +278,7 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onAddTerritoryDialogDismiss() {
-        refreshFragment(AppConstants.TERITORY_FRAGMENT);
+        refreshFragment(AppConstants.TERRITORY_FRAGMENT);
     }
 
     @Override

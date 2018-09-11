@@ -21,6 +21,7 @@
             android:layout_weight=".5"
             android:layout_height="wrap_content" />
         <EditText
+            android:inputType="number"
             android:background="@drawable/bg_input_box"
             android:id="@+id/edit_gift_quantity"
             android:layout_width="0dp"

@@ -139,7 +139,7 @@ public class SignupActivity extends BaseActivity implements View.OnClickListener
                 System.out.print(e.getCause() );
             }
 
-            Intent in = new Intent(SignupActivity.this, ScheduleTimeActivity.class);
+            Intent in = new Intent(SignupActivity.this, AddInputActivity.class);
             startActivity(in);
         }
     }

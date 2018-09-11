@@ -36,6 +36,7 @@ public class AppConstants {
     public static final String ADD_PLAN = "plan/addPlan";
     public static final String ADD_INPUT_PRODUCT = "inputproduct/addInputProduct";
     public static final String ADD_INPUT = "input/addInput";
+    public static final String ADD_INPUT_GIFT = "inputgift/addInputGift";
 
     public static final String DELETE_STATE = "state/deleteState";
     public static final String DELETE_GIFT = "gift/deleteGift";
@@ -171,7 +172,7 @@ public class AppConstants {
 
 
     public static final int STATE_FRAGMENT = 1;
-    public static final int TERITORY_FRAGMENT = 2;
+    public static final int TERRITORY_FRAGMENT = 2;
     public static final int PATCH_FRAGMENT = 3;
     public static final int GIFT_FRAGMENT = 4;
     public static final int PRODUCT_FRAGMENT = 5;
@@ -198,4 +199,11 @@ public class AppConstants {
 
     public static final String KEY_PLAN_ID = "plan_id";
     public static final String KEY_USER_ID = "user_id";
+
+
+    //interested Levels
+    public static final String LOW = "3";
+    public static final String REGULAR = "2";
+    public static final String SUPER = "1";
+    public static final String KEY_INPUT_ID = "input_id";
 }

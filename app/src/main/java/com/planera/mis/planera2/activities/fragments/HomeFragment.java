@@ -30,7 +30,7 @@ import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.ProductCategoryActivity;
 import com.planera.mis.planera2.activities.Retrofit.ApiClient;
 import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
-import com.planera.mis.planera2.activities.ScheduleTimeActivity;
+import com.planera.mis.planera2.activities.AddInputActivity;
 import com.planera.mis.planera2.activities.adapters.VisitsAdapter;
 import com.planera.mis.planera2.activities.models.UserPlan;
 import com.planera.mis.planera2.activities.models.UserPlanListRespnce;
@@ -262,7 +262,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         else{
             isInLocation = AppConstants.USER_NOT_IN_LOCATION;
         }
-        Intent intent = new Intent(mContext, ScheduleTimeActivity.class);
+        Intent intent = new Intent(mContext, AddInputActivity.class);
         intent.putExtra(AppConstants.KEY_ROLE, isDoctor);
         intent.putExtra(AppConstants.KEY_IN_LOCATION, isInLocation);
         intent.putExtra(AppConstants.CUSTOMER_NAME, getCustomerName(pos, plansList, isDoctor));

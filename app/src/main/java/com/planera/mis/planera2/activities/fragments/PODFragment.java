@@ -3,6 +3,8 @@ package com.planera.mis.planera2.activities.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,18 +13,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.FragmentDialog.editDialogs.EditPatchDialog;
-import com.planera.mis.planera2.activities.MainActivity;
+import com.planera.mis.planera2.activities.ProductCategoryActivity;
 import com.planera.mis.planera2.activities.adapters.PODAdapter;
-import com.planera.mis.planera2.activities.adapters.PatchAdapter;
 import com.planera.mis.planera2.activities.models.Brands;
 import com.planera.mis.planera2.activities.models.BrandsListResponse;
+import com.planera.mis.planera2.activities.models.InputOrders;
 import com.planera.mis.planera2.activities.models.MainResponse;
-import com.planera.mis.planera2.activities.models.Orders;
-import com.planera.mis.planera2.activities.models.Patches;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.InternetConnection;
 
@@ -33,15 +33,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PODFragment extends BaseFragment {
+public class PODFragment extends BaseFragment implements ProductCategoryActivity.DataReceivedListener{
 
     private RecyclerView recycleViewPob;
     private View view;
     private List<Brands> productList;
     public static final int NOT_BRAND = 0;
     public static final String TAG = "PODFragment";
-    private Orders orders;
-    private List<Orders> ordersList;
+    private InputOrders orders;
+    private List<InputOrders> ordersList;
 
     public PODFragment() {
     }
@@ -75,6 +75,12 @@ public class PODFragment extends BaseFragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ((ProductCategoryActivity) getActivity()).setDataReceivedListener(this);
+    }
+
+    @Override
     protected void initUi() {
         super.initUi();
         recycleViewPob = view.findViewById(R.id.recycle_view_pob);
@@ -85,7 +91,7 @@ public class PODFragment extends BaseFragment {
         super.initData();
         if(InternetConnection.isNetworkAvailable(mContext)){
             getAllProducts(token, NOT_BRAND);
-            orders = new Orders();
+            orders = new InputOrders();
             ordersList = new ArrayList<>();
         }
     }
@@ -141,7 +147,7 @@ public class PODFragment extends BaseFragment {
     public void initAdapter(List<Brands> productData, RecyclerView recyclerView){
         PODAdapter adapter = new PODAdapter(getContext(), productData, (holder, pos) -> {
             if (holder.editPodProductValue.getText()!= null) {
-                orders.setInputId(productList.get(pos).getProductId());
+                orders.setInputId(productList.get(pos).getProductId()+"");
                 orders.setQuantity(holder.editPodProductValue.getText().toString());
                 ordersList.add(orders);
 
@@ -163,21 +169,27 @@ public class PODFragment extends BaseFragment {
 //        }
     }
 
-    public void uploadProduct(String token, List<Orders> ordersList){
+    public void uploadProduct(String token, List<InputOrders> ordersList){
        processDialog.showDialog(mContext, false);
        Call<MainResponse> call = apiInterface.addInputProductList(token, ordersList);
        call.enqueue(new Callback<MainResponse>() {
            @Override
            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+               processDialog.dismissDialog();
                if (response.isSuccessful()){
                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-
+                       Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                   }
+                   else{
+                       Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
                    }
                }
            }
 
            @Override
            public void onFailure(Call<MainResponse> call, Throwable t) {
+               processDialog.dismissDialog();
+               Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_LONG).show();
 
            }
        });
@@ -190,4 +202,8 @@ public class PODFragment extends BaseFragment {
     }
 
 
+    @Override
+    public void onReceived() {
+        uploadProduct(token, ordersList);
+    }
 }

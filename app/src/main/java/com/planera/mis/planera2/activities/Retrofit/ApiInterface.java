@@ -10,9 +10,12 @@ import com.planera.mis.planera2.activities.models.DoctorsListResponce;
 import com.planera.mis.planera2.activities.models.GiftListResponse;
 import com.planera.mis.planera2.activities.models.GooglePlacesModel.GooglePlaces;
 import com.planera.mis.planera2.activities.models.Input;
+import com.planera.mis.planera2.activities.models.InputGift;
+import com.planera.mis.planera2.activities.models.InputGiftResponce;
+import com.planera.mis.planera2.activities.models.InputOrders;
+import com.planera.mis.planera2.activities.models.InputResponce;
 import com.planera.mis.planera2.activities.models.LoginResponse;
 import com.planera.mis.planera2.activities.models.MainResponse;
-import com.planera.mis.planera2.activities.models.Orders;
 import com.planera.mis.planera2.activities.models.PatchListResponse;
 import com.planera.mis.planera2.activities.models.Plans;
 import com.planera.mis.planera2.activities.models.PlansListResponce;
@@ -113,16 +116,16 @@ public interface ApiInterface {
     Call<MainResponse> addPlan(@Header("Authorization") String token,
                                @Body Plans plans);
 
+
     @POST(AppConstants.ADD_INPUT_PRODUCT)
-    Call<MainResponse> addInputProduct(@Header("Authorization") String token,
-                                       @Query("ProductId") int productId,
-                                       @Query("InterestedLevel") String interestedLevel);
-
-
     Call<MainResponse> addInputProductList(@Header("Authorization") String token,
-                                           @Body List<Orders> orders);
+                                           @Body List<InputOrders> orders);
+
+    @POST(AppConstants.ADD_INPUT_GIFT)
+    Call<InputGiftResponce> addInputGift(@Header("Authorization") String token, @Body List<InputGift> inputGift);
+
     @POST(AppConstants.ADD_INPUT)
-    Call<MainResponse> addInput(@Header("Authorization") String token, @Body Input input);
+    Call<InputResponce> addInput(@Header("Authorization") String token, @Body Input input);
 
     @GET(AppConstants.DELETE_STATE)
     Call<MainResponse> deleteState(@Header("Authorization") String token,

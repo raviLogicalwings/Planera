@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.models.Input;
-import com.planera.mis.planera2.activities.models.MainResponse;
+import com.planera.mis.planera2.activities.models.InputResponce;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.InternetConnection;
 
@@ -29,7 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ScheduleTimeActivity extends BaseActivity implements View.OnClickListener {
+public class AddInputActivity extends BaseActivity implements View.OnClickListener {
     private AppBarLayout appBar;
     private Toolbar toolbarTime;
     private TextView textCustomerName;
@@ -39,7 +39,7 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
     private EditText editFeedback;
     private Button buttonSubmitInput;
     private String startTimeStr, endTimeStr, feedbackStr;
-    public static final String TAG = ScheduleTimeActivity.class.getSimpleName();
+    public static final String TAG = AddInputActivity.class.getSimpleName();
     private boolean isDoctor;
     private double longitude;
     private double latitude;
@@ -51,7 +51,7 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
     private String selectedTime;
     private Input input;
     private int chemistId;
-    private int docterId;
+    private int doctorId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +77,7 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
 
 
         setSupportActionBar(toolbarTime);
+        toolbarTime.setNavigationIcon(R.drawable.back_arrow_whit);
         getSupportActionBar().setTitle("Schedule");
         toolbarTime.setNavigationOnClickListener(view -> onBackPressed());
 
@@ -117,7 +118,7 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
             editFeedback.setError(getString(R.string.invalid_input));
         }
         else{
-            if (InternetConnection.isNetworkAvailable(ScheduleTimeActivity.this)){
+            if (InternetConnection.isNetworkAvailable(AddInputActivity.this)){
                input.setStartDate(startTimeStr);
                input.setEndDate(endTimeStr);
                input.setComment(feedbackStr);
@@ -138,7 +139,7 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
         longitude = intent.getDoubleExtra(AppConstants.LATITUDE, 0.0);
         latitude  = intent.getDoubleExtra(AppConstants.LATITUDE, 0.0);
         isInLocation = intent.getIntExtra(AppConstants.KEY_IN_LOCATION, -1);
-        docterId = intent.getIntExtra(AppConstants.DOCTOR_ID, -10);
+        doctorId = intent.getIntExtra(AppConstants.DOCTOR_ID, -10);
         chemistId = intent.getIntExtra(AppConstants.CHEMIST_ID , -10);
         userId = intent.getIntExtra(AppConstants.KEY_USER_ID, -10);
         planId = intent.getIntExtra(AppConstants.KEY_PLAN_ID, -10);
@@ -147,7 +148,7 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
         input.setLongitude(longitude+"");
         input.setIsInLocation(isInLocation+"");
         if(isDoctor){
-            input.setDoctorId(docterId+"");
+            input.setDoctorId(doctorId +"");
         }
         else{
             input.setChemistsId(chemistId+"");
@@ -178,11 +179,11 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
     }
 
     public void addInputApi(String token, Input input){
-        processDialog.showDialog(ScheduleTimeActivity.this, false);
-        Call<MainResponse> call  = apiInterface.addInput(token, input);
-        call.enqueue(new Callback<MainResponse>() {
+        processDialog.showDialog(AddInputActivity.this, false);
+        Call<InputResponce> call  = apiInterface.addInput(token, input);
+        call.enqueue(new Callback<InputResponce>() {
             @Override
-            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+            public void onResponse(Call<InputResponce> call, Response<InputResponce> response) {
                 Log.e(TAG, "onResponse: "+ new Gson().toJson(response.body()));
                 Log.e(TAG, new Gson().toJson(input));
                processDialog.dismissDialog();
@@ -190,7 +191,8 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
 
                     if (response.code() == 200){
                         if(response.body().getStatusCode() == AppConstants.RESULT_OK){
-                          Intent intent = new Intent(ScheduleTimeActivity.this, ProductCategoryActivity.class);
+                            connector.setInteger(AppConstants.KEY_INPUT_ID, Integer.parseInt(response.body().getData().getInputId()));
+                          Intent intent = new Intent(AddInputActivity.this, ProductCategoryActivity.class);
                           startActivity(intent);
                         }
                         else{
@@ -202,7 +204,7 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
             }
 
             @Override
-            public void onFailure(Call<MainResponse> call, Throwable t) {
+            public void onFailure(Call<InputResponce> call, Throwable t) {
                 processDialog.dismissDialog();
                 Snackbar.make(rootView, t.getMessage(), Snackbar.LENGTH_INDEFINITE).show();
 
@@ -226,7 +228,7 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
             Date inTime = new Date(Long.parseLong(stTime));
             Date outTime = new Date(Long.parseLong(edTime));
             if (outTime.before(inTime)) {
-                Toast.makeText(ScheduleTimeActivity.this, "End time should be greater than start time", Toast.LENGTH_LONG).show();
+                Toast.makeText(AddInputActivity.this, "End time should be greater than start time", Toast.LENGTH_LONG).show();
             } else {
                 uiValidation();
             }
@@ -237,7 +239,7 @@ public class ScheduleTimeActivity extends BaseActivity implements View.OnClickLi
         Calendar mCurrentTime = Calendar.getInstance();
         int hour = mCurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mCurrentTime.get(Calendar.MINUTE);
-        TimePickerDialog timePickerDialog = new TimePickerDialog(ScheduleTimeActivity.this,
+        TimePickerDialog timePickerDialog = new TimePickerDialog(AddInputActivity.this,
                 (view, hourOfDay, minute1) -> {
                     selectedTime = hourOfDay+":"+minute1;
                     textView.setText(selectedTime);

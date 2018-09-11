@@ -32,10 +32,10 @@
             android:label="@string/title_activity_main" />
         <activity android:name=".activities.ProductCategoryActivity" />
         <activity android:name=".activities.ForgetPasswordActivity" />
-        <activity android:name=".activities.ScheduleTimeActivity">
+        <activity android:name=".activities.AddInputActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.planera.mis.planera2.activities.ScheduleTimeActivity" />
+                android:value="com.planera.mis.planera2.activities.AddInputActivity" />
         </activity>
         <activity
             android:name=".activities.AdminPanelActivity"

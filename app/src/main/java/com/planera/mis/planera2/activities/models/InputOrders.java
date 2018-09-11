@@ -2,7 +2,7 @@ package com.planera.mis.planera2.activities.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Orders{
+public class InputOrders {
 
 	@SerializedName("InputId")
 	private String inputId;
@@ -19,7 +19,7 @@ public class Orders{
 	@SerializedName("IsSample")
 	private String isSample;
 
-	public void setInputId(int inputId){
+	public void setInputId(String inputId){
 		this.inputId = inputId;
 	}
 
@@ -62,7 +62,7 @@ public class Orders{
 	@Override
  	public String toString(){
 		return 
-			"Orders{" + 
+			"InputOrders{" +
 			"inputId = '" + inputId + '\'' + 
 			",interestedLevel = '" + interestedLevel + '\'' + 
 			",quantity = '" + quantity + '\'' + 

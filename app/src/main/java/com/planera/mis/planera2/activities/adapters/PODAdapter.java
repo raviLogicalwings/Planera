@@ -11,14 +11,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.ProductCategoryActivity;
 import com.planera.mis.planera2.activities.models.Brands;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
-public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>  implements ProductCategoryActivity.DataReceivedListener{
+public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>{
    private Context context;
    private View holderView;
    private List<Brands> brandsList;
@@ -71,11 +69,6 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>  im
         }
     }
 
-    @Override
-    public void onReceived() {
-
-
-    }
 
     public class MyPobHolder extends RecyclerView.ViewHolder {
         private TextView textPodProductName;

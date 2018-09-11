@@ -13,8 +13,11 @@ import android.widget.TextView;
 
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.models.Brands;
+import com.planera.mis.planera2.activities.models.InputOrders;
 import com.planera.mis.planera2.activities.utils.AppConstants;
+import com.planera.mis.planera2.activities.utils.PreferenceConnector;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHolder> {
@@ -22,28 +25,36 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
     private View mView;
     private List<Brands> brandsList;
     private List<String> brandLevelList;
+    public List<InputOrders> orderListSelected;
+    public PreferenceConnector connector;
+    private InputOrders orders;
+    private int oldPosition = -1;
     private OnItemFoundListener onItemFoundListener;
 
 
 
 
-    public BrandsAdapter(Context context, List<Brands> brandsList, List<String> intrestedLevel, OnItemFoundListener onItemFoundListener) {
+
+    public BrandsAdapter(Context context, List<Brands> brandsList, List<String> intrestedLevel) {
         this.context = context;
         this.brandsList = brandsList;
         brandLevelList = intrestedLevel;
-        this.onItemFoundListener = onItemFoundListener;
 
     }
 
     @NonNull
     @Override
     public MyBrandsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         mView = LayoutInflater.from(context).inflate(R.layout.item_brand_tab, parent, false);
         return new MyBrandsHolder(mView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyBrandsHolder holder, int position) {
+        orderListSelected = new ArrayList<>();
+        orders = new InputOrders();
+        connector = new PreferenceConnector(context);
         bindItemsWithView(holder, position);
     }
 
@@ -58,22 +69,48 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
 
 
     public void bindItemsWithView(MyBrandsHolder holder, int pos) {
+
         if (brandsList.get(pos).getIsBrand().equals(AppConstants.BRAND + "")) {
             holder.textBrandName.setText(brandsList.get(pos).getName());
 
 
         }
-        holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                int productId = brandsList.get(pos).getProductId();
-                onItemFoundListener.onItemFound(pos, position, productId);
-            }
+         Brands brands = brandsList.get(pos);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+            holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String value = brandLevelList.get(position);
+                    if (!value.equals("")) {
+                        orders = new InputOrders();
+                        orders.setProductId(brands.getProductId() + "");
+                        orders.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID)+"");
+                        switch (value){
+                            case "Low":
+                                orders.setInterestedLevel("3");
+                                break;
+                            case "Regular":
+                                orders.setInterestedLevel("2");
+                                break;
+                            case "Super":
+                                orders.setInterestedLevel("1");
+                                break;
+
+                        }
+                        orderListSelected.add(orders);
+                    }
+
+
+//                orders.setInterestedLevel(position+"");
+
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+
 
     }
 
@@ -89,10 +126,17 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
 
     }
 
+    public List<InputOrders> getOrderListSelected() {
+        return orderListSelected;
+    }
 
-    class MyBrandsHolder extends RecyclerView.ViewHolder {
-        private Spinner spinner;
-        private TextView textBrandName;
+    public void setOrderListSelected(List<InputOrders> orderListSelected) {
+        this.orderListSelected = orderListSelected;
+    }
+
+    public class MyBrandsHolder extends RecyclerView.ViewHolder {
+        public  Spinner spinner;
+        TextView textBrandName;
 
         MyBrandsHolder(View itemView) {
             super(itemView);
@@ -105,6 +149,6 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
     }
 
     public interface OnItemFoundListener{
-         void onItemFound(int pos, int interestedLevelPos, int productId);
+         void onItemFound(List<InputOrders> listOfOrders);
     }
 }

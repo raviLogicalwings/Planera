@@ -4,6 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class Input{
 
+	@SerializedName("InputId")
+	private String inputId;
+
 	@SerializedName("DoctorId")
 	private String doctorId;
 
@@ -33,6 +36,14 @@ public class Input{
 
 	@SerializedName("Longitude")
 	private String longitude;
+
+	public String getInputId() {
+		return inputId;
+	}
+
+	public void setInputId(String inputId) {
+		this.inputId = inputId;
+	}
 
 	public void setDoctorId(String doctorId){
 		this.doctorId = doctorId;

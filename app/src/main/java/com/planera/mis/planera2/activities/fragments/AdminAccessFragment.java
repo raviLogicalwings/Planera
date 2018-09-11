@@ -126,7 +126,7 @@ public class AdminAccessFragment extends BaseFragment implements View.OnClickLis
               callIntent(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.STATE_FRAGMENT);
                 break;
             case R.id.card_teritory:
-                callIntent(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.TERITORY_FRAGMENT);
+                callIntent(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.TERRITORY_FRAGMENT);
                 break;
 
             case R.id.card_chemist:
