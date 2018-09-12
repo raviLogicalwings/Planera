@@ -134,7 +134,7 @@ public class ChemistFragment extends BaseFragment{
 
                 case R.id.img_chemist_edit:
                     chemistDetailsForUpdate(position, list);
-                    getActivity().finish();
+                    ChemistFragment.this.getActivity().finish();
 
                     break;
 

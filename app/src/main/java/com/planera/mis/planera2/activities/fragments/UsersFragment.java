@@ -136,6 +136,7 @@ public class UsersFragment extends BaseFragment{
 
                 case R.id.img_user_edit:
                     userDetailsForUpdate(position, list);
+                    UsersFragment.this.getActivity().finish();
 
                     break;
 
