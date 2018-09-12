@@ -146,12 +146,14 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
 
 
     public void createPlanApi(String token, Plans plans) {
+        Log.e(TAG, new Gson().toJson(plans));
         processDialog.showDialog(ActivityCretePlan.this, false);
         Call<MainResponse> call = apiInterface.addPlan(token, plans);
 
         call.enqueue(new Callback<MainResponse>() {
             @Override
             public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+                Log.e(TAG, new Gson().toJson(response.body()));
                 if (response.code() == 400) {
                     try {
                         Toast.makeText(ActivityCretePlan.this, response.errorBody().string(), Toast.LENGTH_LONG).show();

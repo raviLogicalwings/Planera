@@ -1,6 +1,5 @@
 package com.planera.mis.planera2.activities;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +18,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
+import com.planera.mis.planera2.activities.fragments.ChemistFragment;
 import com.planera.mis.planera2.activities.models.Chemists;
 import com.planera.mis.planera2.activities.models.DoctorResponse;
 import com.planera.mis.planera2.activities.models.Doctors;
@@ -81,6 +81,7 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_chemist);
+        getPatchList(token);
         initUi();
         initData();
     }
@@ -162,7 +163,7 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
 
 
 
-        getPatchList(token);
+//        getPatchList(token);
 
         spinnerPatchId.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -172,7 +173,7 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                patchId = patches.get(adapterView.getSelectedItemPosition()).getPatchId();
             }
         });
 
@@ -385,6 +386,7 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
 
                     try {
                         Toast.makeText(mContext, response.errorBody().string(), Toast.LENGTH_LONG).show();
+                        getSupportFragmentManager().beginTransaction().detach(ChemistFragment.newInstance()).attach(ChemistFragment.newInstance()).commitAllowingStateLoss();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -395,7 +397,8 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
 
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                         Intent intent = new Intent(ActivityUpdateChemist.this, SingleListActivity.class);
-                        setResult(Activity.RESULT_OK, intent);
+                        intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.CHEMIST_FRAGMENT);
+                        startActivity(intent);
                         finish();
                     }
                     else{
@@ -455,6 +458,7 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
         textChemistMiddleName.setText(intent.getStringExtra(AppConstants.MIDDLE_NAME));
         textChemistLastName.setText(intent.getStringExtra(AppConstants.LAST_NAME));
         textChemistShopSize.setText(intent.getStringExtra(AppConstants.SHOP_SIZE));
+        textChemistMonthlyVolume.setText(intent.getStringExtra(AppConstants.MONTHLY_VOLUME_POTENTIAL));
         textChemistCompanyName.setText(intent.getStringExtra(AppConstants.COMPANY_NAME));
         textChemistBillingEmail.setText(intent.getStringExtra(AppConstants.BILLING_EMAIL));
         textChemistEmail.setText(intent.getStringExtra(AppConstants.EMAIL));

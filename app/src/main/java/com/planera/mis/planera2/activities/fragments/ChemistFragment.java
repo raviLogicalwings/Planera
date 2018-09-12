@@ -2,7 +2,6 @@ package com.planera.mis.planera2.activities.fragments;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -17,21 +16,16 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.ActivityAddChemist;
-import com.planera.mis.planera2.activities.ActivityAddDoctor;
 import com.planera.mis.planera2.activities.ActivityUpdateChemist;
 import com.planera.mis.planera2.activities.Retrofit.ApiClient;
 import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
 import com.planera.mis.planera2.activities.adapters.ChemistListAdapter;
-import com.planera.mis.planera2.activities.adapters.DoctorsListAdapter;
 import com.planera.mis.planera2.activities.models.ChemistListResponse;
 import com.planera.mis.planera2.activities.models.Chemists;
-import com.planera.mis.planera2.activities.models.Doctors;
-import com.planera.mis.planera2.activities.models.DoctorsListResponce;
 import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.utils.AppConstants;
+
 import java.util.List;
-import java.util.logging.Level;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -140,6 +134,7 @@ public class ChemistFragment extends BaseFragment{
 
                 case R.id.img_chemist_edit:
                     chemistDetailsForUpdate(position, list);
+                    getActivity().finish();
 
                     break;
 
@@ -174,7 +169,7 @@ public class ChemistFragment extends BaseFragment{
         intentChemistCall.putExtra(AppConstants.BILLING_EMAIL, chemistData.get(pos).getBillingEmail());
         intentChemistCall.putExtra(AppConstants.BILLING_PHONE1, chemistData.get(pos).getBillingPhone1());
         intentChemistCall.putExtra(AppConstants.BILLING_PHONE2, chemistData.get(pos).getBillingPhone2());
-        intentChemistCall.putExtra(AppConstants.RATING, chemistData.get(pos).getBillingPhone2());
+        intentChemistCall.putExtra(AppConstants.RATING, chemistData.get(pos).getRating());
 
         intentChemistCall.putExtra(AppConstants.UPDATE_CHEMIST_KEY, selectedChemist);
         mContext.startActivity(intentChemistCall);

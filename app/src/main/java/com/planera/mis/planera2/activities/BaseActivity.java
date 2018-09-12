@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.planera.mis.planera2.activities.Retrofit.ApiClient;
 import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
+import com.planera.mis.planera2.activities.controller.DataController;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.PreferenceConnector;
 import com.planera.mis.planera2.activities.utils.ProcessDialog;
@@ -34,6 +35,7 @@ public class BaseActivity extends AppCompatActivity {
         apiInterfaceForGooglePalces = ApiClient.getInstanceForLocation();
         processDialog = new ProcessDialog();
         mContext = getBaseContext();
+        DataController.getmInstance();
 
     }
 

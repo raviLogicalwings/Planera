@@ -39,6 +39,7 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
     public static final int REQUEST_CODE_DOCTOR = 101;
     public static final int REQUEST_CODE_CHEMIST = 102;
     public static final int REQUEST_CODE_PLAN = 103;
+    private int revertFragment;
 
 
     @Override
@@ -134,7 +135,11 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
         super.initData();
         Intent getData = getIntent();
         comingFragment = getData.getIntExtra(AppConstants.KEY_TOUCHED_FRAGMENT, 0);
-        loadFragment(comingFragment);
+        if (comingFragment!= 0) {
+            loadFragment(comingFragment);
+//            refreshFragment(comingFragment);
+        }
+
     }
 
 
@@ -142,55 +147,55 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
         switch (type){
             case AppConstants.STATE_FRAGMENT:
                 getSupportFragmentManager().beginTransaction().
-                        detach(StateListFragment.newInstance()).
-                        attach(StateListFragment.newInstance()).commitAllowingStateLoss();
+                        detach(new StateListFragment()).
+                        attach(new StateListFragment()).commitAllowingStateLoss();
                 break;
 
             case AppConstants.PATCH_FRAGMENT:
                 getSupportFragmentManager().beginTransaction().
-                        detach(PatchListFragment.newInstance()).
-                        attach(PatchListFragment.newInstance()).commitAllowingStateLoss();
+                        detach(new PatchListFragment()).
+                        attach(new PatchListFragment()).commitAllowingStateLoss();
                 break;
 
             case AppConstants.TERRITORY_FRAGMENT:
                 getSupportFragmentManager().beginTransaction().
-                        detach(TerritoryListFragment.newInstance()).
-                        attach(TerritoryListFragment.newInstance()).commitAllowingStateLoss();
+                        detach(new TerritoryListFragment()).
+                        attach(new TerritoryListFragment()).commitAllowingStateLoss();
                 break;
 
             case AppConstants.GIFT_FRAGMENT:
                 getSupportFragmentManager().beginTransaction().
-                        detach(GiftListFragment.newInstance()).
-                        attach(GiftListFragment.newInstance()).commitAllowingStateLoss();
+                        detach(new GiftListFragment()).
+                        attach(new GiftListFragment()).commitAllowingStateLoss();
                 break;
 
             case AppConstants.PRODUCT_FRAGMENT:
                 getSupportFragmentManager().beginTransaction().
-                        detach(ProductFragment.newInstance()).
-                        attach(ProductFragment.newInstance()).commitAllowingStateLoss();
+                        detach(new ProductFragment()).
+                        attach(new ProductFragment()).commitAllowingStateLoss();
                 break;
 
             case AppConstants.DOCTOR_FRAGMENT:
                 getSupportFragmentManager().beginTransaction().
-                        detach(DoctorsFragment.newInstance()).
-                        attach(DoctorsFragment.newInstance()).commitAllowingStateLoss();
+                        detach(new DoctorsFragment()).
+                        attach(new DoctorsFragment()).commitAllowingStateLoss();
                 break;
 
             case AppConstants.CHEMIST_FRAGMENT:
                 getSupportFragmentManager().beginTransaction().
-                        detach(ChemistFragment.newInstance()).
-                        attach(ChemistFragment.newInstance()).commitAllowingStateLoss();
+                        detach(new ChemistFragment()).
+                        attach(new ChemistFragment()).commitAllowingStateLoss();
 
             case AppConstants.USER_FRAGMENT:
                 getSupportFragmentManager().beginTransaction().
-                        detach(UsersFragment.newInstance()).
-                        attach(UsersFragment.newInstance()).commitAllowingStateLoss();
+                        detach( new UsersFragment()).
+                        attach(new UsersFragment()).commitAllowingStateLoss();
                 break;
 
             case AppConstants.PLAN_FRAGMENT:
                 getSupportFragmentManager().beginTransaction().
-                        detach(PlansFragment.newInstance()).
-                        attach(PlansFragment.newInstance()).commitAllowingStateLoss();
+                        detach(new PatchListFragment()).
+                        attach(new PatchListFragment()).commitAllowingStateLoss();
                         break;
 
         }
@@ -216,48 +221,48 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
         switch (type){
 
             case AppConstants.STATE_FRAGMENT:
-                fragment = StateListFragment.newInstance();
+                fragment =  new StateListFragment();
                 getSupportActionBar().setTitle("States");
                 break;
 
             case AppConstants.TERRITORY_FRAGMENT:
-                fragment = TerritoryListFragment.newInstance();
+                fragment = new TerritoryListFragment();
                 getSupportActionBar().setTitle("Territory");
                 break;
 
             case AppConstants.GIFT_FRAGMENT:
-                fragment = GiftListFragment.newInstance();
+                fragment = new GiftListFragment();
                 getSupportActionBar().setTitle("Gift");
                 break;
 
             case AppConstants.PATCH_FRAGMENT:
-                fragment = PatchListFragment.newInstance();
+                fragment = new PatchListFragment();
                 getSupportActionBar().setTitle("Patch");
                 break;
 
 
             case AppConstants.DOCTOR_FRAGMENT:
-                fragment  = DoctorsFragment.newInstance();
+                fragment  = new DoctorsFragment();
                 getSupportActionBar().setTitle("Doctors");
                 break;
 
             case AppConstants.PRODUCT_FRAGMENT:
-                fragment = ProductFragment.newInstance();
+                fragment = new ProductFragment();
                 getSupportActionBar().setTitle("Products");
                 break;
 
             case AppConstants.CHEMIST_FRAGMENT:
-                fragment = ChemistFragment.newInstance();
+                fragment = new ChemistFragment();
                 getSupportActionBar().setTitle("Chemists");
                 break;
 
             case AppConstants.USER_FRAGMENT:
-                fragment = UsersFragment.newInstance();
+                fragment = new UsersFragment();
                 getSupportActionBar().setTitle("Users");
                 break;
 
             case AppConstants.PLAN_FRAGMENT:
-                fragment = PlansFragment.newInstance();
+                fragment = new PlansFragment();
                 getSupportActionBar().setTitle("Plans");
                 break;
         }

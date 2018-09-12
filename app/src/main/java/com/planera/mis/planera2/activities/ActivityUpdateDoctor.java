@@ -1,6 +1,5 @@
 package com.planera.mis.planera2.activities;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -302,10 +301,12 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
 
 
     public void getPatchList(String token) {
+        processDialog.showDialog(ActivityUpdateDoctor.this, false);
         Call<PatchListResponse> call = apiInterface.patchList(token);
         call.enqueue(new Callback<PatchListResponse>() {
             @Override
             public void onResponse(Call<PatchListResponse> call, Response<PatchListResponse> response) {
+               processDialog.dismissDialog();
                 if (response != null) {
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                         List<String> tempList = new ArrayList<>();
@@ -322,6 +323,7 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
 
             @Override
             public void onFailure(Call<PatchListResponse> call, Throwable t) {
+                processDialog.dismissDialog();
                 Toast.makeText(ActivityUpdateDoctor.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
@@ -339,7 +341,8 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                     Intent intent = new Intent(ActivityUpdateDoctor.this, SingleListActivity.class);
-                    setResult(Activity.RESULT_OK, intent);
+                    intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.DOCTOR_FRAGMENT);
+                    startActivity(intent);
                     finish();
                 }
                 else{
@@ -368,7 +371,7 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
                 if (response.body().getStatus().equals(AppConstants.STATUS_OK)) {
                     if (doctors != null) {
                         doctors.setLatitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLat() + "");
-                        doctors.setLatitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLng() + "");
+                        doctors.setLongitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLng() + "");
                         Log.e("Doctors Object", "onResponse: " + new Gson().toJson(doctors));
 
                             updateDoctorsDetails(token, doctors);

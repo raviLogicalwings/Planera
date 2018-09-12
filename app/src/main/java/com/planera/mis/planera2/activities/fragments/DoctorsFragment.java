@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.ActivityAddDoctor;
+import com.planera.mis.planera2.activities.ActivityUpdateDoctor;
 import com.planera.mis.planera2.activities.Retrofit.ApiClient;
 import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
 import com.planera.mis.planera2.activities.adapters.DoctorsListAdapter;
@@ -24,8 +24,8 @@ import com.planera.mis.planera2.activities.models.Doctors;
 import com.planera.mis.planera2.activities.models.DoctorsListResponce;
 import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.utils.AppConstants;
+
 import java.util.List;
-import java.util.logging.Level;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -134,6 +134,7 @@ public class DoctorsFragment extends BaseFragment{
 
                 case R.id.img_doctor_edit:
                     doctorDetailsForUpdate(position, doctorsList);
+                    DoctorsFragment.this.getActivity().finish();
 
                     break;
 
@@ -147,7 +148,7 @@ public class DoctorsFragment extends BaseFragment{
 
     public void doctorDetailsForUpdate(int pos, List<Doctors> doctorsData){
         selectedDoctor= doctorsData.get(pos).getDoctorId();
-        Intent intentDoctorCall = new Intent(mContext, ActivityAddDoctor.class);
+        Intent intentDoctorCall = new Intent(mContext, ActivityUpdateDoctor.class);
         intentDoctorCall.putExtra(AppConstants.UPDATE_DOCTOR_KEY, selectedDoctor);
         intentDoctorCall.putExtra(AppConstants.FIRST_NAME, doctorsData.get(pos).getFirstName());
         intentDoctorCall.putExtra(AppConstants.MIDDLE_NAME, doctorsData.get(pos).getMiddleName());
@@ -165,7 +166,6 @@ public class DoctorsFragment extends BaseFragment{
         intentDoctorCall.putExtra(AppConstants.STATE, doctorsData.get(pos).getState());
         intentDoctorCall.putExtra(AppConstants.CITY, doctorsData.get(pos).getCity());
         intentDoctorCall.putExtra(AppConstants.PINCODE, doctorsData.get(pos).getPincode());
-        intentDoctorCall.putExtra(AppConstants.UPDATE_DOCTOR_KEY, selectedDoctor);
         mContext.startActivity(intentDoctorCall);
 
     }

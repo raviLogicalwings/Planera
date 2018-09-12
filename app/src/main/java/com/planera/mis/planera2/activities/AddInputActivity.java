@@ -74,11 +74,13 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
         editEndTime = findViewById(R.id.edit_end_time);
         editFeedback = findViewById(R.id.edit_feedback);
         buttonSubmitInput = findViewById(R.id.button_submit_input);
+        editStartTime.setFocusable(false);
+        editEndTime.setFocusable(false);
 
 
         setSupportActionBar(toolbarTime);
         toolbarTime.setNavigationIcon(R.drawable.back_arrow_whit);
-        getSupportActionBar().setTitle("Schedule");
+        getSupportActionBar().setTitle("Input");
         toolbarTime.setNavigationOnClickListener(view -> onBackPressed());
 
 

@@ -11,8 +11,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.planera.mis.planera2.R;
+import com.planera.mis.planera2.activities.controller.DataController;
 import com.planera.mis.planera2.activities.models.Brands;
+import com.planera.mis.planera2.activities.models.InputOrders;
+import com.planera.mis.planera2.activities.utils.AppConstants;
+import com.planera.mis.planera2.activities.utils.PreferenceConnector;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -21,6 +26,9 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>{
    private View holderView;
    private List<Brands> brandsList;
    private PODTextChangeListener podTextChangeListener;
+    private List<InputOrders> ordersList;
+    private InputOrders orders;
+    private PreferenceConnector connector;
 
     public PODAdapter(Context context, List<Brands> brandsList, PODTextChangeListener podTextChangeListener) {
         this.context = context;
@@ -36,6 +44,9 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>{
 
     @Override
     public void onBindViewHolder(MyPobHolder holder, int position) {
+        ordersList = new ArrayList<>();
+        orders = new InputOrders();
+        connector = new PreferenceConnector(context);
 
         bindValues(holder, position);
 
@@ -49,7 +60,8 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>{
 
     public void bindValues(MyPobHolder myPobHolder, int pos){
         if (brandsList!= null){
-            myPobHolder.textPodProductName.setText(brandsList.get(pos).getName());
+            Brands brands = brandsList.get(pos);
+            myPobHolder.textPodProductName.setText(brands.getName());
             myPobHolder.editPodProductValue.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -58,7 +70,14 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>{
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    podTextChangeListener.onPODTextChanged(myPobHolder, pos);
+                    String changedText = s.toString().trim();
+                    if(changedText.equals("")) {
+                        orders = new InputOrders();
+                        orders.setQuantity(s.toString().trim());
+                        orders.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + "");
+                        ordersList.add(orders);
+                        setOrdersList(ordersList);
+                    }
                 }
 
                 @Override
@@ -69,6 +88,13 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>{
         }
     }
 
+    public List<InputOrders> getOrdersList() {
+        return ordersList;
+    }
+
+    public void setOrdersList(List<InputOrders> ordersList) {
+        DataController.getmInstance().setOrderPODList(ordersList);
+    }
 
     public class MyPobHolder extends RecyclerView.ViewHolder {
         private TextView textPodProductName;

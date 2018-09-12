@@ -206,4 +206,5 @@ public class AppConstants {
     public static final String REGULAR = "2";
     public static final String SUPER = "1";
     public static final String KEY_INPUT_ID = "input_id";
+    public static final String KEY_REVERT_FRAGMENT = "revert_fragment";
 }

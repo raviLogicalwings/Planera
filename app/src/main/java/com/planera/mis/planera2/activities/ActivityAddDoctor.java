@@ -127,9 +127,7 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
         setArrayAdapter(meetFequrency, spinnerFrequency);
         setArrayAdapter(prefferdMeetTime, spinnerMeetTime);
 
-        if (intent != null) {
-            loadFromIntent(intent);
-        }
+
     }
 
     @Override
@@ -331,10 +329,12 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
     }
 
     public void getPatchList(String token) {
+        processDialog.showDialog(ActivityAddDoctor.this, false);
         Call<PatchListResponse> call = apiInterface.patchList(token);
         call.enqueue(new Callback<PatchListResponse>() {
             @Override
             public void onResponse(Call<PatchListResponse> call, Response<PatchListResponse> response) {
+                processDialog.dismissDialog();
                 if (response != null) {
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                         List<String> tempList = new ArrayList<>();
@@ -351,6 +351,7 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
 
             @Override
             public void onFailure(Call<PatchListResponse> call, Throwable t) {
+                processDialog.dismissDialog();
                 Toast.makeText(ActivityAddDoctor.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
@@ -371,7 +372,7 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
                 if (response.body().getStatus().equals(AppConstants.STATUS_OK)) {
                     if (doctors != null) {
                         doctors.setLatitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLat() + "");
-                        doctors.setLatitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLng() + "");
+                        doctors.setLongitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLng() + "");
                         Log.e("Doctors Object", "onResponse: " + new Gson().toJson(doctors));
                             addDoctorsApi(token, doctors);
                     }
@@ -393,26 +394,6 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
     }
 
 
-    public void loadFromIntent(Intent intent) {
-        isUpdateCall = true;
-        textDoctorFirstName.setText(intent.getStringExtra(AppConstants.FIRST_NAME));
-        textDoctorMiddleName.setText(intent.getStringExtra(AppConstants.MIDDLE_NAME));
-        textDoctorLastName.setText(intent.getStringExtra(AppConstants.LAST_NAME));
-        textDoctorDob.setText(intent.getStringExtra(AppConstants.DOB));
-        textDoctorEmail.setText(intent.getStringExtra(AppConstants.EMAIL));
-        textDoctorPhone.setText(intent.getStringExtra(AppConstants.PHONE));
-        textDoctorQualification.setText(intent.getStringExtra(AppConstants.QUALIFICATION));
-        textDoctorSpecialization.setText(intent.getStringExtra(AppConstants.SPECIALIZATION));
-        textDoctorAddress1.setText(intent.getStringExtra(AppConstants.ADDRESS1));
-        textDoctorAddress2.setText(intent.getStringExtra(AppConstants.ADDRESS2));
-        textDoctorAddress3.setText(intent.getStringExtra(AppConstants.ADDRESS3));
-        textDoctorAddress4.setText(intent.getStringExtra(AppConstants.ADDRESS4));
-        textDoctorDistrict.setText(intent.getStringExtra(AppConstants.DISTRICT));
-        textDoctorCity.setText(intent.getStringExtra(AppConstants.CITY));
-        textDoctorState.setText(intent.getStringExtra(AppConstants.STATE));
-        textDoctorPincode.setText(intent.getStringExtra(AppConstants.PINCODE));
-        doctorId = intent.getIntExtra(AppConstants.UPDATE_DOCTOR_KEY, 0);
-    }
 
 
     public void setArrayAdapter(List<String> listString, Spinner spinner) {

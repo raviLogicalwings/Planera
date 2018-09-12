@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.planera.mis.planera2.R;
+import com.planera.mis.planera2.activities.controller.DataController;
 import com.planera.mis.planera2.activities.models.GiftsData;
 import com.planera.mis.planera2.activities.models.InputGift;
 import com.planera.mis.planera2.activities.utils.AppConstants;
@@ -47,6 +48,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
     }
 
 
+
     @Override
     public int getItemCount() {
        if(giftsData!=null){
@@ -75,6 +77,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
                     inputGift.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID)+"");
                     inputGift.setGiftId(gifts.getGiftId()+"");
                     inputGiftList.add(inputGift);
+                    setInputGiftList(inputGiftList);
                 }
             }
 
@@ -93,7 +96,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
     }
 
     public void setInputGiftList(List<InputGift> inputGiftList) {
-        this.inputGiftList = inputGiftList;
+        DataController.getmInstance().setInputGiftList(inputGiftList);
     }
 
     public class MyGiftHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

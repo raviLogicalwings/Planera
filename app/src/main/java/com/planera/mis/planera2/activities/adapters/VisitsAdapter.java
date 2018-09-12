@@ -66,6 +66,8 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
             viewHolder.textName.setText(planList.get(position).getDoctorFirstName()
                     + ", " + planList.get(position).getDoctorMiddleName() + ", " +
                     planList.get(position).getDoctorLastName());
+            String firstChar = getFirstName(planList.get(position).getDoctorFirstName());
+            viewHolder.textNameFirstLetter.setText(firstChar.toUpperCase());
 
             dist = calculateDistance(location,
                     planList.get(position).getDoctorLatitude(),
@@ -76,14 +78,15 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
             viewHolder.textName.setText(planList.get(position).getChemistFirstName() + ", " +
                     planList.get(position).getChemistMiddleName() + ", " +
                     planList.get(position).getChemistLastName());
+            String firstChar = getFirstName(planList.get(position).getChemistFirstName());
+            viewHolder.textNameFirstLetter.setText(firstChar.toUpperCase());
 
             float dist = calculateDistance(location, planList.get(position).getChemistLatitude(), planList.get(position).getChemistLongitude());
-            viewHolder.textDistance.setText(Math.abs(dist) + " KM");
+            viewHolder.textDistance.setText(Math.round(dist) + " KM");
 
         }
         viewHolder.ratingBarDoctor.setRating(3.5f);
         viewHolder.textStatus.setText("");
-        viewHolder.textNameFirstLetter.setText("");
         viewHolder.textAddress.setText(planList.get(position).getPatchName() + ", " +
                 planList.get(position).getTerritoryName());
 
@@ -138,6 +141,12 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
             isDoctor = false;
         }
         return isDoctor;
+    }
+
+
+    public String getFirstName(String name){
+            char ch[] = name.toCharArray();
+            return ch[0]+"";
     }
 
     private float calculateDistance(Location mLocation, double lat2, double lon2) {

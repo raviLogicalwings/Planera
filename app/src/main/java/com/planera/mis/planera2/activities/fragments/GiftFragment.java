@@ -8,21 +8,17 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.ProductCategoryActivity;
 import com.planera.mis.planera2.activities.Retrofit.ApiClient;
 import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
 import com.planera.mis.planera2.activities.adapters.GiftsAdapter;
 import com.planera.mis.planera2.activities.models.GiftListResponse;
 import com.planera.mis.planera2.activities.models.GiftsData;
-import com.planera.mis.planera2.activities.models.InputGift;
 import com.planera.mis.planera2.activities.models.InputGiftResponce;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 
@@ -32,7 +28,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class GiftFragment extends BaseFragment implements ProductCategoryActivity.DataReceivedListener{
+public class GiftFragment extends BaseFragment{
     private RecyclerView recyclerViewGifts;
     private View view;
     private GiftsAdapter giftsAdapter;
@@ -68,7 +64,6 @@ public class GiftFragment extends BaseFragment implements ProductCategoryActivit
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((ProductCategoryActivity) getActivity()).setDataReceivedListener(this);
     }
 
     @Override
@@ -114,11 +109,16 @@ public class GiftFragment extends BaseFragment implements ProductCategoryActivit
         });
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Toast.makeText(mContext, "on Pause Gift", Toast.LENGTH_LONG).show();
+    }
 
-    public void addInputgiftApi(String token, List<InputGift> inputGifts){
-        Log.e("AddInputGifts : " , new Gson().toJson(inputGifts));
+    public void addInputgiftApi(String token){
+//        Log.e("AddInputGifts : " , new Gson().toJson(inputGifts));
         processDialog.showDialog(mContext, false);
-        Call<InputGiftResponce> call = apiInterface.addInputGift(token, inputGifts);
+        Call<InputGiftResponce> call = apiInterface.addInputGift(token, giftsAdapter.getInputGiftList());
         call.enqueue(new Callback<InputGiftResponce>() {
             @Override
             public void onResponse(Call<InputGiftResponce> call, Response<InputGiftResponce> response) {
@@ -171,11 +171,6 @@ public class GiftFragment extends BaseFragment implements ProductCategoryActivit
     public void onDetach() {
         super.onDetach();
 
-    }
-
-    @Override
-    public void onReceived() {
-        addInputgiftApi(token, giftsAdapter.getInputGiftList());
     }
 
 //    @Override

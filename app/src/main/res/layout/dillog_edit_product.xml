@@ -18,7 +18,7 @@
             android:text="Is Product"/>
         <Switch
             android:theme="@style/MySwitch"
-            android:id="@+id/switch_is_brand"
+            android:id="@+id/switch_is_brand_edit"
             android:layout_width="wrap_content"
             style="@style/BaseMargin"
             android:layout_height="wrap_content" />

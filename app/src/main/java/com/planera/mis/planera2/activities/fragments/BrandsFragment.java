@@ -99,12 +99,18 @@ public class BrandsFragment extends BaseFragment implements ProductCategoryActiv
         brandsListView = view.findViewById(R.id.recycle_view_brand);
     }
 
-    public void apiAddInputBrands(String token , List<InputOrders> orders){
+    @Override
+    public void onPause() {
+        super.onPause();
+        Toast.makeText(mContext, "On Pause", Toast.LENGTH_LONG).show();
+    }
+
+    public void apiAddInputBrands(String token){
 
 
         Log.e("Inputs", new Gson().toJson(orders));
       processDialog.showDialog(mContext, false);
-        Call<MainResponse> call = apiInterface.addInputProductList(token, orders);
+        Call<MainResponse> call = apiInterface.addInputProductList(token, adapter.getOrderListSelected());
 
         call.enqueue(new Callback<MainResponse>() {
             @Override
@@ -192,7 +198,7 @@ public class BrandsFragment extends BaseFragment implements ProductCategoryActiv
 
     @Override
     public void onReceived() {
-      apiAddInputBrands(token, adapter.getOrderListSelected());
+      apiAddInputBrands(token);
     }
 
 

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -26,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EditProductDialog extends BaseDialogFragment implements View.OnClickListener{
+public class EditProductDialog extends BaseDialogFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
     private View view;
     public OnDismissEditProductDialogListener listener;
     private Switch switchIsBrand;
@@ -133,12 +134,13 @@ public class EditProductDialog extends BaseDialogFragment implements View.OnClic
     @Override
     protected void initUi() {
         super.initUi();
-        switchIsBrand = view.findViewById(R.id.switch_is_brand);
+        switchIsBrand = view.findViewById(R.id.switch_is_brand_edit);
         inputLayoutUserName = view.findViewById(R.id.input_layout_user_name);
         editTextName = view.findViewById(R.id.edit_text_name);
         buttonUpdateProduct = view.findViewById(R.id.button_update_product);
 
         buttonUpdateProduct.setOnClickListener(this);
+        switchIsBrand.setOnCheckedChangeListener(this);
 
     }
 
@@ -156,6 +158,9 @@ public class EditProductDialog extends BaseDialogFragment implements View.OnClic
             if(Integer.parseInt(isBrands)  == 1){
                 switchIsBrand.setChecked(true);
             }
+           if (Integer.parseInt(isBrands) == 0){
+                switchIsBrand.setChecked(false);
+           }
         }
 
 
@@ -168,6 +173,21 @@ public class EditProductDialog extends BaseDialogFragment implements View.OnClic
                 uiValidation();
                 break;
         }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch(buttonView.getId()) {
+            case  R.id.switch_is_brand_edit:
+            if (isChecked) {
+                isBrands = "1";
+            } else {
+                isBrands = "0";
+            }
+
+            break;
+        }
+
     }
 
     public interface OnDismissEditProductDialogListener {

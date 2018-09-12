@@ -319,6 +319,8 @@ public class ActivityUpdateUser extends BaseActivity implements View.OnClickList
                             intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.USER_FRAGMENT);
                             startActivity(intent);
                             finish();
+
+                            finish();
                         }
                         else{
                             Toast.makeText(ActivityUpdateUser.this, response.body().getMessage() , Toast.LENGTH_SHORT).show();

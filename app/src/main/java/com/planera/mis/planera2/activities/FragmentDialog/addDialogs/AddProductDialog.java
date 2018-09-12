@@ -164,9 +164,11 @@ public class AddProductDialog extends BaseDialogFragment implements View.OnClick
             case R.id.switch_is_brand:
                 if (b){
                     isBrand = 1;
+                    Toast.makeText(mContext, "True", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     isBrand = 0;
+                    Toast.makeText(mContext, "False", Toast.LENGTH_SHORT).show();
                 }
         }
 

@@ -1,6 +1,5 @@
 package com.planera.mis.planera2.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -14,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.models.ChemistListResponse;
@@ -139,6 +139,7 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
         loadFormIntent(intent);
+        loadSpinners();
 
     }
 
@@ -160,7 +161,8 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
                 else{
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                         Intent intent = new Intent(ActivityUpdatePlan.this, SingleListActivity.class);
-                        setResult(Activity.RESULT_OK, intent);
+                        intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.PLAN_FRAGMENT);
+                        startActivity(intent);
                         finish();
                     }
                     else{

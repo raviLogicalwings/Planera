@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.planera.mis.planera2.R;
+import com.planera.mis.planera2.activities.controller.DataController;
 import com.planera.mis.planera2.activities.models.Brands;
 import com.planera.mis.planera2.activities.models.InputOrders;
 import com.planera.mis.planera2.activities.utils.AppConstants;
@@ -83,6 +84,7 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
                     String value = brandLevelList.get(position);
                     if (!value.equals("")) {
                         orders = new InputOrders();
+                        orders.setIsSample("0");
                         orders.setProductId(brands.getProductId() + "");
                         orders.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID)+"");
                         switch (value){
@@ -98,6 +100,7 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
 
                         }
                         orderListSelected.add(orders);
+                        DataController.getmInstance().setOrderListSelected(orderListSelected);
                     }
 
 
