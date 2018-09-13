@@ -29,6 +29,7 @@ import com.planera.mis.planera2.activities.utils.AppConstants;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -204,7 +205,7 @@ public interface ApiInterface {
                                          @Body UserData userData);
 
     @POST(AppConstants.UPDATE_PLAN)
-    Call<MainResponse>  updatePlanDetails(@Header("Autorization") String token,
+    Call<ResponseBody>  updatePlanDetails(@Header("Autorization") String token,
                                           @Body Plans plans);
     //Google  Places api Call
     @GET(AppConstants.FIND_PALCE)

@@ -1,6 +1,5 @@
 package com.planera.mis.planera2.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -60,14 +59,14 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
     private Button buttonAddPlan;
     private RadioButton radioDoctor;
     private RadioButton radioChemist;
-    private LinearLayout layoutDoctorSpinner, layouChemistSpinner;
+    private LinearLayout layoutDoctorSpinner, layoutChemistSpinner;
     private Plans plans;
     private List<String> months;
     int patchId, selectedMonth;
     String doctorId, chemistId;
     String userId;
     String yearStr, callStr, remarkStr;
-    boolean isDoctroRadioChecked= true;
+    boolean isDoctorRadioChecked = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +87,14 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
         callStr = textPlanCall.getText().toString().trim();
         remarkStr = textPlanRemark.getText().toString().trim();
         plans = new Plans();
+        if (isDoctorRadioChecked){
+            doctorId = doctorsList.get(spinnerPlanDoctor.getSelectedItemPosition()).getDoctorId()+"";
+            chemistId = "";
+        }
+        else if(!isDoctorRadioChecked){
+            chemistId = chemistsList.get(spinnerPlanChemist.getSelectedItemPosition()).getChemistId()+"";
+            doctorId = "";
+        }
         if (TextUtils.isEmpty(yearStr)) {
             textPlanYear.requestFocus();
             textPlanYear.setError(getString(R.string.invalid_input));
@@ -123,7 +130,7 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        layouChemistSpinner = findViewById(R.id.chemist_spinner_layout);
+        layoutChemistSpinner = findViewById(R.id.chemist_spinner_layout);
         layoutDoctorSpinner = findViewById(R.id.doctor_spinner_layout);
         radioGroupSelect = findViewById(R.id.radio_group_select);
         spinnerPlanDoctor = findViewById(R.id.spinner_plan_doctor);
@@ -137,7 +144,10 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
         textPlanCall = findViewById(R.id.text_plan_call);
         textPlanRemark = findViewById(R.id.text_plan_remark);
         buttonAddPlan = findViewById(R.id.button_add_plan);
-        radioDoctor.setChecked(true);
+        if(isDoctorRadioChecked) {
+            radioDoctor.setChecked(isDoctorRadioChecked);
+            layoutChemistSpinner.setVisibility(View.GONE);
+        }
         buttonAddPlan.setOnClickListener(this);
         getSupportActionBar().setTitle("Add Plan");
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
@@ -163,7 +173,7 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
                 } else {
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                         Intent intent = new Intent(ActivityCretePlan.this, SingleListActivity.class);
-                        setResult(Activity.RESULT_OK, intent);
+                        setResult(SingleListActivity.REQUEST_CODE_PLAN, intent);
                         finish();
                     } else {
                         Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
@@ -185,16 +195,14 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
         radioGroupSelect.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
                 case R.id.radio_chemist:
-                    Toast.makeText(ActivityCretePlan.this, " Checked Change Chemist", Toast.LENGTH_SHORT).show();
                     layoutDoctorSpinner.setVisibility(View.GONE);
-                    layouChemistSpinner.setVisibility(View.VISIBLE);
-                    isDoctroRadioChecked = false;
+                    layoutChemistSpinner.setVisibility(View.VISIBLE);
+                    isDoctorRadioChecked = false;
                     break;
                 case R.id.radio_doctor:
-                    Toast.makeText(ActivityCretePlan.this, " Checked Change Doctor", Toast.LENGTH_SHORT).show();
                     layoutDoctorSpinner.setVisibility(View.VISIBLE);
-                    layouChemistSpinner.setVisibility(View.GONE);
-                    isDoctroRadioChecked = true;
+                    layoutChemistSpinner.setVisibility(View.GONE);
+                    isDoctorRadioChecked = true;
                     break;
             }
         });
@@ -251,36 +259,7 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
             }
         });
 
-        if (!(layouChemistSpinner.getVisibility() == View.VISIBLE && isDoctroRadioChecked)) {
-            spinnerPlanDoctor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    doctorId = doctorsList.get(position).getDoctorId() + "";
-                    chemistId = null;
-                }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                    doctorId = doctorsList.get(parent.getSelectedItemPosition()).getDoctorId() + "";
-                    chemistId = null;
-                }
-            });
-        } else {
-            spinnerPlanChemist.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    chemistId = chemistsList.get(position).getChemistId() + "";
-                    doctorId = null;
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                    doctorId = null;
-                    chemistId = chemistsList.get(parent.getSelectedItemPosition()).getChemistId() + "";
-
-                }
-            });
-        }
     }
 
 
@@ -448,3 +427,4 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
 
 
 }
+

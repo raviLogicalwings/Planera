@@ -3,6 +3,7 @@ package com.planera.mis.planera2.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
@@ -125,15 +127,21 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
         Call<InputGiftResponce> call = apiInterface.addInputGift(token, DataController.getmInstance().getInputGiftList());
         call.enqueue(new Callback<InputGiftResponce>() {
             @Override
-            public void onResponse(Call<InputGiftResponce> call, Response<InputGiftResponce> response) {
+            public void onResponse(@NonNull Call<InputGiftResponce> call, Response<InputGiftResponce> response) {
                 processDialog.dismissDialog();
                 if (response.isSuccessful()){
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-                        Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
-                    }
-                    else{
-                        Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
+                    if (response.body() != null) {
+                        if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                            // Set Array Lis to null
+                            //----------
+                            DataController.getmInstance().setInputGiftList(null);
+                            //---------------
+                            Toast.makeText(ProductCategoryActivity.this, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
+                        }
+                        else{
+                            Toast.makeText(ProductCategoryActivity.this, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
 
+                        }
                     }
                 }
             }
@@ -161,6 +169,11 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
+                    // Set Array Lis to null
+                    //----------
+                    DataController.getmInstance().setOrderListSelected(null);
+                    //---------------
+
                 }
                 else {
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();

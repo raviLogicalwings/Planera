@@ -112,7 +112,7 @@ public class GiftFragment extends BaseFragment{
     @Override
     public void onPause() {
         super.onPause();
-        Toast.makeText(mContext, "on Pause Gift", Toast.LENGTH_LONG).show();
+//        Toast.makeText(mContext, "on Pause Gift", Toast.LENGTH_LONG).show();
     }
 
     public void addInputgiftApi(String token){

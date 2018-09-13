@@ -1,7 +1,8 @@
 package com.planera.mis.planera2.activities.Retrofit;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.planera.mis.planera2.activities.utils.AppConstants;
-
 
 import java.util.concurrent.TimeUnit;
 
@@ -12,8 +13,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
     public static Retrofit instance;
     public static Retrofit instanceForPalces;
+    public static Gson gson;
 
     public static ApiInterface getInstance(){
+
+       gson = new GsonBuilder()
+                .setLenient()
+                .create();
             OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder().
                     readTimeout(AppConstants.REQUEST_TIMEOUT, TimeUnit.SECONDS).
                     writeTimeout(AppConstants.REQUEST_TIMEOUT, TimeUnit.SECONDS).
@@ -23,7 +29,7 @@ public class ApiClient {
             instance = new Retrofit.Builder()
                     .baseUrl(AppConstants.BASE_URL)
                     .client(okHttpClient)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
 
         return  instance.create(ApiInterface.class);

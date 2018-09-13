@@ -170,7 +170,6 @@ public class PlansFragment extends BaseFragment{
 
                 case R.id.img_plan_edit:
                     planDetailsForUpdate(postion, plansData);
-                    PlansFragment.this.getActivity().finish();
                     break;
             }
         });

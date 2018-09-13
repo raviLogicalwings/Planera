@@ -102,7 +102,7 @@ public class BrandsFragment extends BaseFragment implements ProductCategoryActiv
     @Override
     public void onPause() {
         super.onPause();
-        Toast.makeText(mContext, "On Pause", Toast.LENGTH_LONG).show();
+//        Toast.makeText(mContext, "On Pause", Toast.LENGTH_LONG).show();
     }
 
     public void apiAddInputBrands(String token){
