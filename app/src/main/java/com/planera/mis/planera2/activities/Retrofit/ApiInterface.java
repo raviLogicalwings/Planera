@@ -60,6 +60,17 @@ public interface ApiInterface {
     @GET(AppConstants.PATCH_LIST)
     Call<PatchListResponse> patchList(@Header("Authorization") String token);
 
+    @GET(AppConstants.TERRITORY_WISE_PATCHES)
+    Call<PatchListResponse> patchListByTerritory(@Header("Authorization") String token,
+                                                 @Query("TerritoryId") int territoryId);
+    @GET(AppConstants.PATCH_WISE_DOCTORS_LIST)
+    Call<DoctorsListResponce> patchesWiseDoctorList(@Header("Authorization") String token,
+                                                    @Query("PatchId") int patchId);
+
+    @GET(AppConstants.PATCH_WISE_CHEMIST_LIST)
+    Call<ChemistListResponse> patchesWiseChemistList(@Header("Authorization") String token,
+                                                     @Query("PatchId") int patchId);
+
     @GET(AppConstants.TERRITORY_LIST)
     Call<TerritoryListResponse> territoryList(@Header("Authorization") String token);
 
@@ -205,7 +216,7 @@ public interface ApiInterface {
                                          @Body UserData userData);
 
     @POST(AppConstants.UPDATE_PLAN)
-    Call<ResponseBody>  updatePlanDetails(@Header("Autorization") String token,
+    Call<ResponseBody>  updatePlanDetails(@Header("Authorization") String token,
                                           @Body Plans plans);
     //Google  Places api Call
     @GET(AppConstants.FIND_PALCE)

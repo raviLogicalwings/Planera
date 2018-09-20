@@ -1,6 +1,4 @@
 package com.planera.mis.planera2.activities;
-
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.adapters.ChemistTabsPagerAdapter;

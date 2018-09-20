@@ -90,34 +90,6 @@ public class PlansFragment extends BaseFragment{
     }
 
 
-    public void deleteStateApi(String token, int stateId){
-        processDialog.showDialog(mContext, false);
-        Call<MainResponse> call = apiInterface.deleteState(token, stateId);
-        call.enqueue(new Callback<MainResponse>() {
-            @Override
-            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
-                processDialog.dismissDialog();
-                if (response!= null){
-                    if (response.body().getStatusCode()== AppConstants.RESULT_OK){
-                        Toast.makeText(mContext, response.body().getMessage(),Toast.LENGTH_LONG).show();
-                        manager.beginTransaction().detach(PlansFragment.this).attach(PlansFragment.this).commit();
-                    }
-                    else{
-                        Toast.makeText(mContext, response.body().getMessage(),Toast.LENGTH_LONG).show();
-
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MainResponse> call, Throwable t) {
-                processDialog.dismissDialog();
-                Toast.makeText(mContext, t.getMessage(),Toast.LENGTH_LONG).show();
-
-            }
-        });
-
-    }
 
 
 

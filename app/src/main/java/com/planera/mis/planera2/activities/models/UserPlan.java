@@ -49,7 +49,7 @@ public class UserPlan{
 	private int patchId;
 
 	@SerializedName("ChemistsId")
-	private int chemistsId;
+	private String chemistsId;
 
 	@SerializedName("UserFirstName")
 	private String userFirstName;
@@ -164,11 +164,11 @@ public class UserPlan{
 		return patchId;
 	}
 
-	public void setChemistsId(int chemistsId){
+	public void setChemistsId(String chemistsId){
 		this.chemistsId = chemistsId;
 	}
 
-	public int getChemistsId(){
+	public String getChemistsId(){
 		return chemistsId;
 	}
 

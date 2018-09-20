@@ -24,6 +24,9 @@ public class AppConstants {
     public static final String USER_LIST = "user/getAllUsers";
     public static final String PLAN_LIST ="plan/getAllPlans" ;
     public static final String USER_PLAN_LIST = "plan/getUserPlans";
+    public static final String TERRITORY_WISE_PATCHES = "patch/getTerritoryWisePatches";
+    public static final String PATCH_WISE_DOCTORS_LIST = "doctor/getPatchWiseDoctor";
+    public static final String PATCH_WISE_CHEMIST_LIST = "chemist/getPatchWiseChemists";
 
 
     public static final String ADD_STATE = "state/addState";

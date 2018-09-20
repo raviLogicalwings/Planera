@@ -45,6 +45,53 @@
                     android:text="Chemist"
                     />
             </RadioGroup>
+            <LinearLayout
+                android:id="@+id/territory_spinner_update"
+                android:weightSum="2"
+                android:paddingTop="@dimen/drawable_padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_weight="0.8"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Territory"/>
+
+                <Spinner
+                    android:layout_weight="1.2"
+                    android:id="@+id/spinner_plan_territory"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                </Spinner>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:weightSum="2"
+                android:paddingTop="@dimen/drawable_padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_weight=".8"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Patch"/>
+
+                <Spinner
+                    android:layout_weight="1.2"
+                    android:layout_width="0dp"
+                    android:id="@+id/spinner_plan_patch"
+                    android:layout_height="wrap_content">
+                </Spinner>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/doctor_spinner_layout"
@@ -117,27 +164,7 @@
                     android:layout_height="wrap_content">
                 </Spinner>
             </LinearLayout>
-            <LinearLayout
-                android:weightSum="2"
-                android:paddingTop="@dimen/drawable_padding"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_weight=".8"
-                    android:layout_gravity="center_vertical"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Patch"/>
-
-                <Spinner
-                    android:layout_weight="1.2"
-                    android:layout_width="0dp"
-                    android:id="@+id/spinner_plan_patch"
-                    android:layout_height="wrap_content">
-                </Spinner>
-            </LinearLayout>
 
             <LinearLayout
                 android:weightSum="2"

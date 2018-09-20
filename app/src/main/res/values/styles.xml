@@ -41,7 +41,8 @@
         <item name="android:padding">@dimen/small_padding</item>
         <item name="android:textSize">@dimen/edit_text_size</item>
     </style>
-    <style name="rating_bar_doc" parent="Base.Widget.AppCompat.RatingBar.Small" >
+
+    <style name="rating_bar_doc" parent="Base.Widget.AppCompat.RatingBar.Small">
         <item name="android:numStars">5</item>
         <item name="android:rating">3.5</item>
         <item name="android:stepSize">0.5</item>

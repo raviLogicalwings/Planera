@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.planera.mis.planera2.R;
+import com.planera.mis.planera2.activities.ActivityAdminReports;
 import com.planera.mis.planera2.activities.SingleListActivity;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 
@@ -24,6 +25,7 @@ public class AdminAccessFragment extends BaseFragment implements View.OnClickLis
     private CardView cardChemist;
     private CardView cardUser;
     private CardView cardPlans;
+    private CardView cardReports;
     public static AdminAccessFragment instance;
 
 
@@ -75,6 +77,7 @@ public class AdminAccessFragment extends BaseFragment implements View.OnClickLis
         cardChemist = view.findViewById(R.id.card_chemist);
         cardUser = view.findViewById(R.id.card_user);
         cardPlans = view.findViewById(R.id.card_plans);
+        cardReports = view.findViewById(R.id.card_reports);
 
         cardState.setOnClickListener(this);
         cardTeritory.setOnClickListener(this);
@@ -85,7 +88,7 @@ public class AdminAccessFragment extends BaseFragment implements View.OnClickLis
         cardChemist.setOnClickListener(this);
         cardUser.setOnClickListener(this);
         cardPlans.setOnClickListener(this);
-
+        cardReports.setOnClickListener(this);
     }
 
     @Override
@@ -139,10 +142,20 @@ public class AdminAccessFragment extends BaseFragment implements View.OnClickLis
 
             case R.id.card_plans:
                 callIntent(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.PLAN_FRAGMENT);
+                break;
+            case R.id.card_reports:
+                callIntent();
+                break;
+
         }
 
     }
 
+
+    public void callIntent(){
+        Intent intent = new Intent(getContext(), ActivityAdminReports.class);
+        getActivity().startActivity(intent);
+    }
 
     public void callIntent(String key, int fragment){
         Intent intent = new Intent(getContext(), SingleListActivity.class);
