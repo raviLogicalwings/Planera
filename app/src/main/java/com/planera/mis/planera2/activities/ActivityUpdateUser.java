@@ -265,7 +265,7 @@ public class ActivityUpdateUser extends BaseActivity implements View.OnClickList
 
     public void getAddressLatLong(String input) {
         processDialog.showDialog(ActivityUpdateUser.this, false);
-        Call<GooglePlaces> call = apiInterfaceForGooglePalces.getPlaceLatLong(input, AppConstants.INPUT_TYPE, AppConstants.FIELDS, AppConstants.KEY_GOOGLE_PLACES);
+        Call<GooglePlaces> call = apbInterfaceForGooglePlaces.getPlaceLatLong(input, AppConstants.INPUT_TYPE, AppConstants.FIELDS, AppConstants.KEY_GOOGLE_PLACES);
         call.enqueue(new Callback<GooglePlaces>() {
             @Override
             public void onResponse(Call<GooglePlaces> call, Response<GooglePlaces> response) {

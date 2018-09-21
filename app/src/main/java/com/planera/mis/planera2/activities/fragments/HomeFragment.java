@@ -1,16 +1,18 @@
 package com.planera.mis.planera2.activities.fragments;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,19 +20,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
+import com.planera.mis.planera2.activities.AddInputActivity;
 import com.planera.mis.planera2.activities.ProductCategoryActivity;
 import com.planera.mis.planera2.activities.Retrofit.ApiClient;
 import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
-import com.planera.mis.planera2.activities.AddInputActivity;
 import com.planera.mis.planera2.activities.adapters.VisitsAdapter;
 import com.planera.mis.planera2.activities.models.UserPlan;
 import com.planera.mis.planera2.activities.models.UserPlanListRespnce;
@@ -44,7 +50,7 @@ import retrofit2.Response;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
-public class HomeFragment extends BaseFragment implements View.OnClickListener {
+public class HomeFragment extends BaseFragment implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
     public static HomeFragment instance;
 
     private OnFragmentInteractionListener mListener;
@@ -53,29 +59,25 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private ApiInterface apiInterface;
     private List<UserPlan> plansList;
     private LocationRequest mLocationRequest;
+    private final static int REQUEST_CHECK_SETTINGS_GPS=0x1;
     private Location mLocation;
     public static final int INTERVAL = 1000 * 60;
     public static final int FASTEST_INTERVAL = 1000 *30;
-    private double visitLat;
-    private double visitLong;
     int  isInLocation;
     double lat;
     double lng;
-    int doctorId;
-    int chemsitId;
-    int planId;
-    int userId;
+    private GoogleApiClient googleApiClient;
 
 
     public HomeFragment() {
     }
 
-    public static HomeFragment getInstance() {
-        if (instance == null) {
-            instance = new HomeFragment();
-        }
-        return instance;
-    }
+//    public static HomeFragment getInstance() {
+//        if (instance == null) {
+//            instance = new HomeFragment();
+//        }
+//        return instance;
+//    }
 
 
     @Override
@@ -91,9 +93,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         super.initData();
         apiInterface = ApiClient.getInstance();
         mLocationRequest = new LocationRequest();
-        getLastLocation();
-        startLocationUpdates();
-        getAllPlansList(token);
+        setUpGClient();
+
     }
 
     @Override
@@ -167,68 +168,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     }
 
 
-    protected void startLocationUpdates() {
-
-        // Create the location request to start receiving updates
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(INTERVAL);
-        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
-
-        // Create LocationSettingsRequest object using location request
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        builder.addLocationRequest(mLocationRequest);
-        LocationSettingsRequest locationSettingsRequest = builder.build();
-
-        SettingsClient settingsClient = LocationServices.getSettingsClient(mContext);
-        settingsClient.checkLocationSettings(locationSettingsRequest);
-
-        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        getFusedLocationProviderClient(mContext).requestLocationUpdates(mLocationRequest, new LocationCallback() {
-                    @Override
-                    public void onLocationResult(LocationResult locationResult) {
-                        // do work here
-                        onLocationChanged(locationResult.getLastLocation());
-                    }
-                },
-                Looper.myLooper());
-    }
-
-    public void onLocationChanged(Location location) {
-        // New location has now been determined
-
-        mLocation = location;
-
-    }
-
-    public void getLastLocation() {
-        // Get last known recent location using new Google Play Services SDK (v11+)
-        FusedLocationProviderClient locationClient = getFusedLocationProviderClient(mContext);
-
-        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        locationClient.getLastLocation()
-                .addOnSuccessListener(location -> {
-                    if (location != null) {
-                        onLocationChanged(location);
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Log.d("MapDemoActivity", "Error trying to get last GPS location");
-                    e.printStackTrace();
-                });
-    }
-
 
     @Override
     public void onAttach(Context context) {
@@ -238,7 +177,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onPause() {
         super.onPause();
-        getFusedLocationProviderClient(mContext).removeLocationUpdates(new LocationCallback());
+        googleApiClient.disconnect();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        googleApiClient.connect();
     }
 
     @Override
@@ -255,6 +201,98 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+    }
+
+    private synchronized void setUpGClient() {
+        googleApiClient = new GoogleApiClient.Builder(mContext)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        googleApiClient.connect();
+    }
+
+
+    private void getMyLocation(){
+        if(googleApiClient!=null) {
+            if (googleApiClient.isConnected()) {
+                int permissionLocation = ContextCompat.checkSelfPermission(mContext,
+                        Manifest.permission.ACCESS_FINE_LOCATION);
+                if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
+                    mLocation =                     LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+//                    onLocationChanged(mLocation);
+                    mLocationRequest = new LocationRequest();
+                    mLocationRequest.setInterval(INTERVAL);
+                    mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+                    mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+
+                    LocationServices.FusedLocationApi
+                            .requestLocationUpdates(googleApiClient, mLocationRequest, this);
+                }
+            }
+        }
+    }
+
+
+    public void checkLocationSettings(){
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(mLocationRequest);
+        builder.setAlwaysShow(true);
+
+        PendingResult<LocationSettingsResult> result =
+                LocationServices.SettingsApi
+                        .checkLocationSettings(googleApiClient, builder.build());
+        result.setResultCallback(result1 -> {
+            final Status status = result1.getStatus();
+            switch (status.getStatusCode()) {
+                case LocationSettingsStatusCodes.SUCCESS:
+                    // All location settings are satisfied.
+                    // You can initialize location requests here.
+                    int permissionLocation = ContextCompat
+                            .checkSelfPermission(mContext,
+                                    Manifest.permission.ACCESS_FINE_LOCATION);
+                    if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
+                       getMyLocation();
+                    }
+                    break;
+                case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                    // Location settings are not satisfied.
+                    // But could be fixed by showing the user a dialog.
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),
+                        // and check the result in onActivityResult().
+                        // Ask to turn on GPS automatically
+                        status.startResolutionForResult(getActivity(),
+                                REQUEST_CHECK_SETTINGS_GPS);
+                    } catch (IntentSender.SendIntentException e) {
+                        Log.e("Location Setting", e.getMessage());
+                    }
+                    break;
+                case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                    // Location settings are not satisfied.
+                    // However, we have no way
+                    // to fix the
+                    // settings so we won't show the dialog.
+                    // finish();
+                    break;
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CHECK_SETTINGS_GPS:
+                switch (resultCode) {
+                    case Activity.RESULT_OK:
+                        getMyLocation();
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        break;
+                }
+                break;
+        }
     }
 
     public void gotoScheduleTimeActivity(int pos, boolean isDoctor, float dist){
@@ -312,6 +350,28 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
         return customerName;
    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        checkLocationSettings();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mLocation = location;
+        getAllPlansList(token);
+
+    }
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

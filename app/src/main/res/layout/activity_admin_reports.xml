@@ -12,6 +12,7 @@
         android:theme="@style/AppTheme.NoActionBar.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
+            app:navigationIcon="@drawable/back_arrow_whit"
             android:id="@+id/toolbarReports"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"

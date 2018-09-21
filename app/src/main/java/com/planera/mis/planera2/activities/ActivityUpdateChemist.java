@@ -420,7 +420,7 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
 
     public void getAddressLatLong(String input) {
         processDialog.showDialog(ActivityUpdateChemist.this, false);
-        Call<GooglePlaces> call = apiInterfaceForGooglePalces.getPlaceLatLong(input, AppConstants.INPUT_TYPE, AppConstants.FIELDS, AppConstants.KEY_GOOGLE_PLACES);
+        Call<GooglePlaces> call = apbInterfaceForGooglePlaces.getPlaceLatLong(input, AppConstants.INPUT_TYPE, AppConstants.FIELDS, AppConstants.KEY_GOOGLE_PLACES);
         call.enqueue(new Callback<GooglePlaces>() {
             @Override
             public void onResponse(Call<GooglePlaces> call, Response<GooglePlaces> response) {

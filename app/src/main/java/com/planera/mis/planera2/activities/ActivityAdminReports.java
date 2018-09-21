@@ -1,9 +1,11 @@
 package com.planera.mis.planera2.activities;
 
 import android.app.DatePickerDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -11,9 +13,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-
+import android.widget.TextView;
 import com.planera.mis.planera2.R;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -34,14 +35,13 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_reports);
+        initUi();
+        initData();
     }
 
     @Override
     public void initUi() {
         super.initUi();
-
-
-
         parentPanel = findViewById(R.id.parentPanel);
         appBar = findViewById(R.id.appBar);
         toolbarReport = findViewById(R.id.toolbarReport);
@@ -49,9 +49,13 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         editStartTime = findViewById(R.id.edit_start_time);
         editEndTime = findViewById(R.id.edit_end_time);
         buttonSubmitReport = findViewById(R.id.button_submit_report);
+        buttonSubmitReport.setOnClickListener(this);
+        editEndTime.setOnClickListener(this);
+        editStartTime.setOnClickListener(this);
 
         setSupportActionBar(toolbarReport);
-        getSupportActionBar().setTitle("Reports");
+        getSupportActionBar().setTitle("Add Chemist's Detail");
+        toolbarReport.setNavigationOnClickListener(view -> onBackPressed());
     }
 
     @Override
@@ -61,8 +65,35 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     }
 
 
+    public void uiValidation(){
+        String strStartDate = editStartTime.getText().toString().trim();
+        String strEndDate = editEndTime.getText().toString().trim();
+        int pos =spinnerRoleType.getSelectedItemPosition();
+        if (pos == 0){
+            TextView errorText = (TextView)spinnerRoleType.getSelectedView();
+            errorText.setError("anything here, just to add the icon");
+            errorText.setTextColor(Color.RED);
+            errorText.setText("Please select a role");
+        }
 
-    public void pickDateFromDialog(){
+       else if (TextUtils.isEmpty(strStartDate)){
+            editStartTime.setError(getString(R.string.invalid_input));
+            editStartTime.requestFocus();
+
+        }
+        else if (TextUtils.isEmpty(strEndDate)){
+            editEndTime.setError(getString(R.string.invalid_input));
+            editEndTime.requestFocus();
+
+        }
+        else{
+
+        }
+    }
+
+
+
+    public void pickDateFromDialog(EditText editText){
         Calendar mCurrentTime = Calendar.getInstance();
         int mYear = mCurrentTime.get(Calendar.YEAR);
         int mMonth = mCurrentTime.get(Calendar.MONTH);
@@ -72,15 +103,21 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 strPickedDate = year+"-"+month+"-"+dayOfMonth;
+                editText.setText(strPickedDate);
 
             }
         },mYear, mMonth, mDay );
+
+        //code for select on current date and onwards.
+       // datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+//        Toast.makeText(ActivityAdminReports.this, System.currentTimeMillis()+"", Toast.LENGTH_LONG).show();
         datePickerDialog.show();
 
     }
 
     public void initRoles(){
         listOfRoles = new ArrayList<>();
+        listOfRoles.add("-Select-");
         listOfRoles.add("Doctor");
         listOfRoles.add("Chemist");
         listOfRoles.add("User/MR");
@@ -100,10 +137,13 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.button_submit_report:
+                uiValidation();
                 break;
             case R.id.edit_start_time:
+                pickDateFromDialog(editStartTime);
                 break;
             case R.id.edit_end_time:
+                pickDateFromDialog(editEndTime);
                 break;
         }
 

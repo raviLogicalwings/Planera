@@ -111,6 +111,7 @@
             android:name=".activities.ActivityAdminReports"
             android:label="@string/title_activity_admin_reports"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".activities.BaseActivity" />
     </application>
 
 </manifest>

@@ -15,7 +15,7 @@ import com.planera.mis.planera2.activities.utils.RuntimePermissionCheck;
 
 
 public class BaseActivity extends AppCompatActivity {
-    public ApiInterface apiInterfaceForGooglePalces;
+    public ApiInterface apbInterfaceForGooglePlaces;
     public PreferenceConnector connector;
     public ProcessDialog processDialog;
     public View rootView;
@@ -32,7 +32,7 @@ public class BaseActivity extends AppCompatActivity {
         permissionCheck = new RuntimePermissionCheck(getBaseContext());
         apiInterface  = ApiClient.getInstance();
         token = connector.getString(AppConstants.TOKEN);
-        apiInterfaceForGooglePalces = ApiClient.getInstanceForLocation();
+        apbInterfaceForGooglePlaces = ApiClient.getInstanceForLocation();
         processDialog = new ProcessDialog();
         mContext = getBaseContext();
         DataController.getmInstance();

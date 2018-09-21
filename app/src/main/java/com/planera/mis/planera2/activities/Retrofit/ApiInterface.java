@@ -20,6 +20,7 @@ import com.planera.mis.planera2.activities.models.PatchListResponse;
 import com.planera.mis.planera2.activities.models.Plans;
 import com.planera.mis.planera2.activities.models.PlansListResponce;
 import com.planera.mis.planera2.activities.models.RegistrationResponse;
+import com.planera.mis.planera2.activities.models.ReportsListReposnce;
 import com.planera.mis.planera2.activities.models.StateListResponse;
 import com.planera.mis.planera2.activities.models.TerritoryListResponse;
 import com.planera.mis.planera2.activities.models.UserData;
@@ -89,6 +90,12 @@ public interface ApiInterface {
 
     @GET(AppConstants.USER_PLAN_LIST)
     Call<UserPlanListRespnce> userPlanList(@Header("Authorization") String token);
+
+    @POST(AppConstants.REPORTS_LIST)
+    Call<ReportsListReposnce>  reportList(@Header("Authorization") String token,
+                                          @Query("StartDate") String startDate,
+                                          @Query("EndDate") String endDate,
+                                          @Query("Type") String type, @Query("Id") String id);
 
 
     @GET(AppConstants.ADD_STATE)

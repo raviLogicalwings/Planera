@@ -27,6 +27,7 @@ public class AppConstants {
     public static final String TERRITORY_WISE_PATCHES = "patch/getTerritoryWisePatches";
     public static final String PATCH_WISE_DOCTORS_LIST = "doctor/getPatchWiseDoctor";
     public static final String PATCH_WISE_CHEMIST_LIST = "chemist/getPatchWiseChemists";
+    public static final String REPORTS_LIST = "inputreport/inputreport";
 
 
     public static final String ADD_STATE = "state/addState";

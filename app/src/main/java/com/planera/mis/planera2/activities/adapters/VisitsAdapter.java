@@ -63,26 +63,31 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
     private void onBindItems(VisitItemHolder viewHolder, int position) {
 
         if(planList.get(position).getChemistsId() == null){
-            viewHolder.textName.setText(planList.get(position).getDoctorFirstName()
-                    + ", " + planList.get(position).getDoctorMiddleName() + ", " +
-                    planList.get(position).getDoctorLastName());
+            if (planList.get(position).getDoctorFirstName() != null) {
+                viewHolder.textName.setText(planList.get(position).getDoctorFirstName()
+                        + " " + planList.get(position).getDoctorMiddleName() + " " +
+                        planList.get(position).getDoctorLastName());
             String firstChar = getFirstName(planList.get(position).getDoctorFirstName());
             viewHolder.textNameFirstLetter.setText(firstChar.toUpperCase());
 
-            dist = calculateDistance(location,
-                    planList.get(position).getDoctorLatitude(),
-                    planList.get(position).getDoctorLongitude());
-            viewHolder.textDistance.setText(Math.abs(dist) + " KM");
+                dist = calculateDistance(location,
+                        planList.get(position).getDoctorLatitude(),
+                        planList.get(position).getDoctorLongitude());
+                viewHolder.textDistance.setText(Math.abs(dist) + " KM");
+            }
         }
         else {
-            viewHolder.textName.setText(planList.get(position).getChemistFirstName() + ", " +
-                    planList.get(position).getChemistMiddleName() + ", " +
-                    planList.get(position).getChemistLastName());
-            String firstChar = getFirstName(planList.get(position).getChemistFirstName());
-            viewHolder.textNameFirstLetter.setText(firstChar.toUpperCase());
+            if (planList.get(position).getChemistFirstName() != null) {
+                viewHolder.textName.setText(planList.get(position).getChemistFirstName() + " " +
+                        planList.get(position).getChemistMiddleName() + " " +
+                        planList.get(position).getChemistLastName());
+                String firstChar = getFirstName(planList.get(position).getChemistFirstName());
+                viewHolder.textNameFirstLetter.setText(firstChar.toUpperCase());
 
-            float dist = calculateDistance(location, planList.get(position).getChemistLatitude(), planList.get(position).getChemistLongitude());
-            viewHolder.textDistance.setText(Math.round(dist) + " KM");
+
+                float dist = calculateDistance(location, planList.get(position).getChemistLatitude(), planList.get(position).getChemistLongitude());
+                viewHolder.textDistance.setText(Math.round(dist) + " KM");
+            }
 
         }
         viewHolder.ratingBarDoctor.setRating(3.5f);
