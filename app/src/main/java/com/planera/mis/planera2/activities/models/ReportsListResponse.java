@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class ReportsListReposnce extends MainResponse {
+public class ReportsListResponse extends MainResponse {
 
     @SerializedName("data")
     List<Reports> data;

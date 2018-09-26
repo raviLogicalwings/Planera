@@ -289,6 +289,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                         getMyLocation();
                         break;
                     case Activity.RESULT_CANCELED:
+
                         break;
                 }
                 break;
@@ -315,7 +316,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         intent.putExtra(AppConstants.KEY_PLAN_ID, plansList.get(pos).getPlanId());
         intent.putExtra(AppConstants.KEY_USER_ID, plansList.get(pos).getUserId());
         startActivity(intent);
-
     }
     @Override
     public void onClick(View view) {
@@ -369,6 +369,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onLocationChanged(Location location) {
         mLocation = location;
+        Log.e("Current Location", mLocation.getLatitude()+" "+mLocation.getLongitude());
         getAllPlansList(token);
 
     }

@@ -77,6 +77,7 @@ public class AppConstants {
     //User's Plan constants
     public static final int ROLE_DOCTOR = 1;
     public static final int ROLE_CHEMIST = 2;
+    public static final int ROLE_USER = 3;
     public static final String KEY_ROLE = "role";
 
     public static final String KEY_ROLE_DOCTOR = "role_doctor";

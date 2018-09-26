@@ -12,7 +12,15 @@ public class DataController extends Application {
     public List<InputOrders> orderListSelected;
     public List<InputGift> inputGiftList;
     public List<InputOrders> orderPODList;
+    public List<InputOrders> sampleListSelected;
 
+    public List<InputOrders> getSampleListSelected() {
+        return sampleListSelected;
+    }
+
+    public void setSampleListSelected(List<InputOrders> sampleListSelected) {
+        this.sampleListSelected = sampleListSelected;
+    }
 
     public List<InputGift> getInputGiftList() {
         return inputGiftList;

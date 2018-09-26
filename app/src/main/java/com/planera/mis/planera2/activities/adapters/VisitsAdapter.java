@@ -140,12 +140,11 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
     private boolean whichRole(int pos){
 
         if (planList.get(pos).getChemistsId()== null){
-            isDoctor = true;
+           return isDoctor = true;
         }
         else{
-            isDoctor = false;
+           return isDoctor = false;
         }
-        return isDoctor;
     }
 
 

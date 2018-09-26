@@ -113,7 +113,7 @@ public class SignupActivity extends BaseActivity implements View.OnClickListener
             Snackbar.make(rootView, "This field can't be empty", Snackbar.LENGTH_LONG).show();
         }
 
-        else if (passwordStr.length()<10){
+        else if (phoneStr.length()<10){
             inputLayoutMobile.setError("*");
             Snackbar.make(rootView, "Enter 10 Digit mobile number.", Snackbar.LENGTH_LONG).show();
         }

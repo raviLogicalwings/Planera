@@ -18,7 +18,7 @@
 
     <ImageView
         android:layout_height="match_parent"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:src="@drawable/ic_launcher"
         android:id="@+id/appIcon"
         />
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp">
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:text="pratik@gmail.com"
+                android:text="admin@admin.com"
                 android:drawableLeft="@drawable/icon_user_name"
                 android:drawablePadding="@dimen/drawable_padding"
                 android:layout_width="match_parent"
@@ -67,7 +67,7 @@
 
 
             <EditText
-                android:text="1234567890"
+                android:text="admin1234"
                 android:drawableLeft="@drawable/icon_password"
                 android:drawablePadding="@dimen/drawable_padding"
                 android:layout_width="match_parent"
@@ -96,7 +96,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:layout_height="wrap_content">
+    android:layout_height="0dp">
     <Button
 
         style="@style/ButtonText"

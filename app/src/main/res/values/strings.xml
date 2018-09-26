@@ -76,4 +76,5 @@
     <string name="title_activity_crete_plan">ActivityCretePlan</string>
     <string name="title_activity_update_plan">ActivityUpdatePlan</string>
     <string name="title_activity_admin_reports">ActivityAdminReports</string>
+    <string name="sample_fargemt">SAMPLE</string>
 </resources>

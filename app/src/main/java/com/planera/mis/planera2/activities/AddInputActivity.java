@@ -141,10 +141,10 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
         longitude = intent.getDoubleExtra(AppConstants.LATITUDE, 0.0);
         latitude  = intent.getDoubleExtra(AppConstants.LATITUDE, 0.0);
         isInLocation = intent.getIntExtra(AppConstants.KEY_IN_LOCATION, -1);
-        doctorId = intent.getIntExtra(AppConstants.DOCTOR_ID, -10);
-        chemistId = intent.getIntExtra(AppConstants.CHEMIST_ID , -10);
-        userId = intent.getIntExtra(AppConstants.KEY_USER_ID, -10);
-        planId = intent.getIntExtra(AppConstants.KEY_PLAN_ID, -10);
+        doctorId = intent.getIntExtra(AppConstants.DOCTOR_ID, 0);
+        chemistId = intent.getIntExtra(AppConstants.CHEMIST_ID , 0);
+        userId = intent.getIntExtra(AppConstants.KEY_USER_ID, 0);
+        planId = intent.getIntExtra(AppConstants.KEY_PLAN_ID, 0);
 
         input.setLatitude(Double.toString(latitude));
         input.setLongitude(longitude+"");

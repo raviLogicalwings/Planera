@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.adapters.ChemistTabsPagerAdapter;
@@ -18,6 +19,7 @@ import com.planera.mis.planera2.activities.adapters.DoctorTabsPagerAdapter;
 import com.planera.mis.planera2.activities.controller.DataController;
 import com.planera.mis.planera2.activities.fragments.BrandsFragment;
 import com.planera.mis.planera2.activities.fragments.GiftFragment;
+import com.planera.mis.planera2.activities.fragments.SampleFragment;
 import com.planera.mis.planera2.activities.models.InputGiftResponce;
 import com.planera.mis.planera2.activities.models.InputOrders;
 import com.planera.mis.planera2.activities.models.MainResponse;
@@ -96,13 +98,16 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
         switch (v.getId()){
             case R.id.button_confirm_product:
                if (DataController.getmInstance().getInputGiftList()!= null){
-                   addInputgiftApi(token);
+                   addInputGiftApi(token);
                }
                if(DataController.getmInstance().getOrderListSelected()!= null){
                    apiAddInputBrands(token, DataController.getmInstance().getOrderListSelected());
                }
                 if(DataController.getmInstance().getOrderPODList()!= null){
                     apiAddInputBrands(token, DataController.getmInstance().getOrderPODList());
+                }
+                if (DataController.getmInstance().getSampleListSelected() != null){
+                   new SampleFragment().apiAddInputBrands(token, DataController.getmInstance().getSampleListSelected());
                 }
 
                 break;
@@ -118,7 +123,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
 
     }
 
-    public void addInputgiftApi(String token){
+    public void addInputGiftApi(String token){
         Log.e("AddInputGifts : " , new Gson().toJson(DataController.getmInstance().getInputGiftList()));
         processDialog.showDialog(ProductCategoryActivity.this, false);
         Call<InputGiftResponce> call = apiInterface.addInputGift(token, DataController.getmInstance().getInputGiftList());
