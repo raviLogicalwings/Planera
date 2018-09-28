@@ -4,15 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.utils.AppConstants;
+import com.planera.mis.planera2.activities.utils.PreferenceConnector;
 import com.planera.mis.planera2.activities.utils.RuntimePermissionCheck;
 
 
 public class SplashActivity extends BaseActivity {
     public boolean isUserLogin;
     public boolean isUser;
+    private PreferenceConnector connector;
     public RuntimePermissionCheck permissionCheck;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +39,14 @@ public class SplashActivity extends BaseActivity {
     @Override
     public void initData(){
         super.initData();
+        connector = PreferenceConnector.getInstance(this);
+
         isUserLogin = connector.getBoolean(AppConstants.IS_LOGIN);
         isUser = connector.getBoolean(AppConstants.IS_USER);
         permissionCheck = new RuntimePermissionCheck(SplashActivity.this);
-        if(permissionCheck.checkAndRequestMultiplePermission()) {
+        if(permissionCheck.checkPermissionForWriteExternalStorage() && permissionCheck.checkPermissionForReadExtertalStorage()) {
 
-            if (isUserLogin) {
+            if (isUserLogin){
                 if (isUser) {
                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     startActivity(intent);
@@ -49,14 +54,16 @@ public class SplashActivity extends BaseActivity {
                     Intent intent = new Intent(SplashActivity.this, AdminPanelActivity.class);
                     startActivity(intent);
                 }
-            } else {
+            }
+            else {
+                Toast.makeText(this, isUserLogin+"", Toast.LENGTH_SHORT).show();
                 callSplash();
             }
         }
         else{
             try {
-                permissionCheck.requestPermissionForLocation();
-                callSplash();
+                permissionCheck.requestPermissionForWriteExternalStorage();
+                permissionCheck.requestPermissionForReadExtertalStorage();
             } catch (Exception e) {
                 e.printStackTrace();
             }

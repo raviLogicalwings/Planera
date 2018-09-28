@@ -1,6 +1,7 @@
 package com.planera.mis.planera2.activities;
 
 import android.app.DatePickerDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -21,6 +22,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -88,13 +92,17 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     private int territoryId;
     private int patchId;
     private String selectedRole;
-    private String id;
+    private String userId;
     private ReportListAdapter.OnItemDeleteListener listener;
     private List<String> stringDoctorsList;
     private List<String> stringChemistList;
     private List<String> stringUserList;
     private List<String> stringPatchesList;
     private List<String> stringTerritoryList;
+    private String doctorId;
+    private String chemistId;
+    private TableLayout mainTableLayout;
+    private TableRow tr_head;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +138,14 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         layoutDoctorReport = findViewById(R.id.layout_doctor_report);
         layoutUserReport = findViewById(R.id.layout_user_report);
         buttonExport = findViewById(R.id.button_export);
+        mainTableLayout = findViewById(R.id.main_table);
+
+        tr_head = new TableRow(this);
+        tr_head.setBackgroundResource(R.drawable.bg_input_box);
+        tr_head.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
+
         buttonSubmitReport.setOnClickListener(this);
         editEndTime.setOnClickListener(this);
         editStartTime.setOnClickListener(this);
@@ -148,6 +164,8 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         doctorsList = new ArrayList<>();
         patchesList = new ArrayList<>();
         usersList = new ArrayList<>();
+
+
 
         initRoles();
 
@@ -251,23 +269,34 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
             if (InternetConnection.isNetworkAvailable(ActivityAdminReports.this)){
 
                 if (selectedRole.equals("1")){
-                        id = doctorsList.get(spinnerDoctorReport.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getDoctorId() + "";
+                        doctorId = doctorsList.get(spinnerDoctorReport.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getDoctorId() + "";
                 }
 
                 if (selectedRole.equals("2")){
-                    id = chemistsList.get(spinnerChemistReport.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getChemistId()+"";
+                    chemistId = chemistsList.get(spinnerChemistReport.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getChemistId()+"";
 
                 }
 
                 if (selectedRole.equals("3")){
-                    id = usersList.get(spinnerUserReport.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getUserId();
+                    userId = usersList.get(spinnerUserReport.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getUserId();
                 }
 
                 obtainReport.setStartDate(strStartDate);
                 obtainReport.setEndDate(strEndDate );
-                obtainReport.setType(selectedRole);
-                obtainReport.setId(id);
-                getReportList(token, obtainReport);
+                if (userId != null) {
+                    obtainReport.setUserId(userId);
+                    getUserReport(token, obtainReport);
+
+                }
+                if (doctorId != null){
+                    obtainReport.setDoctorId(doctorId);
+                    getDoctorsReport(token, obtainReport);
+
+                }
+                if (chemistId != null){
+                    obtainReport.setChemistId(chemistId);
+                    getChemistReportList(token, obtainReport);
+                }
             }
         }
     }
@@ -525,12 +554,12 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
 
     }
 
-    public void getReportList(String token, ObtainReport report){
+    public void getChemistReportList(String token, ObtainReport report){
         Log.e("Obtain Report", new Gson().toJson(report));
         processDialog.showDialog(ActivityAdminReports.this, false);
 
 
-        Call<ReportListResponce> call = apiInterface.reportList(token, report);
+        Call<ReportListResponce> call = apiInterface.reportListChemist(token, report);
         if (call != null){
             call.enqueue(new Callback<ReportListResponce>() {
                 @Override
@@ -538,15 +567,16 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                     processDialog.dismissDialog();
 
                     if (response.code() == 400){
-                       Toast.makeText(ActivityAdminReports.this, "Error Code", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ActivityAdminReports.this, "Error Code", Toast.LENGTH_LONG).show();
                     }
                     if (response.body().getStatuscode() == AppConstants.RESULT_OK){
-                      Log.e("Data of Items", new Gson().toJson(response.body()));
-                      dataItemsList = response.body().getData();
+                        Log.e("Data of Items", new Gson().toJson(response.body()));
+                        dataItemsList = response.body().getData();
 
-                      if (dataItemsList != null){
-                          initAdapter(dataItemsList, reportsListView);
-                      }
+                        if (dataItemsList != null){
+                            chemistDataTable(dataItemsList);
+//                            initAdapter(dataItemsList, reportsListView);
+                        }
 
 
 
@@ -565,6 +595,523 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         }
     }
 
+
+    public void getDoctorsReport(String token, ObtainReport report){
+        Log.e("Obtain Report Doctor", new Gson().toJson(report));
+        processDialog.showDialog(ActivityAdminReports.this, false);
+
+
+        Call<ReportListResponce> call = apiInterface.reportListDoctor(token, report);
+        if (call != null){
+            call.enqueue(new Callback<ReportListResponce>() {
+                @Override
+                public void onResponse(Call<ReportListResponce> call, Response<ReportListResponce> response) {
+                    processDialog.dismissDialog();
+
+                    if (response.code() == 400){
+                        Toast.makeText(ActivityAdminReports.this, "Error Code", Toast.LENGTH_LONG).show();
+                    }
+                    if (response.body().getStatuscode() == AppConstants.RESULT_OK){
+                        Log.e("Data of Items", new Gson().toJson(response.body()));
+                        dataItemsList = response.body().getData();
+
+                        if (dataItemsList != null){
+                            doctorDataTable(dataItemsList);
+                            initAdapter(dataItemsList, reportsListView);
+                        }
+
+
+
+                    }
+                    else{
+                        Toast.makeText(ActivityAdminReports.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ReportListResponce> call, Throwable t) {
+                    processDialog.dismissDialog();
+                    Toast.makeText(ActivityAdminReports.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+
+    public void getUserReport(String token, ObtainReport report){
+        Log.e("Obtain Report User", new Gson().toJson(report));
+        processDialog.showDialog(ActivityAdminReports.this, false);
+
+
+        Call<ReportListResponce> call = apiInterface.reportListUser(token, report);
+        if (call != null){
+            call.enqueue(new Callback<ReportListResponce>() {
+                @Override
+                public void onResponse(Call<ReportListResponce> call, Response<ReportListResponce> response) {
+                    processDialog.dismissDialog();
+
+                    if (response.code() == 400){
+                        Toast.makeText(ActivityAdminReports.this, "Error Code", Toast.LENGTH_LONG).show();
+                    }
+                    if (response.body().getStatuscode() == AppConstants.RESULT_OK){
+                        Log.e("Data of Items", new Gson().toJson(response.body()));
+                        dataItemsList = response.body().getData();
+
+                        if (dataItemsList != null){
+                            userDataTable(dataItemsList);
+                            initAdapter(dataItemsList, reportsListView);
+                        }
+
+
+
+                    }
+                    else{
+                        Toast.makeText(ActivityAdminReports.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ReportListResponce> call, Throwable t) {
+                    processDialog.dismissDialog();
+                    Toast.makeText(ActivityAdminReports.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+
+    public void chemistDataTable(List<DataItem> dataItemsList){
+        TextView label_number = new TextView(this);
+        label_number.setText("S. No.");
+        label_number.setId(20-1);
+        label_number.setTextColor(Color.BLACK);
+        label_number.setPadding(8,8,8,8);
+        tr_head.addView(label_number);
+
+        TextView lable_user = new TextView(this);
+        lable_user.setText("Mr/User");
+        lable_user.setId(20+1);
+        lable_user.setTextColor(Color.BLACK);
+        lable_user.setPadding(8, 8, 8, 8);
+        tr_head.addView(lable_user);
+
+        TextView lable_start_date = new TextView(this);
+        lable_start_date.setText("Start Date");
+        lable_start_date.setId(20+2);
+        lable_start_date.setGravity(View.TEXT_ALIGNMENT_CENTER);
+        lable_start_date.setTextColor(Color.BLACK);
+        lable_start_date.setPadding(8, 8, 8, 8);
+        tr_head.addView(lable_start_date);
+
+        TextView lable_end_date = new TextView(this);
+        lable_end_date.setText("End Date");
+        lable_end_date.setId(20+3);
+        lable_end_date.setTextColor(Color.BLACK);
+        lable_end_date.setPadding(8, 8, 8, 8);
+        tr_head.addView(lable_end_date);
+
+        TextView lable_pob = new TextView(this);
+        lable_pob.setText("POB");
+        lable_pob.setId(20+4);
+        lable_pob.setTextColor(Color.BLACK);
+        lable_pob.setPadding(8, 8, 8, 8);
+        tr_head.addView(lable_pob);
+
+
+        mainTableLayout.addView(tr_head, new TableLayout.LayoutParams(
+                TableLayout.LayoutParams.FILL_PARENT,                    //part4
+                TableLayout.LayoutParams.MATCH_PARENT));
+
+
+        TableRow[] tr_headObj = new TableRow[dataItemsList.size()];
+        TextView[] textArray = new TextView[5];
+
+        for (int i = 0; i< dataItemsList.size() ; i++){
+            tr_headObj[i] = new TableRow(this);
+            tr_headObj[i].setId(i+1);
+            if (i%2 == 0) {
+                tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.colorGray));
+            }
+            else{
+                tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            }
+            tr_headObj[i].setLayoutParams(new TableRow.LayoutParams(
+                    TableRow.LayoutParams.MATCH_PARENT,
+                    TableRow.LayoutParams.WRAP_CONTENT));
+
+            textArray[0] = new TextView(this);
+            textArray[0].setId(i+111);
+            textArray[0].setText(i+1+"");
+            textArray[0].setTextColor(Color.WHITE);
+            textArray[0].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[0]);
+
+            textArray[1] = new TextView(this);
+            textArray[1].setId(i+111);
+            textArray[1].setText(dataItemsList.get(i).getUserName());
+            textArray[1].setTextColor(Color.WHITE);
+            textArray[1].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[1]);
+
+            textArray[2] = new TextView(this);
+            textArray[2].setId(i+111);
+            textArray[2].setText(dataItemsList.get(i).getStartDate());
+            textArray[2].setTextColor(Color.WHITE);
+            textArray[2].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[2]);
+
+            textArray[3] = new TextView(this);
+            textArray[3].setId(i+111);
+            textArray[3].setText(dataItemsList.get(i).getEndDate());
+            textArray[3].setTextColor(Color.WHITE);
+            textArray[3].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[3]);
+
+            textArray[4] = new TextView(this);
+            textArray[4].setId(i+111);
+            textArray[4].setText(dataItemsList.get(i).getProductName()+"("+dataItemsList.get(i).getProductQty()+")");
+            textArray[4].setTextColor(Color.WHITE);
+            textArray[4].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[4]);
+
+            mainTableLayout.addView(tr_headObj[i], new TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.MATCH_PARENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT));
+
+        }
+
+
+    }
+
+
+
+    public void doctorDataTable(List<DataItem> dataItemsList){
+        TextView label_number = new TextView(this);
+        label_number.setText("S. No.");
+        label_number.setId(20-1);
+        label_number.setTextColor(Color.BLACK);
+        label_number.setPadding(8,8,8,8);
+        tr_head.addView(label_number);
+
+        TextView lable_user = new TextView(this);
+        lable_user.setText("Mr/User");
+        lable_user.setId(20+1);
+        lable_user.setTextColor(Color.BLACK);
+        lable_user.setPadding(8, 8, 8, 8);
+        tr_head.addView(lable_user);
+
+        TextView lable_start_date = new TextView(this);
+        lable_start_date.setText("Start Date");
+        lable_start_date.setId(20+2);
+        lable_start_date.setGravity(View.TEXT_ALIGNMENT_CENTER);
+        lable_start_date.setTextColor(Color.BLACK);
+        lable_start_date.setPadding(8, 8, 8, 8);
+        tr_head.addView(lable_start_date);
+
+        TextView lable_end_date = new TextView(this);
+        lable_end_date.setText("End Date");
+        lable_end_date.setId(20+3);
+        lable_end_date.setTextColor(Color.BLACK);
+        lable_end_date.setPadding(8, 8, 8, 8);
+        tr_head.addView(lable_end_date);
+
+        TextView lebel_sample = new TextView(this);
+        lebel_sample.setText("Sample Product");
+        lebel_sample.setId(20+4);
+        lebel_sample.setTextColor(Color.BLACK);
+        lebel_sample.setPadding(8, 8, 8, 8);
+        tr_head.addView(lebel_sample);
+
+        TextView lebel_interest = new TextView(this);
+        lebel_interest.setText("Brand Interest");
+        lebel_interest.setId(20+4);
+        lebel_interest.setTextColor(Color.BLACK);
+        lebel_interest.setPadding(8, 8, 8, 8);
+        tr_head.addView(lebel_interest);
+
+        mainTableLayout.addView(tr_head, new TableLayout.LayoutParams(
+                TableLayout.LayoutParams.FILL_PARENT,                    //part4
+                TableLayout.LayoutParams.MATCH_PARENT));
+
+
+        TableRow[] tr_headObj = new TableRow[dataItemsList.size()];
+        TextView[] textArray = new TextView[6];
+
+        for (int i = 0; i< dataItemsList.size() ; i++){
+            tr_headObj[i] = new TableRow(this);
+            tr_headObj[i].setId(i+1);
+            if (i%2 == 0) {
+                tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.colorGray));
+            }
+            else{
+                tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            }
+            tr_headObj[i].setLayoutParams(new TableRow.LayoutParams(
+                    TableRow.LayoutParams.MATCH_PARENT,
+                    TableRow.LayoutParams.WRAP_CONTENT));
+
+            textArray[0] = new TextView(this);
+            textArray[0].setId(i+111);
+            textArray[0].setText(i+1+"");
+            textArray[0].setTextColor(Color.WHITE);
+            textArray[0].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[0]);
+
+            textArray[1] = new TextView(this);
+            textArray[1].setId(i+111);
+            textArray[1].setText(dataItemsList.get(i).getUserName());
+            textArray[1].setTextColor(Color.WHITE);
+            textArray[1].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[1]);
+
+            textArray[2] = new TextView(this);
+            textArray[2].setId(i+111);
+            textArray[2].setText(dataItemsList.get(i).getStartDate());
+            textArray[2].setTextColor(Color.WHITE);
+            textArray[2].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[2]);
+
+            textArray[3] = new TextView(this);
+            textArray[3].setId(i+111);
+            textArray[3].setText(dataItemsList.get(i).getEndDate());
+            textArray[3].setTextColor(Color.WHITE);
+            textArray[3].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[3]);
+
+            textArray[4] = new TextView(this);
+            textArray[4].setId(i+111);
+            if (dataItemsList.get(i).getProductQty()!= null && dataItemsList.get(i).getIsBrand().equals("1")) {
+                textArray[4].setText(dataItemsList.get(i).getProductName() + "(" + dataItemsList.get(i).getProductQty() + ")");
+            }
+            textArray[4].setTextColor(Color.WHITE);
+            textArray[4].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[4]);
+
+            textArray[5] = new TextView(this);
+            textArray[5].setId(i+111);
+            if (dataItemsList.get(i).getIsBrand()!= null && dataItemsList.get(i).getIsBrand().equals("1")) {
+                textArray[5].setText(dataItemsList.get(i).getProductName() + "(" + dataItemsList.get(i).getProductQty() + ")");
+            }
+            textArray[5].setTextColor(Color.WHITE);
+            textArray[5].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[5]);
+
+            mainTableLayout.addView(tr_headObj[i], new TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.MATCH_PARENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT));
+
+        }
+
+
+    }
+
+    public void userDataTable(List<DataItem> dataItemsList){
+        TextView label_number = new TextView(this);
+        label_number.setText("S. No.");
+        label_number.setId(20-1);
+        label_number.setTextColor(Color.BLACK);
+        label_number.setPadding(8,8,8,8);
+        tr_head.addView(label_number);
+
+        TextView lable_chemist = new TextView(this);
+        lable_chemist.setText("Chemist");
+        lable_chemist.setId(20+1);
+        lable_chemist.setTextColor(Color.BLACK);
+        lable_chemist.setPadding(8, 8, 8, 8);
+        tr_head.addView(lable_chemist);
+
+        TextView lable_doctor = new TextView(this);
+        lable_doctor.setText("Doctor");
+        lable_doctor.setId(20+2);
+        lable_doctor.setGravity(View.TEXT_ALIGNMENT_CENTER);
+        lable_doctor.setTextColor(Color.BLACK);
+        lable_doctor.setPadding(8, 8, 8, 8);
+        tr_head.addView(lable_doctor);
+
+        TextView lable_start_date = new TextView(this);
+        lable_start_date.setText("Start Date");
+        lable_start_date.setId(20+3);
+        lable_start_date.setTextColor(Color.BLACK);
+        lable_start_date.setPadding(8, 8, 8, 8);
+        tr_head.addView(lable_start_date);
+
+        TextView lebel_end_date = new TextView(this);
+        lebel_end_date.setText("End Date");
+        lebel_end_date.setId(20+4);
+        lebel_end_date.setTextColor(Color.BLACK);
+        lebel_end_date.setPadding(8, 8, 8, 8);
+        tr_head.addView(lebel_end_date);
+
+        TextView lebel_location = new TextView(this);
+        lebel_location.setText("Is in Location");
+        lebel_location.setId(20+4);
+        lebel_location.setTextColor(Color.BLACK);
+        lebel_location.setPadding(8, 8, 8, 8);
+        tr_head.addView(lebel_location);
+
+        TextView lable_sample = new TextView(this);
+        lable_sample.setText("Sample");
+        lable_sample.setId(20+4);
+        lable_sample.setTextColor(Color.BLACK);
+        lable_sample.setPadding(8, 8, 8, 8);
+        tr_head.addView(lable_sample);
+
+        TextView lable_brand_interest = new TextView(this);
+        lable_brand_interest.setText("Brand Interest");
+        lable_brand_interest.setId(20+4);
+        lable_brand_interest.setTextColor(Color.BLACK);
+        lable_brand_interest.setPadding(8, 8, 8, 8);
+        tr_head.addView(lable_brand_interest);
+
+        TextView lebel_gift = new TextView(this);
+        lebel_gift.setText("Gift");
+        lebel_gift.setId(20+4);
+        lebel_gift.setTextColor(Color.BLACK);
+        lebel_gift.setPadding(8, 8, 8, 8);
+        tr_head.addView(lebel_gift);
+
+        TextView lebel_POB = new TextView(this);
+        lebel_POB.setText("POB");
+        lebel_POB.setId(20+4);
+        lebel_POB.setTextColor(Color.BLACK);
+        lebel_POB.setPadding(8, 8, 8, 8);
+        tr_head.addView(lebel_POB);
+
+        mainTableLayout.addView(tr_head, new TableLayout.LayoutParams(
+                TableLayout.LayoutParams.FILL_PARENT,                    //part4
+                TableLayout.LayoutParams.MATCH_PARENT));
+
+
+        TableRow[] tr_headObj = new TableRow[dataItemsList.size()];
+        TextView[] textArray = new TextView[10];
+
+        for (int i = 0; i< dataItemsList.size() ; i++){
+            tr_headObj[i] = new TableRow(this);
+            tr_headObj[i].setId(i+1);
+            if (i%2 == 0) {
+                tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.colorGray));
+            }
+            else{
+                tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            }
+            tr_headObj[i].setLayoutParams(new TableRow.LayoutParams(
+                    TableRow.LayoutParams.MATCH_PARENT,
+                    TableRow.LayoutParams.WRAP_CONTENT));
+
+            textArray[0] = new TextView(this);
+            textArray[0].setId(i+111);
+            textArray[0].setText(i+1+"");
+            textArray[0].setTextColor(Color.WHITE);
+            textArray[0].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[0]);
+
+            // Chemist
+            textArray[1] = new TextView(this);
+            textArray[1].setId(i+111);
+            textArray[1].setText(dataItemsList.get(i).getChemistName());
+            textArray[1].setTextColor(Color.WHITE);
+            textArray[1].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[1]);
+
+            // Doctor
+            textArray[2] = new TextView(this);
+            textArray[2].setId(i+111);
+            textArray[2].setText(dataItemsList.get(i).getDoctorName());
+            textArray[2].setTextColor(Color.WHITE);
+            textArray[2].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[2]);
+
+            // StartDate
+            textArray[3] = new TextView(this);
+            textArray[3].setId(i+111);
+            textArray[3].setText(dataItemsList.get(i).getStartDate());
+            textArray[3].setTextColor(Color.WHITE);
+            textArray[3].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[3]);
+
+            textArray[4] = new TextView(this);
+            textArray[4].setId(i+111);
+            textArray[4].setText(dataItemsList.get(i).getEndDate());
+            textArray[4].setTextColor(Color.WHITE);
+            textArray[4].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[4]);
+
+            textArray[5] = new TextView(this);
+            textArray[5].setId(i+111);
+            if(dataItemsList.get(i).getIsInLocation().equals("1")) {
+                textArray[5].setText("Yes");
+            }
+            else{
+                textArray[5].setText("No");
+            }
+            textArray[5].setTextColor(Color.WHITE);
+            textArray[5].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[5]);
+
+            textArray[6] = new TextView(this);
+            textArray[6].setId(i+111);
+            if (dataItemsList.get(i).getIsBrand().equals("1")) {
+                textArray[6].setText(dataItemsList.get(i).getProductName()
+                        +"("+dataItemsList.get(i).getProductQty()+")");
+            }
+            else{
+                textArray[6].setText("---");
+            }
+            textArray[6].setTextColor(Color.WHITE);
+            textArray[6].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[6]);
+
+
+            textArray[7] = new TextView(this);
+            textArray[7].setId(i+111);
+            if (dataItemsList.get(i).getIsBrand().equals("1")) {
+                textArray[7].setText(dataItemsList.get(i).getProductName()
+                        +"("+dataItemsList.get(i).getInterestedLevel()+")");
+            }
+            else{
+                textArray[7].setText("---");
+            }
+            textArray[7].setTextColor(Color.WHITE);
+            textArray[7].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[7]);
+
+
+            textArray[8] = new TextView(this);
+            textArray[8].setId(i+111);
+            if (dataItemsList.get(i).getGiftId()!= null){
+                textArray[8].setText(dataItemsList.get(i).getGiftName()
+                        +"("+dataItemsList.get(i).getGiftQty()+")");
+            }
+            else{
+                textArray[8].setText("---");
+            }
+            textArray[8].setTextColor(Color.WHITE);
+            textArray[8].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[8]);
+
+            textArray[9] = new TextView(this);
+            textArray[9].setId(i+111);
+            if (dataItemsList.get(i).getIsBrand().equals("0")){
+                textArray[9].setText(dataItemsList.get(i).getProductName()
+                        +"("+dataItemsList.get(i).getProductQty()+")");
+            }
+            else{
+                textArray[9].setText("---");
+            }
+            textArray[9].setTextColor(Color.WHITE);
+            textArray[9].setPadding(8, 8, 8, 8);
+            tr_headObj[i].addView(textArray[9]);
+
+            mainTableLayout.addView(tr_headObj[i], new TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.MATCH_PARENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT));
+
+        }
+
+
+    }
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -581,7 +1128,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                 FileCreation fileCreation = new FileCreation();
                 File toCreate = makeFolder();
                 fileCreation.exportReport(dataItemsList , toCreate, ActivityAdminReports.this, Integer.parseInt(selectedRole));
-                break;
+            break;
         }
 
     }

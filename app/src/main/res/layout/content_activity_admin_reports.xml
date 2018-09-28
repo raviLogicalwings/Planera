@@ -3,11 +3,11 @@
 
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parentPanel"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/parentPanel"
-    android:orientation="vertical"
     android:layout_marginTop="?attr/actionBarSize"
+    android:orientation="vertical"
     tools:context=".activities.AddInputActivity">
 
 
@@ -215,30 +215,50 @@
             android:id="@+id/button_export"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_gravity="right"
             android:src="@drawable/icon_small_xls"
             app:backgroundTint="@color/colorGreen"
-            app:useCompatPadding="true"
-            android:layout_alignParentRight="true" />
+            app:useCompatPadding="true" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/reports_list_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="gone">
 
         </android.support.v7.widget.RecyclerView>
+
+        <ScrollView
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/main_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                </TableLayout>
+            </HorizontalScrollView>
+        </ScrollView>
 
     </LinearLayout>
 
 
-
     <Button
-        android:layout_alignParentBottom="true"
         android:id="@+id/button_submit_report"
-        android:background="@color/colorPrimary"
-        android:text="Submit"
         style="@style/ButtonText"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="center_horizontal"
-        android:layout_height="wrap_content" />
+        android:background="@color/colorPrimary"
+        android:text="Submit" />
 
 </RelativeLayout>

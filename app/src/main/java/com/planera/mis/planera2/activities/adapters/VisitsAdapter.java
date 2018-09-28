@@ -62,7 +62,7 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
     @SuppressLint("SetTextI18n")
     private void onBindItems(VisitItemHolder viewHolder, int position) {
 
-        if(planList.get(position).getChemistsId() == null){
+        if(planList.get(position).getChemistsId().equals("0")){
             if (planList.get(position).getDoctorFirstName() != null) {
                 viewHolder.textName.setText(planList.get(position).getDoctorFirstName()
                         + " " + planList.get(position).getDoctorMiddleName() + " " +
@@ -77,7 +77,7 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
             }
         }
         else {
-            if (planList.get(position).getChemistFirstName() != null) {
+            if (!planList.get(position).getChemistsId().equals("0")) {
                 viewHolder.textName.setText(planList.get(position).getChemistFirstName() + " " +
                         planList.get(position).getChemistMiddleName() + " " +
                         planList.get(position).getChemistLastName());
@@ -139,7 +139,7 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
 
     private boolean whichRole(int pos){
 
-        if (planList.get(pos).getChemistsId()== null){
+        if (planList.get(pos).getChemistsId().equals("0")){
            return isDoctor = true;
         }
         else{

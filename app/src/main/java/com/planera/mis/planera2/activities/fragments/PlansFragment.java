@@ -100,7 +100,6 @@ public class PlansFragment extends BaseFragment{
             @Override
             public void onResponse(Call<PlansListResponce> call, Response<PlansListResponce> response) {
                 processDialog.dismissDialog();
-                Log.e(TAG, "onResponse: " + new Gson().toJson(response.body()));
                 if (response != null) {
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                         plansList = response.body().getData();

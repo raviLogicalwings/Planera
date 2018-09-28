@@ -13,8 +13,30 @@ public class ObtainReport{
 	@SerializedName("EndDate")
 	private String endDate;
 
-	@SerializedName("Id")
-	private String id;
+	@SerializedName("ChemistsId")
+	private String chemistId;
+
+	@SerializedName("DoctorId")
+	private String doctorId;
+
+	@SerializedName("UserId")
+	private String userId;
+
+	public String getDoctorId() {
+		return doctorId;
+	}
+
+	public void setDoctorId(String doctorId) {
+		this.doctorId = doctorId;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
 	public void setStartDate(String startDate){
 		this.startDate = startDate;
@@ -40,12 +62,12 @@ public class ObtainReport{
 		return endDate;
 	}
 
-	public String getId() {
-		return id;
+	public String getChemistId() {
+		return chemistId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setChemistId(String id) {
+		this.chemistId = id;
 	}
 
 	@Override

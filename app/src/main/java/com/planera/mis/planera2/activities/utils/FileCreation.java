@@ -2,8 +2,10 @@ package com.planera.mis.planera2.activities.utils;
 
 import android.content.Context;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.planera.mis.planera2.activities.models.DataItem;
 
 import java.io.File;
@@ -22,9 +24,9 @@ import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 
 public class FileCreation{
-    public String doctorReport = " Doctor Report.xls";
-    public String chemistReprot = " Chemist Report.xls";
-    public String userReport = " User/MR Report.xls";
+    private String doctorReport = " Doctor Report.xls";
+    private String chemistReprot = " Chemist Report.xls";
+    private String userReport = " UserMR Report.xls";
     public File file;
 
     public void exportReport(List<DataItem> reportList, File doc, Context context, int roleType){
@@ -46,16 +48,16 @@ public class FileCreation{
                         sheet.addCell(new Label(0, 0, "Mr/User"));
                         sheet.addCell(new Label(1, 0, "Start Date"));
                         sheet.addCell(new Label(2, 0, "End Date"));
-                        sheet.addCell(new Label(4, 0, "POB"));
+                        sheet.addCell(new Label(3, 0, "POB"));
                         for (int i = 1; i < reportList.size(); i++) {
-                            if (!reportList.get(i).getChemistName().equals(null)) {
-                                if (reportList.get(i).getIsBrand().equals("0")) {
+
+//                                if (reportListChemist.get(i).getIsBrand().equals("0")) {
                                     sheet.addCell(new Label(0, i, reportList.get(i).getChemistName()));
                                     sheet.addCell(new Label(1, i, reportList.get(i).getStartDate()));
                                     sheet.addCell(new Label(2, i, reportList.get(i).getEndDate()));
                                     sheet.addCell(new Label(3, i, reportList.get(i).getProductName() + "(" + reportList.get(i).getProductQty() + ")"));
-                                }
-                            }
+//                                }
+
 
                         }
 
@@ -76,16 +78,18 @@ public class FileCreation{
                 sheet.addCell(new Label(2, 0, "End Date"));
                 sheet.addCell(new Label(3, 0, "Brand Interest"));
                 sheet.addCell(new Label(4, 0, "Brand's Sample"));
+                Log.e("ReportList", new Gson().toJson(reportList));
+                Toast.makeText(context, new Gson().toJson(reportList), Toast.LENGTH_LONG);
                 for (int i = 0; i < reportList.size(); i++) {
                     if (!reportList.get(i).getDoctorName().equals(null)) {
-//                        if (reportList.get(i).getIsBrand().equals("1")) {
+//                        if (reportListChemist.get(i).getIsBrand().equals("1")) {
                             sheet.addCell(new Label(0, i, reportList.get(i).getDoctorName()));
                             sheet.addCell(new Label(1, i, reportList.get(i).getStartDate()));
                             sheet.addCell(new Label(2, i, reportList.get(i).getEndDate()));
-                            sheet.addCell(new Label(3, i, reportList.get(i).getProductName()+"("+reportList.get(i).getInterestedLevel()));
-                            if (reportList.get(i).getIsSample().equals("1")){
-                                sheet.addCell(new Label(4, i, reportList.get(i).getProductName() + "(" + reportList.get(i).getProductQty() + ")"));
-                            }
+//                            sheet.addCell(new Label(3, i, reportListChemist.get(i).getProductName()+"("+reportListChemist.get(i).getInterestedLevel()));
+//                            if (reportListChemist.get(i).getIsSample().equals("1")){
+//                                sheet.addCell(new Label(4, i, reportListChemist.get(i).getProductName() + "(" + reportListChemist.get(i).getProductQty() + ")"));
+//                            }
 
 //                        }
                     }
@@ -119,9 +123,9 @@ public class FileCreation{
 
 
                 for (int i = 1; i < reportList.size(); i++) {
-                            if (reportList.get(i).getDoctorName().equals(null)){
+                            if (Integer.parseInt(reportList.get(i).getDoctorId().toString()) == 0){
                                 sheet.addCell(new Label(0, i, reportList.get(i).getChemistName()));
-                                if (!reportList.get(i).getGiftId().equals(null)){
+                                if (Integer.parseInt(reportList.get(i).getGiftId().toString())!=0){
                                     sheet.addCell(new Label(4, i, reportList.get(i).getGiftName()+"("+ reportList.get(i).getGiftQty()+")"));
                                 }
                                 if (reportList.get(i).getIsSample().equals("1")){
@@ -129,7 +133,7 @@ public class FileCreation{
                                 }
                                 sheet.addCell(new Label(7, i, reportList.get(i).getProductName()+"("+reportList.get(i).getInterestedLevel()));
                             }
-                            if(reportList.get(i).getChemistName().equals(null)){
+                            if(Integer.parseInt(reportList.get(i).getChemistsId()) == 0){
                                 sheet.addCell(new Label(1, i, reportList.get(i).getDoctorName()));
                                 if (reportList.get(i).getIsSample().equals("1")){
                                     sheet.addCell(new Label(5, i, reportList.get(i).getProductName() + "(" + reportList.get(i).getProductQty() + ")"));

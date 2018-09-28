@@ -34,6 +34,7 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
 
 
 
+    public SampleListAdapter(){}
 
     public SampleListAdapter(Context context, List<Brands> brandsList) {
         this.context = context;
@@ -45,7 +46,7 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
     @Override
     public MySampleHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        mView = LayoutInflater.from(context).inflate(R.layout.item_brand_tab, parent, false);
+        mView = LayoutInflater.from(context).inflate(R.layout.item_sample_view, parent, false);
         return new MySampleHolder(mView);
     }
 
@@ -69,49 +70,59 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
 
     public void bindItemsWithView(MySampleHolder holder, int pos) {
 
-        if (brandsList.get(pos).getIsBrand().equals(AppConstants.BRAND + "")) {
-            holder.textBrandSampelName.setText(brandsList.get(pos).getName());
+        if(brandsList.size()!=0) {
 
+            if (brandsList.get(pos).getIsBrand().equals(AppConstants.BRAND + "")) {
+                holder.textBrandSampleName.setText(brandsList.get(pos).getName());
 
-        }
-        Brands brands = brandsList.get(pos);
-
-        holder.editBrandSampleValue.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
+            Brands brands = brandsList.get(pos);
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String changedText = s.toString().trim();
-                if(changedText.equals("")) {
-                    orders = new InputOrders();
-                    orders.setProductId(brands.getProductId() + "");
-                    orders.setIsSample("1");
-                    orders.setQuantity(s.toString().trim());
-                    orders.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + "");
-                    sampleListSelected.add(orders);
-                    DataController.getmInstance().setSampleListSelected(sampleListSelected);
+            holder.editBrandSampleValue.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
                 }
-            }
 
-            @Override
-            public void afterTextChanged(Editable s) {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    String changedText = s.toString().trim();
+                    if (!changedText.equals("")) {
+                        orders = new InputOrders();
+                        orders.setProductId(brands.getProductId() + "");
+                        orders.setIsSample("1");
+                        orders.setQuantity(changedText);
+                        orders.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + "");
+                        sampleListSelected.add(orders);
+                        setSampleListSelected(sampleListSelected);
+                    }
+                }
 
-            }
-        });
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+        }
     }
 
+    public List<InputOrders> getSampleListSelected() {
+        return DataController.getmInstance().getSampleListSelected();
+    }
 
-    public class MySampleHolder extends RecyclerView.ViewHolder {
-        private TextView textBrandSampelName;
+    public void setSampleListSelected(List<InputOrders> sampleListSelected) {
+        DataController.getmInstance().setSampleListSelected(sampleListSelected);
+    }
+
+    class MySampleHolder extends RecyclerView.ViewHolder {
+        private TextView textBrandSampleName;
         private EditText editBrandSampleValue;
 
         MySampleHolder(View itemView) {
             super(itemView);
 
-            textBrandSampelName = (TextView) itemView.findViewById(R.id.text_brand_sampel_name);
+            textBrandSampleName = (TextView) itemView.findViewById(R.id.text_brand_sampel_name);
             editBrandSampleValue = (EditText) itemView.findViewById(R.id.edit_brand_sample_value);
         }
 

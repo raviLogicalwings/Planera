@@ -22,6 +22,7 @@ import com.planera.mis.planera2.activities.models.LoginResponse;
 import com.planera.mis.planera2.activities.models.UserData;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.InternetConnection;
+import com.planera.mis.planera2.activities.utils.PreferenceConnector;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,6 +33,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     private EditText editUserName;
     private TextInputLayout inputLayoutPassword;
     private EditText editPassword;
+    private PreferenceConnector connector;
     private ApiInterface apiInterface;
     private UserData userData;
     public boolean isUserLogin;
@@ -42,6 +44,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         super.initData();
         apiInterface = ApiClient.getInstance();
         userData = new UserData();
+        connector = PreferenceConnector.getInstance(this);
         isUserLogin = connector.getBoolean(AppConstants.IS_LOGIN);
     }
 

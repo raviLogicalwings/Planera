@@ -11,10 +11,10 @@ public class DataItem{
 	private String isInLocation;
 
 	@SerializedName("ProductName")
-	private Object productName;
+	private String productName;
 
 	@SerializedName("IsBrand")
-	private Object isBrand;
+	private int isBrand;
 
 	@SerializedName("PlanId")
 	private String planId;
@@ -23,7 +23,7 @@ public class DataItem{
 	private Object inputGiftId;
 
 	@SerializedName("ProductQty")
-	private Object productQty;
+	private int productQty;
 
 	@SerializedName("UserName")
 	private String userName;
@@ -38,13 +38,13 @@ public class DataItem{
 	private String latitude;
 
 	@SerializedName("ProductId")
-	private Object productId;
+	private int productId;
 
 	@SerializedName("ChemistName")
 	private String chemistName;
 
 	@SerializedName("GiftName")
-	private Object giftName;
+	private String giftName;
 
 	@SerializedName("EndDate")
 	private String endDate;
@@ -53,16 +53,16 @@ public class DataItem{
 	private String longitude;
 
 	@SerializedName("DoctorId")
-	private Object doctorId;
+	private int doctorId;
 
 	@SerializedName("StartDate")
 	private String startDate;
 
 	@SerializedName("InputProductId")
-	private Object inputProductId;
+	private int inputProductId;
 
 	@SerializedName("GiftId")
-	private Object giftId;
+	private int giftId;
 
 	@SerializedName("UserId")
 	private String userId;
@@ -74,13 +74,13 @@ public class DataItem{
 	private String createdDate;
 
 	@SerializedName("InterestedLevel")
-	private Object interestedLevel;
+	private String interestedLevel;
 
 	@SerializedName("IsSample")
-	private Object isSample;
+	private int isSample;
 
 	@SerializedName("GiftQty")
-	private Object giftQty;
+	private int giftQty;
 
 	public void setComment(String comment){
 		this.comment = comment;
@@ -98,7 +98,7 @@ public class DataItem{
 		return isInLocation;
 	}
 
-	public void setProductName(Object productName){
+	public void setProductName(String productName){
 		this.productName = productName;
 	}
 
@@ -106,7 +106,7 @@ public class DataItem{
 		return productName;
 	}
 
-	public void setIsBrand(Object isBrand){
+	public void setIsBrand(int isBrand){
 		this.isBrand = isBrand;
 	}
 
@@ -147,7 +147,7 @@ public class DataItem{
 		return inputGiftId;
 	}
 
-	public void setProductQty(Object productQty){
+	public void setProductQty(int productQty){
 		this.productQty = productQty;
 	}
 
@@ -171,7 +171,7 @@ public class DataItem{
 		return latitude;
 	}
 
-	public void setProductId(Object productId){
+	public void setProductId(int productId){
 		this.productId = productId;
 	}
 
@@ -187,7 +187,7 @@ public class DataItem{
 		return chemistName;
 	}
 
-	public void setGiftName(Object giftName){
+	public void setGiftName(String giftName){
 		this.giftName = giftName;
 	}
 
@@ -211,7 +211,7 @@ public class DataItem{
 		return longitude;
 	}
 
-	public void setDoctorId(Object doctorId){
+	public void setDoctorId(int doctorId){
 		this.doctorId = doctorId;
 	}
 
@@ -227,7 +227,7 @@ public class DataItem{
 		return startDate;
 	}
 
-	public void setInputProductId(Object inputProductId){
+	public void setInputProductId(int inputProductId){
 		this.inputProductId = inputProductId;
 	}
 
@@ -235,7 +235,7 @@ public class DataItem{
 		return inputProductId;
 	}
 
-	public void setGiftId(Object giftId){
+	public void setGiftId(int giftId){
 		this.giftId = giftId;
 	}
 
@@ -267,7 +267,7 @@ public class DataItem{
 		return createdDate;
 	}
 
-	public void setInterestedLevel(Object interestedLevel){
+	public void setInterestedLevel(String interestedLevel){
 		this.interestedLevel = interestedLevel;
 	}
 
@@ -275,7 +275,7 @@ public class DataItem{
 		return interestedLevel;
 	}
 
-	public void setIsSample(Object isSample){
+	public void setIsSample(int isSample){
 		this.isSample = isSample;
 	}
 
@@ -283,7 +283,7 @@ public class DataItem{
 		return isSample;
 	}
 
-	public void setGiftQty(Object giftQty){
+	public void setGiftQty(int giftQty){
 		this.giftQty = giftQty;
 	}
 

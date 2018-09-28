@@ -27,8 +27,9 @@ public class AppConstants {
     public static final String TERRITORY_WISE_PATCHES = "patch/getTerritoryWisePatches";
     public static final String PATCH_WISE_DOCTORS_LIST = "doctor/getPatchWiseDoctor";
     public static final String PATCH_WISE_CHEMIST_LIST = "chemist/getPatchWiseChemists";
-    public static final String REPORTS_LIST = "inputreport/inputreport";
-
+    public static final String CHEMIST_REPORTS_LIST = "inputreport/chemistInputReport";
+    public static final String DOCTOR_REPORTS_LIST = "inputreport/doctorInputReport";
+    public static final String USER_REPORT_LIST = "inputreport/userInputReport";
 
     public static final String ADD_STATE = "state/addState";
     public static final String ADD_TERRITORY = "territory/addTerritory";
@@ -168,7 +169,7 @@ public class AppConstants {
     public static final int INACTIVE_USER = 2;
 
     // Pager fragment count
-    public static final int FRAGMENT_COUNT_FOR_DOCTOR = 2;
+    public static final int FRAGMENT_COUNT_FOR_DOCTOR = 3;
     public static final int FRAGMENT_COUNT_FOR_CHEMIST = 1;
 
     //Fragment for user Role

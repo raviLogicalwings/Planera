@@ -92,10 +92,17 @@ public interface ApiInterface {
     @GET(AppConstants.USER_PLAN_LIST)
     Call<UserPlanListRespnce> userPlanList(@Header("Authorization") String token);
 
-    @POST(AppConstants.REPORTS_LIST)
-    Call<ReportListResponce>  reportList(@Header("Authorization") String token,
-                                         @Body ObtainReport report);
+    @POST(AppConstants.CHEMIST_REPORTS_LIST)
+    Call<ReportListResponce> reportListChemist(@Header("Authorization") String token,
+                                               @Body ObtainReport report);
 
+    @POST(AppConstants.DOCTOR_REPORTS_LIST)
+    Call<ReportListResponce> reportListDoctor(@Header("Authorization") String token,
+                                               @Body ObtainReport report);
+
+    @POST(AppConstants.USER_REPORT_LIST)
+    Call<ReportListResponce> reportListUser(@Header("Authorization") String token,
+                                              @Body ObtainReport report);
 
     @GET(AppConstants.ADD_STATE)
     Call<MainResponse> addState(@Header("Authorization") String token,

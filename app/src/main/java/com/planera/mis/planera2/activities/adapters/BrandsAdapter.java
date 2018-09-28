@@ -33,7 +33,9 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
     private OnItemFoundListener onItemFoundListener;
 
 
+    public BrandsAdapter(){
 
+    }
 
 
     public BrandsAdapter(Context context, List<Brands> brandsList, List<String> intrestedLevel) {
@@ -100,7 +102,7 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
 
                         }
                         orderListSelected.add(orders);
-                        DataController.getmInstance().setOrderListSelected(orderListSelected);
+                        setOrderListSelected(orderListSelected);
                     }
 
 
@@ -118,6 +120,9 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
     }
 
 
+
+
+
     public void setArrayAdapter(Spinner spinner) {
 
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>
@@ -130,11 +135,11 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
     }
 
     public List<InputOrders> getOrderListSelected() {
-        return orderListSelected;
+        return DataController.getmInstance().getOrderListSelected();
     }
 
     public void setOrderListSelected(List<InputOrders> orderListSelected) {
-        this.orderListSelected = orderListSelected;
+        DataController.getmInstance().setOrderListSelected(orderListSelected);
     }
 
     public class MyBrandsHolder extends RecyclerView.ViewHolder {

@@ -33,6 +33,10 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
         this.context = context;
         this.giftsData = giftsData;
     }
+
+    public GiftsAdapter(){
+
+    }
     @Override
     public MyGiftHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         holderView = LayoutInflater.from(context).inflate(R.layout.item_gifts,parent,  false);
@@ -92,11 +96,11 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
 
 
     public List<InputGift> getInputGiftList() {
-        return inputGiftList;
+       return DataController.getmInstance().getInputGiftList();
     }
 
     public void setInputGiftList(List<InputGift> inputGiftList) {
-        DataController.getmInstance().setInputGiftList(inputGiftList);
+      DataController.getmInstance().setInputGiftList(inputGiftList);
     }
 
     public class MyGiftHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

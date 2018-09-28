@@ -36,6 +36,10 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>{
         this.podTextChangeListener = podTextChangeListener;
     }
 
+    public PODAdapter(){
+
+    }
+
     @Override
     public MyPobHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         holderView = LayoutInflater.from(context).inflate(R.layout.item_pob_detalis,parent,  false);
@@ -89,7 +93,7 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>{
     }
 
     public List<InputOrders> getOrdersList() {
-        return ordersList;
+        return DataController.getmInstance().getOrderPODList();
     }
 
     public void setOrdersList(List<InputOrders> ordersList) {
