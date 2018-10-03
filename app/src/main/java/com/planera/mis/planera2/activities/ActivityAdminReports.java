@@ -83,6 +83,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     private FloatingActionButton buttonExport;
     public static final int DEFAULT_SELECT_VALUE= 1;
     public ObtainReport obtainReport;
+    public int COLUMN_ID = 0;
 
 
 
@@ -572,7 +573,6 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                     if (response.body().getStatuscode() == AppConstants.RESULT_OK){
                         Log.e("Data of Items", new Gson().toJson(response.body()));
                         dataItemsList = response.body().getData();
-
                         if (dataItemsList != null){
                             chemistDataTable(dataItemsList);
 //                            initAdapter(dataItemsList, reportsListView);
@@ -683,21 +683,21 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     public void chemistDataTable(List<DataItem> dataItemsList){
         TextView label_number = new TextView(this);
         label_number.setText("S. No.");
-        label_number.setId(20-1);
+        label_number.setId(COLUMN_ID);
         label_number.setTextColor(Color.BLACK);
         label_number.setPadding(8,8,8,8);
         tr_head.addView(label_number);
 
         TextView lable_user = new TextView(this);
         lable_user.setText("Mr/User");
-        lable_user.setId(20+1);
+        lable_user.setId(COLUMN_ID+1);
         lable_user.setTextColor(Color.BLACK);
         lable_user.setPadding(8, 8, 8, 8);
         tr_head.addView(lable_user);
 
         TextView lable_start_date = new TextView(this);
         lable_start_date.setText("Start Date");
-        lable_start_date.setId(20+2);
+        lable_start_date.setId(COLUMN_ID+2);
         lable_start_date.setGravity(View.TEXT_ALIGNMENT_CENTER);
         lable_start_date.setTextColor(Color.BLACK);
         lable_start_date.setPadding(8, 8, 8, 8);
@@ -705,14 +705,14 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
 
         TextView lable_end_date = new TextView(this);
         lable_end_date.setText("End Date");
-        lable_end_date.setId(20+3);
+        lable_end_date.setId(COLUMN_ID+3);
         lable_end_date.setTextColor(Color.BLACK);
         lable_end_date.setPadding(8, 8, 8, 8);
         tr_head.addView(lable_end_date);
 
         TextView lable_pob = new TextView(this);
         lable_pob.setText("POB");
-        lable_pob.setId(20+4);
+        lable_pob.setId(COLUMN_ID+4);
         lable_pob.setTextColor(Color.BLACK);
         lable_pob.setPadding(8, 8, 8, 8);
         tr_head.addView(lable_pob);
@@ -730,7 +730,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
             tr_headObj[i] = new TableRow(this);
             tr_headObj[i].setId(i+1);
             if (i%2 == 0) {
-                tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.colorGray));
+                tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.lightGrayColor));
             }
             else{
                 tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -788,21 +788,21 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     public void doctorDataTable(List<DataItem> dataItemsList){
         TextView label_number = new TextView(this);
         label_number.setText("S. No.");
-        label_number.setId(20-1);
+        label_number.setId(COLUMN_ID+5);
         label_number.setTextColor(Color.BLACK);
         label_number.setPadding(8,8,8,8);
         tr_head.addView(label_number);
 
         TextView lable_user = new TextView(this);
         lable_user.setText("Mr/User");
-        lable_user.setId(20+1);
+        lable_user.setId(COLUMN_ID+6);
         lable_user.setTextColor(Color.BLACK);
         lable_user.setPadding(8, 8, 8, 8);
         tr_head.addView(lable_user);
 
         TextView lable_start_date = new TextView(this);
         lable_start_date.setText("Start Date");
-        lable_start_date.setId(20+2);
+        lable_start_date.setId(COLUMN_ID+7);
         lable_start_date.setGravity(View.TEXT_ALIGNMENT_CENTER);
         lable_start_date.setTextColor(Color.BLACK);
         lable_start_date.setPadding(8, 8, 8, 8);
@@ -810,21 +810,21 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
 
         TextView lable_end_date = new TextView(this);
         lable_end_date.setText("End Date");
-        lable_end_date.setId(20+3);
+        lable_end_date.setId(COLUMN_ID+8);
         lable_end_date.setTextColor(Color.BLACK);
         lable_end_date.setPadding(8, 8, 8, 8);
         tr_head.addView(lable_end_date);
 
         TextView lebel_sample = new TextView(this);
         lebel_sample.setText("Sample Product");
-        lebel_sample.setId(20+4);
+        lebel_sample.setId(COLUMN_ID+9);
         lebel_sample.setTextColor(Color.BLACK);
         lebel_sample.setPadding(8, 8, 8, 8);
         tr_head.addView(lebel_sample);
 
         TextView lebel_interest = new TextView(this);
         lebel_interest.setText("Brand Interest");
-        lebel_interest.setId(20+4);
+        lebel_interest.setId(COLUMN_ID+10);
         lebel_interest.setTextColor(Color.BLACK);
         lebel_interest.setPadding(8, 8, 8, 8);
         tr_head.addView(lebel_interest);
@@ -841,7 +841,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
             tr_headObj[i] = new TableRow(this);
             tr_headObj[i].setId(i+1);
             if (i%2 == 0) {
-                tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.colorGray));
+                tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.lightGrayColor));
             }
             else{
                 tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -880,17 +880,28 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
 
             textArray[4] = new TextView(this);
             textArray[4].setId(i+111);
-            if (dataItemsList.get(i).getProductQty()!= null && dataItemsList.get(i).getIsBrand().equals("1")) {
-                textArray[4].setText(dataItemsList.get(i).getProductName() + "(" + dataItemsList.get(i).getProductQty() + ")");
-            }
+            textArray[4].setText(dataItemsList.get(i).getProductName() + "(" + dataItemsList.get(i).getProductQty() + ")");
             textArray[4].setTextColor(Color.WHITE);
             textArray[4].setPadding(8, 8, 8, 8);
             tr_headObj[i].addView(textArray[4]);
 
             textArray[5] = new TextView(this);
             textArray[5].setId(i+111);
-            if (dataItemsList.get(i).getIsBrand()!= null && dataItemsList.get(i).getIsBrand().equals("1")) {
-                textArray[5].setText(dataItemsList.get(i).getProductName() + "(" + dataItemsList.get(i).getProductQty() + ")");
+            if (dataItemsList.get(i).getInterestedLevel() != null) {
+                if (dataItemsList.get(i).getInterestedLevel().equals("3")) {
+                    textArray[5].setText(dataItemsList.get(i).getProductName() + "(Low)");
+                }
+                if (dataItemsList.get(i).getInterestedLevel().equals("2")) {
+                    textArray[5].setText(dataItemsList.get(i).getProductName() + "(Regular)");
+
+                }
+                if (dataItemsList.get(i).getInterestedLevel().equals("1")) {
+                    textArray[5].setText(dataItemsList.get(i).getProductName() + "(Super)");
+
+                }
+            }
+            else{
+                textArray[5].setText("---");
             }
             textArray[5].setTextColor(Color.WHITE);
             textArray[5].setPadding(8, 8, 8, 8);
@@ -908,74 +919,74 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     public void userDataTable(List<DataItem> dataItemsList){
         TextView label_number = new TextView(this);
         label_number.setText("S. No.");
-        label_number.setId(20-1);
+        label_number.setId(COLUMN_ID+11);
         label_number.setTextColor(Color.BLACK);
         label_number.setPadding(8,8,8,8);
         tr_head.addView(label_number);
 
-        TextView lable_chemist = new TextView(this);
-        lable_chemist.setText("Chemist");
-        lable_chemist.setId(20+1);
-        lable_chemist.setTextColor(Color.BLACK);
-        lable_chemist.setPadding(8, 8, 8, 8);
-        tr_head.addView(lable_chemist);
+        TextView label_chemist = new TextView(this);
+        label_chemist.setText("Chemist");
+        label_chemist.setId(COLUMN_ID+12);
+        label_chemist.setTextColor(Color.BLACK);
+        label_chemist.setPadding(8, 8, 8, 8);
+        tr_head.addView(label_chemist);
 
-        TextView lable_doctor = new TextView(this);
-        lable_doctor.setText("Doctor");
-        lable_doctor.setId(20+2);
-        lable_doctor.setGravity(View.TEXT_ALIGNMENT_CENTER);
-        lable_doctor.setTextColor(Color.BLACK);
-        lable_doctor.setPadding(8, 8, 8, 8);
-        tr_head.addView(lable_doctor);
+        TextView label_doctor = new TextView(this);
+        label_doctor.setText("Doctor");
+        label_doctor.setId(COLUMN_ID+13);
+        label_doctor.setGravity(View.TEXT_ALIGNMENT_CENTER);
+        label_doctor.setTextColor(Color.BLACK);
+        label_doctor.setPadding(8, 8, 8, 8);
+        tr_head.addView(label_doctor);
 
-        TextView lable_start_date = new TextView(this);
-        lable_start_date.setText("Start Date");
-        lable_start_date.setId(20+3);
-        lable_start_date.setTextColor(Color.BLACK);
-        lable_start_date.setPadding(8, 8, 8, 8);
-        tr_head.addView(lable_start_date);
+        TextView label_start_date = new TextView(this);
+        label_start_date.setText("Start Date");
+        label_start_date.setId(COLUMN_ID+14);
+        label_start_date.setTextColor(Color.BLACK);
+        label_start_date.setPadding(8, 8, 8, 8);
+        tr_head.addView(label_start_date);
 
-        TextView lebel_end_date = new TextView(this);
-        lebel_end_date.setText("End Date");
-        lebel_end_date.setId(20+4);
-        lebel_end_date.setTextColor(Color.BLACK);
-        lebel_end_date.setPadding(8, 8, 8, 8);
-        tr_head.addView(lebel_end_date);
+        TextView label_end_date = new TextView(this);
+        label_end_date.setText("End Date");
+        label_end_date.setId(COLUMN_ID+15);
+        label_end_date.setTextColor(Color.BLACK);
+        label_end_date.setPadding(8, 8, 8, 8);
+        tr_head.addView(label_end_date);
 
-        TextView lebel_location = new TextView(this);
-        lebel_location.setText("Is in Location");
-        lebel_location.setId(20+4);
-        lebel_location.setTextColor(Color.BLACK);
-        lebel_location.setPadding(8, 8, 8, 8);
-        tr_head.addView(lebel_location);
+        TextView label_location = new TextView(this);
+        label_location.setText("Is in Location");
+        label_location.setId(COLUMN_ID+16);
+        label_location.setTextColor(Color.BLACK);
+        label_location.setPadding(8, 8, 8, 8);
+        tr_head.addView(label_location);
 
-        TextView lable_sample = new TextView(this);
-        lable_sample.setText("Sample");
-        lable_sample.setId(20+4);
-        lable_sample.setTextColor(Color.BLACK);
-        lable_sample.setPadding(8, 8, 8, 8);
-        tr_head.addView(lable_sample);
+        TextView label_sample = new TextView(this);
+        label_sample.setText("Sample");
+        label_sample.setId(COLUMN_ID+17);
+        label_sample.setTextColor(Color.BLACK);
+        label_sample.setPadding(8, 8, 8, 8);
+        tr_head.addView(label_sample);
 
-        TextView lable_brand_interest = new TextView(this);
-        lable_brand_interest.setText("Brand Interest");
-        lable_brand_interest.setId(20+4);
-        lable_brand_interest.setTextColor(Color.BLACK);
-        lable_brand_interest.setPadding(8, 8, 8, 8);
-        tr_head.addView(lable_brand_interest);
+        TextView label_brand_interest = new TextView(this);
+        label_brand_interest.setText("Brand Interest");
+        label_brand_interest.setId(COLUMN_ID+18);
+        label_brand_interest.setTextColor(Color.BLACK);
+        label_brand_interest.setPadding(8, 8, 8, 8);
+        tr_head.addView(label_brand_interest);
 
-        TextView lebel_gift = new TextView(this);
-        lebel_gift.setText("Gift");
-        lebel_gift.setId(20+4);
-        lebel_gift.setTextColor(Color.BLACK);
-        lebel_gift.setPadding(8, 8, 8, 8);
-        tr_head.addView(lebel_gift);
+        TextView label_gift = new TextView(this);
+        label_gift.setText("Gift");
+        label_gift.setId(COLUMN_ID+19);
+        label_gift.setTextColor(Color.BLACK);
+        label_gift.setPadding(8, 8, 8, 8);
+        tr_head.addView(label_gift);
 
-        TextView lebel_POB = new TextView(this);
-        lebel_POB.setText("POB");
-        lebel_POB.setId(20+4);
-        lebel_POB.setTextColor(Color.BLACK);
-        lebel_POB.setPadding(8, 8, 8, 8);
-        tr_head.addView(lebel_POB);
+        TextView label_POB = new TextView(this);
+        label_POB.setText("POB");
+        label_POB.setId(COLUMN_ID+20);
+        label_POB.setTextColor(Color.BLACK);
+        label_POB.setPadding(8, 8, 8, 8);
+        tr_head.addView(label_POB);
 
         mainTableLayout.addView(tr_head, new TableLayout.LayoutParams(
                 TableLayout.LayoutParams.FILL_PARENT,                    //part4
@@ -989,7 +1000,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
             tr_headObj[i] = new TableRow(this);
             tr_headObj[i].setId(i+1);
             if (i%2 == 0) {
-                tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.colorGray));
+                tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.lightGrayColor));
             }
             else{
                 tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -1078,7 +1089,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
 
             textArray[8] = new TextView(this);
             textArray[8].setId(i+111);
-            if (dataItemsList.get(i).getGiftId()!= null){
+            if (dataItemsList.get(i).getGiftId() != 0){
                 textArray[8].setText(dataItemsList.get(i).getGiftName()
                         +"("+dataItemsList.get(i).getGiftQty()+")");
             }
@@ -1125,9 +1136,14 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                 pickDateFromDialog(editEndTime);
                 break;
             case R.id.button_export:
-                FileCreation fileCreation = new FileCreation();
-                File toCreate = makeFolder();
-                fileCreation.exportReport(dataItemsList , toCreate, ActivityAdminReports.this, Integer.parseInt(selectedRole));
+                if (dataItemsList != null) {
+                    FileCreation fileCreation = new FileCreation();
+                    File toCreate = makeFolder();
+                    fileCreation.exportReport(dataItemsList, toCreate, ActivityAdminReports.this, Integer.parseInt(selectedRole));
+                }
+                else{
+                    Snackbar.make(rootView, "No data available to export", Snackbar.LENGTH_SHORT).show();
+                }
             break;
         }
 

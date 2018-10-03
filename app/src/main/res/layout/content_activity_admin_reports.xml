@@ -6,7 +6,6 @@
     android:id="@+id/parentPanel"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="?attr/actionBarSize"
     android:orientation="vertical"
     tools:context=".activities.AddInputActivity">
 
@@ -218,8 +217,7 @@
             android:layout_alignParentRight="true"
             android:layout_gravity="right"
             android:src="@drawable/icon_small_xls"
-            app:backgroundTint="@color/colorGreen"
-            app:useCompatPadding="true" />
+            />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/reports_list_view"

@@ -1,6 +1,5 @@
 package com.planera.mis.planera2.activities;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -312,7 +311,8 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
                 Log.e("Add Doctor", "onResponse: " + new Gson().toJson(response.body()));
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     Intent intent = new Intent(ActivityAddDoctor.this, SingleListActivity.class);
-                    setResult(Activity.RESULT_OK,intent);
+                    intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.DOCTOR_FRAGMENT);
+                    startActivity(intent);
                     finish();
                 } else {
                     Toast.makeText(ActivityAddDoctor.this, response.body().getMessage(), Toast.LENGTH_LONG).show();

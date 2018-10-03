@@ -192,7 +192,8 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
                 } else {
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                         Intent intent = new Intent(ActivityCretePlan.this, SingleListActivity.class);
-                        setResult(SingleListActivity.REQUEST_CODE_PLAN, intent);
+                        intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.PLAN_FRAGMENT);
+                        startActivity(intent);
                         finish();
                     } else {
                         Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();

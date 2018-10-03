@@ -52,6 +52,7 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
     private Input input;
     private int chemistId;
     private int doctorId;
+    private String currentdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,8 +122,10 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
         }
         else{
             if (InternetConnection.isNetworkAvailable(AddInputActivity.this)){
-               input.setStartDate(startTimeStr);
-               input.setEndDate(endTimeStr);
+                String stTime = currentdate+" "+startTimeStr+":00";
+                String edTime = currentdate+" "+endTimeStr+":00";
+               input.setStartDate(stTime);
+               input.setEndDate(edTime);
                input.setComment(feedbackStr);
                 addInputApi(token, input);
             }
@@ -181,6 +184,7 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
     }
 
     public void addInputApi(String token, Input input){
+        Log.e("Input Object", new Gson().toJson(input));
         processDialog.showDialog(AddInputActivity.this, false);
         Call<InputResponce> call  = apiInterface.addInput(token, input);
         call.enqueue(new Callback<InputResponce>() {
@@ -218,6 +222,9 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         textVisitDate.setText(df.format(c));
+
+        SimpleDateFormat reqFor = new SimpleDateFormat("yyyy-MM-dd");
+        currentdate = reqFor.format(c.getTime());
     }
 
    public void isTimeAfter() {
@@ -240,7 +247,9 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
     public void getDateFromDialog(TextView textView){
         Calendar mCurrentTime = Calendar.getInstance();
         int hour = mCurrentTime.get(Calendar.HOUR_OF_DAY);
+
         int minute = mCurrentTime.get(Calendar.MINUTE);
+        int sec = mCurrentTime.get(Calendar.SECOND);
         TimePickerDialog timePickerDialog = new TimePickerDialog(AddInputActivity.this,
                 (view, hourOfDay, minute1) -> {
                     selectedTime = hourOfDay+":"+minute1;

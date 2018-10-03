@@ -81,7 +81,7 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_chemist);
-        getPatchList(token);
+
         initUi();
         initData();
     }
@@ -134,11 +134,15 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
         if (intent != null) {
             loadFromIntent(intent);
         }
+
+
     }
 
     @Override
     public void initData() {
         super.initData();
+
+        getPatchList(token);
         chemists = new Chemists();
         spinnerMeetTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

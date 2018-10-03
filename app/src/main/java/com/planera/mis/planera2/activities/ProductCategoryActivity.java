@@ -125,9 +125,9 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                }
                else{
                    if(new GiftsAdapter().getInputGiftList()!=null){
-                       List<InputGift> inputGIfts = new  GiftsAdapter().getInputGiftList();
-                       if (inputGIfts.size()>0) {
-                           addInputGiftApi(token, inputGIfts);
+                       List<InputGift> inputGifts = new  GiftsAdapter().getInputGiftList();
+                       if (inputGifts.size()>0) {
+                           addInputGiftApi(token, inputGifts);
                        }
                        else{
                            if (new SampleListAdapter().getSampleListSelected() != null){
@@ -176,11 +176,14 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                         if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                             // Set Array Lis to null
                             //----------
+                            new  GiftsAdapter().setInputGiftList(null);
                             DataController.getmInstance().setInputGiftList(null);
                             //---------------Call Samples Add Api after getting responce
                             List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
-                            if (inputSamples.size()>0) {
-                                apiAddInputSamples(token, inputSamples);
+                            if (inputSamples != null) {
+                                if (inputSamples.size() > 0) {
+                                    apiAddInputSamples(token, inputSamples);
+                                }
                             }
 
                             Toast.makeText(ProductCategoryActivity.this, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
@@ -218,6 +221,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                     // Set Array Lis to null
                     //----------
+                    new SampleListAdapter().setSampleListSelected(null);
                     DataController.getmInstance().setOrderListSelected(null);
 
                     // On Responce of Input Brand Calling add input Gift Api
@@ -252,6 +256,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                     // Set Array Lis to null
                     //----------
+                    new BrandsAdapter().setOrderListSelected(null);
                     DataController.getmInstance().setOrderListSelected(null);
 
                     // On Responce of Input Brand Calling add input Gift Api
@@ -269,8 +274,10 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                         }
                         else{
                             List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
-                            if (inputSamples.size()>0) {
-                                apiAddInputBrands(token, inputSamples);
+                            if (inputSamples != null) {
+                                if (inputSamples.size() > 0) {
+                                    apiAddInputBrands(token, inputSamples);
+                                }
                             }
                         }
                     //---------------

@@ -102,7 +102,7 @@ public class DataItem{
 		this.productName = productName;
 	}
 
-	public Object getProductName(){
+	public String getProductName(){
 		return productName;
 	}
 
@@ -151,7 +151,7 @@ public class DataItem{
 		this.productQty = productQty;
 	}
 
-	public Object getProductQty(){
+	public int getProductQty(){
 		return productQty;
 	}
 
@@ -191,7 +191,7 @@ public class DataItem{
 		this.giftName = giftName;
 	}
 
-	public Object getGiftName(){
+	public String getGiftName(){
 		return giftName;
 	}
 
@@ -215,7 +215,7 @@ public class DataItem{
 		this.doctorId = doctorId;
 	}
 
-	public Object getDoctorId(){
+	public int getDoctorId(){
 		return doctorId;
 	}
 
@@ -239,7 +239,7 @@ public class DataItem{
 		this.giftId = giftId;
 	}
 
-	public Object getGiftId(){
+	public int getGiftId(){
 		return giftId;
 	}
 
@@ -271,7 +271,7 @@ public class DataItem{
 		this.interestedLevel = interestedLevel;
 	}
 
-	public Object getInterestedLevel(){
+	public String getInterestedLevel(){
 		return interestedLevel;
 	}
 
@@ -279,7 +279,7 @@ public class DataItem{
 		this.isSample = isSample;
 	}
 
-	public Object getIsSample(){
+	public int getIsSample(){
 		return isSample;
 	}
 

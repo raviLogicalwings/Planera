@@ -1,6 +1,5 @@
 package com.planera.mis.planera2.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -24,7 +23,6 @@ import com.planera.mis.planera2.activities.models.PatchListResponse;
 import com.planera.mis.planera2.activities.models.Patches;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.InternetConnection;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -385,7 +383,8 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                     Intent intentSingleList = new Intent(ActivityAddChemist.this, SingleListActivity.class);
-                    setResult(Activity.RESULT_OK, intentSingleList);
+                    intentSingleList.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.CHEMIST_FRAGMENT);
+                    startActivity(intentSingleList);
                     finish();
                 }
                 else{
