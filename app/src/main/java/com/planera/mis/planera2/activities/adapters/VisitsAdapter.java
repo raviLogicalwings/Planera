@@ -73,7 +73,7 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
                 dist = calculateDistance(location,
                         planList.get(position).getDoctorLatitude(),
                         planList.get(position).getDoctorLongitude());
-                viewHolder.textDistance.setText(Math.abs(dist) + " KM");
+                viewHolder.textDistance.setText(Math.round(dist) + " KM");
             }
         }
         else {

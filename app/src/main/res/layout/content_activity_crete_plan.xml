@@ -188,19 +188,27 @@
                 </Spinner>
             </LinearLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <LinearLayout
+                android:weightSum="2"
+                android:paddingTop="@dimen/drawable_padding"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/text_plan_year"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Year"
-                    android:maxLength="4"
-                    android:inputType="phone" />
+                <TextView
+                    android:layout_weight=".8"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Year"/>
 
-            </android.support.design.widget.TextInputLayout>
+                <Spinner
+                    android:layout_weight="1.2"
+                    android:layout_width="0dp"
+                    android:id="@+id/spinner_plan_year"
+                    android:layout_height="wrap_content">
+                </Spinner>
+            </LinearLayout>
 
 
             <android.support.design.widget.TextInputLayout

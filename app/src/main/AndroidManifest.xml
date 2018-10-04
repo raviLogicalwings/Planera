@@ -49,6 +49,7 @@
         <activity
             android:name=".activities.SingleListActivity"
             android:label="@string/title_activity_single_list"
+            android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

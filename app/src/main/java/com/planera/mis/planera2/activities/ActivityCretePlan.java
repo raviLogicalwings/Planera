@@ -37,6 +37,7 @@ import com.planera.mis.planera2.activities.utils.InternetConnection;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import retrofit2.Call;
@@ -53,8 +54,8 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
     private Spinner spinnerPlanPatch;
     private Spinner spinnerPlanMonth;
     private Spinner spinnerPlanTerritory;
+    private Spinner spinnerPlanYear;
     private RadioGroup radioGroupSelect;
-    private EditText textPlanYear;
     private EditText textPlanCall;
     private EditText textPlanRemark;
     private List<Patches> patchesList = null;
@@ -74,6 +75,8 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
     String yearStr, callStr, remarkStr;
     boolean isDoctorRadioChecked = true;
     private int territoryId = 0;
+    private int runningYear;
+    private List<String> years;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +93,6 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
     }
 
     public void uiValidation() {
-        yearStr = textPlanYear.getText().toString().trim();
         callStr = textPlanCall.getText().toString().trim();
         remarkStr = textPlanRemark.getText().toString().trim();
         plans = new Plans();
@@ -114,10 +116,7 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
 
             }
         }
-        if (TextUtils.isEmpty(yearStr)) {
-            textPlanYear.requestFocus();
-            textPlanYear.setError(getString(R.string.invalid_input));
-        } else if (TextUtils.isEmpty(callStr)) {
+        if (TextUtils.isEmpty(callStr)) {
             textPlanCall.requestFocus();
             textPlanCall.setError(getString(R.string.invalid_input));
         } else if (TextUtils.isEmpty(remarkStr)) {
@@ -156,10 +155,10 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
         spinnerPlanUser = findViewById(R.id.spinner_plan_user);
         spinnerPlanPatch = findViewById(R.id.spinner_plan_patch);
         spinnerPlanMonth = findViewById(R.id.spinner_plan_month);
+        spinnerPlanYear = findViewById(R.id.spinner_plan_year);
         spinnerPlanTerritory = findViewById(R.id.spinner_plan_territory);
         radioDoctor = findViewById(R.id.radio_doctor);
         radioChemist = findViewById(R.id.radio_chemist);
-        textPlanYear = findViewById(R.id.text_plan_year);
         textPlanCall = findViewById(R.id.text_plan_call);
         textPlanRemark = findViewById(R.id.text_plan_remark);
         buttonAddPlan = findViewById(R.id.button_add_plan);
@@ -175,7 +174,7 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
 
 
     public void createPlanApi(String token, Plans plans) {
-        Log.e("Plan Object", plans.getUserId());
+        Log.e("Plan Object", new Gson().toJson(plans));
         processDialog.showDialog(ActivityCretePlan.this, false);
         Call<MainResponse> call = apiInterface.addPlan(token, plans);
 
@@ -216,6 +215,7 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
         doctorsList = new ArrayList<>();
         patchesList = new ArrayList<>();
         usersList = new ArrayList<>();
+        runningYear = Calendar.getInstance().get(Calendar.YEAR);
         radioGroupSelect.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
                 case R.id.radio_chemist:
@@ -247,7 +247,25 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
         months.add("Dec");
         setArrayAdapter(months, spinnerPlanMonth);
 
+        years = new ArrayList<>();
+        years.add(runningYear+"");
+        years.add(runningYear+1+"");
+        years.add(runningYear+2+"");
+        years.add(runningYear+3+"");
+        years.add(runningYear+4+"");
+        setArrayAdapter(years, spinnerPlanYear);
 
+        spinnerPlanYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                yearStr = years.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                yearStr = years.get(parent.getSelectedItemPosition());
+            }
+        });
         spinnerPlanMonth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

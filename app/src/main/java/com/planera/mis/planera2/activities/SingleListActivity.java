@@ -92,17 +92,19 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
 
                else if(comingFragment == AppConstants.DOCTOR_FRAGMENT){
                    Intent intentAddDoctor = new Intent(SingleListActivity.this, ActivityAddDoctor.class);
-                   startActivityForResult(intentAddDoctor, REQUEST_CODE_DOCTOR);
+                   startActivity(intentAddDoctor);
+
                }
 
                else if(comingFragment == AppConstants.CHEMIST_FRAGMENT){
                    Intent intentAddChemist = new Intent(SingleListActivity.this, ActivityAddChemist.class);
-                   startActivityForResult(intentAddChemist, REQUEST_CODE_CHEMIST);
+                   startActivity(intentAddChemist);
+
                 }
 
                 else if (comingFragment == AppConstants.PLAN_FRAGMENT){
                    Intent intentPlan = new Intent(SingleListActivity.this, ActivityCretePlan.class);
-                   startActivityForResult(intentPlan, REQUEST_CODE_PLAN);
+                   startActivity(intentPlan);
                }
                break;
         }

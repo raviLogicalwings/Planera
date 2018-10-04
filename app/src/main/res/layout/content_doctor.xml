@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/first_name"
-                android:inputType="textCapWords" />
+                android:inputType="textPersonName" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -43,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Middle Name"
-                android:inputType="textCapWords" />
+                android:inputType="textPersonName" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -56,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Last Name"
-                android:inputType="textCapWords" />
+                android:inputType="textPersonName" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -96,7 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Qualification"
-                android:inputType="textCapWords" />
+                android:inputType="textPersonName" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -110,7 +110,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Specialization"
-                android:inputType="textCapWords" />
+                android:inputType="textPersonName" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -206,7 +206,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Address Line 1"
-                android:inputType="textCapWords"
+                android:inputType="textCapSentences"
                 />
 
         </android.support.design.widget.TextInputLayout>
@@ -220,7 +220,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Address Line 2"
-                android:inputType="textCapWords" />
+                android:inputType="textPersonName" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -233,7 +233,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Address Line 3"
-                android:inputType="textCapWords" />
+                android:inputType="textCapSentences" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -246,7 +246,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Address Line 4"
-            android:inputType="textCapWords" />
+            android:inputType="textPersonName" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -260,7 +260,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="District"
-                android:inputType="textCapWords" />
+                android:inputType="textPersonName" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -273,7 +273,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="City"
-                android:inputType="textCapWords" />
+                android:inputType="textPersonName" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -286,7 +286,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="State"
-                android:inputType="textCapWords" />
+                android:inputType="textCapSentences" />
 
         </android.support.design.widget.TextInputLayout>
 
