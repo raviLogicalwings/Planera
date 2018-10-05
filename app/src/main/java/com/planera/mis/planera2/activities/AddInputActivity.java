@@ -143,7 +143,7 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
         isDoctor = intent.getBooleanExtra(AppConstants.KEY_ROLE, true);
         longitude = intent.getDoubleExtra(AppConstants.LATITUDE, 0.0);
         latitude  = intent.getDoubleExtra(AppConstants.LATITUDE, 0.0);
-        isInLocation = intent.getIntExtra(AppConstants.KEY_IN_LOCATION, -1);
+        isInLocation = intent.getIntExtra(AppConstants.KEY_IN_LOCATION, 0);
         doctorId = intent.getIntExtra(AppConstants.DOCTOR_ID, 0);
         chemistId = intent.getIntExtra(AppConstants.CHEMIST_ID , 0);
         userId = intent.getIntExtra(AppConstants.KEY_USER_ID, 0);

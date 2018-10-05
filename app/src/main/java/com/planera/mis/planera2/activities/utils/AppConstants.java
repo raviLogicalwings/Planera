@@ -11,7 +11,7 @@ public class AppConstants {
     public static final String BASE_URL = "http://35.231.248.33/mrapi/";
     public static final String LOGIN = "login/login";
     public static final String USER_REGISTRATION = "register/registerUserDetails";
-
+    public static final String CHANGE_PASSWORD = "login/changePassword";
 
     public static final String GIFT_LIST = "gift/getAllGifts";
     public static final String BRANDS_LIST = "product/getAllProducts";

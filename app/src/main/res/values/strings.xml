@@ -23,7 +23,6 @@
     <string name="gift_fragment">GIFT</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
-    <string name="new_password">New Password</string>
     <string name="choose">choose</string>
     <string name="confirm">Confirm</string>
     <string name="no_internet">No Internet Connection !!</string>
@@ -77,4 +76,8 @@
     <string name="title_activity_update_plan">ActivityUpdatePlan</string>
     <string name="title_activity_admin_reports">ActivityAdminReports</string>
     <string name="sample_fargemt">SAMPLE</string>
+    <string name="title_activity_changepassword">ActivityChangepassword</string>
+    <string name="old_password">Old Password</string>
+    <string name="submit">Submit</string>
+    <string name="new_password">New Password</string>
 </resources>

@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -44,6 +45,7 @@ import com.planera.mis.planera2.activities.utils.AppConstants;
 
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -289,7 +291,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                         getMyLocation();
                         break;
                     case Activity.RESULT_CANCELED:
-
+                        Toasty.warning(mContext, "Please Turn on location, it's required to go ahead. ", Toast.LENGTH_LONG).show();
                         break;
                 }
                 break;
@@ -298,13 +300,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     public void gotoScheduleTimeActivity(int pos, boolean isDoctor, float dist){
 
-        if(dist<=1){
+        if(Math.round(dist)<=1){
           isInLocation = AppConstants.USER_IN_LOCATION;
         }
         else{
             isInLocation = AppConstants.USER_NOT_IN_LOCATION;
         }
         Intent intent = new Intent(mContext, AddInputActivity.class);
+        connector.setBoolean(AppConstants.KEY_ROLE, isDoctor);
         intent.putExtra(AppConstants.KEY_ROLE, isDoctor);
         intent.putExtra(AppConstants.KEY_IN_LOCATION, isInLocation);
         intent.putExtra(AppConstants.CUSTOMER_NAME, getCustomerName(pos, plansList, isDoctor));

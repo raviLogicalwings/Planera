@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
@@ -146,7 +147,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
     @Override
     public void onBackPressed() {
-
+        ActivityCompat.finishAffinity(LoginActivity.this);
     }
 
     @Override

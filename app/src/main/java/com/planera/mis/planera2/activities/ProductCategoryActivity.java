@@ -1,6 +1,5 @@
 package com.planera.mis.planera2.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -60,8 +59,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
     @Override
     public void initData() {
         super.initData();
-        Intent intent = getIntent();
-        isDoctor = intent.getBooleanExtra(AppConstants.KEY_ROLE, true);
+        isDoctor = connector.getBoolean(AppConstants.KEY_ROLE);
         fragmentManager = getSupportFragmentManager();
 
     }
@@ -101,65 +99,66 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
         switch (v.getId()){
             case R.id.button_confirm_product:
 
-               if( new BrandsAdapter().getOrderListSelected() !=null){
-                   List<InputOrders> inputB = new BrandsAdapter().getOrderListSelected();
-                   if (inputB.size()>0) {
-                       apiAddInputBrands(token, inputB);
-                   }
-                   else{
-                       if(new GiftsAdapter().getInputGiftList()!=null){
-                           List<InputGift> inputGIfts = new  GiftsAdapter().getInputGiftList();
-                           if (inputGIfts.size()>0) {
-                               addInputGiftApi(token, inputGIfts);
-                           }
-                           else{
-                               if (new SampleListAdapter().getSampleListSelected() != null){
-                                   List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
-                                   if (inputSamples.size()>0) {
-                                       apiAddInputSamples(token, inputSamples);
-                                   }
-                               }
-                           }
-                       }
-                   }
-               }
-               else{
-                   if(new GiftsAdapter().getInputGiftList()!=null){
-                       List<InputGift> inputGifts = new  GiftsAdapter().getInputGiftList();
-                       if (inputGifts.size()>0) {
-                           addInputGiftApi(token, inputGifts);
-                       }
-                       else{
-                           if (new SampleListAdapter().getSampleListSelected() != null){
-                               List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
-                               if (inputSamples.size()>0) {
-                                   apiAddInputSamples(token, inputSamples);
-                               }
-                           }
-                       }
-                   }
-                   else{
-                       if (new SampleListAdapter().getSampleListSelected() != null){
-                           List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
-                           if (inputSamples.size()>0) {
-                               apiAddInputSamples(token, inputSamples);
-                           }
-                       }
-                       else{
-                           Toast.makeText(ProductCategoryActivity.this, "Nothing updated", Toast.LENGTH_LONG).show();
-                       }
-                   }
-               }
+                if (isDoctor) {
 
-                if( new PODAdapter().getOrdersList()!= null){
-                   List<InputOrders> inputOrders = new PODAdapter().getOrdersList();
-                   if (inputOrders.size()>0) {
-                       apiAddInputBrands(token, new PODAdapter().getOrdersList());
-                   }
+                    if (new BrandsAdapter().getOrderListSelected() != null) {
+                        List<InputOrders> inputB = new BrandsAdapter().getOrderListSelected();
+                        if (inputB.size() > 0) {
+                            apiAddInputBrands(token, inputB);
+                        } else {
+                            if (new GiftsAdapter().getInputGiftList() != null) {
+                                List<InputGift> inputGIfts = new GiftsAdapter().getInputGiftList();
+                                if (inputGIfts.size() > 0) {
+                                    addInputGiftApi(token, inputGIfts);
+                                } else {
+                                    if (new SampleListAdapter().getSampleListSelected() != null) {
+                                        List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
+                                        if (inputSamples.size() > 0) {
+                                            apiAddInputSamples(token, inputSamples);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        if (new GiftsAdapter().getInputGiftList() != null) {
+                            List<InputGift> inputGifts = new GiftsAdapter().getInputGiftList();
+                            if (inputGifts.size() > 0) {
+                                addInputGiftApi(token, inputGifts);
+                            } else {
+                                if (new SampleListAdapter().getSampleListSelected() != null) {
+                                    List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
+                                    if (inputSamples.size() > 0) {
+                                        apiAddInputSamples(token, inputSamples);
+                                    }
+                                }
+                            }
+                        } else {
+                            if (new SampleListAdapter().getSampleListSelected() != null) {
+                                List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
+                                if (inputSamples.size() > 0) {
+                                    apiAddInputSamples(token, inputSamples);
+                                }
+                            } else {
+                                Toast.makeText(ProductCategoryActivity.this, "Nothing updated", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }
+                }
+
+                else {
+                    if (new PODAdapter().getPOBOrdersList() != null) {
+                        List<InputOrders> inputOrders = new PODAdapter().getPOBOrdersList();
+                        if (inputOrders.size() > 0) {
+                            Log.e("POB" , new Gson().toJson( new PODAdapter().getPOBOrdersList()));
+                            apiAddInputBrands(token, new PODAdapter().getPOBOrdersList());
+                        }
+                    }
                 }
 
                 break;
         }
+
     }
 
 

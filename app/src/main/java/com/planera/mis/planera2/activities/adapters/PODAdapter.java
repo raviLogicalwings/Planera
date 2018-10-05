@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.controller.DataController;
@@ -26,7 +27,7 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>{
    private View holderView;
    private List<Brands> brandsList;
    private PODTextChangeListener podTextChangeListener;
-    private List<InputOrders> ordersList;
+    private List<InputOrders> POBOrdersList;
     private InputOrders orders;
     private PreferenceConnector connector;
 
@@ -48,7 +49,7 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>{
 
     @Override
     public void onBindViewHolder(MyPobHolder holder, int position) {
-        ordersList = new ArrayList<>();
+        POBOrdersList = new ArrayList<>();
         orders = new InputOrders();
         connector = new PreferenceConnector(context);
 
@@ -59,7 +60,12 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>{
 
     @Override
     public int getItemCount() {
-        return 6;
+        if (brandsList.size()>0){
+           return brandsList.size();
+        }
+        else{
+            return 0;
+        }
     }
 
     public void bindValues(MyPobHolder myPobHolder, int pos){
@@ -75,29 +81,31 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>{
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     String changedText = s.toString().trim();
-                    if(changedText.equals("")) {
+                    if(!changedText.equals("")) {
                         orders = new InputOrders();
                         orders.setQuantity(s.toString().trim());
+                        orders.setProductId(brands.getProductId()+"");
                         orders.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + "");
-                        ordersList.add(orders);
-                        setOrdersList(ordersList);
+                        POBOrdersList.add(orders);
+
                     }
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
-
+                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
                 }
             });
+            setPOBOrdersList(POBOrdersList);
         }
     }
 
-    public List<InputOrders> getOrdersList() {
+    public List<InputOrders> getPOBOrdersList() {
         return DataController.getmInstance().getOrderPODList();
     }
 
-    public void setOrdersList(List<InputOrders> ordersList) {
-        DataController.getmInstance().setOrderPODList(ordersList);
+    public void setPOBOrdersList(List<InputOrders> POBOrdersList) {
+        DataController.getmInstance().setOrderPODList(POBOrdersList);
     }
 
     public class MyPobHolder extends RecyclerView.ViewHolder {

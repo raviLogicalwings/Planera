@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -62,8 +63,7 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        this.finish();
+        ActivityCompat.finishAffinity(MainActivity.this);
         }
 
 
@@ -77,7 +77,7 @@ public class MainActivity extends BaseActivity implements
 
             case AppConstants.PROFILE_FRAGMENT:
                 fragment = ProfileFragment.newInstance();
-//               getSupportActionBar().setTitle("Profile");
+                getSupportActionBar().setTitle("Profile");
                 break;
 
 

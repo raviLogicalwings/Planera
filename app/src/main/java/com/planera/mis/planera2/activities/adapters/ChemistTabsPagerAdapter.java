@@ -22,7 +22,12 @@ public class ChemistTabsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-       return PODFragment.newInstance(null, null);
+        if (position == POD_FRAGMENT) {
+            return PODFragment.newInstance(null, null);
+        }
+        else{
+            return null;
+        }
     }
 
     @Override

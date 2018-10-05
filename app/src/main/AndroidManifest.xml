@@ -104,15 +104,19 @@
         <activity
             android:name=".activities.ActivityUpdatePlan"
             android:label="@string/title_activity_update_plan"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.ActivityUploadPlan"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.ActivityAdminReports"
             android:label="@string/title_activity_admin_reports"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.BaseActivity" />
+        <activity
+            android:name=".activities.ActivityChangePassword"
+            android:label="@string/title_activity_changepassword"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
