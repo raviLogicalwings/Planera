@@ -1,5 +1,6 @@
 package com.planera.mis.planera2.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -21,11 +22,14 @@ import com.planera.mis.planera2.activities.adapters.GiftsAdapter;
 import com.planera.mis.planera2.activities.adapters.PODAdapter;
 import com.planera.mis.planera2.activities.adapters.SampleListAdapter;
 import com.planera.mis.planera2.activities.controller.DataController;
+import com.planera.mis.planera2.activities.models.Input;
 import com.planera.mis.planera2.activities.models.InputGift;
 import com.planera.mis.planera2.activities.models.InputGiftResponce;
 import com.planera.mis.planera2.activities.models.InputOrders;
+import com.planera.mis.planera2.activities.models.InputResponce;
 import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.utils.AppConstants;
+import com.planera.mis.planera2.activities.utils.InternetConnection;
 
 import java.util.List;
 
@@ -41,8 +45,10 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
     private ViewPager pager;
     private Toolbar toolbarProduct;
     private Button buttonConfirm;
+    private Input input;
     DataReceivedListener listener;
     private boolean isDoctor;
+    public static final String TAG = ProductCategoryActivity.class.getSimpleName();
     @Override
     protected void onStart() {
         super.onStart();
@@ -61,6 +67,8 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
         super.initData();
         isDoctor = connector.getBoolean(AppConstants.KEY_ROLE);
         fragmentManager = getSupportFragmentManager();
+        String getInput = connector.getString(AppConstants.PASS_INPUT);
+        input = new Gson().fromJson(getInput, Input.class);
 
     }
 
@@ -98,62 +106,11 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.button_confirm_product:
-
-                if (isDoctor) {
-
-                    if (new BrandsAdapter().getOrderListSelected() != null) {
-                        List<InputOrders> inputB = new BrandsAdapter().getOrderListSelected();
-                        if (inputB.size() > 0) {
-                            apiAddInputBrands(token, inputB);
-                        } else {
-                            if (new GiftsAdapter().getInputGiftList() != null) {
-                                List<InputGift> inputGIfts = new GiftsAdapter().getInputGiftList();
-                                if (inputGIfts.size() > 0) {
-                                    addInputGiftApi(token, inputGIfts);
-                                } else {
-                                    if (new SampleListAdapter().getSampleListSelected() != null) {
-                                        List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
-                                        if (inputSamples.size() > 0) {
-                                            apiAddInputSamples(token, inputSamples);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        if (new GiftsAdapter().getInputGiftList() != null) {
-                            List<InputGift> inputGifts = new GiftsAdapter().getInputGiftList();
-                            if (inputGifts.size() > 0) {
-                                addInputGiftApi(token, inputGifts);
-                            } else {
-                                if (new SampleListAdapter().getSampleListSelected() != null) {
-                                    List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
-                                    if (inputSamples.size() > 0) {
-                                        apiAddInputSamples(token, inputSamples);
-                                    }
-                                }
-                            }
-                        } else {
-                            if (new SampleListAdapter().getSampleListSelected() != null) {
-                                List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
-                                if (inputSamples.size() > 0) {
-                                    apiAddInputSamples(token, inputSamples);
-                                }
-                            } else {
-                                Toast.makeText(ProductCategoryActivity.this, "Nothing updated", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    }
+                if (InternetConnection.isNetworkAvailable(ProductCategoryActivity.this)){
+                    addInputApi(token, input);
                 }
-
-                else {
-                    if (new PODAdapter().getPOBOrdersList() != null) {
-                        List<InputOrders> inputOrders = new PODAdapter().getPOBOrdersList();
-                        if (inputOrders.size() > 0) {
-                            Log.e("POB" , new Gson().toJson( new PODAdapter().getPOBOrdersList()));
-                            apiAddInputBrands(token, new PODAdapter().getPOBOrdersList());
-                        }
-                    }
+                else{
+                    Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_SHORT).show();
                 }
 
                 break;
@@ -184,6 +141,9 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                                     apiAddInputSamples(token, inputSamples);
                                 }
                             }
+
+                            Intent startMainActivity = new Intent(ProductCategoryActivity.this, MainActivity.class);
+                            startActivity(startMainActivity);
 
                             Toast.makeText(ProductCategoryActivity.this, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                         }
@@ -225,6 +185,8 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
 
                     // On Responce of Input Brand Calling add input Gift Api
                     //---------------
+                    Intent startMainActivity = new Intent(ProductCategoryActivity.this, MainActivity.class);
+                    startActivity(startMainActivity);
 
                 }
                 else {
@@ -258,6 +220,8 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                     new BrandsAdapter().setOrderListSelected(null);
                     DataController.getmInstance().setOrderListSelected(null);
 
+
+
                     // On Responce of Input Brand Calling add input Gift Api
                         List<InputGift> inputGifts = new GiftsAdapter().getInputGiftList();
                         if (inputGifts != null) {
@@ -279,6 +243,8 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                                 }
                             }
                         }
+                    Intent startMainActivity = new Intent(ProductCategoryActivity.this, MainActivity.class);
+                    startActivity(startMainActivity);
                     //---------------
 
                 }
@@ -291,6 +257,102 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
             public void onFailure(Call<MainResponse> call, Throwable t) {
                 processDialog.dismissDialog();
                 Snackbar.make(rootView, t.getMessage(), Snackbar.LENGTH_LONG).show();
+            }
+        });
+    }
+
+
+
+    public void callingAllApi(){
+
+        if (isDoctor) {
+
+            if (new BrandsAdapter().getOrderListSelected() != null) {
+                List<InputOrders> inputB = new BrandsAdapter().getOrderListSelected();
+                if (inputB.size() > 0) {
+                    apiAddInputBrands(token, inputB);
+                } else {
+                    if (new GiftsAdapter().getInputGiftList() != null) {
+                        List<InputGift> inputGIfts = new GiftsAdapter().getInputGiftList();
+                        if (inputGIfts.size() > 0) {
+                            addInputGiftApi(token, inputGIfts);
+                        } else {
+                            if (new SampleListAdapter().getSampleListSelected() != null) {
+                                List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
+                                if (inputSamples.size() > 0) {
+                                    apiAddInputSamples(token, inputSamples);
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (new GiftsAdapter().getInputGiftList() != null) {
+                    List<InputGift> inputGifts = new GiftsAdapter().getInputGiftList();
+                    if (inputGifts.size() > 0) {
+                        addInputGiftApi(token, inputGifts);
+                    } else {
+                        if (new SampleListAdapter().getSampleListSelected() != null) {
+                            List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
+                            if (inputSamples.size() > 0) {
+                                apiAddInputSamples(token, inputSamples);
+                            }
+                        }
+                    }
+                } else {
+                    if (new SampleListAdapter().getSampleListSelected() != null) {
+                        List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
+                        if (inputSamples.size() > 0) {
+                            apiAddInputSamples(token, inputSamples);
+                        }
+                    } else {
+                        Toast.makeText(ProductCategoryActivity.this, "Nothing updated", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        }
+
+        else {
+            if (new PODAdapter().getPOBOrdersList() != null) {
+                List<InputOrders> inputOrders = new PODAdapter().getPOBOrdersList();
+                if (inputOrders.size() > 0) {
+                    Log.e("POB" , new Gson().toJson( new PODAdapter().getPOBOrdersList()));
+                    apiAddInputBrands(token, new PODAdapter().getPOBOrdersList());
+                }
+            }
+        }
+    }
+
+    public void addInputApi(String token, Input input){
+        Log.e("Input Object", new Gson().toJson(input));
+        processDialog.showDialog(ProductCategoryActivity.this, false);
+        Call<InputResponce> call  = apiInterface.addInput(token, input);
+        call.enqueue(new Callback<InputResponce>() {
+            @Override
+            public void onResponse(Call<InputResponce> call, Response<InputResponce> response) {
+                Log.e(TAG, "onResponse: "+ new Gson().toJson(response.body()));
+                Log.e(TAG, new Gson().toJson(input));
+                processDialog.dismissDialog();
+                if (response.isSuccessful()){
+
+                    if (response.code() == 200){
+                        if(response.body().getStatusCode() == AppConstants.RESULT_OK){
+                           // Calling all api, product, gift, and Pod
+                            callingAllApi();
+                        }
+                        else{
+                            Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_INDEFINITE).show();
+
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InputResponce> call, Throwable t) {
+                processDialog.dismissDialog();
+                Snackbar.make(rootView, t.getMessage(), Snackbar.LENGTH_INDEFINITE).show();
+
             }
         });
     }

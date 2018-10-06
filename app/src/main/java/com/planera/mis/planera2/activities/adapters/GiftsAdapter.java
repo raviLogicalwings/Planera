@@ -46,9 +46,10 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
     @Override
     public void onBindViewHolder(MyGiftHolder holder, int position) {
         inputGift = new InputGift();
+        GiftsData giftsDataObj = giftsData.get(position);
         inputGiftList = new ArrayList<>();
         connector = new PreferenceConnector(context);
-        setGiftsData(position, holder, giftsData);
+        setGiftsData(position, holder, giftsData, giftsDataObj);
     }
 
 
@@ -63,8 +64,8 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
        }
     }
 
-    public void setGiftsData(int position, MyGiftHolder holder, List<GiftsData> giftsData){
-        holder.textGift.setText(giftsData.get(position).getName());
+    public void setGiftsData(int position, MyGiftHolder holder, List<GiftsData> giftsData, GiftsData giftsDataObj){
+        holder.textGift.setText(giftsDataObj.getName());
         holder.editGiftQuantity.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -74,15 +75,53 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String quantityGift = s.toString().trim();
-                GiftsData gifts = giftsData.get(position);
-                if (!quantityGift.equals("")){
-                    inputGift = new InputGift();
-                    inputGift.setQuantity(quantityGift);
-                    inputGift.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID)+"");
-                    inputGift.setGiftId(gifts.getGiftId()+"");
-                    inputGiftList.add(inputGift);
-                    setInputGiftList(inputGiftList);
+                boolean isUpdated = false;
+                if (!quantityGift.equals("")) {
+
+                     if (inputGiftList.size()>0){
+                        for (int i = 0; i < inputGiftList.size(); i++) {
+                            InputGift d = inputGiftList.get(i);
+                            if (Integer.parseInt(d.getGiftId()) == giftsDataObj.getGiftId()) {
+                                inputGiftList.get(i).setGiftId(giftsDataObj.getGiftId() + "");
+                                inputGiftList.get(i).setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + "");
+                                inputGiftList.get(i).setQuantity(quantityGift);
+                                isUpdated = true;
+                            }
+                            else{
+//
+                            }
+                        }
+                        if (!isUpdated){
+                            inputGift = new InputGift();
+                            inputGift.setQuantity(quantityGift);
+                            inputGift.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + "");
+                            inputGift.setGiftId(giftsDataObj.getGiftId() + "");
+                            inputGiftList.add(inputGift);
+                        }
+
+
+                    }
+                    else{
+                         inputGift = new InputGift();
+                         inputGift.setQuantity(quantityGift);
+                         inputGift.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + "");
+                         inputGift.setGiftId(giftsDataObj.getGiftId() + "");
+                         inputGiftList.add(inputGift);
+                     }
+
                 }
+
+//                GiftsData gifts = giftsData.get(position);
+//                if (!quantityGift.equals("")){
+//                    inputGift = new InputGift();
+//                    inputGift.setQuantity(quantityGift);
+//                    inputGift.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID)+"");
+//                    inputGift.setGiftId(gifts.getGiftId()+"");
+//                    inputGiftList.add(inputGift);
+//
+//                }
+
+                setInputGiftList(inputGiftList);
             }
 
             @Override
@@ -122,6 +161,6 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
 
     public interface OnItemClickListener{
 
-        public void onItemClick(View view, int position);
+        void onItemClick(View view, int position);
     }
 }

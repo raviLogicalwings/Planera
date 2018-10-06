@@ -81,12 +81,32 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>{
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     String changedText = s.toString().trim();
+                    boolean isUpdated = false;
                     if(!changedText.equals("")) {
-                        orders = new InputOrders();
-                        orders.setQuantity(s.toString().trim());
-                        orders.setProductId(brands.getProductId()+"");
-                        orders.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + "");
-                        POBOrdersList.add(orders);
+                        if (POBOrdersList.size()>0){
+                            for (int i = 0; i<POBOrdersList.size(); i++){
+                                if (POBOrdersList.get(i).getProductId().equals(brands.getProductId()+"")){
+                                    POBOrdersList.get(i).setQuantity(changedText);
+                                    isUpdated = true;
+                                }
+                            }
+                            if (!isUpdated){
+                                orders = new InputOrders();
+                                orders.setQuantity(changedText);
+                                orders.setProductId(brands.getProductId() + "");
+                                orders.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + "");
+                                POBOrdersList.add(orders);
+                            }
+
+
+                        }
+                        else {
+                            orders = new InputOrders();
+                            orders.setQuantity(changedText);
+                            orders.setProductId(brands.getProductId() + "");
+                            orders.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + "");
+                            POBOrdersList.add(orders);
+                        }
 
                     }
                 }

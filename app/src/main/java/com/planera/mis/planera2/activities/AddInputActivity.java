@@ -7,7 +7,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,17 +16,12 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.models.Input;
-import com.planera.mis.planera2.activities.models.InputResponce;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.InternetConnection;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class AddInputActivity extends BaseActivity implements View.OnClickListener {
     private AppBarLayout appBar;
@@ -50,7 +44,7 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
     private String endTime;
     private String selectedTime;
     private Input input;
-    private int chemistId;
+    private String chemistId;
     private int doctorId;
     private String currentdate;
 
@@ -127,7 +121,12 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
                input.setStartDate(stTime);
                input.setEndDate(edTime);
                input.setComment(feedbackStr);
-                addInputApi(token, input);
+               Gson gson = new Gson();
+               String passInput = gson.toJson(input);
+               connector.setString(AppConstants.PASS_INPUT, passInput);
+                Intent intent = new Intent(AddInputActivity.this, ProductCategoryActivity.class);
+                startActivity(intent);
+//                addInputApi(token, input);
             }
             else{
                 Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
@@ -145,7 +144,7 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
         latitude  = intent.getDoubleExtra(AppConstants.LATITUDE, 0.0);
         isInLocation = intent.getIntExtra(AppConstants.KEY_IN_LOCATION, 0);
         doctorId = intent.getIntExtra(AppConstants.DOCTOR_ID, 0);
-        chemistId = intent.getIntExtra(AppConstants.CHEMIST_ID , 0);
+        chemistId = intent.getStringExtra(AppConstants.CHEMIST_ID);
         userId = intent.getIntExtra(AppConstants.KEY_USER_ID, 0);
         planId = intent.getIntExtra(AppConstants.KEY_PLAN_ID, 0);
 
@@ -156,7 +155,7 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
             input.setDoctorId(doctorId +"");
         }
         else{
-            input.setChemistsId(chemistId+"");
+            input.setChemistsId(chemistId);
         }
         input.setPlanId(planId+"");
         input.setUserId(userId+"");
@@ -183,40 +182,6 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
 
     }
 
-    public void addInputApi(String token, Input input){
-        Log.e("Input Object", new Gson().toJson(input));
-        processDialog.showDialog(AddInputActivity.this, false);
-        Call<InputResponce> call  = apiInterface.addInput(token, input);
-        call.enqueue(new Callback<InputResponce>() {
-            @Override
-            public void onResponse(Call<InputResponce> call, Response<InputResponce> response) {
-                Log.e(TAG, "onResponse: "+ new Gson().toJson(response.body()));
-                Log.e(TAG, new Gson().toJson(input));
-               processDialog.dismissDialog();
-                if (response.isSuccessful()){
-
-                    if (response.code() == 200){
-                        if(response.body().getStatusCode() == AppConstants.RESULT_OK){
-                            connector.setInteger(AppConstants.KEY_INPUT_ID, Integer.parseInt(response.body().getData().getInputId()));
-                          Intent intent = new Intent(AddInputActivity.this, ProductCategoryActivity.class);
-                          startActivity(intent);
-                        }
-                        else{
-                            Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_INDEFINITE).show();
-
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<InputResponce> call, Throwable t) {
-                processDialog.dismissDialog();
-                Snackbar.make(rootView, t.getMessage(), Snackbar.LENGTH_INDEFINITE).show();
-
-            }
-        });
-    }
 
     public void getCurrentDate(){
         Date c = Calendar.getInstance().getTime();
