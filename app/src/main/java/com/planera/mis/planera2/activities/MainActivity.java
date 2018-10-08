@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.planera.mis.planera2.R;
@@ -17,6 +19,7 @@ import com.planera.mis.planera2.activities.fragments.HomeFragment;
 import com.planera.mis.planera2.activities.fragments.ProfileFragment;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.BottomNavigationViewHelper;
+import com.planera.mis.planera2.activities.utils.InternetConnection;
 
 public class MainActivity extends BaseActivity implements
         View.OnClickListener {
@@ -27,6 +30,7 @@ public class MainActivity extends BaseActivity implements
     private Fragment fragment;
     private AppBarLayout appBar;
     private Toolbar toolbarProduct;
+    private ImageView imageAddPlan;
 
 
 
@@ -91,13 +95,14 @@ public class MainActivity extends BaseActivity implements
         navigation  = findViewById(R.id.navigation);
         BottomNavigationViewHelper.removeShiftMode(navigation);
         mTextMessage = findViewById(R.id.message);
-
+        imageAddPlan = (ImageView) findViewById(R.id.img_action_add);
 
         appBar = findViewById(R.id.appBar);
         toolbarProduct = (Toolbar) findViewById(R.id.toolbarProduct);
         setSupportActionBar(toolbarProduct);
         getSupportActionBar().setTitle("Visit Plan");
         toolbarProduct.setNavigationIcon(R.drawable.back_arrow_whit);
+        imageAddPlan.setOnClickListener(this);
 
     }
 
@@ -116,6 +121,17 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.img_action_add:
+                if (InternetConnection.isNetworkAvailable(MainActivity.this)){
+                    Intent intent = new Intent(MainActivity.this, ActivityUserPlanCreate.class);
+                    startActivity(intent);
+                }
+                else{
+                    Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_SHORT).show();
+                }
+                break;
+        }
     }
 
 }

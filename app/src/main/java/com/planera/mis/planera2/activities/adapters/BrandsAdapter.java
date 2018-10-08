@@ -88,7 +88,7 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
                         orders = new InputOrders();
                         orders.setIsSample("0");
                         orders.setProductId(brands.getProductId() + "");
-                        orders.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID)+"");
+
                         switch (value){
                             case "Low":
                                 orders.setInterestedLevel("3");

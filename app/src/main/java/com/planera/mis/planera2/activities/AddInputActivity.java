@@ -97,38 +97,34 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
     }
 
 
-    public void uiValidation(){
+    public void uiValidation() {
         startTimeStr = editStartTime.getText().toString().trim();
         endTimeStr = editEndTime.getText().toString().trim();
         feedbackStr = editFeedback.getText().toString().trim();
 
-        if(TextUtils.isEmpty(startTimeStr)){
+        if (TextUtils.isEmpty(startTimeStr)) {
             editStartTime.requestFocus();
             editStartTime.setError(getString(R.string.invalid_input));
-        }
-        else if(TextUtils.isEmpty(endTimeStr)){
+        } else if (TextUtils.isEmpty(endTimeStr)) {
             editEndTime.requestFocus();
             editEndTime.setError(getString(R.string.invalid_input));
-        }
-        else if(TextUtils.isEmpty(feedbackStr)){
+        } else if (TextUtils.isEmpty(feedbackStr)) {
             editFeedback.requestFocus();
             editFeedback.setError(getString(R.string.invalid_input));
-        }
-        else{
-            if (InternetConnection.isNetworkAvailable(AddInputActivity.this)){
-                String stTime = currentdate+" "+startTimeStr+":00";
-                String edTime = currentdate+" "+endTimeStr+":00";
-               input.setStartDate(stTime);
-               input.setEndDate(edTime);
-               input.setComment(feedbackStr);
-               Gson gson = new Gson();
-               String passInput = gson.toJson(input);
-               connector.setString(AppConstants.PASS_INPUT, passInput);
+        } else {
+            if (InternetConnection.isNetworkAvailable(AddInputActivity.this)) {
+                String stTime = currentdate + " " + startTimeStr + ":00";
+                String edTime = currentdate + " " + endTimeStr + ":00";
+                input.setStartDate(stTime);
+                input.setEndDate(edTime);
+                input.setComment(feedbackStr);
+                Gson gson = new Gson();
+                String passInput = gson.toJson(input);
+                connector.setString(AppConstants.PASS_INPUT, passInput);
                 Intent intent = new Intent(AddInputActivity.this, ProductCategoryActivity.class);
                 startActivity(intent);
 //                addInputApi(token, input);
-            }
-            else{
+            } else {
                 Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
             }
         }
@@ -136,12 +132,12 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
     }
 
 
-    public void loadFormIntent(Intent intent){
+    public void loadFormIntent(Intent intent) {
         textCustomerName.setText(intent.getStringExtra(AppConstants.CUSTOMER_NAME));
         textVisitDate.setText(intent.getStringExtra(AppConstants.VISIT_DATE));
         isDoctor = intent.getBooleanExtra(AppConstants.KEY_ROLE, true);
         longitude = intent.getDoubleExtra(AppConstants.LATITUDE, 0.0);
-        latitude  = intent.getDoubleExtra(AppConstants.LATITUDE, 0.0);
+        latitude = intent.getDoubleExtra(AppConstants.LATITUDE, 0.0);
         isInLocation = intent.getIntExtra(AppConstants.KEY_IN_LOCATION, 0);
         doctorId = intent.getIntExtra(AppConstants.DOCTOR_ID, 0);
         chemistId = intent.getStringExtra(AppConstants.CHEMIST_ID);
@@ -149,16 +145,15 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
         planId = intent.getIntExtra(AppConstants.KEY_PLAN_ID, 0);
 
         input.setLatitude(Double.toString(latitude));
-        input.setLongitude(longitude+"");
-        input.setIsInLocation(isInLocation+"");
-        if(isDoctor){
-            input.setDoctorId(doctorId +"");
-        }
-        else{
+        input.setLongitude(longitude + "");
+        input.setIsInLocation(isInLocation + "");
+        if (isDoctor) {
+            input.setDoctorId(doctorId + "");
+        } else {
             input.setChemistsId(chemistId);
         }
-        input.setPlanId(planId+"");
-        input.setUserId(userId+"");
+        input.setPlanId(planId + "");
+        input.setUserId(userId + "");
 
 
     }
@@ -166,7 +161,7 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View view) {
 
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.button_submit_input:
                 isTimeAfter();
                 break;
@@ -183,7 +178,7 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
     }
 
 
-    public void getCurrentDate(){
+    public void getCurrentDate() {
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         textVisitDate.setText(df.format(c));
@@ -192,24 +187,22 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
         currentdate = reqFor.format(c.getTime());
     }
 
-   public void isTimeAfter() {
-
-
-            startTimeStr = editStartTime.getText().toString().trim();
-            endTimeStr = editEndTime.getText().toString().trim();
-            String stTime = "20101212" + startTimeStr.replace(":", "");
-            String edTime = "20101212" + endTimeStr.replace(":", "");
-            Date inTime = new Date(Long.parseLong(stTime));
-            Date outTime = new Date(Long.parseLong(edTime));
-            if (outTime.before(inTime)) {
-                Toast.makeText(AddInputActivity.this, "End time should be greater than start time", Toast.LENGTH_LONG).show();
-            } else {
-                uiValidation();
-            }
+    public void isTimeAfter() {
+        startTimeStr = editStartTime.getText().toString().trim();
+        endTimeStr = editEndTime.getText().toString().trim();
+        String stTime = "20101212" + startTimeStr.replace(":", "");
+        String edTime = "20101212" + endTimeStr.replace(":", "");
+        Date inTime = new Date(Long.parseLong(stTime));
+        Date outTime = new Date(Long.parseLong(edTime));
+        if (outTime.before(inTime)) {
+            Toast.makeText(AddInputActivity.this, "End time should be greater than start time", Toast.LENGTH_LONG).show();
+        } else {
+            uiValidation();
+        }
 
     }
 
-    public void getDateFromDialog(TextView textView){
+    public void getDateFromDialog(TextView textView) {
         Calendar mCurrentTime = Calendar.getInstance();
         int hour = mCurrentTime.get(Calendar.HOUR_OF_DAY);
 
@@ -217,7 +210,7 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
         int sec = mCurrentTime.get(Calendar.SECOND);
         TimePickerDialog timePickerDialog = new TimePickerDialog(AddInputActivity.this,
                 (view, hourOfDay, minute1) -> {
-                    selectedTime = hourOfDay+":"+minute1;
+                    selectedTime = hourOfDay + ":" + minute1;
                     textView.setText(selectedTime);
                 }, hour, minute, false);
         timePickerDialog.show();

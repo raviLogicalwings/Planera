@@ -107,8 +107,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 processDialog.dismissDialog();
                 Log.e(TAG, "onResponse: "+ new Gson().toJson(response.body()));
                 if (response.body().getStatusCode()== AppConstants.RESULT_OK){
-//                    Toast.makeText(LoginActivity.this, response.body().getData().getToken(), Toast.LENGTH_LONG).show();
                     connector.setString(AppConstants.TOKEN, response.body().getData().getToken());
+                    connector.setString(AppConstants.USER_ID, response.body().getData().getUserId());
                     connector.setBoolean(AppConstants.IS_LOGIN, true);
                     if(response.body().getData().getType().equals(AppConstants.USER)) {
                         connector.setBoolean(AppConstants.IS_USER, true);

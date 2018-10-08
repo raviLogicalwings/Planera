@@ -27,11 +27,11 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 
 public class ActivityUploadPlan extends BaseActivity implements View.OnClickListener{
@@ -127,7 +127,7 @@ public class ActivityUploadPlan extends BaseActivity implements View.OnClickList
                     String uriString = uri.toString();
                     myFile = new File(uriString);
 
-                    readExcelData(myFile);
+                    readExcelData(uri);
                     String path = myFile.getAbsolutePath();
                     Log.e(TAG, "FILE PATH"+path);
                     displayName = null;
@@ -178,44 +178,54 @@ public class ActivityUploadPlan extends BaseActivity implements View.OnClickList
     }
 
 
-    private void readExcelData(File filePath) {
-        Log.e(TAG, filePath.toString());
+    private void readExcelData(Uri uri) {
 
-        if(filePath.toString().isEmpty()){
-            Toast.makeText(this, "Not exist", Toast.LENGTH_SHORT).show();
-        }
-
-        else{
             Toast.makeText(this, "Working fine", Toast.LENGTH_LONG).show();
             try {
 //            File fileB = new File(filePath);
-                FileInputStream inputStream = new FileInputStream(filePath);
-                XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
-                XSSFSheet sheet = workbook.getSheetAt(0);
-                int rowsCount = sheet.getPhysicalNumberOfRows();
-                Toast.makeText(this, "rowCount"+rowsCount, Toast.LENGTH_LONG).show();
-                FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
-                StringBuilder sb = new StringBuilder();
-
-                //loop, loops through rows
-                for (int r = 1; r < rowsCount; r++) {
-                    Row row = sheet.getRow(r);
-                    int cellsCount = row.getPhysicalNumberOfCells();
-                    //inner loop, loops through columns
-                    for (int c = 0; c < cellsCount; c++) {
-
-                        String value = getCellAsString(row, c, formulaEvaluator);
-                        String cellInfo = "r:" + r + "; c:" + c + "; v:" + value;
-                        Log.d(TAG, "readExcelData: Data from row: " + cellInfo);
-                        sb.append(value + ", ");
-                    }
+                InputStream inputStream = getContentResolver().openInputStream(uri);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder stringBuilder = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null){
+                    stringBuilder.append(line);
                 }
-                sb.append(":");
+
+                inputStream.close();
+              Log.e("String Result", stringBuilder.toString());
+
+
+
+
+
+
+//
+//                XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+//                XSSFSheet sheet = workbook.getSheetAt(0);
+//                int rowsCount = sheet.getPhysicalNumberOfRows();
+//                Toast.makeText(this, "rowCount"+rowsCount, Toast.LENGTH_LONG).show();
+//                FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
+//                StringBuilder sb = new StringBuilder();
+//
+//                //loop, loops through rows
+//                for (int r = 1; r < rowsCount; r++) {
+//                    Row row = sheet.getRow(r);
+//                    int cellsCount = row.getPhysicalNumberOfCells();
+//                    //inner loop, loops through columns
+//                    for (int c = 0; c < cellsCount; c++) {
+//
+//                        String value = getCellAsString(row, c, formulaEvaluator);
+//                        String cellInfo = "r:" + r + "; c:" + c + "; v:" + value;
+//                        Log.d(TAG, "readExcelData: Data from row: " + cellInfo);
+//                        sb.append(value + ", ");
+//                    }
+//                }
+//                sb.append(":");
 
             }catch (Exception e) {
                 Log.e(TAG, "readExcelData: FileNotFoundException. " + e.getMessage() );
             }
-        }
+
 
 
     }

@@ -80,4 +80,5 @@
     <string name="old_password">Old Password</string>
     <string name="submit">Submit</string>
     <string name="new_password">New Password</string>
+    <string name="title_activity_user_plan_create">ActivityUserPlanCreate</string>
 </resources>

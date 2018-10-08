@@ -116,6 +116,10 @@
         <activity
             android:name=".activities.ActivityChangePassword"
             android:label="@string/title_activity_changepassword"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.ActivityUserPlanCreate"
+            android:label="@string/title_activity_user_plan_create"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

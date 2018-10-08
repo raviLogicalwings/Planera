@@ -38,6 +38,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ProductCategoryActivity extends BaseActivity implements View.OnClickListener{
+    private  String INPUT_ID = null;
     private DoctorTabsPagerAdapter doctorTabsPagerAdapter;
     private ChemistTabsPagerAdapter chemistTabsPagerAdapter;
     private FragmentManager fragmentManager;
@@ -138,6 +139,9 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                             List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
                             if (inputSamples != null) {
                                 if (inputSamples.size() > 0) {
+                                    for (int i = 0; i<inputSamples.size() ; i++){
+                                        inputSamples.get(i).setInputId(INPUT_ID);
+                                    }
                                     apiAddInputSamples(token, inputSamples);
                                 }
                             }
@@ -222,15 +226,21 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
 
 
 
-                    // On Responce of Input Brand Calling add input Gift Api
+                    // On Response of Input Brand Calling add input Gift Api
                         List<InputGift> inputGifts = new GiftsAdapter().getInputGiftList();
                         if (inputGifts != null) {
                             if (inputGifts.size() > 0) {
+                                for (int i = 0; i<inputGifts.size() ; i++){
+                                    inputGifts.get(i).setInputId(INPUT_ID);
+                                }
                                 addInputGiftApi(token, inputGifts);
                             }
                             else{
                                 List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
                                 if (inputSamples.size()>0) {
+                                    for (int i = 0; i<inputGifts.size() ; i++){
+                                        inputGifts.get(i).setInputId(INPUT_ID);
+                                    }
                                     apiAddInputBrands(token, inputSamples);
                                 }
                             }
@@ -239,6 +249,9 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                             List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
                             if (inputSamples != null) {
                                 if (inputSamples.size() > 0) {
+                                    for (int i = 0; i<inputSamples.size() ; i++){
+                                        inputSamples.get(i).setInputId(INPUT_ID);
+                                    }
                                     apiAddInputBrands(token, inputSamples);
                                 }
                             }
@@ -270,16 +283,25 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
             if (new BrandsAdapter().getOrderListSelected() != null) {
                 List<InputOrders> inputB = new BrandsAdapter().getOrderListSelected();
                 if (inputB.size() > 0) {
+                    for (int i = 0; i<inputB.size() ; i++){
+                        inputB.get(i).setInputId(INPUT_ID);
+                    }
                     apiAddInputBrands(token, inputB);
                 } else {
                     if (new GiftsAdapter().getInputGiftList() != null) {
-                        List<InputGift> inputGIfts = new GiftsAdapter().getInputGiftList();
-                        if (inputGIfts.size() > 0) {
-                            addInputGiftApi(token, inputGIfts);
+                        List<InputGift> inputGifts = new GiftsAdapter().getInputGiftList();
+                        if (inputGifts.size() > 0) {
+                            for (int i = 0; i<inputGifts.size() ; i++){
+                                inputGifts.get(i).setInputId(INPUT_ID);
+                            }
+                            addInputGiftApi(token, inputGifts);
                         } else {
                             if (new SampleListAdapter().getSampleListSelected() != null) {
                                 List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
                                 if (inputSamples.size() > 0) {
+                                    for (int i = 0; i<inputSamples.size() ; i++){
+                                        inputSamples.get(i).setInputId(INPUT_ID);
+                                    }
                                     apiAddInputSamples(token, inputSamples);
                                 }
                             }
@@ -290,11 +312,17 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                 if (new GiftsAdapter().getInputGiftList() != null) {
                     List<InputGift> inputGifts = new GiftsAdapter().getInputGiftList();
                     if (inputGifts.size() > 0) {
+                        for (int i = 0; i<inputGifts.size() ; i++){
+                            inputGifts.get(i).setInputId(INPUT_ID);
+                        }
                         addInputGiftApi(token, inputGifts);
                     } else {
                         if (new SampleListAdapter().getSampleListSelected() != null) {
                             List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
                             if (inputSamples.size() > 0) {
+                                for (int i = 0; i<inputSamples.size() ; i++){
+                                    inputSamples.get(i).setInputId(INPUT_ID);
+                                }
                                 apiAddInputSamples(token, inputSamples);
                             }
                         }
@@ -303,6 +331,9 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                     if (new SampleListAdapter().getSampleListSelected() != null) {
                         List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
                         if (inputSamples.size() > 0) {
+                            for (int i = 0; i<inputSamples.size() ; i++){
+                                inputSamples.get(i).setInputId(INPUT_ID);
+                            }
                             apiAddInputSamples(token, inputSamples);
                         }
                     } else {
@@ -316,6 +347,9 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
             if (new PODAdapter().getPOBOrdersList() != null) {
                 List<InputOrders> inputOrders = new PODAdapter().getPOBOrdersList();
                 if (inputOrders.size() > 0) {
+                    for (int i = 0; i<inputOrders.size() ; i++){
+                        inputOrders.get(i).setInputId(connector.getString(AppConstants.KEY_INPUT_ID));
+                    }
                     Log.e("POB" , new Gson().toJson( new PODAdapter().getPOBOrdersList()));
                     apiAddInputBrands(token, new PODAdapter().getPOBOrdersList());
                 }
@@ -338,6 +372,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                     if (response.code() == 200){
                         if(response.body().getStatusCode() == AppConstants.RESULT_OK){
                            // Calling all api, product, gift, and Pod
+                            INPUT_ID = response.body().getData().getInputId();
                             callingAllApi();
                         }
                         else{

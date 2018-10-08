@@ -14,7 +14,6 @@ import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.controller.DataController;
 import com.planera.mis.planera2.activities.models.GiftsData;
 import com.planera.mis.planera2.activities.models.InputGift;
-import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.PreferenceConnector;
 
 import java.util.ArrayList;
@@ -83,7 +82,6 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
                             InputGift d = inputGiftList.get(i);
                             if (Integer.parseInt(d.getGiftId()) == giftsDataObj.getGiftId()) {
                                 inputGiftList.get(i).setGiftId(giftsDataObj.getGiftId() + "");
-                                inputGiftList.get(i).setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + "");
                                 inputGiftList.get(i).setQuantity(quantityGift);
                                 isUpdated = true;
                             }
@@ -94,7 +92,6 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
                         if (!isUpdated){
                             inputGift = new InputGift();
                             inputGift.setQuantity(quantityGift);
-                            inputGift.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + "");
                             inputGift.setGiftId(giftsDataObj.getGiftId() + "");
                             inputGiftList.add(inputGift);
                         }
@@ -104,7 +101,6 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
                     else{
                          inputGift = new InputGift();
                          inputGift.setQuantity(quantityGift);
-                         inputGift.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + "");
                          inputGift.setGiftId(giftsDataObj.getGiftId() + "");
                          inputGiftList.add(inputGift);
                      }

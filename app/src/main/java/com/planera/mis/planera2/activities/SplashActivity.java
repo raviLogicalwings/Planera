@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.utils.AppConstants;
@@ -55,7 +54,7 @@ public class SplashActivity extends BaseActivity {
                 }
             }
             else {
-                Toast.makeText(this, isUserLogin+"", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, isUserLogin+"", Toast.LENGTH_SHORT).show();
                 callSplash();
             }
         }

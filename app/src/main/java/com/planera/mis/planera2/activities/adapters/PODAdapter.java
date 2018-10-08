@@ -15,7 +15,6 @@ import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.controller.DataController;
 import com.planera.mis.planera2.activities.models.Brands;
 import com.planera.mis.planera2.activities.models.InputOrders;
-import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.PreferenceConnector;
 
 import java.util.ArrayList;
@@ -94,7 +93,6 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>{
                                 orders = new InputOrders();
                                 orders.setQuantity(changedText);
                                 orders.setProductId(brands.getProductId() + "");
-                                orders.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + "");
                                 POBOrdersList.add(orders);
                             }
 
@@ -104,7 +102,6 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>{
                             orders = new InputOrders();
                             orders.setQuantity(changedText);
                             orders.setProductId(brands.getProductId() + "");
-                            orders.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + "");
                             POBOrdersList.add(orders);
                         }
 
