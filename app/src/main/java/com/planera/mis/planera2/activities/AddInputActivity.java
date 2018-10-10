@@ -1,5 +1,6 @@
 package com.planera.mis.planera2.activities;
 
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +34,9 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
     private EditText editStartTime;
     private EditText editEndTime;
     private EditText editFeedback;
+    private EditText editEarlierFeedback;
     private Button buttonSubmitInput;
+    private LinearLayout layoutEarlierEntryFeedBack;
     private String startTimeStr, endTimeStr, feedbackStr;
     public static final String TAG = AddInputActivity.class.getSimpleName();
     private boolean isDoctor;
@@ -47,6 +52,9 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
     private String chemistId;
     private int doctorId;
     private String currentdate;
+    private String selectedDate;
+    private String earlierFeedbackStr;
+    private String strVisitDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,16 +77,18 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
         editEndTime = findViewById(R.id.edit_end_time);
         editFeedback = findViewById(R.id.edit_feedback);
         buttonSubmitInput = findViewById(R.id.button_submit_input);
+        editEarlierFeedback = findViewById(R.id.edit_earlier_feedback);
+        layoutEarlierEntryFeedBack = findViewById(R.id.layout_earlier_entry_feedback);
         editStartTime.setFocusable(false);
         editEndTime.setFocusable(false);
 
-
+        layoutEarlierEntryFeedBack.setVisibility(View.GONE);
+        editEarlierFeedback.setVisibility(View.GONE);
         setSupportActionBar(toolbarTime);
         toolbarTime.setNavigationIcon(R.drawable.back_arrow_whit);
         getSupportActionBar().setTitle("Input");
         toolbarTime.setNavigationOnClickListener(view -> onBackPressed());
-
-
+        textVisitDate.setOnClickListener(this);
         buttonSubmitInput.setOnClickListener(this);
         editStartTime.setOnClickListener(this);
         editEndTime.setOnClickListener(this);
@@ -101,16 +111,24 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
         startTimeStr = editStartTime.getText().toString().trim();
         endTimeStr = editEndTime.getText().toString().trim();
         feedbackStr = editFeedback.getText().toString().trim();
+        earlierFeedbackStr = editEarlierFeedback.getText().toString().trim();
+        strVisitDate = textVisitDate.getText().toString().trim();
 
-        if (TextUtils.isEmpty(startTimeStr)) {
+        if (strVisitDate.equals(getString(R.string.select).replace("-", ""))){
+            textVisitDate.setError(getString(R.string.invalid_input));
+            textVisitDate.requestFocus();
+        }
+        else if (TextUtils.isEmpty(startTimeStr)) {
             editStartTime.requestFocus();
             editStartTime.setError(getString(R.string.invalid_input));
         } else if (TextUtils.isEmpty(endTimeStr)) {
             editEndTime.requestFocus();
             editEndTime.setError(getString(R.string.invalid_input));
-        } else if (TextUtils.isEmpty(feedbackStr)) {
-            editFeedback.requestFocus();
-            editFeedback.setError(getString(R.string.invalid_input));
+        } else if (editEarlierFeedback.isShown()) {
+                    if (TextUtils.isEmpty(earlierFeedbackStr)) {
+                        editEarlierFeedback.requestFocus();
+                        editEarlierFeedback.setError(getString(R.string.invalid_input));
+                    }
         } else {
             if (InternetConnection.isNetworkAvailable(AddInputActivity.this)) {
                 String stTime = currentdate + " " + startTimeStr + ":00";
@@ -118,6 +136,8 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
                 input.setStartDate(stTime);
                 input.setEndDate(edTime);
                 input.setComment(feedbackStr);
+                input.setVisitDate(selectedDate);
+                input.setEarlierEntryFeedback(earlierFeedbackStr);
                 Gson gson = new Gson();
                 String passInput = gson.toJson(input);
                 connector.setString(AppConstants.PASS_INPUT, passInput);
@@ -133,8 +153,6 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
 
 
     public void loadFormIntent(Intent intent) {
-        textCustomerName.setText(intent.getStringExtra(AppConstants.CUSTOMER_NAME));
-        textVisitDate.setText(intent.getStringExtra(AppConstants.VISIT_DATE));
         isDoctor = intent.getBooleanExtra(AppConstants.KEY_ROLE, true);
         longitude = intent.getDoubleExtra(AppConstants.LATITUDE, 0.0);
         latitude = intent.getDoubleExtra(AppConstants.LATITUDE, 0.0);
@@ -173,18 +191,44 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
             case R.id.edit_end_time:
                 getDateFromDialog(editEndTime);
                 break;
+
+            case R.id.text_visit_date:
+                chooseDateFromDialog();
         }
 
+    }
+
+    private void chooseDateFromDialog() {
+        final Calendar mCurrentDate = Calendar.getInstance();
+        int mYear = mCurrentDate.get(Calendar.YEAR);
+        int mMonth = mCurrentDate.get(Calendar.MONTH);
+        int mDay = mCurrentDate.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog dialog = new DatePickerDialog(AddInputActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                selectedDate = dayOfMonth + "-" + month + "-" + year;
+                currentdate = currentdate.substring(0, 2);
+                textVisitDate.setText(selectedDate);
+
+                if (!currentdate.equals(dayOfMonth + "")) {
+                    layoutEarlierEntryFeedBack.setVisibility(View.VISIBLE);
+                    editEarlierFeedback.setVisibility(View.VISIBLE);
+                } else {
+
+                    layoutEarlierEntryFeedBack.setVisibility(View.GONE);
+                    editEarlierFeedback.setVisibility(View.GONE);
+                }
+            }
+        }, mYear, mMonth, mDay);
+        dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+        dialog.show();
     }
 
 
     public void getCurrentDate() {
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-        textVisitDate.setText(df.format(c));
-
-        SimpleDateFormat reqFor = new SimpleDateFormat("yyyy-MM-dd");
-        currentdate = reqFor.format(c.getTime());
+        currentdate = df.format(c.getTime());
     }
 
     public void isTimeAfter() {

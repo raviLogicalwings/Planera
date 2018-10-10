@@ -112,8 +112,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     connector.setBoolean(AppConstants.IS_LOGIN, true);
                     if(response.body().getData().getType().equals(AppConstants.USER)) {
                         connector.setBoolean(AppConstants.IS_USER, true);
-
-                        Intent intentHome = new Intent(LoginActivity.this, MainActivity.class);
+                        Intent intentHome = new Intent(LoginActivity.this, HomeActivity.class);
                         startActivity(intentHome);
                     }
                     else{

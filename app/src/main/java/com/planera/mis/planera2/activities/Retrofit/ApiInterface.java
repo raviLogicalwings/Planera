@@ -98,7 +98,7 @@ public interface ApiInterface {
     Call<PlansListResponce> planList(@Header("Authorization") String token);
 
     @GET(AppConstants.USER_PLAN_LIST)
-    Call<UserPlanListRespnce> userPlanList(@Header("Authorization") String token);
+    Call<UserPlanListRespnce> userPlanList(@Header("Authorization") String token, @Query("PatchId") int patchId);
 
     @POST(AppConstants.CHEMIST_REPORTS_LIST)
     Call<ReportListResponce> reportListChemist(@Header("Authorization") String token,

@@ -73,11 +73,13 @@
 
             <TextView
                 android:id="@+id/text_visit_date"
+                android:clickable="true"
                 style="@style/MediumText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="20/10/2016" />
+                android:text="Select"
+                android:focusable="true" />
         </LinearLayout>
 
 
@@ -154,9 +156,40 @@
             android:layout_height="wrap_content"
             android:gravity="top|left"
             android:inputType="textMultiLine"
-            android:lines="8"
-            android:maxLines="10"
-            android:minLines="6"
+            android:lines="4"
+            android:maxLines="4"
+            android:minLines="4"
+            android:scrollbars="vertical" />
+
+        <LinearLayout
+            android:id="@+id/layout_earlier_entry_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                style="@style/MediumTextBlack"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="Earlier Entry Feedback:"
+                android:textColor="@color/colorGray" />
+        </LinearLayout>
+
+        <EditText
+            android:padding="3dp"
+            android:background="@drawable/bg_input_box"
+            android:id="@+id/edit_earlier_feedback"
+            android:layout_margin="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|left"
+            android:inputType="textMultiLine"
+            android:lines="4"
+            android:maxLines="4"
+            android:minLines="4"
             android:scrollbars="vertical" />
 
 

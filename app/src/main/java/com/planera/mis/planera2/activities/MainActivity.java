@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -67,7 +66,7 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onBackPressed() {
-        ActivityCompat.finishAffinity(MainActivity.this);
+      super.onBackPressed();
         }
 
 
@@ -75,7 +74,7 @@ public class MainActivity extends BaseActivity implements
         switch (type){
 
             case AppConstants.HOME_FRAGMENT:
-                fragment = (Fragment) new HomeFragment();
+                fragment = new HomeFragment();
 //               getSupportActionBar().setTitle("Home");
                 break;
 
@@ -95,13 +94,15 @@ public class MainActivity extends BaseActivity implements
         navigation  = findViewById(R.id.navigation);
         BottomNavigationViewHelper.removeShiftMode(navigation);
         mTextMessage = findViewById(R.id.message);
-        imageAddPlan = (ImageView) findViewById(R.id.img_action_add);
+        imageAddPlan = findViewById(R.id.img_action_add);
 
         appBar = findViewById(R.id.appBar);
-        toolbarProduct = (Toolbar) findViewById(R.id.toolbarProduct);
+        toolbarProduct = findViewById(R.id.toolbarProduct);
         setSupportActionBar(toolbarProduct);
         getSupportActionBar().setTitle("Visit Plan");
+
         toolbarProduct.setNavigationIcon(R.drawable.back_arrow_whit);
+        toolbarProduct.setNavigationOnClickListener(view-> onBackPressed());
         imageAddPlan.setOnClickListener(this);
 
     }
@@ -116,6 +117,7 @@ public class MainActivity extends BaseActivity implements
     public void initData() {
         super.initData();
         manager = getSupportFragmentManager();
+
        loadFragment(AppConstants.HOME_FRAGMENT);
     }
 

@@ -348,10 +348,10 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                 List<InputOrders> inputOrders = new PODAdapter().getPOBOrdersList();
                 if (inputOrders.size() > 0) {
                     for (int i = 0; i<inputOrders.size() ; i++){
-                        inputOrders.get(i).setInputId(connector.getString(AppConstants.KEY_INPUT_ID));
+                        inputOrders.get(i).setInputId(INPUT_ID);
                     }
                     Log.e("POB" , new Gson().toJson( new PODAdapter().getPOBOrdersList()));
-                    apiAddInputBrands(token, new PODAdapter().getPOBOrdersList());
+                    apiAddInputBrands(token,inputOrders);
                 }
             }
         }

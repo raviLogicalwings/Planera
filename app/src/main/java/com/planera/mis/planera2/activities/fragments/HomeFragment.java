@@ -69,6 +69,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     double lat;
     double lng;
     private GoogleApiClient googleApiClient;
+    private Integer patchId;
 
 
     public HomeFragment() {
@@ -95,6 +96,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         super.initData();
         apiInterface = ApiClient.getInstance();
         mLocationRequest = new LocationRequest();
+        patchId = connector.getInteger(AppConstants.KEY_PATCH_ID);
         setUpGClient();
 
     }
@@ -111,10 +113,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
 
 
-    public void getAllPlansList(String token) {
+    public void getAllPlansList(String token, int patchId) {
 
         processDialog.showDialog(mContext, false);
-        Call<UserPlanListRespnce> call = apiInterface.userPlanList(token);
+        Call<UserPlanListRespnce> call = apiInterface.userPlanList(token, patchId);
 
         call.enqueue(new Callback<UserPlanListRespnce>() {
             @Override
@@ -373,7 +375,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     public void onLocationChanged(Location location) {
         mLocation = location;
         Log.e("Current Location", mLocation.getLatitude()+" "+mLocation.getLongitude());
-        getAllPlansList(token);
+        getAllPlansList(token, patchId);
 
     }
 

@@ -93,7 +93,7 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>{
                                 orders = new InputOrders();
                                 orders.setQuantity(changedText);
                                 orders.setProductId(brands.getProductId() + "");
-                                POBOrdersList.add(orders);
+                                    POBOrdersList.add(orders);
                             }
 
 

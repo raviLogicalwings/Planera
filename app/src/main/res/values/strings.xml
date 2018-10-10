@@ -81,4 +81,5 @@
     <string name="submit">Submit</string>
     <string name="new_password">New Password</string>
     <string name="title_activity_user_plan_create">ActivityUserPlanCreate</string>
+    <string name="title_activity_home">HomeActivity</string>
 </resources>

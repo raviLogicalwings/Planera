@@ -46,7 +46,7 @@ public class SplashActivity extends BaseActivity {
 
             if (isUserLogin){
                 if (isUser) {
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(SplashActivity.this, AdminPanelActivity.class);
