@@ -7,7 +7,7 @@ public class AppConstants {
 
     //Retrofit Constants
     public static final int RESULT_OK = 1;
-    public static final long REQUEST_TIMEOUT = 200;
+    public static final long REQUEST_TIMEOUT = 3;
     public static final String BASE_URL = "http://35.231.248.33/mrapi/";
     public static final String LOGIN = "login/login";
     public static final String USER_REGISTRATION = "register/registerUserDetails";
@@ -23,7 +23,7 @@ public class AppConstants {
     public static final String CHEMIST_LIST = "chemist/getAllChemists";
     public static final String USER_LIST = "user/getAllUsers";
     public static final String PLAN_LIST ="plan/getAllPlans" ;
-    public static final String USER_PLAN_LIST = "plan/getPlansByPatches";
+    public static final String USER_PLAN_LIST = "plan/getUserPlans";
     public static final String TERRITORY_WISE_PATCHES = "patch/getTerritoryWisePatches";
     public static final String PATCH_WISE_DOCTORS_LIST = "doctor/getPatchWiseDoctor";
     public static final String PATCH_WISE_CHEMIST_LIST = "chemist/getPatchWiseChemists";
@@ -145,6 +145,27 @@ public class AppConstants {
     public static final String STATUS_OK = "OK";
     public static final String STATUS_ZERO_RESULTS = "ZERO_RESULTS";
     public static final String STATUS_OVER_LIMIT = "OVER_QUERY_LIMIT";
+
+    //Doctor Constants for excel Upload Data
+    public static final int PATCH_ID_EXCEL = 1;
+    public static final int FIRST_NAME_EXCEL = 3;
+    public static final int MIDDLE_NAME_EXCEL = 4;
+    public static final int LAST_NAME_EXCEL = 5;
+    public static final int DOB_EXCEL = 6;
+    public static final int EMAIL_EXCEL = 8;
+    public static final int QUALIFICATION_EXCEL = 9;
+    public static final int SPECIALIZATION_EXCEL = 10;
+    public static final int PREFERRED_MEET_TIME_EXCEL = 12;
+    public static final int MEET_FREQUENCY_EXCEL = 13;
+    public static final int PHONE_EXCEL  = 14;
+    public static final int ADDRESS_1_EXCEL = 15;
+    public static final int ADDRESS_2_EXCEL = 16;
+    public static final int ADDRESS_3_EXCEL = 17;
+    public static final int ADDRESS_4_EXCEL = 18;
+    public static final int CITY_EXCEL = 20;
+    public static final int DISTRICT_EXCEL = 21;
+    public static final int STATE_EXCEL = 22;
+    public static final int PINCODE_EXCEL = 23;
 
 
 

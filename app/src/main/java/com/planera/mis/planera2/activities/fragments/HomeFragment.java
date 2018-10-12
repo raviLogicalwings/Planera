@@ -113,10 +113,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
 
 
-    public void getAllPlansList(String token, int patchId) {
+    public void getAllPlansList(String token) {
 
         processDialog.showDialog(mContext, false);
-        Call<UserPlanListRespnce> call = apiInterface.userPlanList(token, patchId);
+        Call<UserPlanListRespnce> call = apiInterface.userPlanList(token);
 
         call.enqueue(new Callback<UserPlanListRespnce>() {
             @Override
@@ -375,7 +375,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     public void onLocationChanged(Location location) {
         mLocation = location;
         Log.e("Current Location", mLocation.getLatitude()+" "+mLocation.getLongitude());
-        getAllPlansList(token, patchId);
+        getAllPlansList(token);
 
     }
 

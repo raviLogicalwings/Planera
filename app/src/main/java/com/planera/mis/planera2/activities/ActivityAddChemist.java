@@ -78,7 +78,7 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
     public void initUi() {
         super.initUi();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
 
         textChemistCompanyName = findViewById(R.id.text_chemist_company_name);
         textChemistMonthlyVolume = findViewById(R.id.text_chemist_monthly_volume);

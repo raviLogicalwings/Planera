@@ -84,17 +84,18 @@ public class FileCreation {
                         sheet.addCell(new Label(0, i + 1, reportList.get(i).getDoctorName()));
                         sheet.addCell(new Label(1, i + 1, reportList.get(i).getStartDate()));
                         sheet.addCell(new Label(2, i + 1, reportList.get(i).getEndDate()));
-                            if (!reportList.get(i).getInterestedLevel().equals("0")) {
-                                if (reportList.get(i).getInterestedLevel().equals("1")) {
-                                    sheet.addCell(new Label(3, i + 1, reportList.get(i).getProductName() + "(Super)"));
-                                }
-                                if (reportList.get(i).getInterestedLevel().equals("2")) {
-                                    sheet.addCell(new Label(3, i + 1, reportList.get(i).getProductName() + "(Regular)"));
-                                }
-                                if (reportList.get(i).getInterestedLevel().equals("3")) {
-                                    sheet.addCell(new Label(3, i + 1, reportList.get(i).getProductName() + "(Low)"));
-                                }
+                        if (reportList.get(i).getInterestedLevel() != null) {
+                            if (reportList.get(i).getInterestedLevel().equals("1")) {
+                                sheet.addCell(new Label(3, i + 1, reportList.get(i).getProductName() + "(Super)"));
                             }
+                            if (reportList.get(i).getInterestedLevel().equals("2")) {
+                                sheet.addCell(new Label(3, i + 1, reportList.get(i).getProductName() + "(Regular)"));
+                            }
+                            if (reportList.get(i).getInterestedLevel().equals("3")) {
+                                sheet.addCell(new Label(3, i + 1, reportList.get(i).getProductName() + "(Low)"));
+                            }
+
+                        }
                             if (reportList.get(i).getProductQty()!=0) {
                                 sheet.addCell(new Label(4, i + 1, reportList.get(i).getProductName() + "(" + reportList.get(i).getProductQty() + ")"));
                             }

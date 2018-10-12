@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.ActivityUploadPlan;
+import com.planera.mis.planera2.activities.ActivityUploadDoctor;
 
 public class UploadDataFragment extends BaseFragment implements View.OnClickListener{
     public  View view;
@@ -66,7 +66,7 @@ public class UploadDataFragment extends BaseFragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.card_upload_plans:
-                Intent intent = new Intent(mContext, ActivityUploadPlan.class);
+                Intent intent = new Intent(mContext, ActivityUploadDoctor.class);
                 startActivity(intent);
                 break;
             case R.id.card_upload_doctor:

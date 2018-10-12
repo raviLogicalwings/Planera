@@ -688,12 +688,12 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         label_number.setPadding(8,8,8,8);
         tr_head.addView(label_number);
 
-        TextView lable_user = new TextView(this);
-        lable_user.setText("Mr/User");
-        lable_user.setId(COLUMN_ID+1);
-        lable_user.setTextColor(Color.BLACK);
-        lable_user.setPadding(8, 8, 8, 8);
-        tr_head.addView(lable_user);
+        TextView label_user = new TextView(this);
+        label_user.setText("Mr/User");
+        label_user.setId(COLUMN_ID+1);
+        label_user.setTextColor(Color.BLACK);
+        label_user.setPadding(8, 8, 8, 8);
+        tr_head.addView(label_user);
 
         TextView lable_start_date = new TextView(this);
         lable_start_date.setText("Start Date");
@@ -1122,6 +1122,10 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
 
     }
 
+    public void destroyTable(){
+       mainTableLayout.removeAllViews();
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -1136,10 +1140,13 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                 pickDateFromDialog(editEndTime);
                 break;
             case R.id.button_export:
+
                 if (dataItemsList != null) {
+
                     FileCreation fileCreation = new FileCreation();
                     File toCreate = makeFolder();
                     fileCreation.exportReport(dataItemsList, toCreate, ActivityAdminReports.this, Integer.parseInt(selectedRole));
+                    destroyTable();
                 }
                 else{
                     Snackbar.make(rootView, "No data available to export", Snackbar.LENGTH_SHORT).show();
