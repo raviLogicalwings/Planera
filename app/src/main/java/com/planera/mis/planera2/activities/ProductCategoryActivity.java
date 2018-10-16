@@ -68,7 +68,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
         super.initData();
         isDoctor = connector.getBoolean(AppConstants.KEY_ROLE);
         fragmentManager = getSupportFragmentManager();
-        String getInput = connector.getString(AppConstants.PASS_INPUT);
+        String getInput = getIntent().getStringExtra(AppConstants.PASS_INPUT);
         input = new Gson().fromJson(getInput, Input.class);
 
     }
@@ -285,7 +285,9 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                 if (inputB.size() > 0) {
                     for (int i = 0; i<inputB.size() ; i++){
                         inputB.get(i).setInputId(INPUT_ID);
+
                     }
+                    Log.e("Product", new Gson().toJson(inputB));
                     apiAddInputBrands(token, inputB);
                 } else {
                     if (new GiftsAdapter().getInputGiftList() != null) {
@@ -295,6 +297,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                                 inputGifts.get(i).setInputId(INPUT_ID);
                             }
                             addInputGiftApi(token, inputGifts);
+                            Log.e("Product", new Gson().toJson(inputB));
                         } else {
                             if (new SampleListAdapter().getSampleListSelected() != null) {
                                 List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();

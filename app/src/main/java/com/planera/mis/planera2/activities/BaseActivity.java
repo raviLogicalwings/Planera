@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.crashlytics.android.Crashlytics;
 import com.planera.mis.planera2.activities.Retrofit.ApiClient;
 import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
 import com.planera.mis.planera2.activities.controller.DataController;
@@ -12,6 +13,8 @@ import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.PreferenceConnector;
 import com.planera.mis.planera2.activities.utils.ProcessDialog;
 import com.planera.mis.planera2.activities.utils.RuntimePermissionCheck;
+
+import io.fabric.sdk.android.Fabric;
 
 
 public class BaseActivity extends AppCompatActivity {
@@ -27,6 +30,7 @@ public class BaseActivity extends AppCompatActivity {
 
 
     public void initData() {
+        Fabric.with(this, new Crashlytics());
         rootView = getWindow().getDecorView().getRootView();
         connector = PreferenceConnector.getInstance(this);
         permissionCheck = new RuntimePermissionCheck(getBaseContext());

@@ -82,6 +82,20 @@ public class DataItem{
 	@SerializedName("GiftQty")
 	private int giftQty;
 
+	@SerializedName("VisitedRank")
+	private int visitedRank;
+
+	@SerializedName("VisitDate")
+	private String visitDate;
+
+	public int getVisitedRank() {
+		return visitedRank;
+	}
+
+	public void setVisitedRank(int visitedRank) {
+		this.visitedRank = visitedRank;
+	}
+
 	public void setComment(String comment){
 		this.comment = comment;
 	}
@@ -321,4 +335,12 @@ public class DataItem{
 			",giftQty = '" + giftQty + '\'' + 
 			"}";
 		}
+
+    public void setVisitDate(String visitDate) {
+        this.visitDate = visitDate;
+    }
+
+	public String getVisitDate() {
+		return visitDate;
+	}
 }

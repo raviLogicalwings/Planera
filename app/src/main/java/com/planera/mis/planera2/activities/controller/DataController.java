@@ -2,9 +2,11 @@ package com.planera.mis.planera2.activities.controller;
 
 import android.app.Application;
 
+import com.crashlytics.android.Crashlytics;
 import com.planera.mis.planera2.activities.models.InputGift;
 import com.planera.mis.planera2.activities.models.InputOrders;
 
+import io.fabric.sdk.android.Fabric;
 import java.util.List;
 
 public class DataController extends Application {
@@ -61,6 +63,7 @@ public class DataController extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         mInstance = this;
     }
 }

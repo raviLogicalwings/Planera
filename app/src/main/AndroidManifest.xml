@@ -12,10 +12,10 @@
     <application
         android:name=".activities.controller.DataController"
         android:allowBackup="true"
-        android:largeHeap="true"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
@@ -126,7 +126,18 @@
         <activity
             android:name=".activities.HomeActivity"
             android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.UserInputListActivity"
+            android:label="@string/title_activity_user_input_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.SearchDateWiseInputActivity"
+            android:label="@string/title_activity_search_date_wise_input"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="a30a59c51b2f102869d308e85cfdbf188f2b9aa5" />
     </application>
 
 </manifest>

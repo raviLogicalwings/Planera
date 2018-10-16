@@ -8,6 +8,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
+import com.planera.mis.planera2.activities.models.DataItem;
 import com.planera.mis.planera2.activities.models.Input;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.InternetConnection;
@@ -45,8 +47,7 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
     private int isInLocation;
     private int planId;
     private int userId;
-    private String startTime;
-    private String endTime;
+    private String timeWithDate;
     private String selectedTime;
     private Input input;
     private String chemistId;
@@ -55,6 +56,9 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
     private String selectedDate;
     private String earlierFeedbackStr;
     private String strVisitDate;
+    private boolean isUpdateInput;
+    private DataItem previousInputObj;
+    private String previousInputStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +118,7 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
         earlierFeedbackStr = editEarlierFeedback.getText().toString().trim();
         strVisitDate = textVisitDate.getText().toString().trim();
 
-        if (strVisitDate.equals(getString(R.string.select).replace("-", ""))){
+        if (strVisitDate.equals(getString(R.string.select).replace("-", ""))  || strVisitDate.isEmpty()){
             textVisitDate.setError(getString(R.string.invalid_input));
             textVisitDate.requestFocus();
         }
@@ -131,18 +135,24 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
                     }
         } else {
             if (InternetConnection.isNetworkAvailable(AddInputActivity.this)) {
-                String stTime = currentdate + " " + startTimeStr + ":00";
-                String edTime = currentdate + " " + endTimeStr + ":00";
-                input.setStartDate(stTime);
-                input.setEndDate(edTime);
-                input.setComment(feedbackStr);
-                input.setVisitDate(selectedDate);
-                input.setEarlierEntryFeedback(earlierFeedbackStr);
-                Gson gson = new Gson();
-                String passInput = gson.toJson(input);
-                connector.setString(AppConstants.PASS_INPUT, passInput);
-                Intent intent = new Intent(AddInputActivity.this, ProductCategoryActivity.class);
-                startActivity(intent);
+                    input.setStartDate(timeWithDate);
+                    input.setEndDate(timeWithDate);
+
+                    input.setComment(feedbackStr);
+                    input.setVisitDate(textVisitDate.getText().toString());
+                    input.setEarlierEntryFeedback(earlierFeedbackStr);
+                    Gson gson = new Gson();
+                    String passInput = gson.toJson(input);
+                    Log.e("Input Params", passInput);
+                    Intent intent = new Intent(AddInputActivity.this, ProductCategoryActivity.class);
+                    if (isUpdateInput){
+                        intent.putExtra(AppConstants.PASS_INPUT, previousInputStr);
+                    }
+                    else{
+                        intent.putExtra(AppConstants.PASS_INPUT, passInput);
+                    }
+                    startActivity(intent);
+
 //                addInputApi(token, input);
             } else {
                 Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
@@ -153,25 +163,62 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
 
 
     public void loadFormIntent(Intent intent) {
-        isDoctor = intent.getBooleanExtra(AppConstants.KEY_ROLE, true);
-        longitude = intent.getDoubleExtra(AppConstants.LATITUDE, 0.0);
-        latitude = intent.getDoubleExtra(AppConstants.LATITUDE, 0.0);
-        isInLocation = intent.getIntExtra(AppConstants.KEY_IN_LOCATION, 0);
-        doctorId = intent.getIntExtra(AppConstants.DOCTOR_ID, 0);
-        chemistId = intent.getStringExtra(AppConstants.CHEMIST_ID);
-        userId = intent.getIntExtra(AppConstants.KEY_USER_ID, 0);
-        planId = intent.getIntExtra(AppConstants.KEY_PLAN_ID, 0);
+        isUpdateInput = intent.getBooleanExtra(AppConstants.IS_INPUT_UPDATE, false);
+        if (isUpdateInput){
+            previousInputStr = intent.getStringExtra(AppConstants.PASS_UPDATE_INPUT);
+            previousInputObj = new Gson().fromJson(previousInputStr, DataItem.class);
+            input.setLatitude(previousInputObj.getLatitude());
+            input.setLongitude(previousInputObj.getLongitude());
+            input.setIsInLocation(previousInputObj.getIsInLocation());
+            input.setPlanId(previousInputObj.getPlanId());
+            input.setUserId(previousInputObj.getUserId());
+            input.setInputId(previousInputObj.getInputId());
 
-        input.setLatitude(Double.toString(latitude));
-        input.setLongitude(longitude + "");
-        input.setIsInLocation(isInLocation + "");
-        if (isDoctor) {
-            input.setDoctorId(doctorId + "");
-        } else {
-            input.setChemistsId(chemistId);
+            //set to this class
+            textVisitDate.setText(previousInputObj.getVisitDate());
+            editStartTime.setText(previousInputObj.getStartDate());
+            editEndTime.setText(previousInputObj.getEndDate());
+            editFeedback.setText(previousInputObj.getComment());
+
+            if (previousInputObj.getChemistsId().equals("0")){
+                input.setDoctorId(previousInputObj.getDoctorId()+"");
+                connector.setBoolean(AppConstants.KEY_ROLE, true);
+                if (previousInputObj.getDoctorName() != null) {
+                    textCustomerName.setText(previousInputObj.getDoctorName());
+                }
+            }
+            else{
+                input.setChemistsId(previousInputObj.getChemistsId());
+                connector.setBoolean(AppConstants.KEY_ROLE, false);
+                if (previousInputObj.getChemistName() != null) {
+                    textCustomerName.setText(previousInputObj.getChemistName());
+                }
+            }
         }
-        input.setPlanId(planId + "");
-        input.setUserId(userId + "");
+        else {
+            isDoctor = intent.getBooleanExtra(AppConstants.KEY_ROLE, true);
+            longitude = intent.getDoubleExtra(AppConstants.LATITUDE, 0.0);
+            latitude = intent.getDoubleExtra(AppConstants.LATITUDE, 0.0);
+            isInLocation = intent.getIntExtra(AppConstants.KEY_IN_LOCATION, 0);
+            doctorId = intent.getIntExtra(AppConstants.DOCTOR_ID, 0);
+            chemistId = intent.getStringExtra(AppConstants.CHEMIST_ID);
+            userId = intent.getIntExtra(AppConstants.KEY_USER_ID, 0);
+            planId = intent.getIntExtra(AppConstants.KEY_PLAN_ID, 0);
+
+            input.setLatitude(Double.toString(latitude));
+            input.setLongitude(longitude + "");
+            input.setIsInLocation(isInLocation + "");
+            if (isDoctor) {
+                input.setDoctorId(doctorId + "");
+            } else {
+                input.setChemistsId(chemistId);
+            }
+            input.setPlanId(planId + "");
+            input.setUserId(userId + "");
+        }
+
+
+
 
 
     }
@@ -232,10 +279,10 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
     }
 
     public void isTimeAfter() {
-        startTimeStr = editStartTime.getText().toString().trim();
-        endTimeStr = editEndTime.getText().toString().trim();
-        String stTime = "20101212" + startTimeStr.replace(":", "");
-        String edTime = "20101212" + endTimeStr.replace(":", "");
+        startTimeStr = editStartTime.getText().toString().trim().replaceAll("[^A-Za-z0-9]+", "");
+        endTimeStr = editEndTime.getText().toString().trim().replaceAll("[^A-Za-z0-9]+", "");
+        String stTime = "2" + startTimeStr;
+        String edTime = "2" + endTimeStr;
         Date inTime = new Date(Long.parseLong(stTime));
         Date outTime = new Date(Long.parseLong(edTime));
         if (outTime.before(inTime)) {
@@ -246,15 +293,22 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
 
     }
 
+    public void getDoctorsReport(String token){
+
+    }
+
     public void getDateFromDialog(TextView textView) {
         Calendar mCurrentTime = Calendar.getInstance();
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String todayDate  = df.format(c.getTime());
         int hour = mCurrentTime.get(Calendar.HOUR_OF_DAY);
-
         int minute = mCurrentTime.get(Calendar.MINUTE);
         int sec = mCurrentTime.get(Calendar.SECOND);
         TimePickerDialog timePickerDialog = new TimePickerDialog(AddInputActivity.this,
                 (view, hourOfDay, minute1) -> {
                     selectedTime = hourOfDay + ":" + minute1;
+                    timeWithDate = todayDate+" "+selectedTime+":00";
                     textView.setText(selectedTime);
                 }, hour, minute, false);
         timePickerDialog.show();

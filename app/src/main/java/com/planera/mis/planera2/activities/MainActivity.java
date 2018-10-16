@@ -41,6 +41,8 @@ public class MainActivity extends BaseActivity implements
                       getSupportActionBar().setTitle("Visit Plan");
                         return true;
                     case R.id.navigation_meeting:
+                        Intent intent = new Intent(MainActivity.this, SearchDateWiseInputActivity.class);
+                        startActivity(intent);
                         return true;
                     case R.id.navigation_profile:
                      loadFragment(AppConstants.PROFILE_FRAGMENT);
@@ -100,9 +102,6 @@ public class MainActivity extends BaseActivity implements
         toolbarProduct = findViewById(R.id.toolbarProduct);
         setSupportActionBar(toolbarProduct);
         getSupportActionBar().setTitle("Visit Plan");
-
-        toolbarProduct.setNavigationIcon(R.drawable.back_arrow_whit);
-        toolbarProduct.setNavigationOnClickListener(view-> onBackPressed());
         imageAddPlan.setOnClickListener(this);
 
     }

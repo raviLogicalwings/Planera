@@ -235,4 +235,7 @@ public class AppConstants {
     public static final String KEY_INPUT_ID = "input_id";
     public static final String KEY_REVERT_FRAGMENT = "revert_fragment";
     public static final String PASS_INPUT = "pass_input";
+    public static final String OBTAIN_REPORT = "obtain_report";
+    public static final String IS_INPUT_UPDATE = "is_update";
+    public static final String PASS_UPDATE_INPUT = "pass_update_input";
 }
