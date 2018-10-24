@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.adapters.InputListAdapter;
@@ -17,9 +16,7 @@ import com.planera.mis.planera2.activities.models.ObtainReport;
 import com.planera.mis.planera2.activities.models.ReportListResponce;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.InternetConnection;
-
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,7 +37,7 @@ public class UserInputListActivity extends BaseActivity implements InputListAdap
         setContentView(R.layout.activity_user_input_list);
         initUi();
         initData();
-        onInputItemClickListener = (InputListAdapter.OnInputItemClickListener)this;
+        onInputItemClickListener = this;
     }
 
 
@@ -98,6 +95,7 @@ public class UserInputListActivity extends BaseActivity implements InputListAdap
 
                     }
                     else{
+                        Log.e("User Reports Response", response.body().getMessage());
                         Toast.makeText(UserInputListActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -129,6 +127,7 @@ public class UserInputListActivity extends BaseActivity implements InputListAdap
     @Override
     public void onInputItemClick(DataItem item) {
         detailsForUpdateInput(item);
+        Log.e("Actual Data", new Gson().toJson(item));
     }
 
     public void detailsForUpdateInput(DataItem sample){

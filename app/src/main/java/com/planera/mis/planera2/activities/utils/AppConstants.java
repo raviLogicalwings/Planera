@@ -62,6 +62,7 @@ public class AppConstants {
     public static final String UPDATE_CHEMIST = "chemist/updateChemist";
     public static final String UPDATE_USER = "user/updateUser";
     public static final String UPDATE_PLAN = "plan/updatePlan";
+    public static final String UPDATE_INPUT = "input/updateInput";
 
     //User's Constant
     public static final String EXPERIENCE_YEAR = "experience_year";

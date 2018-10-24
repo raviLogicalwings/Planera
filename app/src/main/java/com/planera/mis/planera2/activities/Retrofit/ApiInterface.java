@@ -4,6 +4,7 @@ import com.planera.mis.planera2.activities.models.BrandsListResponse;
 import com.planera.mis.planera2.activities.models.ChemistListResponse;
 import com.planera.mis.planera2.activities.models.ChemistResponse;
 import com.planera.mis.planera2.activities.models.Chemists;
+import com.planera.mis.planera2.activities.models.DataItem;
 import com.planera.mis.planera2.activities.models.DoctorResponse;
 import com.planera.mis.planera2.activities.models.Doctors;
 import com.planera.mis.planera2.activities.models.DoctorsListResponce;
@@ -229,16 +230,20 @@ public interface ApiInterface {
                                         @Query("Name") String name);
 
     @POST(AppConstants.UPDATE_CHEMIST)
-    Call<MainResponse> updateChemsit(@Header("Authorization") String token,
+    Call<MainResponse> updateChemist (@Header("Authorization") String token,
                                      @Body Chemists chemists);
 
     @POST(AppConstants.UPDATE_USER)
-    Call<MainResponse> updateUserDetails(@Header("Authorization")String token,
+    Call<MainResponse> updateUserDetails (@Header("Authorization")String token,
                                          @Body UserData userData);
 
     @POST(AppConstants.UPDATE_PLAN)
-    Call<MainResponse>  updatePlanDetails(@Header("Authorization") String token,
+    Call<MainResponse>  updatePlanDetails (@Header("Authorization") String token,
                                           @Body Plans plans);
+
+    @POST(AppConstants.UPDATE_INPUT)
+    Call<MainResponse> updateInputDetails (@Header("Authorization") String token,
+                                          @Body DataItem item);
     //Google  Places api Call
     @GET(AppConstants.FIND_PALCE)
     Call<GooglePlaces> getPlaceLatLong(@Query("input") String input,

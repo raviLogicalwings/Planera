@@ -16,6 +16,29 @@ public class InputGift{
 	@SerializedName("Quantity")
 	private String quantity;
 
+	@SerializedName("GiftName")
+	private String giftName;
+
+	@SerializedName("GiftQty")
+	private String giftQuantity;
+
+
+	public String getGiftName() {
+		return giftName;
+	}
+
+	public void setGiftName(String giftName) {
+		this.giftName = giftName;
+	}
+
+	public String getGiftQuantity() {
+		return giftQuantity;
+	}
+
+	public void setGiftQuantity(String giftQuantity) {
+		this.giftQuantity = giftQuantity;
+	}
+
 	public void setGiftId(String giftId){
 		this.giftId = giftId;
 	}

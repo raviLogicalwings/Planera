@@ -13,10 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.Retrofit.ApiClient;
 import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
 import com.planera.mis.planera2.activities.adapters.GiftsAdapter;
+import com.planera.mis.planera2.activities.models.DataItem;
 import com.planera.mis.planera2.activities.models.GiftListResponse;
 import com.planera.mis.planera2.activities.models.GiftsData;
 import com.planera.mis.planera2.activities.models.InputGiftResponce;
@@ -35,7 +37,8 @@ public class GiftFragment extends BaseFragment{
     private ApiInterface apiInterface;
     private List<GiftsData> giftsDataList;
     private String token;
-
+    private String strPreviousInput;
+    private DataItem dataItemForUpdate;
 
 
     public GiftFragment() {
@@ -49,6 +52,7 @@ public class GiftFragment extends BaseFragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -71,6 +75,11 @@ public class GiftFragment extends BaseFragment{
         super.initData();
         apiInterface = ApiClient.getInstance();
         token = connector.getString(AppConstants.TOKEN);
+        if (getArguments() != null){
+            Bundle bundle = getArguments();
+            strPreviousInput = bundle.getString(AppConstants.PASS_UPDATE_INPUT);
+            dataItemForUpdate = new Gson().fromJson(strPreviousInput, DataItem.class);
+        }
         if(token!=null){
             getGiftListApi(token);
         }
@@ -93,7 +102,7 @@ public class GiftFragment extends BaseFragment{
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                         giftsDataList = response.body().getGiftsData();
                         if (giftsDataList!= null){
-                            initAdapter(giftsDataList, recyclerViewGifts);
+                            initAdapter(giftsDataList, recyclerViewGifts, dataItemForUpdate);
                         }
                     }
                     else{
@@ -146,8 +155,8 @@ public class GiftFragment extends BaseFragment{
     public void onButtonPressed(Uri uri) {
     }
 
-    public void initAdapter(List<GiftsData> giftsData, RecyclerView recyclerView){
-            giftsAdapter = new GiftsAdapter(getContext(), giftsData);
+    public void initAdapter(List<GiftsData> giftsData, RecyclerView recyclerView, DataItem previousInputUpdate){
+            giftsAdapter = new GiftsAdapter(getContext(), giftsData, previousInputUpdate);
                 setAdapter(recyclerView, giftsAdapter);
 
         }

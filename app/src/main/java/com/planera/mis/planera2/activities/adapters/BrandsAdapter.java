@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.controller.DataController;
 import com.planera.mis.planera2.activities.models.Brands;
+import com.planera.mis.planera2.activities.models.DataItem;
 import com.planera.mis.planera2.activities.models.InputOrders;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.PreferenceConnector;
@@ -31,6 +32,7 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
     private InputOrders orders;
     private int oldPosition = -1;
     private OnItemFoundListener onItemFoundListener;
+    private DataItem dataItemForUpdate;
 
 
     public BrandsAdapter(){
@@ -38,10 +40,11 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
     }
 
 
-    public BrandsAdapter(Context context, List<Brands> brandsList, List<String> intrestedLevel) {
+    public BrandsAdapter(Context context, List<Brands> brandsList, List<String> intrestedLevel, DataItem dataItemForUpdate) {
         this.context = context;
         this.brandsList = brandsList;
         brandLevelList = intrestedLevel;
+        this.dataItemForUpdate = dataItemForUpdate;
 
     }
 
@@ -72,6 +75,9 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
 
 
     public void bindItemsWithView(MyBrandsHolder holder, int pos) {
+        if (brandsList.get(pos).getProductId()== dataItemForUpdate.getProductId()){
+        }
+
 
         if (brandsList.get(pos).getIsBrand().equals(AppConstants.BRAND + "")) {
             holder.textBrandName.setText(brandsList.get(pos).getName());

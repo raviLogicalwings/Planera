@@ -381,7 +381,7 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
 
     public void updateChemistDetails(String token, Chemists chemists){
         processDialog.showDialog(ActivityUpdateChemist.this, false);
-        Call<MainResponse> call = apiInterface.updateChemsit(token, chemists);
+        Call<MainResponse> call = apiInterface.updateChemist(token, chemists);
         call.enqueue(new Callback<MainResponse>() {
             @Override
             public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {

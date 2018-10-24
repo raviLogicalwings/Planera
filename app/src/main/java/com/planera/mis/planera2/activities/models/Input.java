@@ -1,12 +1,6 @@
 package com.planera.mis.planera2.activities.models;
 
-import android.util.Log;
-
 import com.google.gson.annotations.SerializedName;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Input{
 
@@ -62,16 +56,6 @@ public class Input{
 	}
 
 	public void setVisitDate(String visitDate) {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");//yyyy-MM-dd'T'HH:mm:ss
-		SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd");
-		Date data = null;
-		try {
-			data = sdf.parse(visitDate);
-		} catch (ParseException e) {
-			Log.e("Exp", e.getMessage());
-		}
-		visitDate = output.format(data);
-
 		this.visitDate = visitDate;
 	}
 

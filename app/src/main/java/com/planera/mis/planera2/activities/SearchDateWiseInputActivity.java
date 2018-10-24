@@ -111,6 +111,7 @@ public class SearchDateWiseInputActivity extends BaseActivity implements View.On
         //code for select on current date and onwards.
         // datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
 //        Toast.makeText(ActivityAdminReports.this, System.currentTimeMillis()+"", Toast.LENGTH_LONG).show();
+//        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         datePickerDialog.show();
 
     }

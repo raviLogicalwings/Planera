@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.controller.DataController;
 import com.planera.mis.planera2.activities.models.Brands;
+import com.planera.mis.planera2.activities.models.DataItem;
 import com.planera.mis.planera2.activities.models.InputOrders;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.PreferenceConnector;
@@ -28,15 +29,17 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
     public List<InputOrders> sampleListSelected;
     public PreferenceConnector connector;
     private InputOrders orders;
+    private DataItem dataItemForUpdate;
 
 
 
 
     public SampleListAdapter(){}
 
-    public SampleListAdapter(Context context, List<Brands> brandsList) {
+    public SampleListAdapter(Context context, List<Brands> brandsList, DataItem dataItemForUpdate) {
         this.context = context;
         this.brandsList = brandsList;
+        this.dataItemForUpdate = dataItemForUpdate;
 
     }
 
@@ -67,14 +70,23 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
 
     public void bindItemsWithView(MySampleHolder holder, int pos) {
 
-        if(brandsList.size()!=0) {
 
+        if(brandsList.size()!=0) {
             if (brandsList.get(pos).getIsBrand().equals(AppConstants.BRAND + "")) {
                 holder.textBrandSampleName.setText(brandsList.get(pos).getName());
 
 
             }
             Brands brands = brandsList.get(pos);
+
+            if (dataItemForUpdate.getProductDetails() != null) {
+                for (int i = 0; i < dataItemForUpdate.getProductDetails().size(); i++) {
+                    if (dataItemForUpdate.getProductDetails().get(i).getProductId().equals(brands.getProductId() + "")) {
+                        String samples = dataItemForUpdate.getProductDetails().get(i).getProductQty() + "";
+                        holder.editBrandSampleValue.setText(samples);
+                    }
+                }
+            }
 
             holder.editBrandSampleValue.addTextChangedListener(new TextWatcher() {
                 @Override

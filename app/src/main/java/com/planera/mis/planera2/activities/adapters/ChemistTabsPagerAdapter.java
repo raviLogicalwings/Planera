@@ -2,6 +2,7 @@ package com.planera.mis.planera2.activities.adapters;
 
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -13,6 +14,7 @@ import com.planera.mis.planera2.activities.utils.AppConstants;
 public class ChemistTabsPagerAdapter extends FragmentPagerAdapter {
     public static final int POD_FRAGMENT = 0;
     private Context mContext;
+    private Bundle bundle;
 
 
     public ChemistTabsPagerAdapter(FragmentManager fm, Context context) {
@@ -20,10 +22,18 @@ public class ChemistTabsPagerAdapter extends FragmentPagerAdapter {
         mContext = context;
     }
 
+    public ChemistTabsPagerAdapter(FragmentManager fm, Context context, Bundle bundle) {
+        super(fm);
+        mContext = context;
+        this.bundle = bundle;
+    }
+
     @Override
     public Fragment getItem(int position) {
         if (position == POD_FRAGMENT) {
-            return PODFragment.newInstance(null, null);
+            PODFragment podFragment = new PODFragment();
+            podFragment.setArguments(bundle);
+            return podFragment;
         }
         else{
             return null;

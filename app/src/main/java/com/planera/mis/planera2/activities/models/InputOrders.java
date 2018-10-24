@@ -3,6 +3,14 @@ package com.planera.mis.planera2.activities.models;
 import com.google.gson.annotations.SerializedName;
 
 public class InputOrders {
+	@SerializedName("InputProductId")
+	private int inputProductId;
+
+	@SerializedName("ProductName")
+	private String productName;
+
+	@SerializedName("IsBrand")
+	private int isBrand;
 
 	@SerializedName("InputId")
 	private String inputId;
@@ -12,6 +20,11 @@ public class InputOrders {
 
 	@SerializedName("Quantity")
 	private String quantity;
+
+
+	@SerializedName("ProductQty")
+	private int productQty;
+
 
 	@SerializedName("ProductId")
 	private String productId;
@@ -57,6 +70,38 @@ public class InputOrders {
 
 	public String getIsSample(){
 		return isSample;
+	}
+
+	public int getInputProductId() {
+		return inputProductId;
+	}
+
+	public void setInputProductId(int inputProductId) {
+		this.inputProductId = inputProductId;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public int getIsBrand() {
+		return isBrand;
+	}
+
+	public void setIsBrand(int isBrand) {
+		this.isBrand = isBrand;
+	}
+
+	public int getProductQty() {
+		return productQty;
+	}
+
+	public void setProductQty(int productQty) {
+		this.productQty = productQty;
 	}
 
 	@Override

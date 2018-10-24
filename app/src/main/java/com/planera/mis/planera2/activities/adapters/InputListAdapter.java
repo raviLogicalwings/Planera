@@ -63,8 +63,8 @@ public class InputListAdapter extends RecyclerView.Adapter<InputListAdapter.MyIn
     public void bindItemsWithView(MyInputItemHolder holder, int pos) {
 
         item = inputListItems.get(pos);
-        holder.textDateInput.setText(inputListItems.get(pos).getStartDate());
-//        holder.textVisitCounter.setText(inputListItems.get(pos).getVisitedRank());
+        holder.textDateInput.setText(inputListItems.get(pos).getStartTime());
+        holder.textVisitCounter.setText(inputListItems.get(pos).getVisitedRank()+"");
         if(inputListItems.get(pos).getDoctorId() == 0){
             holder.textNameInput.setText(inputListItems.get(pos).getChemistName());
         }
@@ -97,7 +97,7 @@ public class InputListAdapter extends RecyclerView.Adapter<InputListAdapter.MyIn
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.button_edit_input:
-                    onInputItemClickListener.onInputItemClick(item);
+                    onInputItemClickListener.onInputItemClick(inputListItems.get(getAdapterPosition()));
                     break;
             }
         }

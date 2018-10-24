@@ -1,6 +1,7 @@
 package com.planera.mis.planera2.activities.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,43 +15,43 @@ import android.widget.Toast;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.controller.DataController;
 import com.planera.mis.planera2.activities.models.Brands;
+import com.planera.mis.planera2.activities.models.DataItem;
 import com.planera.mis.planera2.activities.models.InputOrders;
-import com.planera.mis.planera2.activities.utils.PreferenceConnector;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>{
-   private Context context;
-   private View holderView;
-   private List<Brands> brandsList;
-   private PODTextChangeListener podTextChangeListener;
+public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder> {
+    private Context context;
+    private View holderView;
+    private List<Brands> brandsList;
+    private PODTextChangeListener podTextChangeListener;
     private List<InputOrders> POBOrdersList;
     private InputOrders orders;
-    private PreferenceConnector connector;
+    private DataItem previousInputForUpdate;
 
-    public PODAdapter(Context context, List<Brands> brandsList, PODTextChangeListener podTextChangeListener) {
+    public PODAdapter(Context context, List<Brands> brandsList, PODTextChangeListener podTextChangeListener, DataItem previousInputForUpdate) {
         this.context = context;
         this.brandsList = brandsList;
         this.podTextChangeListener = podTextChangeListener;
+        this.previousInputForUpdate = previousInputForUpdate;
     }
 
-    public PODAdapter(){
+    public PODAdapter() {
 
     }
 
     @Override
     public MyPobHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        holderView = LayoutInflater.from(context).inflate(R.layout.item_pob_detalis,parent,  false);
+        holderView = LayoutInflater.from(context).inflate(R.layout.item_pob_detalis, parent, false);
         return new MyPobHolder(holderView);
     }
 
     @Override
-    public void onBindViewHolder(MyPobHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyPobHolder holder, int position) {
         POBOrdersList = new ArrayList<>();
         orders = new InputOrders();
-        connector = new PreferenceConnector(context);
 
         bindValues(holder, position);
 
@@ -59,18 +60,29 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>{
 
     @Override
     public int getItemCount() {
-        if (brandsList.size()>0){
-           return brandsList.size();
-        }
-        else{
+        if (brandsList.size() > 0) {
+            return brandsList.size();
+        } else {
             return 0;
         }
     }
 
-    public void bindValues(MyPobHolder myPobHolder, int pos){
-        if (brandsList!= null){
-            Brands brands = brandsList.get(pos);
-            myPobHolder.textPodProductName.setText(brands.getName());
+    public void bindValues(MyPobHolder myPobHolder, int pos) {
+        Brands brands;
+
+        if (brandsList != null) {
+
+            brands = brandsList.get(pos);
+            myPobHolder.textPodProductName.setText(brandsList.get(pos).getName());
+            if (previousInputForUpdate.getProductDetails() != null) {
+                for (int i = 0; i < previousInputForUpdate.getProductDetails().size(); i++) {
+                    if (previousInputForUpdate.getProductDetails().get(i).getProductId().equals(brands.getProductId() + "")) {
+                        String qty = previousInputForUpdate.getProductDetails().get(i).getProductQty() + "";
+                        myPobHolder.editPodProductValue.setText(qty);
+                    }
+                }
+            }
+
             myPobHolder.editPodProductValue.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -81,24 +93,23 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>{
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     String changedText = s.toString().trim();
                     boolean isUpdated = false;
-                    if(!changedText.equals("")) {
-                        if (POBOrdersList.size()>0){
-                            for (int i = 0; i<POBOrdersList.size(); i++){
-                                if (POBOrdersList.get(i).getProductId().equals(brands.getProductId()+"")){
+                    if (!changedText.equals("")) {
+                        if (POBOrdersList.size() > 0) {
+                            for (int i = 0; i < POBOrdersList.size(); i++) {
+                                if (POBOrdersList.get(i).getProductId().equals(brands.getProductId() + "")) {
                                     POBOrdersList.get(i).setQuantity(changedText);
                                     isUpdated = true;
                                 }
                             }
-                            if (!isUpdated){
+                            if (!isUpdated) {
                                 orders = new InputOrders();
                                 orders.setQuantity(changedText);
                                 orders.setProductId(brands.getProductId() + "");
-                                    POBOrdersList.add(orders);
+                                POBOrdersList.add(orders);
                             }
 
 
-                        }
-                        else {
+                        } else {
                             orders = new InputOrders();
                             orders.setQuantity(changedText);
                             orders.setProductId(brands.getProductId() + "");
@@ -137,7 +148,7 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder>{
         }
     }
 
-    public interface PODTextChangeListener{
-        void onPODTextChanged( MyPobHolder holder, int pos);
+    public interface PODTextChangeListener {
+        void onPODTextChanged(MyPobHolder holder, int pos);
     }
 }

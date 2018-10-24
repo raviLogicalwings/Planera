@@ -2,6 +2,8 @@ package com.planera.mis.planera2.activities.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class DataItem{
 
 	@SerializedName("Comment")
@@ -87,6 +89,50 @@ public class DataItem{
 
 	@SerializedName("VisitDate")
 	private String visitDate;
+
+	@SerializedName("StartTime")
+	private String startTime;
+
+	@SerializedName("EndTime")
+	private String endTime;
+
+	@SerializedName("product_detail")
+    private List<InputOrders> productDetails;
+
+	@SerializedName("gift_detail")
+	private List<InputGift> giftDetails;
+
+	public List<InputOrders> getProductDetails() {
+		return productDetails;
+	}
+
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+
+	public void setProductDetails(List<InputOrders> productDetails) {
+		this.productDetails = productDetails;
+	}
+
+	public List<InputGift> getGiftDetails() {
+		return giftDetails;
+	}
+
+	public void setGiftDetails(List<InputGift> giftDetails) {
+		this.giftDetails = giftDetails;
+	}
 
 	public int getVisitedRank() {
 		return visitedRank;
@@ -189,7 +235,7 @@ public class DataItem{
 		this.productId = productId;
 	}
 
-	public Object getProductId(){
+	public int getProductId(){
 		return productId;
 	}
 
@@ -313,9 +359,9 @@ public class DataItem{
 			",isInLocation = '" + isInLocation + '\'' + 
 			",productName = '" + productName + '\'' + 
 			",isBrand = '" + isBrand + '\'' + 
-			",planId = '" + planId + '\'' + 
-			",inputGiftId = '" + inputGiftId + '\'' + 
-			",productQty = '" + productQty + '\'' + 
+			",planId = '" + planId + '\'' +
+			",inputGiftId = '" + inputGiftId + '\'' +
+			",productQty = '" + productQty + '\'' +
 			",chemistsId = '" + chemistsId + '\'' + 
 			",latitude = '" + latitude + '\'' + 
 			",productId = '" + productId + '\'' + 
@@ -324,15 +370,15 @@ public class DataItem{
 			",endDate = '" + endDate + '\'' + 
 			",longitude = '" + longitude + '\'' + 
 			",doctorId = '" + doctorId + '\'' + 
-			",startDate = '" + startDate + '\'' + 
-			",inputProductId = '" + inputProductId + '\'' + 
-			",giftId = '" + giftId + '\'' + 
+			",startDate = '" + startDate + '\'' +
+			",inputProductId = '" + inputProductId + '\'' +
+			",giftId = '" + giftId + '\'' +
 			",userId = '" + userId + '\'' + 
 			",inputId = '" + inputId + '\'' + 
-			",createdDate = '" + createdDate + '\'' + 
-			",interestedLevel = '" + interestedLevel + '\'' + 
-			",isSample = '" + isSample + '\'' + 
-			",giftQty = '" + giftQty + '\'' + 
+			",createdDate = '" + createdDate + '\'' +
+			",interestedLevel = '" + interestedLevel + '\'' +
+			",isSample = '" + isSample + '\'' +
+			",giftQty = '" + giftQty + '\'' +
 			"}";
 		}
 

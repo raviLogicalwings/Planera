@@ -21,6 +21,7 @@ import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
 import com.planera.mis.planera2.activities.adapters.SampleListAdapter;
 import com.planera.mis.planera2.activities.models.Brands;
 import com.planera.mis.planera2.activities.models.BrandsListResponse;
+import com.planera.mis.planera2.activities.models.DataItem;
 import com.planera.mis.planera2.activities.models.InputOrders;
 import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.utils.AppConstants;
@@ -46,12 +47,12 @@ public class SampleFragment extends BaseFragment {
     int productId;
     public static final int SAMPLE = 1;
     List<Integer> itemsPositions;
-
-
-
+    private String strPreviousInput;
+    private DataItem dataItemForUpdate;
 
 
     public SampleFragment() {
+
     }
 
 
@@ -59,7 +60,6 @@ public class SampleFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -81,6 +81,11 @@ public class SampleFragment extends BaseFragment {
     protected void initData() {
         super.initData();
         initInterestedList();
+        if (getArguments() != null){
+            Bundle bundle = getArguments();
+            strPreviousInput = bundle.getString(AppConstants.PASS_UPDATE_INPUT);
+            dataItemForUpdate = new Gson().fromJson(strPreviousInput, DataItem.class);
+        }
         apiInterface = ApiClient.getInstance();
         itemsPositions = new ArrayList<>();
         orders = new InputOrders();
@@ -140,7 +145,7 @@ public class SampleFragment extends BaseFragment {
                 if (response!= null){
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                         listOfBrands = response.body().getData();
-                        initAdapter(listOfBrands, brandsListView, brandLevelList);
+                        initAdapter(listOfBrands, brandsListView, brandLevelList, dataItemForUpdate);
                     }
                     else{
                         Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -156,9 +161,9 @@ public class SampleFragment extends BaseFragment {
     }
 
 
-    public void initAdapter(List<Brands> brandsList, RecyclerView recyclerView, List<String> intrestedLevel){
+    public void initAdapter(List<Brands> brandsList, RecyclerView recyclerView, List<String> intrestedLevel, DataItem dataItemForUpdate){
 
-        adapter = new SampleListAdapter(mContext,brandsList);
+        adapter = new SampleListAdapter(mContext,brandsList, dataItemForUpdate);
 
         setAdapter(recyclerView, adapter);
 

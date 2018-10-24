@@ -21,6 +21,7 @@ import com.planera.mis.planera2.activities.ProductCategoryActivity;
 import com.planera.mis.planera2.activities.adapters.PODAdapter;
 import com.planera.mis.planera2.activities.models.Brands;
 import com.planera.mis.planera2.activities.models.BrandsListResponse;
+import com.planera.mis.planera2.activities.models.DataItem;
 import com.planera.mis.planera2.activities.models.InputOrders;
 import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.utils.AppConstants;
@@ -42,6 +43,8 @@ public class PODFragment extends BaseFragment implements ProductCategoryActivity
     public static final String TAG = "PODFragment";
     private InputOrders orders;
     private List<InputOrders> ordersList;
+    private String strPreviousInput;
+    private DataItem dataItemForUpdate;
 
     public PODFragment() {
     }
@@ -59,6 +62,12 @@ public class PODFragment extends BaseFragment implements ProductCategoryActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null){
+            Bundle bundle = getArguments();
+            strPreviousInput = bundle.getString(AppConstants.PASS_UPDATE_INPUT);
+            dataItemForUpdate = new Gson().fromJson(strPreviousInput, DataItem.class);
+
+        }
     }
 
     @Override
@@ -145,6 +154,7 @@ public class PODFragment extends BaseFragment implements ProductCategoryActivity
 
     //Init and Setup RecyclerView Adapter
     public void initAdapter(List<Brands> productData, RecyclerView recyclerView){
+
         PODAdapter adapter = new PODAdapter(getContext(), productData, (holder, pos) -> {
             if (holder.editPodProductValue.getText()!= null) {
                 orders.setInputId(productList.get(pos).getProductId()+"");
@@ -152,8 +162,7 @@ public class PODFragment extends BaseFragment implements ProductCategoryActivity
                 ordersList.add(orders);
 
             }
-
-        });
+        }, dataItemForUpdate);
         setAdapter(recyclerView, adapter);
 
     }

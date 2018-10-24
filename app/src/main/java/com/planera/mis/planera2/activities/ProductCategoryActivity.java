@@ -22,6 +22,7 @@ import com.planera.mis.planera2.activities.adapters.GiftsAdapter;
 import com.planera.mis.planera2.activities.adapters.PODAdapter;
 import com.planera.mis.planera2.activities.adapters.SampleListAdapter;
 import com.planera.mis.planera2.activities.controller.DataController;
+import com.planera.mis.planera2.activities.models.DataItem;
 import com.planera.mis.planera2.activities.models.Input;
 import com.planera.mis.planera2.activities.models.InputGift;
 import com.planera.mis.planera2.activities.models.InputGiftResponce;
@@ -37,8 +38,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProductCategoryActivity extends BaseActivity implements View.OnClickListener{
-    private  String INPUT_ID = null;
+public class ProductCategoryActivity extends BaseActivity implements View.OnClickListener {
+    private String INPUT_ID = null;
     private DoctorTabsPagerAdapter doctorTabsPagerAdapter;
     private ChemistTabsPagerAdapter chemistTabsPagerAdapter;
     private FragmentManager fragmentManager;
@@ -50,6 +51,9 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
     DataReceivedListener listener;
     private boolean isDoctor;
     public static final String TAG = ProductCategoryActivity.class.getSimpleName();
+    private boolean isUpdateInput;
+    private DataItem dataForUpdate;
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -59,8 +63,8 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_category);
-        initData();
         initUi();
+        initData();
     }
 
     @Override
@@ -70,6 +74,36 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
         fragmentManager = getSupportFragmentManager();
         String getInput = getIntent().getStringExtra(AppConstants.PASS_INPUT);
         input = new Gson().fromJson(getInput, Input.class);
+        isUpdateInput = getIntent().getBooleanExtra(AppConstants.IS_INPUT_UPDATE, false);
+
+
+        if (isUpdateInput) {
+            String strData = getIntent().getStringExtra(AppConstants.PASS_UPDATE_INPUT);
+            dataForUpdate = new Gson().fromJson(strData, DataItem.class);
+            Bundle bundle = new Bundle();
+            bundle.putString(AppConstants.PASS_UPDATE_INPUT, strData);
+
+            if (dataForUpdate.getChemistsId().equals("0")) {
+                doctorTabsPagerAdapter = new DoctorTabsPagerAdapter(fragmentManager, ProductCategoryActivity.this, bundle);
+                pager.setAdapter(doctorTabsPagerAdapter);
+            } else {
+                chemistTabsPagerAdapter = new ChemistTabsPagerAdapter(fragmentManager, ProductCategoryActivity.this, bundle);
+                pager.setAdapter(chemistTabsPagerAdapter);
+            }
+
+            tabLayout.setupWithViewPager(pager);
+        } else {
+
+            if (isDoctor) {
+                doctorTabsPagerAdapter = new DoctorTabsPagerAdapter(fragmentManager, ProductCategoryActivity.this);
+                pager.setAdapter(doctorTabsPagerAdapter);
+            } else {
+                chemistTabsPagerAdapter = new ChemistTabsPagerAdapter(fragmentManager, ProductCategoryActivity.this);
+                pager.setAdapter(chemistTabsPagerAdapter);
+            }
+
+            tabLayout.setupWithViewPager(pager);
+        }
 
     }
 
@@ -87,30 +121,17 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
         toolbarProduct.setNavigationOnClickListener(v -> onBackPressed());
         buttonConfirm.setOnClickListener(this);
 
-        if (isDoctor) {
-            doctorTabsPagerAdapter = new DoctorTabsPagerAdapter(fragmentManager, ProductCategoryActivity.this);
-            pager.setAdapter(doctorTabsPagerAdapter);
-        }
-        else{
-            chemistTabsPagerAdapter = new ChemistTabsPagerAdapter(fragmentManager, ProductCategoryActivity.this);
-            pager.setAdapter(chemistTabsPagerAdapter);
-        }
-
-        tabLayout.setupWithViewPager(pager);
 
     }
 
 
-
-
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.button_confirm_product:
-                if (InternetConnection.isNetworkAvailable(ProductCategoryActivity.this)){
+                if (InternetConnection.isNetworkAvailable(ProductCategoryActivity.this)) {
                     addInputApi(token, input);
-                }
-                else{
+                } else {
                     Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_SHORT).show();
                 }
 
@@ -120,26 +141,26 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
     }
 
 
-    public void addInputGiftApi(String token, List<InputGift> inputGifts){
-        Log.e("AddInputGifts : " , new Gson().toJson(inputGifts));
+    public void addInputGiftApi(String token, List<InputGift> inputGifts) {
+        Log.e("AddInputGifts : ", new Gson().toJson(inputGifts));
         processDialog.showDialog(ProductCategoryActivity.this, false);
         Call<InputGiftResponce> call = apiInterface.addInputGift(token, inputGifts);
         call.enqueue(new Callback<InputGiftResponce>() {
             @Override
             public void onResponse(@NonNull Call<InputGiftResponce> call, Response<InputGiftResponce> response) {
                 processDialog.dismissDialog();
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     if (response.body() != null) {
-                        if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                        if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                             // Set Array Lis to null
                             //----------
-                            new  GiftsAdapter().setInputGiftList(null);
+                            new GiftsAdapter().setInputGiftList(null);
                             DataController.getmInstance().setInputGiftList(null);
                             //---------------Call Samples Add Api after getting responce
                             List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
                             if (inputSamples != null) {
                                 if (inputSamples.size() > 0) {
-                                    for (int i = 0; i<inputSamples.size() ; i++){
+                                    for (int i = 0; i < inputSamples.size(); i++) {
                                         inputSamples.get(i).setInputId(INPUT_ID);
                                     }
                                     apiAddInputSamples(token, inputSamples);
@@ -150,8 +171,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                             startActivity(startMainActivity);
 
                             Toast.makeText(ProductCategoryActivity.this, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
-                        }
-                        else{
+                        } else {
                             Toast.makeText(ProductCategoryActivity.this, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
 
                         }
@@ -169,7 +189,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
     }
 
 
-    public void apiAddInputSamples(String token, List<InputOrders> inputOrders){
+    public void apiAddInputSamples(String token, List<InputOrders> inputOrders) {
 
 
         Log.e("Inputs", new Gson().toJson(DataController.getmInstance().getOrderListSelected()));
@@ -180,7 +200,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
             @Override
             public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
                 processDialog.dismissDialog();
-                if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                     // Set Array Lis to null
                     //----------
@@ -192,8 +212,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                     Intent startMainActivity = new Intent(ProductCategoryActivity.this, MainActivity.class);
                     startActivity(startMainActivity);
 
-                }
-                else {
+                } else {
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                 }
             }
@@ -206,7 +225,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
         });
     }
 
-    public void apiAddInputBrands(String token, List<InputOrders> inputOrders){
+    public void apiAddInputBrands(String token, List<InputOrders> inputOrders) {
 
 
         Log.e("Inputs", new Gson().toJson(DataController.getmInstance().getOrderListSelected()));
@@ -217,7 +236,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
             @Override
             public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
                 processDialog.dismissDialog();
-                if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                     // Set Array Lis to null
                     //----------
@@ -225,43 +244,39 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                     DataController.getmInstance().setOrderListSelected(null);
 
 
-
                     // On Response of Input Brand Calling add input Gift Api
-                        List<InputGift> inputGifts = new GiftsAdapter().getInputGiftList();
-                        if (inputGifts != null) {
-                            if (inputGifts.size() > 0) {
-                                for (int i = 0; i<inputGifts.size() ; i++){
+                    List<InputGift> inputGifts = new GiftsAdapter().getInputGiftList();
+                    if (inputGifts != null) {
+                        if (inputGifts.size() > 0) {
+                            for (int i = 0; i < inputGifts.size(); i++) {
+                                inputGifts.get(i).setInputId(INPUT_ID);
+                            }
+                            addInputGiftApi(token, inputGifts);
+                        } else {
+                            List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
+                            if (inputSamples.size() > 0) {
+                                for (int i = 0; i < inputGifts.size(); i++) {
                                     inputGifts.get(i).setInputId(INPUT_ID);
                                 }
-                                addInputGiftApi(token, inputGifts);
-                            }
-                            else{
-                                List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
-                                if (inputSamples.size()>0) {
-                                    for (int i = 0; i<inputGifts.size() ; i++){
-                                        inputGifts.get(i).setInputId(INPUT_ID);
-                                    }
-                                    apiAddInputBrands(token, inputSamples);
-                                }
+                                apiAddInputBrands(token, inputSamples);
                             }
                         }
-                        else{
-                            List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
-                            if (inputSamples != null) {
-                                if (inputSamples.size() > 0) {
-                                    for (int i = 0; i<inputSamples.size() ; i++){
-                                        inputSamples.get(i).setInputId(INPUT_ID);
-                                    }
-                                    apiAddInputBrands(token, inputSamples);
+                    } else {
+                        List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
+                        if (inputSamples != null) {
+                            if (inputSamples.size() > 0) {
+                                for (int i = 0; i < inputSamples.size(); i++) {
+                                    inputSamples.get(i).setInputId(INPUT_ID);
                                 }
+                                apiAddInputBrands(token, inputSamples);
                             }
                         }
+                    }
                     Intent startMainActivity = new Intent(ProductCategoryActivity.this, MainActivity.class);
                     startActivity(startMainActivity);
                     //---------------
 
-                }
-                else {
+                } else {
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                 }
             }
@@ -275,15 +290,14 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
     }
 
 
-
-    public void callingAllApi(){
+    public void callingAllApi() {
 
         if (isDoctor) {
 
             if (new BrandsAdapter().getOrderListSelected() != null) {
                 List<InputOrders> inputB = new BrandsAdapter().getOrderListSelected();
                 if (inputB.size() > 0) {
-                    for (int i = 0; i<inputB.size() ; i++){
+                    for (int i = 0; i < inputB.size(); i++) {
                         inputB.get(i).setInputId(INPUT_ID);
 
                     }
@@ -293,7 +307,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                     if (new GiftsAdapter().getInputGiftList() != null) {
                         List<InputGift> inputGifts = new GiftsAdapter().getInputGiftList();
                         if (inputGifts.size() > 0) {
-                            for (int i = 0; i<inputGifts.size() ; i++){
+                            for (int i = 0; i < inputGifts.size(); i++) {
                                 inputGifts.get(i).setInputId(INPUT_ID);
                             }
                             addInputGiftApi(token, inputGifts);
@@ -302,7 +316,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                             if (new SampleListAdapter().getSampleListSelected() != null) {
                                 List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
                                 if (inputSamples.size() > 0) {
-                                    for (int i = 0; i<inputSamples.size() ; i++){
+                                    for (int i = 0; i < inputSamples.size(); i++) {
                                         inputSamples.get(i).setInputId(INPUT_ID);
                                     }
                                     apiAddInputSamples(token, inputSamples);
@@ -315,7 +329,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                 if (new GiftsAdapter().getInputGiftList() != null) {
                     List<InputGift> inputGifts = new GiftsAdapter().getInputGiftList();
                     if (inputGifts.size() > 0) {
-                        for (int i = 0; i<inputGifts.size() ; i++){
+                        for (int i = 0; i < inputGifts.size(); i++) {
                             inputGifts.get(i).setInputId(INPUT_ID);
                         }
                         addInputGiftApi(token, inputGifts);
@@ -323,7 +337,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                         if (new SampleListAdapter().getSampleListSelected() != null) {
                             List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
                             if (inputSamples.size() > 0) {
-                                for (int i = 0; i<inputSamples.size() ; i++){
+                                for (int i = 0; i < inputSamples.size(); i++) {
                                     inputSamples.get(i).setInputId(INPUT_ID);
                                 }
                                 apiAddInputSamples(token, inputSamples);
@@ -334,7 +348,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                     if (new SampleListAdapter().getSampleListSelected() != null) {
                         List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
                         if (inputSamples.size() > 0) {
-                            for (int i = 0; i<inputSamples.size() ; i++){
+                            for (int i = 0; i < inputSamples.size(); i++) {
                                 inputSamples.get(i).setInputId(INPUT_ID);
                             }
                             apiAddInputSamples(token, inputSamples);
@@ -344,41 +358,38 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                     }
                 }
             }
-        }
-
-        else {
+        } else {
             if (new PODAdapter().getPOBOrdersList() != null) {
                 List<InputOrders> inputOrders = new PODAdapter().getPOBOrdersList();
                 if (inputOrders.size() > 0) {
-                    for (int i = 0; i<inputOrders.size() ; i++){
+                    for (int i = 0; i < inputOrders.size(); i++) {
                         inputOrders.get(i).setInputId(INPUT_ID);
                     }
-                    Log.e("POB" , new Gson().toJson( new PODAdapter().getPOBOrdersList()));
-                    apiAddInputBrands(token,inputOrders);
+                    Log.e("POB", new Gson().toJson(new PODAdapter().getPOBOrdersList()));
+                    apiAddInputBrands(token, inputOrders);
                 }
             }
         }
     }
 
-    public void addInputApi(String token, Input input){
+    public void addInputApi(String token, Input input) {
         Log.e("Input Object", new Gson().toJson(input));
         processDialog.showDialog(ProductCategoryActivity.this, false);
-        Call<InputResponce> call  = apiInterface.addInput(token, input);
+        Call<InputResponce> call = apiInterface.addInput(token, input);
         call.enqueue(new Callback<InputResponce>() {
             @Override
             public void onResponse(Call<InputResponce> call, Response<InputResponce> response) {
-                Log.e(TAG, "onResponse: "+ new Gson().toJson(response.body()));
+                Log.e(TAG, "onResponse: " + new Gson().toJson(response.body()));
                 Log.e(TAG, new Gson().toJson(input));
                 processDialog.dismissDialog();
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
 
-                    if (response.code() == 200){
-                        if(response.body().getStatusCode() == AppConstants.RESULT_OK){
-                           // Calling all api, product, gift, and Pod
+                    if (response.code() == 200) {
+                        if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
+                            // Calling all api, product, gift, and Pod
                             INPUT_ID = response.body().getData().getInputId();
                             callingAllApi();
-                        }
-                        else{
+                        } else {
                             Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_INDEFINITE).show();
 
                         }
@@ -394,10 +405,6 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
             }
         });
     }
-
-
-
-
 
 
     public void setDataReceivedListener(DataReceivedListener listener) {

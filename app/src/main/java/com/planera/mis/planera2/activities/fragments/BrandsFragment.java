@@ -22,6 +22,7 @@ import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
 import com.planera.mis.planera2.activities.adapters.BrandsAdapter;
 import com.planera.mis.planera2.activities.models.Brands;
 import com.planera.mis.planera2.activities.models.BrandsListResponse;
+import com.planera.mis.planera2.activities.models.DataItem;
 import com.planera.mis.planera2.activities.models.InputOrders;
 import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.utils.AppConstants;
@@ -45,6 +46,8 @@ public class BrandsFragment extends BaseFragment implements ProductCategoryActiv
     public List<InputOrders> orderList;
     private InputOrders orders;
     int productId;
+    private String strPreviousInput;
+    private DataItem dataItemForUpdate;
     List<Integer> itemsPositions;
 
 
@@ -59,6 +62,11 @@ public class BrandsFragment extends BaseFragment implements ProductCategoryActiv
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null){
+            Bundle bundle = getArguments();
+            strPreviousInput = bundle.getString(AppConstants.PASS_UPDATE_INPUT);
+            dataItemForUpdate = new Gson().fromJson(strPreviousInput, DataItem.class);
+        }
 
     }
 
@@ -157,9 +165,9 @@ public class BrandsFragment extends BaseFragment implements ProductCategoryActiv
     }
 
 
-    public void initAdapter(List<Brands> brandsList, RecyclerView recyclerView, List<String> intrestedLevel){
+    public void initAdapter(List<Brands> brandsList, RecyclerView recyclerView, List<String> interestedLevel){
 
-        adapter = new BrandsAdapter(mContext,brandsList, intrestedLevel);
+        adapter = new BrandsAdapter(mContext,brandsList, interestedLevel,dataItemForUpdate );
 
         setAdapter(recyclerView, adapter);
 
