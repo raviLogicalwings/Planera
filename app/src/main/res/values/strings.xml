@@ -84,4 +84,5 @@
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_activity_user_input_list">UserInputListActivity</string>
     <string name="title_activity_search_date_wise_input">SearchDateWiseInputActivity</string>
+    <string name="no_data_available">No data available !</string>
 </resources>

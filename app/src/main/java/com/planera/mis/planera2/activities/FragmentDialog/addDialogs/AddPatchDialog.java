@@ -69,7 +69,7 @@ public class AddPatchDialog extends BaseDialogFragment implements View.OnClickLi
 
     public void uiValidation(){
         inputLayoutUserName.setError(null);
-        String strTerritory = editTextPatch.getText().toString();
+        String strTerritory = editTextPatch.getText().toString().trim();
 
         if (TextUtils.isEmpty(strTerritory)){
             inputLayoutUserName.setError(getString(R.string.invalid_input));

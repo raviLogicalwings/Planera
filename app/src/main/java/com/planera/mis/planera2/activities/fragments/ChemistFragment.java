@@ -157,6 +157,7 @@ public class ChemistFragment extends BaseFragment{
         intentChemistCall.putExtra(AppConstants.EMAIL, chemistData.get(pos).getEmail());
         intentChemistCall.putExtra(AppConstants.COMPANY_NAME, chemistData.get(pos).getCompanyName());
         intentChemistCall.putExtra(AppConstants.SHOP_SIZE, chemistData.get(pos).getShopSize());
+        intentChemistCall.putExtra(AppConstants.PREFERRED_MEET_TIME, chemistData.get(pos).getPreferredMeetTime());
         intentChemistCall.putExtra(AppConstants.MONTHLY_VOLUME_POTENTIAL, chemistData.get(pos).getMonthlyVolumePotential());
         intentChemistCall.putExtra(AppConstants.ADDRESS1, chemistData.get(pos).getAddress1());
         intentChemistCall.putExtra(AppConstants.ADDRESS2, chemistData.get(pos).getAddress2());

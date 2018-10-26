@@ -78,7 +78,7 @@ public class EditProductDialog extends BaseDialogFragment implements View.OnClic
 
     public void uiValidation(){
         inputLayoutUserName.setError(null);
-        String strState = editTextName.getText().toString();
+        String strState = editTextName.getText().toString().trim();
 
         if (TextUtils.isEmpty(strState)){
             inputLayoutUserName.setError(getString(R.string.invalid_input));

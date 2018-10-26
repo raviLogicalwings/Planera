@@ -61,7 +61,7 @@ public class EditStateDialog  extends BaseDialogFragment implements View.OnClick
 
     public void uiValidation(){
         inputLayoutUserName.setError(null);
-        String strState = editTextName.getText().toString();
+        String strState = editTextName.getText().toString().trim();
 
         if (TextUtils.isEmpty(strState)){
             inputLayoutUserName.setError(getString(R.string.invalid_input));

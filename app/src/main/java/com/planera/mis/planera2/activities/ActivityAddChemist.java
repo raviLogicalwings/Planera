@@ -3,6 +3,7 @@ package com.planera.mis.planera2.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -26,6 +27,7 @@ import com.planera.mis.planera2.activities.utils.InternetConnection;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,13 +56,27 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
     private EditText textChemistBillingPhone2;
     private EditText textChemistBillingEmail;
     private EditText textChemistRating;
-    private Button buttonAddChemist;
+    private TextInputLayout inputLayoutCompanyNameChemist;
+    private TextInputLayout inputLayoutMonthlyVolumeChemist;
+    private TextInputLayout inputLayoutShopSizeChemist;
+    private TextInputLayout inputLayoutFirstNameChemist;
+    private TextInputLayout inputLayoutMiddleNameChemist;
+    private TextInputLayout inputLayoutLastNameChemist;
+    private TextInputLayout inputLayoutEmailChemist;
+    private TextInputLayout inputLayoutPhoneChemist;
+    private TextInputLayout inputLayoutAddress1Chemist;
+    private TextInputLayout inputLayoutAddress2Chemist;
+    private TextInputLayout inputLayoutAddress3Chemist;
+    private TextInputLayout inputLayoutAddress4Chemist;
+    private TextInputLayout inputLayoutDistrictChemist;
+    private TextInputLayout inputLayoutCityChemist;
+    private TextInputLayout inputLayoutStateChemist;
+    private TextInputLayout inputLayoutPincodeChemist;
+    private TextInputLayout inputLayoutBillingPhone1Chemist;
+    private TextInputLayout inputLayoutBillingPhone2Chemist;
+    private TextInputLayout inputLayoutBillingEmailChemist;
+    private TextInputLayout inputLayoutRatingChemist;
     private List<String> prefferdMeetTime;
-    private String strCompanyName, strChemistMonthlyVolume, strChemistShopSize,
-    strFirstName, strMiddleName, strLastName,strChemistEmail, strChemistPhone,
-    strAddress1, strAddress2, strAddress3, strAddress4, strChemistDistrict,
-    strChemistCity, strChemistState, strChemsitPincode, strChemistBillingPhone1,
-            strChemistBillingPhone2, strChemistBillingEmail, strChemistRating;
     private int meetTime;
     private List<Patches> patches;
     private int patchId;
@@ -79,6 +95,29 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
         super.initUi();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
+
+
+        inputLayoutCompanyNameChemist = findViewById(R.id.input_layout_company_name_chemist);
+        inputLayoutMonthlyVolumeChemist = findViewById(R.id.input_layout_monthly_volume_chemist);
+        inputLayoutShopSizeChemist = findViewById(R.id.input_layout_shop_size_chemist);
+        inputLayoutFirstNameChemist = findViewById(R.id.input_layout_first_name_chemist);
+        inputLayoutMiddleNameChemist = findViewById(R.id.input_layout_middle_name_chemist);
+        inputLayoutLastNameChemist = findViewById(R.id.input_layout_last_name_chemist);
+        inputLayoutEmailChemist = findViewById(R.id.input_layout_email_chemist);
+        inputLayoutPhoneChemist = findViewById(R.id.input_layout_phone_chemist);
+        inputLayoutAddress1Chemist = findViewById(R.id.input_layout_address_1_chemist);
+        inputLayoutAddress2Chemist = findViewById(R.id.input_layout_address_2_chemist);
+        inputLayoutAddress3Chemist = findViewById(R.id.input_layout_address_3_chemist);
+        inputLayoutAddress4Chemist = findViewById(R.id.input_layout_address_4_chemist);
+        inputLayoutDistrictChemist = findViewById(R.id.input_layout_district_chemist);
+        inputLayoutCityChemist = findViewById(R.id.input_layout_city_chemist);
+        inputLayoutStateChemist = findViewById(R.id.input_layout_state_chemist);
+        inputLayoutPincodeChemist = findViewById(R.id.input_layout_pincode_chemist);
+        inputLayoutBillingPhone1Chemist = findViewById(R.id.input_layout_billing_phone1_chemist);
+        inputLayoutBillingPhone2Chemist = findViewById(R.id.input_layout_billing_phone2_chemist);
+        inputLayoutBillingEmailChemist = findViewById(R.id.input_layout_billing_email_chemist);
+        inputLayoutRatingChemist = findViewById(R.id.input_layout_rating_chemist);
+
 
         textChemistCompanyName = findViewById(R.id.text_chemist_company_name);
         textChemistMonthlyVolume = findViewById(R.id.text_chemist_monthly_volume);
@@ -102,7 +141,7 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
         textChemistBillingPhone2 = findViewById(R.id.text_chemist_billing_phone2);
         textChemistBillingEmail = findViewById(R.id.text_chemist_billing_email);
         textChemistRating = findViewById(R.id.text_chemist_rating);
-        buttonAddChemist = findViewById(R.id.button_add_chemist);
+        Button buttonAddChemist = findViewById(R.id.button_add_chemist);
         buttonAddChemist.setOnClickListener(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Add Chemist's Detail");
@@ -113,112 +152,126 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
         prefferdMeetTime.add("Evening");
         setArrayAdapter(prefferdMeetTime, spinnerMeetTime);
 
-
-
     }
 
     public void uiValidation(){
-        strCompanyName = textChemistCompanyName.getText().toString().trim();
-        strChemistMonthlyVolume = textChemistMonthlyVolume.getText().toString().trim();
-        strChemistShopSize = textChemistShopSize.getText().toString().trim();
-        strFirstName = textChemistFirstName.getText().toString().trim();
-        strMiddleName = textChemistMiddleName.getText().toString().trim();
-        strLastName = textChemistLastName.getText().toString().trim();
-        strChemistEmail = textChemistEmail.getText().toString().trim();
-        strChemistPhone = textChemistPhone.getText().toString().trim();
-        strAddress1 = textChemistAddress1.getText().toString().trim();
-        strAddress2 = textChemistAddress2.getText().toString().trim();
-        strAddress3 = textChemistAddress3.getText().toString().trim();
-        strAddress4 = textChemistAddress4.getText().toString().trim();
-        strChemistDistrict = textChemistDistrict.getText().toString().trim();
-        strChemistCity = textChemistCity.getText().toString().trim();
-        strChemistState = textChemistState.getText().toString().trim();
-        strChemsitPincode = textChemistPincode.getText().toString().trim();
-        strChemistBillingEmail = textChemistBillingEmail.getText().toString().trim();
-        strChemistBillingPhone1 = textChemistBillingPhone1.getText().toString().trim();
-        strChemistBillingPhone2 = textChemistBillingPhone2.getText().toString().trim();
-        strChemistRating = textChemistRating.getText().toString().trim();
+        String strCompanyName = textChemistCompanyName.getText().toString().trim();
+        String strChemistMonthlyVolume = textChemistMonthlyVolume.getText().toString().trim();
+        String strChemistShopSize = textChemistShopSize.getText().toString().trim();
+        String strFirstName = textChemistFirstName.getText().toString().trim();
+        String strMiddleName = textChemistMiddleName.getText().toString().trim();
+        String strLastName = textChemistLastName.getText().toString().trim();
+        String strChemistEmail = textChemistEmail.getText().toString().trim();
+        String strChemistPhone = textChemistPhone.getText().toString().trim();
+        String strAddress1 = textChemistAddress1.getText().toString().trim();
+        String strAddress2 = textChemistAddress2.getText().toString().trim();
+        String strAddress3 = textChemistAddress3.getText().toString().trim();
+        String strAddress4 = textChemistAddress4.getText().toString().trim();
+        String strChemistDistrict = textChemistDistrict.getText().toString().trim();
+        String strChemistCity = textChemistCity.getText().toString().trim();
+        String strChemistState = textChemistState.getText().toString().trim();
+        String strChemistPincode = textChemistPincode.getText().toString().trim();
+        String strChemistBillingEmail = textChemistBillingEmail.getText().toString().trim();
+        String strChemistBillingPhone1 = textChemistBillingPhone1.getText().toString().trim();
+        String strChemistBillingPhone2 = textChemistBillingPhone2.getText().toString().trim();
+        String strChemistRating = textChemistRating.getText().toString().trim();
 
 
         if (TextUtils.isEmpty(strCompanyName)){
             textChemistCompanyName.requestFocus();
-            textChemistCompanyName.setError(getString(R.string.invalid_input));
+            inputLayoutCompanyNameChemist.setError(getString(R.string.invalid_input));
         }
         else if (TextUtils.isEmpty(strChemistMonthlyVolume)){
             textChemistMonthlyVolume.requestFocus();
-            textChemistMonthlyVolume.setError(getString(R.string.invalid_input));
+            inputLayoutMonthlyVolumeChemist.setError(getString(R.string.invalid_input));
         }
         else if (TextUtils.isEmpty(strChemistShopSize)){
             textChemistShopSize.requestFocus();
-            textChemistShopSize.setError(getString(R.string.invalid_input));
+            inputLayoutShopSizeChemist.setError(getString(R.string.invalid_input));
         }
         else if (TextUtils.isEmpty(strFirstName)){
             textChemistFirstName.requestFocus();
-            textChemistFirstName.setError(getString(R.string.invalid_input));
+            inputLayoutFirstNameChemist.setError(getString(R.string.invalid_input));
         }
         else if (TextUtils.isEmpty(strMiddleName)){
             textChemistMiddleName.requestFocus();
-            textChemistMiddleName.setError(getString(R.string.invalid_input));
+            inputLayoutMiddleNameChemist.setError(getString(R.string.invalid_input));
         }
         else if (TextUtils.isEmpty(strLastName)){
             textChemistLastName.requestFocus();
-            textChemistLastName.setError(getString(R.string.invalid_input));
+            inputLayoutLastNameChemist.setError(getString(R.string.invalid_input));
         }
         else if (TextUtils.isEmpty(strChemistEmail)){
             textChemistEmail.requestFocus();
-            textChemistEmail.setError(getString(R.string.invalid_input));
+            inputLayoutEmailChemist.setError(getString(R.string.invalid_input));
+        }
+        else if (!isValidEmailId(strChemistEmail)){
+            textChemistEmail.requestFocus();
+            inputLayoutEmailChemist.setError("Invalid Email");
         }
         else if (TextUtils.isEmpty(strChemistPhone)){
             textChemistPhone.requestFocus();
-            textChemistPhone.setError(getString(R.string.invalid_input));
+            inputLayoutPhoneChemist.setError(getString(R.string.invalid_input));
         }
         else if (TextUtils.isEmpty(strAddress1)){
             textChemistAddress1.requestFocus();
-            textChemistAddress1.setError(getString(R.string.invalid_input));
+            inputLayoutAddress1Chemist.setError(getString(R.string.invalid_input));
         }
         else if (TextUtils.isEmpty(strAddress2)){
             textChemistAddress2.requestFocus();
-            textChemistAddress2.setError(getString(R.string.invalid_input));
+            inputLayoutAddress2Chemist.setError(getString(R.string.invalid_input));
         }
         else if (TextUtils.isEmpty(strAddress3)){
             textChemistAddress3.requestFocus();
-            textChemistAddress3.setError(getString(R.string.invalid_input));
+            inputLayoutAddress3Chemist.setError(getString(R.string.invalid_input));
         }
         else if (TextUtils.isEmpty(strAddress4)){
             textChemistAddress4.requestFocus();
-            textChemistAddress4.setError(getString(R.string.invalid_input));
+            inputLayoutAddress4Chemist.setError(getString(R.string.invalid_input));
         }
         else if (TextUtils.isEmpty(strChemistDistrict)){
             textChemistDistrict.requestFocus();
-            textChemistDistrict.setError(getString(R.string.invalid_input));
+            inputLayoutDistrictChemist.setError(getString(R.string.invalid_input));
         }
         else if (TextUtils.isEmpty(strChemistCity)){
             textChemistCity.requestFocus();
-            textChemistCity.setError(getString(R.string.invalid_input));
+            inputLayoutCityChemist.setError(getString(R.string.invalid_input));
         }
         else if (TextUtils.isEmpty(strChemistState)){
             textChemistState.requestFocus();
-            textChemistState.setError(getString(R.string.invalid_input));
+            inputLayoutStateChemist.setError(getString(R.string.invalid_input));
         }
-        else if (TextUtils.isEmpty(strChemsitPincode)){
+        else if (TextUtils.isEmpty(strChemistPincode)){
             textChemistPincode.requestFocus();
-            textChemistPincode.setError(getString(R.string.invalid_input));
+            inputLayoutPincodeChemist.setError(getString(R.string.invalid_input));
         }
         else if (TextUtils.isEmpty(strChemistBillingEmail)){
             textChemistBillingEmail.requestFocus();
-            textChemistBillingEmail.setError(getString(R.string.invalid_input));
+            inputLayoutBillingEmailChemist.setError(getString(R.string.invalid_input));
+        }
+        else if (!isValidEmailId(strChemistBillingEmail)){
+            textChemistBillingEmail.requestFocus();
+            inputLayoutBillingEmailChemist.setError("Invalid Email");
         }
         else if (TextUtils.isEmpty(strChemistBillingPhone1)){
-            textChemistBillingPhone2.requestFocus();
-            textChemistBillingPhone2.setError(getString(R.string.invalid_input));
+            textChemistBillingPhone1.requestFocus();
+            inputLayoutBillingPhone1Chemist.setError(getString(R.string.invalid_input));
+        }
+        else if (strChemistBillingPhone1.length()<10){
+            textChemistBillingPhone1.requestFocus();
+            inputLayoutBillingPhone1Chemist.setError("Invalid phone number.");
         }
         else if (TextUtils.isEmpty(strChemistBillingPhone2)){
             textChemistBillingPhone2.requestFocus();
-            textChemistBillingPhone2.setError(getString(R.string.invalid_input));
+            inputLayoutBillingPhone2Chemist.setError(getString(R.string.invalid_input));
+        }
+        else if (strChemistBillingPhone2.length()<10){
+            textChemistBillingPhone2.requestFocus();
+            inputLayoutBillingPhone2Chemist.setError("Invalid phone number.");
         }
         else if (TextUtils.isEmpty(strChemistRating)){
             textChemistRating.requestFocus();
-            textChemistRating.setError(getString(R.string.invalid_input));
+            inputLayoutRatingChemist.setError(getString(R.string.invalid_input));
         }
         else{
             chemists.setCompanyName(strCompanyName);
@@ -237,7 +290,7 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
             chemists.setDistrict(strChemistDistrict);
             chemists.setCity(strChemistCity);
             chemists.setState(strChemistState);
-            chemists.setPincode(strChemsitPincode);
+            chemists.setPincode(strChemistPincode);
             chemists.setBillingEmail(strChemistBillingEmail);
             chemists.setBillingPhone1(strChemistBillingPhone1);
             chemists.setBillingPhone2(strChemistBillingPhone2);
@@ -245,7 +298,7 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
             chemists.setStatus("1");
             chemists.setPreferredMeetTime(prefferdMeetTime+"");
             if (InternetConnection.isNetworkAvailable(ActivityAddChemist.this)){
-                getAddressLatLong(strAddress1+ ", "+ strChemsitPincode);
+                getAddressLatLong(strAddress1 + ", "+ strChemistPincode);
             }
             else{
                 Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
@@ -253,6 +306,16 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
         }
     }
 
+
+    private boolean isValidEmailId(String email){
+
+        return Pattern.compile("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
+                + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
+                + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$").matcher(email).matches();
+    }
     @Override
     public void initData() {
         super.initData();

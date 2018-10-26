@@ -166,6 +166,7 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
                             bundle.putInt("id", statesList.get(postion).getStateId());
                             editStateDialog.setArguments(bundle);
                             editStateDialog.setTargetFragment(this, 0);
+                    assert getFragmentManager() != null;
                     editStateDialog.show(getFragmentManager(), "Edit State");
                     break;
             }
@@ -176,8 +177,11 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
 
 
     public void setAdapter(RecyclerView recyclerView, StateAdapter adapter) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.hasFixedSize();
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

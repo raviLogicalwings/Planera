@@ -69,7 +69,7 @@ public class AdminAccessFragment extends BaseFragment implements View.OnClickLis
         super.initUi();
 
         cardState = view.findViewById(R.id.card_state);
-        cardTeritory = view.findViewById(R.id.card_teritory);
+        cardTeritory = view.findViewById(R.id.card_territory);
         cardPatch = view.findViewById(R.id.card_patch);
         cardGift = view.findViewById(R.id.card_gift);
         cardProduct = view.findViewById(R.id.card_product);
@@ -128,7 +128,7 @@ public class AdminAccessFragment extends BaseFragment implements View.OnClickLis
             case R.id.card_state:
               callIntent(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.STATE_FRAGMENT);
                 break;
-            case R.id.card_teritory:
+            case R.id.card_territory:
                 callIntent(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.TERRITORY_FRAGMENT);
                 break;
 

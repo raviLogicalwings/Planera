@@ -114,6 +114,8 @@ public class AppConstants {
     public static final String KEY_EVENING_TIME = "Evening";
     public static final int MORNING = 1;
     public static final int EVENING = 2;
+    public static final String PREFERRED_MEET_TIME = "preferred_meet_time";
+    public static final String MEET_FREQUENCY = "meet_freq";
     public static final String UPDATE_DOCTOR_KEY = "updateDoctor";
     public static final String FIRST_NAME = "firstName";
     public static final String MIDDLE_NAME = "middleName";

@@ -300,6 +300,13 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
                 if (position!= 0) {
                     territoryId = territorysList.get(position- DEFAULT_SELECT_VALUE).getTerritoryId();
                     getPatchList(token, territoryId);
+                    if (isDoctorRadioChecked){
+                        spinnerPlanDoctor.setAdapter(null);
+                    }
+                    else{
+                        spinnerPlanChemist.setAdapter(null);
+                    }
+
                 }
             }
 

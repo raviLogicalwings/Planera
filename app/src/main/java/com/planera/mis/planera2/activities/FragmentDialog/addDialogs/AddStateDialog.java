@@ -1,6 +1,7 @@
 package com.planera.mis.planera2.activities.FragmentDialog.addDialogs;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
@@ -35,17 +36,22 @@ public class AddStateDialog  extends BaseDialogFragment implements View.OnClickL
     }
 
 
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         try
         {
-            onDialogDismissListener = (OnStateDialogDismissListener) getActivity();
+            onDialogDismissListener = (OnStateDialogDismissListener) context;
         }
         catch (ClassCastException e) {
             throw new ClassCastException("Calling Fragment must implement OnAddFriendListener");
         }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -72,7 +78,7 @@ public class AddStateDialog  extends BaseDialogFragment implements View.OnClickL
 
     public void uiValidation(){
         inputLayoutUserName.setError(null);
-        String strState = editTextName.getText().toString();
+        String strState = editTextName.getText().toString().trim();
 
         if (TextUtils.isEmpty(strState)){
           inputLayoutUserName.setError(getString(R.string.invalid_input));

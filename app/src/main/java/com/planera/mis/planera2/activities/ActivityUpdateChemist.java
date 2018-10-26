@@ -400,6 +400,7 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
 
 
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                        Log.e("Chemsit Update fragment", new Gson().toJson(response.body()));
                         Intent intent = new Intent(ActivityUpdateChemist.this, SingleListActivity.class);
                         intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.CHEMIST_FRAGMENT);
                         startActivity(intent);
@@ -433,7 +434,7 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
                 if (response.body().getStatus().equals(AppConstants.STATUS_OK)) {
                     if (chemists != null) {
                         chemists.setLatitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLat() + "");
-                        chemists.setLatitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLng() + "");
+                        chemists.setLongitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLng() + "");
                         Log.e("Doctors Object", "onResponse: " + new Gson().toJson(chemists));
 
                             updateChemistDetails(token, chemists);
@@ -465,6 +466,7 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
         textChemistMonthlyVolume.setText(intent.getStringExtra(AppConstants.MONTHLY_VOLUME_POTENTIAL));
         textChemistCompanyName.setText(intent.getStringExtra(AppConstants.COMPANY_NAME));
         textChemistBillingEmail.setText(intent.getStringExtra(AppConstants.BILLING_EMAIL));
+        spinnerMeetTime.setSelection(Integer.parseInt(intent.getStringExtra(AppConstants.PREFERRED_MEET_TIME))-1);
         textChemistEmail.setText(intent.getStringExtra(AppConstants.EMAIL));
         textChemistPhone.setText(intent.getStringExtra(AppConstants.PHONE));
         textChemistBillingPhone2.setText(intent.getStringExtra(AppConstants.BILLING_PHONE2));

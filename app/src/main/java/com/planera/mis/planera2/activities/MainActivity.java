@@ -1,5 +1,6 @@
 package com.planera.mis.planera2.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -48,8 +49,7 @@ public class MainActivity extends BaseActivity implements
                      loadFragment(AppConstants.PROFILE_FRAGMENT);
                         return true;
                     case R.id.navigation_logout:
-
-                        backToLogin();
+                        popupDialog();
                         return true;
                 }
                 return false;
@@ -112,11 +112,28 @@ public class MainActivity extends BaseActivity implements
         startActivity(intentLogin);
     }
 
+    public void popupDialog(){
+        AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
+        boolean isYes = false;
+
+        alertDialog.setMessage("Are you sure you want to logout?");
+
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", (dialogInterface, i) -> {
+            backToLogin();
+
+        });
+
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", (dialog, which) -> {
+            dialog.cancel();
+        });
+        alertDialog.show();
+
+    }
     @Override
     public void initData() {
         super.initData();
         manager = getSupportFragmentManager();
-
        loadFragment(AppConstants.HOME_FRAGMENT);
     }
 

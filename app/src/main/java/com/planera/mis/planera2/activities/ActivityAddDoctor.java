@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -62,6 +63,23 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
     private EditText textDoctorState;
     private EditText textDoctorPincode;
     private Button buttonAddDoctor;
+    private TextInputLayout inputLayoutFirstNameDoctor;
+    private TextInputLayout inputLayoutMiddleNameDoctor;
+    private TextInputLayout inputLayoutLastNameDoctor;
+    private TextInputLayout inputLayoutDobDoctor;
+    private TextInputLayout inputLayoutEmailDoctor;
+    private TextInputLayout inputLayoutQualificationDoctor;
+    private TextInputLayout inputLayoutSpecializationDoctor;
+    private TextInputLayout inputLayoutPhoneDoctor;
+    private TextInputLayout inputLayoutAddress1Doctor;
+    private TextInputLayout inputLayoutAddress2Doctor;
+    private TextInputLayout inputLayoutAddress3Doctor;
+    private TextInputLayout inputLayoutAddress4Doctor;
+    private TextInputLayout inputLayoutDistrictDoctor;
+    private TextInputLayout inputLayoutCityDoctor;
+    private TextInputLayout inputLayoutStateDoctor;
+    private TextInputLayout inputLayoutPincodeDoctor;
+
     private BasicCustomAdapter patchBasicAdapter;
     private String dateOfBirthString;
     int meetTime;
@@ -106,6 +124,24 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
         textDoctorState = findViewById(R.id.text_doctor_state);
         textDoctorPincode = findViewById(R.id.text_doctor_pincode);
         buttonAddDoctor = findViewById(R.id.button_add_doctor);
+
+        inputLayoutFirstNameDoctor = findViewById(R.id.input_layout_first_name_doctor);
+        inputLayoutMiddleNameDoctor = findViewById(R.id.input_layout_middle_name_doctor);
+        inputLayoutLastNameDoctor = findViewById(R.id.input_layout_last_name_doctor);
+        inputLayoutDobDoctor = findViewById(R.id.input_layout_dob_doctor);
+        inputLayoutEmailDoctor = findViewById(R.id.input_layout_email_doctor);
+        inputLayoutQualificationDoctor = findViewById(R.id.input_layout_qualification_doctor);
+        inputLayoutSpecializationDoctor = findViewById(R.id.input_layout_specialization_doctor);
+        inputLayoutPhoneDoctor = findViewById(R.id.input_layout_phone_doctor);
+        inputLayoutAddress1Doctor = findViewById(R.id.input_layout_address_1_doctor);
+        inputLayoutAddress2Doctor = findViewById(R.id.input_layout_address_2_doctor);
+        inputLayoutAddress3Doctor = findViewById(R.id.input_layout_address_3_doctor);
+        inputLayoutAddress4Doctor = findViewById(R.id.input_layout_address_4_doctor);
+        inputLayoutDistrictDoctor = findViewById(R.id.input_layout_district_doctor);
+        inputLayoutCityDoctor = findViewById(R.id.input_layout_city_doctor);
+        inputLayoutStateDoctor = findViewById(R.id.input_layout_state_doctor);
+        inputLayoutPincodeDoctor = findViewById(R.id.input_layout_pincode_doctor);
+
 
         buttonAddDoctor.setOnClickListener(this);
         textDoctorDob.setOnClickListener(this);
@@ -207,65 +243,56 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
 
         if (TextUtils.isEmpty(firstNameStr)) {
             textDoctorFirstName.requestFocus();
-            textDoctorFirstName.setError(getString(R.string.invalid_input));
+            inputLayoutFirstNameDoctor.setError(getString(R.string.invalid_input));
         } else if (TextUtils.isEmpty(middleNameStr)) {
             textDoctorMiddleName.requestFocus();
-            textDoctorMiddleName.setError(getString(R.string.invalid_input));
+            inputLayoutMiddleNameDoctor.setError(getString(R.string.invalid_input));
         } else if (TextUtils.isEmpty(lastNameStr)) {
             textDoctorLastName.requestFocus();
-            textDoctorLastName.setError(getString(R.string.invalid_input));
+            inputLayoutLastNameDoctor.setError(getString(R.string.invalid_input));
         } else if (TextUtils.isEmpty(dobStr)) {
             textDoctorDob.requestFocus();
-            textDoctorDob.setError(getString(R.string.invalid_input));
+            inputLayoutDobDoctor.setError(getString(R.string.invalid_input));
         } else if (TextUtils.isEmpty(specializationStr)) {
             textDoctorSpecialization.requestFocus();
-            textDoctorSpecialization.setError(getString(R.string.invalid_input));
+            inputLayoutSpecializationDoctor.setError(getString(R.string.invalid_input));
         } else if (TextUtils.isEmpty(qualificationStr)) {
             textDoctorQualification.requestFocus();
-            textDoctorQualification.setError(getString(R.string.invalid_input));
-        } else if (TextUtils.isEmpty(middleNameStr)) {
-            textDoctorMiddleName.requestFocus();
-            textDoctorMiddleName.setError(getString(R.string.invalid_input));
-        } else if (TextUtils.isEmpty(emailStr)) {
+            inputLayoutQualificationDoctor.setError(getString(R.string.invalid_input));
+        }  else if (TextUtils.isEmpty(emailStr)) {
             textDoctorEmail.requestFocus();
-            textDoctorEmail.setError(getString(R.string.invalid_input));
+            inputLayoutEmailDoctor.setError(getString(R.string.invalid_input));
         } else if (TextUtils.isEmpty(phoneStr)) {
             textDoctorPhone.requestFocus();
-            textDoctorPhone.setError(getString(R.string.invalid_input));
+            inputLayoutPhoneDoctor.setError(getString(R.string.invalid_input));
         } else if (TextUtils.isEmpty(address1Str)) {
             textDoctorAddress1.requestFocus();
-            textDoctorAddress1.setError(getString(R.string.invalid_input));
+            inputLayoutAddress1Doctor.setError(getString(R.string.invalid_input));
         } else if (TextUtils.isEmpty(address2Str)) {
             textDoctorAddress2.requestFocus();
-            textDoctorAddress2.setError(getString(R.string.invalid_input));
+            inputLayoutAddress2Doctor.setError(getString(R.string.invalid_input));
         } else if (TextUtils.isEmpty(address3Str)) {
             textDoctorAddress3.requestFocus();
-            textDoctorAddress3.setError(getString(R.string.invalid_input));
+            inputLayoutAddress3Doctor.setError(getString(R.string.invalid_input));
         } else if (TextUtils.isEmpty(address4Str)) {
             textDoctorAddress4.requestFocus();
-            textDoctorAddress4.setError(getString(R.string.invalid_input));
+            inputLayoutAddress4Doctor.setError(getString(R.string.invalid_input));
         } else if (TextUtils.isEmpty(districtStr)) {
             textDoctorDistrict.requestFocus();
-            textDoctorDistrict.setError(getString(R.string.invalid_input));
+            inputLayoutDistrictDoctor.setError(getString(R.string.invalid_input));
         } else if (TextUtils.isEmpty(cityStr)) {
             textDoctorCity.requestFocus();
-            textDoctorCity.setError(getString(R.string.invalid_input));
+            inputLayoutCityDoctor.setError(getString(R.string.invalid_input));
         } else if (TextUtils.isEmpty(stateStr)) {
             textDoctorState.requestFocus();
-            textDoctorState.setError(getString(R.string.invalid_input));
+            inputLayoutStateDoctor.setError(getString(R.string.invalid_input));
         } else if (TextUtils.isEmpty(qualificationStr)) {
             textDoctorQualification.requestFocus();
-            textDoctorQualification.setError(getString(R.string.invalid_input));
+            inputLayoutQualificationDoctor.setError(getString(R.string.invalid_input));
         } else if (TextUtils.isEmpty(phoneStr)) {
             textDoctorPincode.requestFocus();
-            textDoctorPincode.setError(getString(R.string.invalid_input));
+            inputLayoutPincodeDoctor.setError(getString(R.string.invalid_input));
         } else {
-
-            if (doctorId!=0){
-                doctors.setDoctorId(doctorId);
-
-                }
-            }
             doctors.setMeetFrequency(meetFreq + "");
             doctors.setPreferredMeetTime(meetTime + "");
             doctors.setFirstName(firstNameStr);
@@ -292,11 +319,12 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
 
             if (InternetConnection.isNetworkAvailable(ActivityAddDoctor.this)) {
 
-                    getAddressLatLong(address1Str + ", " + pincodeStr);
+                getAddressLatLong(address1Str + ", " + pincodeStr);
 
             } else {
                 Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
             }
+        }
 
     }
 
@@ -417,6 +445,7 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
             textDoctorDob.setText(dateOfBirthString);
         };
         DatePickerDialog dpDialog = new DatePickerDialog(ActivityAddDoctor.this, listener, year, month, day);
+        dpDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         dpDialog.show();
 
     }

@@ -1,5 +1,6 @@
 package com.planera.mis.planera2.activities;
 
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -69,7 +70,7 @@ public class AdminPanelActivity extends BaseActivity {
                         return true;
 
                     case R.id.logout_admin:
-                        backToLogin();
+                        popupDialog();
                         return true;
                 }
                 return false;
@@ -79,6 +80,25 @@ public class AdminPanelActivity extends BaseActivity {
         Intent intentLogin = new Intent(AdminPanelActivity.this, LoginActivity.class);
         connector.setBoolean(AppConstants.IS_LOGIN, false);
         startActivity(intentLogin);
+    }
+
+    public void popupDialog(){
+        AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
+
+        alertDialog.setMessage("Are you sure you want to logout?");
+
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", (dialogInterface, i) -> {
+            dialogInterface.cancel();
+            backToLogin();
+        });
+
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", (dialog, which) -> {
+            dialog.cancel();
+        });
+
+        alertDialog.show();
+
     }
 
 

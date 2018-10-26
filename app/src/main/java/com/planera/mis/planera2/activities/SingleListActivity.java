@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.FragmentDialog.addDialogs.AddGiftDialog;
@@ -139,7 +140,7 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
         comingFragment = getData.getIntExtra(AppConstants.KEY_TOUCHED_FRAGMENT, 0);
         if (comingFragment!= 0) {
             loadFragment(comingFragment);
-//            refreshFragment(comingFragment);
+            refreshFragment(comingFragment);
         }
 
     }
@@ -269,7 +270,7 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
                 break;
         }
 
-      getSupportFragmentManager().beginTransaction().replace(R.id.containerSingle, fragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
+      getSupportFragmentManager().beginTransaction().replace(R.id.containerSingle, fragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commitAllowingStateLoss();
     }
 
     @Override
@@ -280,7 +281,8 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onDialogDismiss() {
-        refreshFragment(AppConstants.STATE_FRAGMENT);
+        Toast.makeText(this, "Getting Intraction !!", Toast.LENGTH_SHORT).show();
+        loadFragment(AppConstants.STATE_FRAGMENT);
     }
 
     @Override

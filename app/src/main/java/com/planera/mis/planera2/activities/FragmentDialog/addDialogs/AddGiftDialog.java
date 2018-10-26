@@ -57,7 +57,7 @@ public class AddGiftDialog  extends BaseDialogFragment implements View.OnClickLi
 
     public void uiValidation(){
         inputLayoutUserName.setError(null);
-        String strGift = editTextName.getText().toString();
+        String strGift = editTextName.getText().toString().trim();
 
         if (TextUtils.isEmpty(strGift)){
             inputLayoutUserName.setError(getString(R.string.invalid_input));

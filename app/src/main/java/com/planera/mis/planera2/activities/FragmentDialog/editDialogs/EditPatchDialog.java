@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.FragmentDialog.BaseDialogFragment;
 import com.planera.mis.planera2.activities.models.MainResponse;
@@ -25,6 +27,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EditPatchDialog extends BaseDialogFragment implements View.OnClickListener{
+    private static final String TAG = EditPatchDialog.class.getSimpleName() ;
     private View view;
     public OnDismissEditPatchDialogListener listener;
     private TextInputLayout inputLayoutUserName;
@@ -75,7 +78,7 @@ public class EditPatchDialog extends BaseDialogFragment implements View.OnClickL
 
     public void uiValidation(){
         inputLayoutUserName.setError(null);
-        String strState = editTextName.getText().toString();
+        String strState = editTextName.getText().toString().trim();
 
         if (TextUtils.isEmpty(strState)){
             inputLayoutUserName.setError(getString(R.string.invalid_input));
@@ -83,7 +86,7 @@ public class EditPatchDialog extends BaseDialogFragment implements View.OnClickL
         }
         else{
             if (InternetConnection.isNetworkAvailable(mContext)) {
-                editPatchApi(token, patchId, patchName, territoryId);
+                editPatchApi(token, patchId, strState, territoryId);
             }
             else
             {
@@ -110,6 +113,7 @@ public class EditPatchDialog extends BaseDialogFragment implements View.OnClickL
                 processDialog.dismissDialog();
                 if (response!= null){
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                        Log.e(TAG, "onResponse: "+new Gson().toJson(response.body()));
                         Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
                         listener.onDismissEditPatchDialog();
                         dismiss();

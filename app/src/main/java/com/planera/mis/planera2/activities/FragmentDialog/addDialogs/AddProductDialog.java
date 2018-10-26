@@ -141,7 +141,7 @@ public class AddProductDialog extends BaseDialogFragment implements View.OnClick
 
     private void uiValidation() {
         inputLayoutUserName.setError(null);
-        String productStr= editTextName.getText().toString();
+        String productStr= editTextName.getText().toString().trim();
 
 
         if (!TextUtils.isEmpty(productStr)){

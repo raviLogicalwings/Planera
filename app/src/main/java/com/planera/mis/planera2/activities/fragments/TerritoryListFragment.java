@@ -3,6 +3,7 @@ package com.planera.mis.planera2.activities.fragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.models.Territories;
 import com.planera.mis.planera2.activities.models.TerritoryListResponse;
 import com.planera.mis.planera2.activities.utils.AppConstants;
+import com.planera.mis.planera2.activities.utils.InternetConnection;
 
 import java.util.List;
 
@@ -188,7 +190,14 @@ public class TerritoryListFragment extends BaseFragment implements EditTerritory
 
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", (dialogInterface, i) -> {
             dialogInterface.cancel();
-            deleteTerritory(token, territoryId );
+            if (InternetConnection.isNetworkAvailable(mContext)){
+                deleteTerritory(token, territoryId );
+            }
+            else{
+                Snackbar.make(getActivity().getWindow().getDecorView().getRootView(), getString(R.string.no_internet), Snackbar.LENGTH_SHORT).show();
+
+            }
+
         });
 
 

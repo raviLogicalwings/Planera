@@ -73,7 +73,7 @@ public class EditTerritoryDialog extends BaseDialogFragment implements View.OnCl
 
     public void uiValidation(){
         inputLayoutUserName.setError(null);
-        String strTerritory = editTextName.getText().toString();
+        String strTerritory = editTextName.getText().toString().trim();
 
         if (TextUtils.isEmpty(strTerritory)){
             inputLayoutUserName.setError(getString(R.string.invalid_input));

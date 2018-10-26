@@ -23,7 +23,8 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_marginTop="@dimen/layout_margin_top"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/input_layout_first_name_doctor">
 
             <EditText
                 android:id="@+id/text_doctor_first_name"
@@ -36,7 +37,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/input_layout_middle_name_doctor">
 
             <EditText
                 android:id="@+id/text_doctor_middle_name"
@@ -49,7 +51,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/input_layout_last_name_doctor">
 
             <EditText
                 android:id="@+id/text_doctor_last_name"
@@ -62,7 +65,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/input_layout_dob_doctor">
 
             <EditText
                 android:focusable="false"
@@ -76,7 +80,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/input_layout_email_doctor">
 
             <EditText
                 android:id="@+id/text_doctor_email"
@@ -89,7 +94,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/input_layout_qualification_doctor">
 
             <EditText
                 android:id="@+id/text_doctor_qualification"
@@ -103,7 +109,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/input_layout_specialization_doctor">
 
             <EditText
                 android:id="@+id/text_doctor_specialization"
@@ -184,7 +191,8 @@
     </LinearLayout>
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/input_layout_phone_doctor">
 
             <EditText
                 android:id="@+id/text_doctor_phone"
@@ -199,7 +207,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/input_layout_address_1_doctor">
 
             <EditText
                 android:id="@+id/text_doctor_address1"
@@ -213,7 +222,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/input_layout_address_2_doctor">
 
             <EditText
                 android:id="@+id/text_doctor_address2"
@@ -226,7 +236,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/input_layout_address_3_doctor">
 
             <EditText
                 android:id="@+id/text_doctor_address3"
@@ -239,7 +250,8 @@
 
         <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+            android:id="@+id/input_layout_address_4_doctor">
 
         <EditText
             android:id="@+id/text_doctor_address4"
@@ -253,7 +265,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/input_layout_district_doctor">
 
             <EditText
                 android:id="@+id/text_doctor_district"
@@ -266,7 +279,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/input_layout_city_doctor">
 
             <EditText
                 android:id="@+id/text_doctor_city"
@@ -279,7 +293,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/input_layout_state_doctor">
 
             <EditText
                 android:id="@+id/text_doctor_state"
@@ -292,7 +307,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/input_layout_pincode_doctor">
 
             <EditText
                 android:id="@+id/text_doctor_pincode"

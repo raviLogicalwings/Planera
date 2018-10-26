@@ -68,18 +68,17 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
     }
 
 
-    public void bindItemsWithView(MySampleHolder holder, int pos) {
+    private void bindItemsWithView(MySampleHolder holder, int pos) {
 
 
         if(brandsList.size()!=0) {
             if (brandsList.get(pos).getIsBrand().equals(AppConstants.BRAND + "")) {
                 holder.textBrandSampleName.setText(brandsList.get(pos).getName());
 
-
             }
             Brands brands = brandsList.get(pos);
 
-            if (dataItemForUpdate.getProductDetails() != null) {
+            if (dataItemForUpdate != null) {
                 for (int i = 0; i < dataItemForUpdate.getProductDetails().size(); i++) {
                     if (dataItemForUpdate.getProductDetails().get(i).getProductId().equals(brands.getProductId() + "")) {
                         String samples = dataItemForUpdate.getProductDetails().get(i).getProductQty() + "";

@@ -68,6 +68,7 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
     int doctorId;
     String firstNameStr, middleNameStr, lastNameStr, emailStr, dobStr, qualificationStr, specializationStr, phoneStr,
             address1Str, address2Str, address3Str, address4Str, districtStr, cityStr, stateStr, pincodeStr;
+    private String previousPatchId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +131,9 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
     public void initData() {
         super.initData();
         doctors = new Doctors();
+
+
+
         spinnerMeetTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -166,6 +170,16 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
         });
 
         getPatchList(token);
+
+        // set previous patch id to spinner
+       if (patches != null) {
+           for (int i = 0; i < patches.size(); i++) {
+               if (patches.get(i).getPatchId() == Integer.parseInt(previousPatchId)) {
+                   spinnerPatchId.setSelection(i);
+                   break;
+               }
+           }
+       }
 
         spinnerPatchId.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -402,6 +416,9 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
         textDoctorDob.setText(intent.getStringExtra(AppConstants.DOB));
         textDoctorEmail.setText(intent.getStringExtra(AppConstants.EMAIL));
         textDoctorPhone.setText(intent.getStringExtra(AppConstants.PHONE));
+        spinnerFrequency.setSelection((Integer.parseInt(intent.getStringExtra(AppConstants.MEET_FREQUENCY))-1));
+        spinnerMeetTime.setSelection(Integer.parseInt(intent.getStringExtra(AppConstants.PREFERRED_MEET_TIME))-1);
+        previousPatchId = intent.getStringExtra(AppConstants.PATCH_ID);
         textDoctorQualification.setText(intent.getStringExtra(AppConstants.QUALIFICATION));
         textDoctorSpecialization.setText(intent.getStringExtra(AppConstants.SPECIALIZATION));
         textDoctorAddress1.setText(intent.getStringExtra(AppConstants.ADDRESS1));

@@ -155,6 +155,9 @@ public class DoctorsFragment extends BaseFragment{
         intentDoctorCall.putExtra(AppConstants.LAST_NAME, doctorsData.get(pos).getLastName());
         intentDoctorCall.putExtra(AppConstants.PHONE, doctorsData.get(pos).getPhone());
         intentDoctorCall.putExtra(AppConstants.EMAIL, doctorsData.get(pos).getEmail());
+        intentDoctorCall.putExtra(AppConstants.PREFERRED_MEET_TIME, doctorsData.get(pos).getPreferredMeetTime());
+        intentDoctorCall.putExtra(AppConstants.MEET_FREQUENCY, doctorsData.get(pos).getMeetFrequency());
+        intentDoctorCall.putExtra(AppConstants.PATCH_ID, doctorsData.get(pos).getPatchId());
         intentDoctorCall.putExtra(AppConstants.QUALIFICATION, doctorsData.get(pos).getQualifications());
         intentDoctorCall.putExtra(AppConstants.SPECIALIZATION, doctorsData.get(pos).getSpecializations());
         intentDoctorCall.putExtra(AppConstants.DOB, doctorsData.get(pos).getDOB());

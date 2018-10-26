@@ -59,7 +59,7 @@
 
 
         <android.support.v7.widget.CardView
-            android:id="@+id/card_teritory"
+            android:id="@+id/card_territory"
             style="@style/CardViewStyle"
             android:layout_weight="1"
             >

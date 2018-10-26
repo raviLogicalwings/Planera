@@ -2,6 +2,7 @@ package com.planera.mis.planera2.activities.FragmentDialog.addDialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,7 +23,7 @@ import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.models.StateListResponse;
 import com.planera.mis.planera2.activities.models.States;
 import com.planera.mis.planera2.activities.utils.AppConstants;
-
+import com.planera.mis.planera2.activities.utils.InternetConnection;
 
 import java.util.List;
 
@@ -79,15 +80,20 @@ public class AddTerritoryDialog extends BaseDialogFragment implements View.OnCli
 
     public void uiValidation(){
         inputLayoutUserName.setError(null);
-        String strTerritory = editTextName.getText().toString();
+        String strTerritory = editTextName.getText().toString().trim();
 
         if (TextUtils.isEmpty(strTerritory)){
             inputLayoutUserName.setError(getString(R.string.invalid_input));
             editTextName.requestFocus();
         }
         else{
+            if(InternetConnection.isNetworkAvailable(mContext)){
                 addTerritoryApi(token, strTerritory, stateId);
             }
+            else{
+                Snackbar.make(getActivity().getWindow().getDecorView().getRootView(), getString(R.string.no_internet), Snackbar.LENGTH_SHORT).show();
+            }
+        }
 
     }
 

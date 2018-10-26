@@ -66,9 +66,9 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
        }
     }
 
-    public void setGiftsData(int position, MyGiftHolder holder, List<GiftsData> giftsData, GiftsData giftsDataObj, DataItem previousInputUpdate){
+    private void setGiftsData(int position, MyGiftHolder holder, List<GiftsData> giftsData, GiftsData giftsDataObj, DataItem previousInputUpdate){
         holder.textGift.setText(giftsDataObj.getName());
-        if (previousInputUpdate.getGiftDetails() != null) {
+        if (previousInputUpdate != null) {
             for (int i = 0; i < previousInputUpdate.getGiftDetails().size(); i++) {
                 if (previousInputUpdate.getGiftDetails().get(i).getGiftId().equals(giftsDataObj.getGiftId() + "")) {
                     String samples = previousInputUpdate.getGiftDetails().get(i).getGiftQuantity() + "";
@@ -96,9 +96,6 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
                                 inputGiftList.get(i).setQuantity(quantityGift);
                                 isUpdated = true;
                             }
-                            else{
-//
-                            }
                         }
                         if (!isUpdated){
                             inputGift = new InputGift();
@@ -118,16 +115,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
 
                 }
 
-//                GiftsData gifts = giftsData.get(position);
-//                if (!quantityGift.equals("")){
-//                    inputGift = new InputGift();
-//                    inputGift.setQuantity(quantityGift);
-//                    inputGift.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID)+"");
-//                    inputGift.setGiftId(gifts.getGiftId()+"");
-//                    inputGiftList.add(inputGift);
 //
-//                }
-
                 setInputGiftList(inputGiftList);
             }
 
@@ -157,6 +145,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
             super(itemView);
             editGiftQuantity = itemView.findViewById(R.id.edit_gift_quantity);
             textGift = itemView.findViewById(R.id.text_gift);
+
         }
 
         @Override
