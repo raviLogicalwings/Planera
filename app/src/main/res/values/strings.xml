@@ -85,4 +85,9 @@
     <string name="title_activity_user_input_list">UserInputListActivity</string>
     <string name="title_activity_search_date_wise_input">SearchDateWiseInputActivity</string>
     <string name="no_data_available">No data available !</string>
+    <string name="update">Update</string>
+    <string name="title_activity_upload_chemist">ActivityUploadChemist</string>
+    <string name="select_file">Select File</string>
+    <string name="file_name">File Name</string>
+    <string name="upload">Upload</string>
 </resources>

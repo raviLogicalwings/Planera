@@ -35,7 +35,7 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
     private DataItem dataItemForUpdate;
 
 
-    public BrandsAdapter(){
+    public BrandsAdapter() {
 
     }
 
@@ -77,6 +77,19 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
     public void bindItemsWithView(MyBrandsHolder holder, int pos) {
         if (dataItemForUpdate != null) {
             if (brandsList.get(pos).getProductId() == dataItemForUpdate.getProductId()) {
+                switch (dataItemForUpdate.getInterestedLevel()) {
+                    case "1":
+                        holder.spinner.setSelection(3);
+                        break;
+                    case "2":
+                        holder.spinner.setSelection(2);
+                        break;
+                    case "3":
+                        holder.spinner.setSelection(1);
+                        break;
+                    default:
+                        holder.spinner.setSelection(0);
+                }
             }
         }
 
@@ -86,49 +99,46 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
 
 
         }
-         Brands brands = brandsList.get(pos);
+        Brands brands = brandsList.get(pos);
 
-            holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    String value = brandLevelList.get(position);
-                    if (!value.equals("")) {
-                        orders = new InputOrders();
-                        orders.setIsSample("0");
-                        orders.setProductId(brands.getProductId() + "");
+        holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String value = brandLevelList.get(position);
+                if (!value.equals("")) {
+                    orders = new InputOrders();
+                    orders.setIsSample("0");
+                    orders.setProductId(brands.getProductId() + "");
 
-                        switch (value){
-                            case "Low":
-                                orders.setInterestedLevel("3");
-                                break;
-                            case "Regular":
-                                orders.setInterestedLevel("2");
-                                break;
-                            case "Super":
-                                orders.setInterestedLevel("1");
-                                break;
+                    switch (value) {
+                        case "Low":
+                            orders.setInterestedLevel("3");
+                            break;
+                        case "Regular":
+                            orders.setInterestedLevel("2");
+                            break;
+                        case "Super":
+                            orders.setInterestedLevel("1");
+                            break;
 
-                        }
-                        orderListSelected.add(orders);
-                        setOrderListSelected(orderListSelected);
                     }
+                    orderListSelected.add(orders);
+                    setOrderListSelected(orderListSelected);
+                }
 
 
 //                orders.setInterestedLevel(position+"");
 
 
-                }
+            }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
-            });
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
 
     }
-
-
-
 
 
     public void setArrayAdapter(Spinner spinner) {
@@ -151,7 +161,7 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
     }
 
     public class MyBrandsHolder extends RecyclerView.ViewHolder {
-        public  Spinner spinner;
+        public Spinner spinner;
         TextView textBrandName;
 
         MyBrandsHolder(View itemView) {
@@ -164,7 +174,7 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
 
     }
 
-    public interface OnItemFoundListener{
-         void onItemFound(List<InputOrders> listOfOrders);
+    public interface OnItemFoundListener {
+        void onItemFound(List<InputOrders> listOfOrders);
     }
 }

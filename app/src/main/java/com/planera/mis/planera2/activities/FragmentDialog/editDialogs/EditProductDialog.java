@@ -81,7 +81,7 @@ public class EditProductDialog extends BaseDialogFragment implements View.OnClic
         String strState = editTextName.getText().toString().trim();
 
         if (TextUtils.isEmpty(strState)){
-            inputLayoutUserName.setError(getString(R.string.invalid_input));
+            inputLayoutUserName.setError("Product name is required.");
             editTextName.requestFocus();
         }
         else{

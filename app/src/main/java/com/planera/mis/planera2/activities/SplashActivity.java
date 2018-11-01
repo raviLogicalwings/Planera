@@ -42,7 +42,8 @@ public class SplashActivity extends BaseActivity {
         isUserLogin = connector.getBoolean(AppConstants.IS_LOGIN);
         isUser = connector.getBoolean(AppConstants.IS_USER);
         permissionCheck = new RuntimePermissionCheck(SplashActivity.this);
-        if(permissionCheck.checkPermissionForWriteExternalStorage() && permissionCheck.checkPermissionForReadExtertalStorage()) {
+        if(permissionCheck.checkPermissionForWriteExternalStorage() && permissionCheck.checkPermissionForReadExtertalStorage()
+                && permissionCheck.checkPermissionForLocation()) {
 
             if (isUserLogin){
                 if (isUser) {
@@ -62,6 +63,7 @@ public class SplashActivity extends BaseActivity {
             try {
                 permissionCheck.requestPermissionForWriteExternalStorage();
                 permissionCheck.requestPermissionForReadExtertalStorage();
+                permissionCheck.requestPermissionForLocation();
             } catch (Exception e) {
                 e.printStackTrace();
             }

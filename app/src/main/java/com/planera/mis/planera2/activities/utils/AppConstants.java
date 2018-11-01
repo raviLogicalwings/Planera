@@ -64,6 +64,12 @@ public class AppConstants {
     public static final String UPDATE_PLAN = "plan/updatePlan";
     public static final String UPDATE_INPUT = "input/updateInput";
 
+    public static final String IMPORT_DOCTORS_DATA = "Importrecords/doctorsData";
+    public static final String IMPORT_CHEMIST_DATA = "Importrecords/chemistsData";
+    public static final String IMPORT_USER_DATA = "Importrecords/usersData";
+    public static final String IMPORT_PATCH_DATA = "Importrecords/patchData";
+    public static final String IMPORT_TERRITORY_DATA = "Importrecords/territoryData";
+
     //User's Constant
     public static final String EXPERIENCE_YEAR = "experience_year";
     public static final String UPDATE_USER_KEY = "update_user";
@@ -150,7 +156,9 @@ public class AppConstants {
     public static final String STATUS_OVER_LIMIT = "OVER_QUERY_LIMIT";
 
     //Doctor Constants for excel Upload Data
+    public static final int DOCTOR_ID_EXCEL = 0;
     public static final int PATCH_ID_EXCEL = 1;
+    public static final int ACTIVE_EXCEL = 2;
     public static final int FIRST_NAME_EXCEL = 3;
     public static final int MIDDLE_NAME_EXCEL = 4;
     public static final int LAST_NAME_EXCEL = 5;
@@ -169,6 +177,31 @@ public class AppConstants {
     public static final int DISTRICT_EXCEL = 21;
     public static final int STATE_EXCEL = 22;
     public static final int PINCODE_EXCEL = 23;
+
+    //Chemist Constants for excel upload data.
+    public static final int CHEMIST_ID_EXCEL = 0;
+    public static final int COMPANY_NAME_EXCEL = 3;
+    public static final int MONTHLY_VOLUME_POTENTIAL_EXCEL = 4;
+    public static final int SHOP_SIZE_EXCEL = 5;
+    public static final int ADDRESS1_EXCEL = 6;
+    public static final int ADDRESS2_EXCEL = 7;
+    public static final int ADDRESS3_EXCEL = 8;
+    public static final int BILLING_PHONE1_EXCEL = 9;
+    public static final int BILLING_PHONE2_EXCEL = 10;
+    public static final int BILLING_EMAIL_EXCEL = 11;
+    public static final int CITY_CHEMIST_EXCEL = 12;
+    public static final int DISTRICT_CHEMIST_EXCEL = 13;
+    public static final int STATE_CHEMIST_EXCEL = 14;
+    public static final int PIN_CHEMIST_EXCEL = 15;
+    public static final int FIRST_NAME_CHEMSIT_EXCEL = 16;
+    public static final int MIDDLE_NAME_CHEMSIT_EXCEL = 17;
+    public static final int LAST_NAME_CHEMSIT_EXCEL = 18;
+    public static final int OWNER_PHONE_CHEMSIT_EXCEL = 19;
+    public static final int OWNER_EMAIL_CHEMSIT_EXCEL = 20;
+    public static final int PREFFERED_MEET_TIME_CHEMSIT_EXCEL = 21;
+
+
+
 
 
 

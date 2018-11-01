@@ -205,8 +205,6 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
         });
 
         getPatchList(token);
-        spinnerPatchId.setAdapter(patchBasicAdapter);
-
         spinnerPatchId.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -221,6 +219,12 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ActivityAddDoctor.this, SingleListActivity.class);
+        intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.DOCTOR_FRAGMENT);
+        startActivity(intent);
+    }
 
     public void uiValidation() {
         firstNameStr = textDoctorFirstName.getText().toString().trim();

@@ -1,10 +1,12 @@
 package com.planera.mis.planera2.activities.Retrofit;
 
 import com.planera.mis.planera2.activities.models.BrandsListResponse;
+import com.planera.mis.planera2.activities.models.ChemistImport;
 import com.planera.mis.planera2.activities.models.ChemistListResponse;
 import com.planera.mis.planera2.activities.models.ChemistResponse;
 import com.planera.mis.planera2.activities.models.Chemists;
 import com.planera.mis.planera2.activities.models.DataItem;
+import com.planera.mis.planera2.activities.models.DoctorImport;
 import com.planera.mis.planera2.activities.models.DoctorResponse;
 import com.planera.mis.planera2.activities.models.Doctors;
 import com.planera.mis.planera2.activities.models.DoctorsListResponce;
@@ -244,6 +246,14 @@ public interface ApiInterface {
     @POST(AppConstants.UPDATE_INPUT)
     Call<MainResponse> updateInputDetails (@Header("Authorization") String token,
                                           @Body DataItem item);
+
+    @POST(AppConstants.IMPORT_DOCTORS_DATA)
+    Call<MainResponse> importDoctorFromExcel (@Header("Authorization") String token,
+                                              @Body List<DoctorImport> doctorImport);
+
+    @POST(AppConstants.IMPORT_CHEMIST_DATA)
+    Call<MainResponse> importChemistFromExcel (@Header("Authorization") String token,
+                                              @Body List<ChemistImport> chemistImports);
     //Google  Places api Call
     @GET(AppConstants.FIND_PALCE)
     Call<GooglePlaces> getPlaceLatLong(@Query("input") String input,

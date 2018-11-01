@@ -110,11 +110,11 @@ public class MainActivity extends BaseActivity implements
         connector.setBoolean(AppConstants.IS_LOGIN, false);
         Intent intentLogin = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intentLogin);
+        finish();
     }
 
     public void popupDialog(){
-        AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
-        boolean isYes = false;
+        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
 
         alertDialog.setMessage("Are you sure you want to logout?");
 

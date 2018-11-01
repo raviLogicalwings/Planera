@@ -81,7 +81,7 @@ public class AddStateDialog  extends BaseDialogFragment implements View.OnClickL
         String strState = editTextName.getText().toString().trim();
 
         if (TextUtils.isEmpty(strState)){
-          inputLayoutUserName.setError(getString(R.string.invalid_input));
+          inputLayoutUserName.setError("State name is required.");
           editTextName.requestFocus();
         }
         else{

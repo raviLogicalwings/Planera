@@ -112,6 +112,14 @@ public class ActivityUpdateUser extends BaseActivity implements View.OnClickList
 
     }
 
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ActivityUpdateUser.this, SingleListActivity.class);
+        intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.USER_FRAGMENT);
+        startActivity(intent);
+    }
+
     public void uiValidation() {
 
 

@@ -76,7 +76,7 @@ public class EditTerritoryDialog extends BaseDialogFragment implements View.OnCl
         String strTerritory = editTextName.getText().toString().trim();
 
         if (TextUtils.isEmpty(strTerritory)){
-            inputLayoutUserName.setError(getString(R.string.invalid_input));
+            inputLayoutUserName.setError("Territory name is required.");
             editTextName.requestFocus();
         }
         else{

@@ -154,6 +154,14 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
 
     }
 
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ActivityAddChemist.this, SingleListActivity.class);
+        intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.CHEMIST_FRAGMENT);
+        startActivity(intent);
+    }
+
     public void uiValidation(){
         String strCompanyName = textChemistCompanyName.getText().toString().trim();
         String strChemistMonthlyVolume = textChemistMonthlyVolume.getText().toString().trim();

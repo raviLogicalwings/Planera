@@ -80,15 +80,15 @@ public class AdminPanelActivity extends BaseActivity {
         Intent intentLogin = new Intent(AdminPanelActivity.this, LoginActivity.class);
         connector.setBoolean(AppConstants.IS_LOGIN, false);
         startActivity(intentLogin);
+        finish();
     }
 
     public void popupDialog(){
-        AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
+        AlertDialog alertDialog = new AlertDialog.Builder(AdminPanelActivity.this).create();
 
         alertDialog.setMessage("Are you sure you want to logout?");
 
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", (dialogInterface, i) -> {
-            dialogInterface.cancel();
             backToLogin();
         });
 
@@ -96,7 +96,6 @@ public class AdminPanelActivity extends BaseActivity {
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", (dialog, which) -> {
             dialog.cancel();
         });
-
         alertDialog.show();
 
     }

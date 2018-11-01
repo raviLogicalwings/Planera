@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -55,6 +56,13 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
     private Spinner spinnerPlanMonth;
     private Spinner spinnerPlanTerritory;
     private Spinner spinnerPlanYear;
+    private TextInputLayout inputLayoutTerritoryPlan;
+    private TextInputLayout inputLayoutPatchPlan;
+    private TextInputLayout inputLayoutDoctorPlan;
+    private TextInputLayout inputLayoutChemistPlan;
+    private TextInputLayout inputLayoutUserPlan;
+    private TextInputLayout inputLayoutMonthPlan;
+    private TextInputLayout inputLayoutYearPlan;
     private RadioGroup radioGroupSelect;
     private EditText textPlanCall;
     private EditText textPlanRemark;
@@ -96,10 +104,39 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
         callStr = textPlanCall.getText().toString().trim();
         remarkStr = textPlanRemark.getText().toString().trim();
         plans = new Plans();
-        if (isDoctorRadioChecked) {
+
+
+        if (spinnerPlanTerritory.getSelectedItemPosition() == 0 ){
+            inputLayoutTerritoryPlan.setError("Please select territory.");
+            inputLayoutTerritoryPlan.requestFocus();
+        }
+        else if(spinnerPlanPatch.getSelectedItemPosition() == 0 ){
+            inputLayoutPatchPlan.setError("Please select patch.");
+            inputLayoutTerritoryPlan.requestFocus();
+        }
+        else if(spinnerPlanChemist.isShown() && spinnerPlanChemist.getSelectedItemPosition() == 0){
+            inputLayoutChemistPlan.setError("Please select chemist.");
+            inputLayoutChemistPlan.requestFocus();
+        }
+        else if(spinnerPlanDoctor.isShown() && spinnerPlanDoctor.getSelectedItemPosition() == 0){
+            inputLayoutDoctorPlan.setError("Please select doctor.");
+            inputLayoutDoctorPlan.requestFocus();
+        }
+        else if (spinnerPlanUser.getSelectedItemPosition() == 0){
+            inputLayoutUserPlan.setError("Please select user.");
+        }
+        else if (TextUtils.isEmpty(callStr)) {
+            textPlanCall.requestFocus();
+            textPlanCall.setError(getString(R.string.invalid_input));
+        } else if (TextUtils.isEmpty(remarkStr)) {
+            textPlanRemark.requestFocus();
+            textPlanRemark.setError(getString(R.string.invalid_input));
+        }
+
+        else if (isDoctorRadioChecked) {
             if (!doctorsList.isEmpty()) {
-                if (spinnerPlanDoctor.getSelectedItemPosition()!=0) {
-                    doctorId = doctorsList.get(spinnerPlanDoctor.getSelectedItemPosition()- DEFAULT_SELECT_VALUE).getDoctorId() + "";
+                if (spinnerPlanDoctor.getSelectedItemPosition() != 0) {
+                    doctorId = doctorsList.get(spinnerPlanDoctor.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getDoctorId() + "";
                     chemistId = null;
                 }
             } else {
@@ -107,22 +144,15 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
             }
         } else if (!isDoctorRadioChecked) {
             if (!chemistsList.isEmpty()) {
-                if (spinnerPlanChemist.getSelectedItemPosition()!= 0) {
-                    chemistId = chemistsList.get(spinnerPlanChemist.getSelectedItemPosition()- DEFAULT_SELECT_VALUE).getChemistId() + "";
+                if (spinnerPlanChemist.getSelectedItemPosition() != 0) {
+                    chemistId = chemistsList.get(spinnerPlanChemist.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getChemistId() + "";
                     doctorId = null;
                 }
             } else {
                 Toast.makeText(ActivityCretePlan.this, "Can create plan, chemist's list not found", Toast.LENGTH_LONG).show();
 
             }
-        }
-        if (TextUtils.isEmpty(callStr)) {
-            textPlanCall.requestFocus();
-            textPlanCall.setError(getString(R.string.invalid_input));
-        } else if (TextUtils.isEmpty(remarkStr)) {
-            textPlanRemark.requestFocus();
-            textPlanRemark.setError(getString(R.string.invalid_input));
-        } else {
+        }else {
             plans.setCalls(callStr);
             plans.setChemistsId(chemistId);
             plans.setDoctorId(doctorId);
@@ -156,6 +186,16 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
         spinnerPlanPatch = findViewById(R.id.spinner_plan_patch);
         spinnerPlanMonth = findViewById(R.id.spinner_plan_month);
         spinnerPlanYear = findViewById(R.id.spinner_plan_year);
+
+
+        inputLayoutTerritoryPlan = findViewById(R.id.input_layout_territory_plan);
+        inputLayoutPatchPlan = findViewById(R.id.input_layout_patch_plan);
+        inputLayoutDoctorPlan = findViewById(R.id.input_layout_doctor_plan);
+        inputLayoutChemistPlan = findViewById(R.id.input_layout_chemist_plan);
+        inputLayoutUserPlan = findViewById(R.id.input_layout_user_plan);
+        inputLayoutMonthPlan = findViewById(R.id.input_layout_month_plan);
+        inputLayoutYearPlan = findViewById(R.id.input_layout_year_plan);
+
         spinnerPlanTerritory = findViewById(R.id.spinner_plan_territory);
         radioDoctor = findViewById(R.id.radio_doctor);
         radioChemist = findViewById(R.id.radio_chemist);
@@ -208,6 +248,14 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
         });
     }
 
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ActivityCretePlan.this, SingleListActivity.class);
+        intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.PLAN_FRAGMENT);
+        startActivity(intent);
+    }
+
     @Override
     public void initData() {
         super.initData();
@@ -248,11 +296,11 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
         setArrayAdapter(months, spinnerPlanMonth);
 
         years = new ArrayList<>();
-        years.add(runningYear+"");
-        years.add(runningYear+1+"");
-        years.add(runningYear+2+"");
-        years.add(runningYear+3+"");
-        years.add(runningYear+4+"");
+        years.add(runningYear + "");
+        years.add(runningYear + 1 + "");
+        years.add(runningYear + 2 + "");
+        years.add(runningYear + 3 + "");
+        years.add(runningYear + 4 + "");
         setArrayAdapter(years, spinnerPlanYear);
 
         spinnerPlanYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -281,7 +329,8 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
-                    userIdStr = usersList.get(position- DEFAULT_SELECT_VALUE).getUserId();
+                    inputLayoutUserPlan.setError(null);
+                    userIdStr = usersList.get(position - DEFAULT_SELECT_VALUE).getUserId();
                 }
             }
 
@@ -297,17 +346,20 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
         spinnerPlanTerritory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position!= 0) {
-                    territoryId = territorysList.get(position- DEFAULT_SELECT_VALUE).getTerritoryId();
+                if (position != 0) {
+                    inputLayoutTerritoryPlan.setError(null);
+                    territoryId = territorysList.get(position - DEFAULT_SELECT_VALUE).getTerritoryId();
                     getPatchList(token, territoryId);
-                    if (isDoctorRadioChecked){
+                    if (isDoctorRadioChecked) {
                         spinnerPlanDoctor.setAdapter(null);
-                    }
-                    else{
+                    } else {
                         spinnerPlanChemist.setAdapter(null);
                     }
 
                 }
+                else{
+                    spinnerPlanTerritory.setSelection(0, false);
+                    }
             }
 
             @Override
@@ -319,7 +371,8 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
-                    patchId = patchesList.get(position- DEFAULT_SELECT_VALUE).getPatchId();
+                    inputLayoutPatchPlan.setError(null);
+                    patchId = patchesList.get(position - DEFAULT_SELECT_VALUE).getPatchId();
                     if (isDoctorRadioChecked) {
                         getDoctorsList(token, patchId);
                     } else {
@@ -334,7 +387,33 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
             }
         });
 
+        spinnerPlanDoctor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0){
+                    inputLayoutDoctorPlan.setError(null);
+                }
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinnerPlanChemist.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0){
+                    inputLayoutChemistPlan.setError(null);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
 
@@ -361,7 +440,7 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
                         List<String> stringTerritoryList = new ArrayList<>();
                         stringTerritoryList.add(getString(R.string.select));
                         for (int i = 0; i < territorysList.size(); i++) {
-                                stringTerritoryList.add(territorysList.get(i).getTerritoryName());
+                            stringTerritoryList.add(territorysList.get(i).getTerritoryName());
                         }
                         setArrayAdapter(stringTerritoryList, spinnerPlanTerritory);
 
@@ -395,7 +474,7 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
                             List<String> stringPatchesList = new ArrayList<>();
                             stringPatchesList.add(getString(R.string.select));
                             for (int i = 0; i < patchesList.size(); i++) {
-                                    stringPatchesList.add(patchesList.get(i).getPatchName());
+                                stringPatchesList.add(patchesList.get(i).getPatchName());
                             }
                             setArrayAdapter(stringPatchesList, spinnerPlanPatch);
 
@@ -430,15 +509,15 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
                         List<String> stringDoctorsList = new ArrayList<>();
                         stringDoctorsList.add(getString(R.string.select));
                         for (int i = 0; i < doctorsList.size(); i++) {
-                                String docName = doctorsList.get(i).getFirstName();
-                                if (doctorsList.get(i).getMiddleName() != null) {
-                                    docName += " " + doctorsList.get(i).getMiddleName();
-                                }
-                                if (doctorsList.get(i).getLastName() != null) {
-                                    docName += " " + doctorsList.get(i).getLastName();
-                                }
+                            String docName = doctorsList.get(i).getFirstName();
+                            if (doctorsList.get(i).getMiddleName() != null) {
+                                docName += " " + doctorsList.get(i).getMiddleName();
+                            }
+                            if (doctorsList.get(i).getLastName() != null) {
+                                docName += " " + doctorsList.get(i).getLastName();
+                            }
 
-                                stringDoctorsList.add(docName);
+                            stringDoctorsList.add(docName);
                         }
                         setArrayAdapter(stringDoctorsList, spinnerPlanDoctor);
                     } else {
@@ -471,14 +550,14 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
                     List<String> stringUserList = new ArrayList<>();
                     stringUserList.add(getString(R.string.select));
                     for (int i = 0; i < usersList.size(); i++) {
-                            String userName = usersList.get(i).getFirstName();
-                            if (usersList.get(i).getMiddleName() != null) {
-                                userName += " " + usersList.get(i).getMiddleName();
-                            }
-                            if (usersList.get(i).getLastName() != null) {
-                                userName += " " + usersList.get(i).getLastName();
-                            }
-                            stringUserList.add(userName);
+                        String userName = usersList.get(i).getFirstName();
+                        if (usersList.get(i).getMiddleName() != null) {
+                            userName += " " + usersList.get(i).getMiddleName();
+                        }
+                        if (usersList.get(i).getLastName() != null) {
+                            userName += " " + usersList.get(i).getLastName();
+                        }
+                        stringUserList.add(userName);
                     }
                     setArrayAdapter(stringUserList, spinnerPlanUser);
                 } else {
@@ -506,7 +585,7 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     chemistsList = response.body().getData();
                     List<String> stringChemistList = new ArrayList<>();
-                        stringChemistList.add(getString(R.string.select));
+                    stringChemistList.add(getString(R.string.select));
                     for (int i = 0; i < chemistsList.size(); i++) {
                         stringChemistList.add(chemistsList.get(i).getFirstName() + " " + chemistsList.get(i).getLastName());
                     }

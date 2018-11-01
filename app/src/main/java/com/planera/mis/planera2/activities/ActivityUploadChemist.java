@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.models.DoctorImport;
+import com.planera.mis.planera2.activities.models.ChemistImport;
 import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.RuntimePermissionCheck;
@@ -42,28 +42,29 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ActivityUploadDoctor extends BaseActivity implements View.OnClickListener{
+public class ActivityUploadChemist extends BaseActivity implements View.OnClickListener{
 
     public static ActivityUploadDoctor instance;
-    private CardView cardUploadPlanView;
+    private CardView cardUploadChemistView;
     private ImageView imageSheetView;
-    private Button buttonUploadPlanSheet;
+    private Button buttonUploadChemistSheet;
     private RuntimePermissionCheck permissionCheck;
     private String displayName;
     private TextView textFileName;
     private ImageView imageClose;
-    private List<DoctorImport> listDoctors;
-    private DoctorImport doctors;
+    private List<ChemistImport> chemistImportList;
+    private ChemistImport chemists;
     private Uri uri = null;
     public static final String TAG = ActivityUploadDoctor.class.getSimpleName();
     private File myFile;
     private boolean isCellNull = false;
+    public static final int CHEMIST_SHEET = 1;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragmend_upload_plan);
+        setContentView(R.layout.activity_upload_chemist);
         initUi();
         initData();
 
@@ -73,14 +74,14 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
     @Override
     public void initUi() {
         super.initUi();
-        cardUploadPlanView = findViewById(R.id.card_upload_Plan_view);
+        cardUploadChemistView = findViewById(R.id.card_upload_chemist_view);
         imageSheetView = findViewById(R.id.image_sheet_view);
-        buttonUploadPlanSheet = findViewById(R.id.button_upload_plan_sheet);
+        buttonUploadChemistSheet = findViewById(R.id.button_upload_chemist_sheet);
         textFileName = findViewById(R.id.text_file_name);
         imageClose = findViewById(R.id.img_close);
         imageSheetView.setOnClickListener(this);
-        cardUploadPlanView.setOnClickListener(this);
-        buttonUploadPlanSheet.setOnClickListener(this);
+        cardUploadChemistView.setOnClickListener(this);
+        buttonUploadChemistSheet.setOnClickListener(this);
     }
 
     public void checkRequiredPermission(){
@@ -92,13 +93,13 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }
-            try {
-                permissionCheck.requestPermissionForWriteExternalStorage();
-                permissionCheck.requestPermissionForReadExtertalStorage();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            permissionCheck.requestPermissionForWriteExternalStorage();
+            permissionCheck.requestPermissionForReadExtertalStorage();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
 
     public void pickFile(){
         Intent intent = new Intent();
@@ -152,7 +153,7 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
                     if (uriString.startsWith("content://")) {
                         Cursor cursor = null;
                         try {
-                            cursor = ActivityUploadDoctor.this.getContentResolver().query(uri, null, null, null, null);
+                            cursor = ActivityUploadChemist.this.getContentResolver().query(uri, null, null, null, null);
                             if (cursor != null && cursor.moveToFirst()) {
                                 displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
                                 toggleView(displayName);
@@ -175,7 +176,7 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
 
     public void toggleView(String name){
         if(name!= null){
-            cardUploadPlanView.setVisibility(View.GONE);
+            cardUploadChemistView.setVisibility(View.GONE);
             imageSheetView.setVisibility(View.VISIBLE);
             textFileName.setVisibility(View.VISIBLE);
             textFileName.setText(name);
@@ -186,18 +187,18 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
     @Override
     public void initData() {
         super.initData();
-        listDoctors = new ArrayList<>();
+        chemistImportList = new ArrayList<>();
 
-        permissionCheck = new RuntimePermissionCheck(ActivityUploadDoctor.this);
+        permissionCheck = new RuntimePermissionCheck(ActivityUploadChemist.this);
     }
 
 
     private void readExcelData(Uri uri) {
 
-            Toast.makeText(this, "Working fine", Toast.LENGTH_LONG).show();
-            try {
+        Toast.makeText(this, "Working fine", Toast.LENGTH_LONG).show();
+        try {
 //            File fileB = new File(filePath);
-                InputStream inputStream = getContentResolver().openInputStream(uri);
+            InputStream inputStream = getContentResolver().openInputStream(uri);
 //                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 //                StringBuilder stringBuilder = new StringBuilder();
 //                String line;
@@ -208,149 +209,139 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
 //                inputStream.close();
 //              Log.e("String Result", stringBuilder.toString());
 //
-                XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
-                XSSFSheet sheet = workbook.getSheetAt(0);
-                int rowsCount = sheet.getPhysicalNumberOfRows();
-                Toast.makeText(this, "rowCount"+rowsCount, Toast.LENGTH_LONG).show();
-                FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
-                StringBuilder sb = new StringBuilder();
-                //loop, loops through rows
-                for (int r = 1; r < rowsCount; r++) {
-                    Row row = sheet.getRow(r);
-                    int cellsCount = row.getPhysicalNumberOfCells();
-                    doctors = new DoctorImport();
-                    //inner loop, loops through columns
-                    if (isCellNull){
+            XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+            XSSFSheet sheet = workbook.getSheetAt(CHEMIST_SHEET);
+            int rowsCount = sheet.getPhysicalNumberOfRows();
+            Toast.makeText(this, "rowCount"+rowsCount, Toast.LENGTH_LONG).show();
+            FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
+            StringBuilder sb = new StringBuilder();
+            //loop, loops through rows
+            for (int r = 1; r < rowsCount; r++) {
+                Row row = sheet.getRow(r);
+                int cellsCount = row.getPhysicalNumberOfCells();
+                chemists = new ChemistImport();
+                //inner loop, loops through columns
+                if (isCellNull){
+                    break;
+                }
+                for (int c = 0; c < cellsCount; c++) {
+                    String value = getCellAsString(row, c, formulaEvaluator);
+
+                    if (c==0 && value.isEmpty()){
+                        isCellNull = true;
                         break;
                     }
-                    for (int c = 0; c < cellsCount; c++) {
-                        String value = getCellAsString(row, c, formulaEvaluator);
-
-                        if (c==0 && value.isEmpty()){
-                            isCellNull = true;
-                            break;
+                    if (c == AppConstants.DOCTOR_ID_EXCEL){
+                        chemists.setChemistId(value);
+                    }
+                    if (c == AppConstants.PATCH_ID_EXCEL){
+                        if (!value.isEmpty()){
+                            chemists.setPatchId(value);
                         }
-                        if (c == AppConstants.DOCTOR_ID_EXCEL){
-                            doctors.setDocId(value);
+                    }
+                    if (c == AppConstants.FIRST_NAME_EXCEL){
+                        if (!value.isEmpty()){
+                            chemists.setFirstName(value);
                         }
-                        if (c == AppConstants.PATCH_ID_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setPatchId(value);
-                            }
+                    }
+                    if (c == AppConstants.MIDDLE_NAME_EXCEL){
+                        if (!value.isEmpty()){
+//                                chemists.setMiddleName(value);
                         }
-                        if (c == AppConstants.FIRST_NAME_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setFirstName(value);
-                            }
+                    }
+                    if (c == AppConstants.LAST_NAME_EXCEL){
+                        if (!value.isEmpty()){
+                            chemists.setLastName(value);
                         }
-                        if (c == AppConstants.MIDDLE_NAME_EXCEL){
-                            if (!value.isEmpty()){
-//                                doctors.setMiddleName(value);
-                            }
+                    }
+                    if (c == AppConstants.DOB_EXCEL){
+                        if (!value.isEmpty()){
+//                                chemists.setDOB(value);
                         }
-                        if (c == AppConstants.LAST_NAME_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setLastName(value);
-                            }
+                    }
+                    if (c == AppConstants.EMAIL_EXCEL){
+                        if (!value.isEmpty()){
+//                                chemists.setEmail(value);
                         }
-                        if (c == AppConstants.DOB_EXCEL){
-                            if (!value.isEmpty()){
-//                                doctors.setDOB(value);
-                            }
+                    }
+                    if (c == AppConstants.ACTIVE_EXCEL){
+                        if (!value.isEmpty()){
+                            chemists.setActive(value);
                         }
-                        if (c == AppConstants.EMAIL_EXCEL){
-                            if (!value.isEmpty()){
-//                                doctors.setEmail(value);
-                            }
+                    }
+                    if (c == AppConstants.PREFERRED_MEET_TIME_EXCEL){
+                        if (!value.isEmpty()){
+                            chemists.setPreferredMeetTime(value);
                         }
-                        if (c == AppConstants.QUALIFICATION_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setQualifications(value);
-                            }
+                    }
+                    if (c == AppConstants.COMPANY_NAME_EXCEL){
+                        if (!value.isEmpty()){
+                            chemists.setCompanyName(value);
                         }
-                        if (c == AppConstants.SPECIALIZATION_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setSpecializations(value);
-                            }
+                    }
+                    if (c == AppConstants.PHONE_EXCEL){
+                        if (!value.isEmpty()){
+//                                chemists.setPhone(value);
                         }
-                        if (c == AppConstants.PREFERRED_MEET_TIME_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setPreferredMeetTime(value);
-                            }
+                    }
+                    if (c == AppConstants.ADDRESS_1_EXCEL){
+                        if (!value.isEmpty()){
+                            chemists.setAddressLine1(value);
                         }
-                        if (c == AppConstants.MEET_FREQUENCY_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setMeetFrequency(value);
-                            }
+                    }
+                    if (c == AppConstants.ADDRESS_2_EXCEL){
+                        if (!value.isEmpty()){
+                            chemists.setAddressLine2(value);
                         }
-                        if (c == AppConstants.PHONE_EXCEL){
-                            if (!value.isEmpty()){
-//                                doctors.setPhone(value);
-                            }
+                    }
+                    if (c == AppConstants.ADDRESS_3_EXCEL){
+                        if (!value.isEmpty()){
+                            chemists.setAddressLine3(value);
                         }
-                        if (c == AppConstants.ADDRESS_1_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setAddressLine1(value);
-                            }
+                    }
+                    if (c == AppConstants.CITY_EXCEL){
+                        if (!value.isEmpty()){
+                            chemists.setCity(value);
                         }
-                        if (c == AppConstants.ADDRESS_2_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setAddressLine2(value);
-                            }
+                    }
+                    if (c == AppConstants.DISTRICT_EXCEL){
+                        if (!value.isEmpty()){
+                            chemists.setDistrict(value);
                         }
-                        if (c == AppConstants.ADDRESS_3_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setAddressLine3(value);
-                            }
+                    }
+                    if (c == AppConstants.STATE_EXCEL){
+                        if (!value.isEmpty()){
+                            chemists.setState(value);
                         }
-                        if (c == AppConstants.ADDRESS_4_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setAddressLine4(value);
-                            }
-                        }
-                        if (c == AppConstants.CITY_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setCity(value);
-                            }
-                        }
-                        if (c == AppConstants.DISTRICT_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setDistrict(value);
-                            }
-                        }
-                        if (c == AppConstants.STATE_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setState(value);
-                            }
-                        }
-
-                        if (c == AppConstants.PINCODE_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setPIN(value);
-                            }
-                        }
-
-                        else{
-
-                            String cellInfo = "r:" + r + "; c:" + c + "; v:" + value;
-                            Log.d(TAG, "readExcelData: Data from row: " + cellInfo);
-                            sb.append(value + ", ");
-                            Toast.makeText(this, new String(sb), Toast.LENGTH_SHORT).show();
-                        }
-
                     }
 
-                    listDoctors.add(doctors);
-                }
-                sb.append(":");
+                    if (c == AppConstants.PINCODE_EXCEL){
+                        if (!value.isEmpty()){
+                            chemists.setPIN(value);
+                        }
+                    }
 
-                if (listDoctors != null){
-                    apiImportDoctorsFromExcel(token, listDoctors);
+                    else{
+
+                        String cellInfo = "r:" + r + "; c:" + c + "; v:" + value;
+                        Log.d(TAG, "readExcelData: Data from row: " + cellInfo);
+                        sb.append(value + ", ");
+                        Toast.makeText(this, new String(sb), Toast.LENGTH_SHORT).show();
+                    }
+
                 }
 
-            }catch (Exception e) {
-                Log.e(TAG, "readExcelData: FileNotFoundException. " + e.getMessage() );
+                chemistImportList.add(chemists);
             }
+            sb.append(":");
+
+            if (chemistImportList != null){
+                apiImportChemistFromExcel(token, chemistImportList);
+            }
+
+        }catch (Exception e) {
+            Log.e(TAG, "readExcelData: FileNotFoundException. " + e.getMessage() );
+        }
 
 
 
@@ -367,7 +358,7 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
                     value = ""+cellValue.getBooleanValue();
                     break;
                 case Cell.CELL_TYPE_NUMERIC:
-                    int numericValue = (int) cellValue.getNumberValue();
+                    int numericValue = (int)cellValue.getNumberValue();
                         value = ""+numericValue;
                     break;
                 case Cell.CELL_TYPE_STRING:
@@ -383,21 +374,23 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
     }
 
 
-    public void apiImportDoctorsFromExcel(String token, List<DoctorImport> doctorImportList){
-        Log.e("Import Doctors params", new Gson().toJson(doctorImportList));
+    public void apiImportChemistFromExcel(String token, List<ChemistImport> chemistImportList){
+        Log.e("Import Doctors params", new Gson().toJson(chemistImportList));
 //        processDialog.showDialog(ActivityUploadDoctor.this, false);
-        Call<MainResponse> call = apiInterface.importDoctorFromExcel(token, doctorImportList);
+        Call<MainResponse> call = apiInterface.importChemistFromExcel(token, chemistImportList);
         call.enqueue(new Callback<MainResponse>() {
             @Override
             public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
 //                processDialog.dismissDialog();
                 if (response.isSuccessful()){
-                   if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-                       Log.d("Import api response",  new Gson().toJson(response.body()));
-                   }
-                   else{
-                       Log.d("Import api response",  new Gson().toJson(response.body()));
-                   }
+                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+
+                        Log.d("Import api response", new Gson().toJson(response.body()));
+                    }
+                    else{
+                        Log.d("Import api response", new Gson().toJson(response.body()));
+                    }
+
                 }
             }
 
@@ -411,10 +404,10 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.card_upload_Plan_view:
+            case R.id.card_upload_chemist_view:
                 checkRequiredPermission();
                 break;
-            case R.id.button_upload_plan_sheet:
+            case R.id.button_upload_chemist_sheet:
                 readExcelData(uri);
                 break;
             case R.id.image_sheet_view:

@@ -134,10 +134,17 @@
         <activity
             android:name=".activities.SearchDateWiseInputActivity"
             android:label="@string/title_activity_search_date_wise_input"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="a30a59c51b2f102869d308e85cfdbf188f2b9aa5" />
+
+        <activity
+            android:name=".activities.ActivityUploadChemist"
+            android:label="@string/title_activity_upload_chemist"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.ActivityUploadPlan"></activity>
     </application>
 
 </manifest>

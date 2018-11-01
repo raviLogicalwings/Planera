@@ -60,7 +60,7 @@ public class AddGiftDialog  extends BaseDialogFragment implements View.OnClickLi
         String strGift = editTextName.getText().toString().trim();
 
         if (TextUtils.isEmpty(strGift)){
-            inputLayoutUserName.setError(getString(R.string.invalid_input));
+            inputLayoutUserName.setError("Gift name is required.");
             editTextName.requestFocus();
         }
         else{

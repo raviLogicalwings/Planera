@@ -156,6 +156,7 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
         textPlanCall = findViewById(R.id.text_plan_call);
         textPlanRemark = findViewById(R.id.text_plan_remark);
         buttonAddPlan = findViewById(R.id.button_add_plan);
+        buttonAddPlan.setText(getString(R.string.update));
 
         if(isDoctorRadioChecked) {
             radioDoctor.setChecked(isDoctorRadioChecked);
@@ -200,6 +201,14 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ActivityUpdatePlan.this, SingleListActivity.class);
+        intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.PLAN_FRAGMENT);
+        startActivity(intent);
+    }
+
     @Override
     public void initData() {
         super.initData();

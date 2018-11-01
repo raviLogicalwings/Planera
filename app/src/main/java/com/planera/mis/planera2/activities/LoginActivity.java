@@ -72,10 +72,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         String emailIdStr = editUserName.getText().toString();
         String passwordStr = editPassword.getText().toString();
             if(!isEmailValid(emailIdStr)){
-                inputLayoutUserName.setError(getString(R.string.invalid_input));
+                inputLayoutUserName.setError("Invalid email address.");
             }
             else if(TextUtils.isEmpty(passwordStr)){
                inputLayoutPassword.setError(getString(R.string.invalid_input));
+            }
+            else if (passwordStr.length()<8){
+                inputLayoutPassword.setError("minimum 8 characters.");
             }
             else{
                 userData.setLoginId(emailIdStr);

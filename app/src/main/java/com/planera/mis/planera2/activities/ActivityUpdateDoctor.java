@@ -171,15 +171,6 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
 
         getPatchList(token);
 
-        // set previous patch id to spinner
-       if (patches != null) {
-           for (int i = 0; i < patches.size(); i++) {
-               if (patches.get(i).getPatchId() == Integer.parseInt(previousPatchId)) {
-                   spinnerPatchId.setSelection(i);
-                   break;
-               }
-           }
-       }
 
         spinnerPatchId.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -196,6 +187,12 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ActivityUpdateDoctor.this, SingleListActivity.class);
+        intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.DOCTOR_FRAGMENT);
+        startActivity(intent);
+    }
 
     public void uiValidation() {
         firstNameStr = textDoctorFirstName.getText().toString().trim();
@@ -440,6 +437,14 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout
                 .simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerArrayAdapter);
+
+        if (patches != null) {
+            for (int i = 0; i < patches.size(); i++) {
+                if (patches.get(i).getPatchId() == Integer.parseInt(previousPatchId)) {
+                    spinnerPatchId.setSelection(i);
+                }
+            }
+        }
 
     }
 

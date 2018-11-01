@@ -10,14 +10,13 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.Retrofit.ApiClient;
 import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
 import com.planera.mis.planera2.activities.models.RegistrationResponse;
 import com.planera.mis.planera2.activities.models.UserData;
+import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.InternetConnection;
 
 import retrofit2.Call;
@@ -92,33 +91,45 @@ public class SignupActivity extends BaseActivity implements View.OnClickListener
         confirmPasswordStr = editConfirmPassword.getText().toString();
         if (TextUtils.isEmpty(userNameStr)){
             inputLayoutUserName.setError("*");
-            Snackbar.make(rootView, "This field can't be empty", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(rootView, "This field can't be empty", Snackbar.LENGTH_SHORT).show();
         }
 
-        else if (TextUtils.isEmpty(passwordStr) || passwordStr.length()<8){
+        else if (TextUtils.isEmpty(passwordStr)){
             inputLayoutPassword.setError("*");
-            Snackbar.make(rootView, "This field can't be empty", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(rootView, "This field can't be empty", Snackbar.LENGTH_SHORT).show();
         }
-        else if (TextUtils.isEmpty(confirmPasswordStr) || passwordStr.length()<8){
+        else if (passwordStr.length()<8){
+            inputLayoutPassword.setError("*");
+            Snackbar.make(rootView, "Password must be of minimum 8 characters.", Snackbar.LENGTH_SHORT).show();
+        }
+        else if (TextUtils.isEmpty(confirmPasswordStr)){
             inputLayoutConfirmPassword.setError("*");
-            Snackbar.make(rootView, "This field can't be empty", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(rootView, "This field can't be empty.", Snackbar.LENGTH_SHORT).show();
         }
-        else if (TextUtils.isEmpty(emailStr)  || !isEmailValid(emailStr)){
+        else if (confirmPasswordStr.length()<8){
+            inputLayoutConfirmPassword.setError("*");
+            Snackbar.make(rootView, "Password must be of minimum 8 characters.", Snackbar.LENGTH_SHORT).show();
+        }
+        else if (TextUtils.isEmpty(emailStr)){
             inputLayoutEmail.setError("*");
             Snackbar.make(rootView, getString(R.string.invalid_input), Snackbar.LENGTH_LONG).show();
+        }
+        else if (!isEmailValid(emailStr)){
+            inputLayoutEmail.setError("*");
+            Snackbar.make(rootView, "Invalid email address.", Snackbar.LENGTH_LONG).show();
         }
 
         else if (TextUtils.isEmpty(phoneStr)){
             inputLayoutMobile.setError("*");
-            Snackbar.make(rootView, "This field can't be empty", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(rootView, "This field can't be empty.", Snackbar.LENGTH_LONG).show();
         }
 
         else if (phoneStr.length()<10){
             inputLayoutMobile.setError("*");
             Snackbar.make(rootView, "Enter 10 Digit mobile number.", Snackbar.LENGTH_LONG).show();
         }
-        else if(!passwordStr.equals(confirmPasswordStr)  || passwordStr.length()<8){
-            inputLayoutConfirmPassword.setError("Password does not matched");
+        else if(!passwordStr.equals(confirmPasswordStr)){
+            inputLayoutConfirmPassword.setError("Password does not match.");
         }
         else{
             user.setLoginId(emailStr);
@@ -127,7 +138,6 @@ public class SignupActivity extends BaseActivity implements View.OnClickListener
             user.setPhone1(phoneStr);
             user.setPassword(passwordStr);
             user.setStatus(ON_HOLD);
-            Toast.makeText(this, new Gson().toJson(user), Toast.LENGTH_LONG).show();
             try {
                 if (InternetConnection.isNetworkAvailable(SignupActivity.this)){
                 callUserRegistrationApi(user);}
@@ -152,12 +162,21 @@ public class SignupActivity extends BaseActivity implements View.OnClickListener
         call.enqueue(new Callback<RegistrationResponse>() {
             @Override
             public void onResponse(Call<RegistrationResponse> call, Response<RegistrationResponse> response) {
-                Toast.makeText(SignupActivity.this, new Gson().toJson(response.body()), Toast.LENGTH_LONG).show();
+                if (response.isSuccessful()){
+                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                        connector.setBoolean(AppConstants.IS_LOGIN, true);
+                        Intent intentMain = new Intent(SignupActivity.this, MainActivity.class);
+                        startActivity(intentMain);
+                    }
+                    else{
+                        Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_SHORT).show();
+                    }
+                }
             }
 
             @Override
             public void onFailure(Call<RegistrationResponse> call, Throwable t) {
-                Toast.makeText(SignupActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                Snackbar.make(rootView,  t.getMessage(), Snackbar.LENGTH_SHORT).show();
             }
         });
     }

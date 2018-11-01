@@ -146,6 +146,12 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
     }
 
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(SingleListActivity.this, AdminPanelActivity.class);
+        startActivity(intent);
+    }
+
     public void refreshFragment(int type){
         switch (type){
             case AppConstants.STATE_FRAGMENT:

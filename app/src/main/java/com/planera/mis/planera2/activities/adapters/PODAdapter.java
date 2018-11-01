@@ -77,8 +77,8 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder> {
             if (previousInputForUpdate.getProductDetails() != null) {
                 for (int i = 0; i < previousInputForUpdate.getProductDetails().size(); i++) {
                     if (previousInputForUpdate.getProductDetails().get(i).getProductId().equals(brands.getProductId() + "")) {
-                        String qty = previousInputForUpdate.getProductDetails().get(i).getProductQty() + "";
-                        myPobHolder.editPodProductValue.setText(qty);
+//                        String qty = previousInputForUpdate.getProductDetails().get(i).getProductQty() + "";
+//                        myPobHolder.editPodProductValue.setText(qty);
                     }
                 }
             }

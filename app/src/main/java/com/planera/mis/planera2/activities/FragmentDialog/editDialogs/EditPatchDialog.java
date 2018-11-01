@@ -81,7 +81,7 @@ public class EditPatchDialog extends BaseDialogFragment implements View.OnClickL
         String strState = editTextName.getText().toString().trim();
 
         if (TextUtils.isEmpty(strState)){
-            inputLayoutUserName.setError(getString(R.string.invalid_input));
+            inputLayoutUserName.setError("Patch name is required");
             editTextName.requestFocus();
         }
         else{

@@ -77,7 +77,6 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
             }
         }
         else {
-            if (!planList.get(position).getChemistsId().equals("0")) {
                 viewHolder.textName.setText(planList.get(position).getChemistFirstName() + " " +
                         planList.get(position).getChemistMiddleName() + " " +
                         planList.get(position).getChemistLastName());
@@ -87,7 +86,7 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
 
                 float dist = calculateDistance(location, planList.get(position).getChemistLatitude(), planList.get(position).getChemistLongitude());
                 viewHolder.textDistance.setText(Math.round(dist) + " KM");
-            }
+
 
         }
         viewHolder.ratingBarDoctor.setRating(3.5f);
@@ -139,7 +138,7 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
 
     private boolean whichRole(int pos){
 
-        if (planList.get(pos).getDoctorId() != 0){
+        if (planList.get(pos).getChemistsId().equals("0")){
            return isDoctor = true;
         }
         else{

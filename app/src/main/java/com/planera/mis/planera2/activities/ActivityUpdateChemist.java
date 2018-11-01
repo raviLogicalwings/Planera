@@ -76,6 +76,7 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
     private boolean isUpdateCall;
     String firstNameStr, middleNameStr, lastNameStr, emailStr, dobStr, companyNameStr, monthtlyVolumeStr,shopSizeStr,  billingEmailStr, billingPhone2Str, billingPhone1Str, ratingStr ,specializationStr, phoneStr,
             address1Str, address2Str, address3Str, address4Str, districtStr, cityStr, stateStr, pincodeStr;
+    private String previousPatchId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,6 +184,12 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ActivityUpdateChemist.this, SingleListActivity.class);
+        intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.CHEMIST_FRAGMENT);
+        startActivity(intent);
+    }
 
     public void uiValidation() {
         firstNameStr = textChemistFirstName.getText().toString().trim();
@@ -481,6 +488,7 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
         textChemistPincode.setText(intent.getStringExtra(AppConstants.PINCODE));
         textChemistRating.setText(intent.getStringExtra(AppConstants.RATING));
         chemistId = intent.getIntExtra(AppConstants.UPDATE_CHEMIST_KEY, 0);
+        previousPatchId = intent.getStringExtra(AppConstants.PATCH_ID);
     }
 
 
@@ -491,6 +499,15 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout
                 .simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerArrayAdapter);
+
+        //set adapter position of previous input value of previous data.
+        if (patches != null) {
+            for (int i = 0; i < patches.size(); i++) {
+                if (patches.get(i).getPatchId() == Integer.parseInt(previousPatchId)) {
+                    spinnerPatchId.setSelection(i);
+                }
+            }
+        }
 
     }
 
