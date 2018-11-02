@@ -9,11 +9,10 @@
         android:type="linear" />
 
     <corners
-        android:radius="40dp"/>
+        android:radius="20dp"/>
 
 
     <size
-        android:height="30dp"
-        android:width="100dp"/>
+        android:width="70dp"/>
 
 </shape>

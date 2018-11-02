@@ -285,7 +285,7 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/button_add_plan"
+        android:id="@+id/button_create_plan"
         style="@style/ButtonText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

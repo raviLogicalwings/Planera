@@ -105,7 +105,27 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
         remarkStr = textPlanRemark.getText().toString().trim();
         plans = new Plans();
 
+        if (isDoctorRadioChecked) {
+            if (!doctorsList.isEmpty()) {
+                if (spinnerPlanDoctor.getSelectedItemPosition() != 0) {
+                    doctorId = doctorsList.get(spinnerPlanDoctor.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getDoctorId() + "";
+                    chemistId = null;
+                }
+            } else {
+                Toast.makeText(ActivityCretePlan.this, "Can create plan, doctor's list not found", Toast.LENGTH_LONG).show();
+            }
+        }
+        if (!isDoctorRadioChecked) {
+            if (!chemistsList.isEmpty()) {
+                if (spinnerPlanChemist.getSelectedItemPosition() != 0) {
+                    chemistId = chemistsList.get(spinnerPlanChemist.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getChemistId() + "";
+                    doctorId = null;
+                }
+            } else {
+                Toast.makeText(ActivityCretePlan.this, "Can create plan, chemist's list not found", Toast.LENGTH_LONG).show();
 
+            }
+        }
         if (spinnerPlanTerritory.getSelectedItemPosition() == 0 ){
             inputLayoutTerritoryPlan.setError("Please select territory.");
             inputLayoutTerritoryPlan.requestFocus();
@@ -133,29 +153,15 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
             textPlanRemark.setError(getString(R.string.invalid_input));
         }
 
-        else if (isDoctorRadioChecked) {
-            if (!doctorsList.isEmpty()) {
-                if (spinnerPlanDoctor.getSelectedItemPosition() != 0) {
-                    doctorId = doctorsList.get(spinnerPlanDoctor.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getDoctorId() + "";
-                    chemistId = null;
-                }
-            } else {
-                Toast.makeText(ActivityCretePlan.this, "Can create plan, doctor's list not found", Toast.LENGTH_LONG).show();
-            }
-        } else if (!isDoctorRadioChecked) {
-            if (!chemistsList.isEmpty()) {
-                if (spinnerPlanChemist.getSelectedItemPosition() != 0) {
-                    chemistId = chemistsList.get(spinnerPlanChemist.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getChemistId() + "";
-                    doctorId = null;
-                }
-            } else {
-                Toast.makeText(ActivityCretePlan.this, "Can create plan, chemist's list not found", Toast.LENGTH_LONG).show();
 
-            }
-        }else {
+        else {
             plans.setCalls(callStr);
-            plans.setChemistsId(chemistId);
-            plans.setDoctorId(doctorId);
+            if (!isDoctorRadioChecked) {
+                plans.setChemistsId(chemistId);
+            }
+            if (isDoctorRadioChecked) {
+                plans.setDoctorId(doctorId);
+            }
             plans.setUserId(userIdStr);
             plans.setPatchId(patchId + "");
             plans.setYear(yearStr);
@@ -167,8 +173,8 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
             } else {
                 Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
             }
-
         }
+
     }
 
     @Override
@@ -201,7 +207,7 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
         radioChemist = findViewById(R.id.radio_chemist);
         textPlanCall = findViewById(R.id.text_plan_call);
         textPlanRemark = findViewById(R.id.text_plan_remark);
-        buttonAddPlan = findViewById(R.id.button_add_plan);
+        buttonAddPlan = findViewById(R.id.button_create_plan);
         if (isDoctorRadioChecked) {
             radioDoctor.setChecked(isDoctorRadioChecked);
             layoutChemistSpinner.setVisibility(View.GONE);
@@ -619,7 +625,7 @@ public class ActivityCretePlan extends BaseActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_add_plan:
+            case R.id.button_create_plan:
                 uiValidation();
                 break;
         }

@@ -1,13 +1,12 @@
 package com.planera.mis.planera2.activities;
 
 import android.app.AlertDialog;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 
 import com.planera.mis.planera2.R;
@@ -55,7 +54,7 @@ public class AdminPanelActivity extends BaseActivity {
     @Override
     public void initData() {
         super.initData();
-        fragmentManager = getFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         loadFragment(FRAGMENT_ADMIN_DASHBOARD);
     }
 
@@ -106,7 +105,7 @@ public class AdminPanelActivity extends BaseActivity {
         switch (currentFragment){
             case FRAGMENT_ADMIN_DASHBOARD:
                 TAG = KEY_ADMIN_DASHBOARD;
-                 fragment= AdminAccessFragment.getInstance();
+                 fragment= new AdminAccessFragment();
                 getSupportActionBar().setTitle("Dashboard");
                 break;
             case FRAGMENT_UPLOAD:
@@ -119,7 +118,6 @@ public class AdminPanelActivity extends BaseActivity {
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, fragment, TAG)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
     }
 }

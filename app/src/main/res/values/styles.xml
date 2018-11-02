@@ -32,6 +32,7 @@
     </style>
 
     <style name="CheckInButton">
+        <item name="android:textSize">@dimen/tiny_text</item>
         <item name="android:background">@drawable/bg_check_button</item>
         <item name="android:textColor">@color/colorWhite</item>
     </style>

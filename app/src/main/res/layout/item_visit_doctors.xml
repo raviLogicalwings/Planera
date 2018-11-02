@@ -7,11 +7,11 @@
 
 
     <android.support.v7.widget.CardView
-        app:cardUseCompatPadding="true"
         style="@style/Base.CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        app:cardUseCompatPadding="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,74 +27,78 @@
                 >
 
                 <TextView
-                    android:layout_centerHorizontal="true"
                     android:id="@+id/text_name_first_letter"
                     style="@style/ExtraLargeText"
-                    android:textColor="@color/colorGray"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
                     android:layout_margin="@dimen/fab_margin"
                     android:background="@drawable/bg_text_name"
                     android:gravity="center"
-                    android:text="T" />
+                    android:text="T"
+                    android:textColor="@color/colorGray" />
 
             </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="1.9"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/fab_margin"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
+                android:layout_weight="1.9"
+                android:orientation="vertical">
+
                 <TextView
-                    android:padding="3dp"
-                    android:layout_width="wrap_content"
                     android:id="@+id/text_name"
-                    style="@style/LargeTextBlack"
-                    android:text="Dr. Aman Kashyap"
-                    android:layout_height="wrap_content" />
+                    style="@style/MediumText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:text="Dr. Aman Kashyap" />
 
                 <RatingBar
                     android:id="@+id/rating_bar_doctor"
-                    style="@style/rating_bar_doc"/>
+                    style="@style/rating_bar_doc" />
+
                 <TextView
-                    android:padding="3dp"
-                    android:layout_width="wrap_content"
                     android:id="@+id/text_address"
                     style="@style/NormalTextBlack"
-                    android:textColor="@color/colorGray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
                     android:text="1/578/B-17, Por Mohollo, Opp. State Bank of India, Athughar Timliyawadm, Nanpura, Surat, Gujrat, 395001"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@color/colorGray" />
 
                 <TextView
-                    android:visibility="gone"
-                    android:padding="3dp"
-                    android:textStyle="italic"
-                    android:drawablePadding="@dimen/drawable_padding"
-                    android:drawableStart="@drawable/icon_remark"
-                    android:textColor="@color/colorPrimary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Remark"
-                    android:drawableLeft="@drawable/icon_remark" />
-                <TextView
-                    android:visibility="gone"
-                    android:layout_marginTop="8dp"
+                    android:drawableLeft="@drawable/icon_remark"
+                    android:drawablePadding="@dimen/drawable_padding"
+                    android:drawableStart="@drawable/icon_remark"
                     android:padding="3dp"
-                    android:layout_width="wrap_content"
+                    android:text="Remark"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="italic"
+                    android:visibility="gone" />
+
+                <TextView
                     android:id="@+id/text_status"
                     style="@style/LargeTextBlack"
-                    android:textColor="@color/colorGreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:padding="3dp"
                     android:text="Confirm"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@color/colorGreen"
+                    android:visibility="gone" />
 
-               <Button
-                   android:layout_marginTop="8dp"
-                   android:id="@+id/button_check_in"
-                   android:layout_width="wrap_content"
-                   style="@style/CheckInButton"
-                   android:layout_height="wrap_content"
-                   android:text="Check in"/>
+                <Button
+                    android:id="@+id/button_check_in"
+                    style="@style/CheckInButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Check in"
+                    android:textStyle="normal" />
 
             </LinearLayout>
 
@@ -109,6 +113,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
                     android:padding="3dp"
                     android:text="5 KM" />
 
@@ -119,8 +124,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="11dp"
-                    android:src="@drawable/icon_active_location"
-                     />
+                    android:src="@drawable/icon_active_location" />
 
 
             </RelativeLayout>

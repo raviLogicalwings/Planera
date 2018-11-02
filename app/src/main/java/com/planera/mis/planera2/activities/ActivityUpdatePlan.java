@@ -155,7 +155,7 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
         spinnerTerritory = findViewById(R.id.spinner_plan_territory);
         textPlanCall = findViewById(R.id.text_plan_call);
         textPlanRemark = findViewById(R.id.text_plan_remark);
-        buttonAddPlan = findViewById(R.id.button_add_plan);
+        buttonAddPlan = findViewById(R.id.button_create_plan);
         buttonAddPlan.setText(getString(R.string.update));
 
         if(isDoctorRadioChecked) {
@@ -530,7 +530,7 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.button_add_plan:
+            case R.id.button_create_plan:
                 uiValidation();
                 break;
         }

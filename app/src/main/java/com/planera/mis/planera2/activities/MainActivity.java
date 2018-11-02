@@ -3,12 +3,12 @@ package com.planera.mis.planera2.activities;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -88,7 +88,7 @@ public class MainActivity extends BaseActivity implements
 
         }
 
-        manager.beginTransaction().replace(R.id.container, fragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
+        manager.beginTransaction().replace(R.id.container, fragment).commit();
     }
     @Override
     public void initUi() {
@@ -104,6 +104,15 @@ public class MainActivity extends BaseActivity implements
         getSupportActionBar().setTitle("Visit Plan");
         imageAddPlan.setOnClickListener(this);
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        fragment = getSupportFragmentManager().findFragmentById(R.id.container);
+        if (fragment != null) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     public void backToLogin(){

@@ -11,6 +11,7 @@
 
     <dimen name="extra_large_text_size">22sp</dimen>
     <dimen name="large_text_size">18sp</dimen>
+    <dimen name="tiny_text">10sp</dimen>
     <dimen name="medium_text_size">16sp</dimen>
     <dimen name="normal_text_size">10sp</dimen>
 

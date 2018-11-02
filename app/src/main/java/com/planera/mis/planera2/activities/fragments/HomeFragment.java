@@ -70,6 +70,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     double lng;
     private GoogleApiClient googleApiClient;
     private Integer patchId;
+    private boolean isPermissionCancelled = false;
 
 
     public HomeFragment() {
@@ -293,7 +294,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                         getMyLocation();
                         break;
                     case Activity.RESULT_CANCELED:
+                        isPermissionCancelled = true;
                         Toasty.warning(mContext, "Please Turn on location, it's required to go ahead. ", Toast.LENGTH_LONG).show();
+
                         break;
                 }
                 break;
@@ -358,7 +361,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        checkLocationSettings();
+        if (!isPermissionCancelled) {
+            checkLocationSettings();
+        }
     }
 
     @Override

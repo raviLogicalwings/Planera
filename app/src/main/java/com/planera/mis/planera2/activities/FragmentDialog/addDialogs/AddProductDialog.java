@@ -154,7 +154,7 @@ public class AddProductDialog extends BaseDialogFragment implements View.OnClick
 
         }
         else {
-            inputLayoutUserName.setError(getString(R.string.invalid_input));
+            inputLayoutUserName.setError("Product name is required.");
         }
     }
 

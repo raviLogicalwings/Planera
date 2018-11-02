@@ -93,11 +93,19 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.MyUs
 
 
     public void bindView(MyUsersHolder holder, int pos){
-        holder.textUserName.setText(list.get(pos).getFirstName()+" "+ list.get(pos).getMiddleName()+" "+list.get(pos).getLastName());
+        String userName = list.get(pos).getFirstName();
+        if (list.get(pos).getMiddleName() != null){
+            userName += list.get(pos).getMiddleName();
+        }
+        if (list.get(pos).getLastName() != null){
+            userName += list.get(pos).getLastName();
+        }
+        holder.textUserName.setText(userName);
         holder.textUserEmail.setText(list.get(pos).getEmail1());
         holder.textUserContact.setText(list.get(pos).getPhone1());
         holder.textQualification.setText(list.get(pos).getQualifications());
     }
+
 
 
     public interface OnItemClickListener{

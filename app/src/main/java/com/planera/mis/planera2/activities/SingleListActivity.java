@@ -2,9 +2,7 @@ package com.planera.mis.planera2.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -140,7 +138,6 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
         comingFragment = getData.getIntExtra(AppConstants.KEY_TOUCHED_FRAGMENT, 0);
         if (comingFragment!= 0) {
             loadFragment(comingFragment);
-            refreshFragment(comingFragment);
         }
 
     }
@@ -148,10 +145,9 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(SingleListActivity.this, AdminPanelActivity.class);
-        startActivity(intent);
-    }
-
+    Intent intent = new Intent(SingleListActivity.this, AdminPanelActivity.class);
+    startActivity(intent);
+}
     public void refreshFragment(int type){
         switch (type){
             case AppConstants.STATE_FRAGMENT:
@@ -210,21 +206,6 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-
-        switch (requestCode){
-            case REQUEST_CODE_PLAN:
-                refreshFragment(AppConstants.PLAN_FRAGMENT);
-                break;
-            case REQUEST_CODE_CHEMIST:
-                refreshFragment(AppConstants.CHEMIST_FRAGMENT);
-                break;
-            case REQUEST_CODE_DOCTOR:
-                refreshFragment(AppConstants.DOCTOR_FRAGMENT);
-                break;
-        }
-    }
 
     public void loadFragment(int type){
         switch (type){
@@ -276,7 +257,7 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
                 break;
         }
 
-      getSupportFragmentManager().beginTransaction().replace(R.id.containerSingle, fragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commitAllowingStateLoss();
+      getSupportFragmentManager().beginTransaction().replace(R.id.containerSingle, fragment).commit();
     }
 
     @Override
