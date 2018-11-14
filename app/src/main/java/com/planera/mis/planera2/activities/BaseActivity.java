@@ -52,9 +52,15 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
+    public String getToken() {
+        return token;
+    }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
 
-//    public void showProgressDialog(String title, String message){
+    //    public void showProgressDialog(String title, String message){
 //        if(progressDialog!=null && progressDialog.isShowing()){
 //            progressDialog.dismiss();
 //        }

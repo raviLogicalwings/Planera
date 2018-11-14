@@ -5,7 +5,6 @@ import com.planera.mis.planera2.activities.models.ChemistImport;
 import com.planera.mis.planera2.activities.models.ChemistListResponse;
 import com.planera.mis.planera2.activities.models.ChemistResponse;
 import com.planera.mis.planera2.activities.models.Chemists;
-import com.planera.mis.planera2.activities.models.DataItem;
 import com.planera.mis.planera2.activities.models.DoctorImport;
 import com.planera.mis.planera2.activities.models.DoctorResponse;
 import com.planera.mis.planera2.activities.models.Doctors;
@@ -243,9 +242,8 @@ public interface ApiInterface {
     Call<MainResponse>  updatePlanDetails (@Header("Authorization") String token,
                                           @Body Plans plans);
 
-    @POST(AppConstants.UPDATE_INPUT)
-    Call<MainResponse> updateInputDetails (@Header("Authorization") String token,
-                                          @Body DataItem item);
+    @POST(AppConstants.UPDATE_MR_INPUT)
+    Call<MainResponse> updateMrInput (@Header("Authorization") String token, @Body Input input);
 
     @POST(AppConstants.IMPORT_DOCTORS_DATA)
     Call<MainResponse> importDoctorFromExcel (@Header("Authorization") String token,

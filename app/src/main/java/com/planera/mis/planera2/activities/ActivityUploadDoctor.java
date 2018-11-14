@@ -221,6 +221,9 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
                     doctors = new DoctorImport();
                     //inner loop, loops through columns
                     if (isCellNull){
+                        if (listDoctors != null){
+                            apiImportDoctorsFromExcel(token, listDoctors);
+                        }
                         break;
                     }
                     for (int c = 0; c < cellsCount; c++) {
@@ -344,10 +347,10 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
                 }
                 sb.append(":");
 
+
                 if (listDoctors != null){
                     apiImportDoctorsFromExcel(token, listDoctors);
                 }
-
             }catch (Exception e) {
                 Log.e(TAG, "readExcelData: FileNotFoundException. " + e.getMessage() );
             }

@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.FragmentDialog.addDialogs.AddGiftDialog;
@@ -268,7 +267,6 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onDialogDismiss() {
-        Toast.makeText(this, "Getting Intraction !!", Toast.LENGTH_SHORT).show();
         loadFragment(AppConstants.STATE_FRAGMENT);
     }
 

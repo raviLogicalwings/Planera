@@ -34,6 +34,7 @@ import com.planera.mis.planera2.activities.utils.InternetConnection;
 
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -129,7 +130,12 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_confirm_product:
-                if (InternetConnection.isNetworkAvailable(ProductCategoryActivity.this)) {
+                if (isUpdateInput){
+                    input.setGiftDetails(new GiftsAdapter().getInputGiftList());
+                    input.setProductDetalis(new SampleListAdapter().getSampleListSelected());
+                    apiUpdateMrInput(token, input);
+                }
+                else if (InternetConnection.isNetworkAvailable(ProductCategoryActivity.this)) {
                     addInputApi(token, input);
                 } else {
                     Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_SHORT).show();
@@ -215,6 +221,40 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
             }
         });
     }
+
+
+
+    public void apiUpdateMrInput(String token, Input input){
+        processDialog.showDialog(ProductCategoryActivity.this, false);
+        Log.e("Input for update", new Gson().toJson(input));
+        Call<MainResponse> call = apiInterface.updateMrInput(token, input);
+        call.enqueue(new Callback<MainResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
+                processDialog.dismissDialog();
+                if (response.isSuccessful()){
+                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                        Toasty.success(ProductCategoryActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                        Intent inUserReportList = new Intent(ProductCategoryActivity.this, SearchDateWiseInputActivity.class);
+                        inUserReportList.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(inUserReportList);
+                        finish();
+                    }
+                    else{
+                        Toasty.error(ProductCategoryActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<MainResponse> call, @NonNull Throwable t) {
+                processDialog.dismissDialog();
+                Toasty.error(ProductCategoryActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
 
     public void apiAddInputBrands(String token, List<InputOrders> inputOrders) {
 

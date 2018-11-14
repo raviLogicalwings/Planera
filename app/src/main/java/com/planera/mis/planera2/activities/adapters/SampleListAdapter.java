@@ -78,11 +78,11 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
             }
             Brands brands = brandsList.get(pos);
 
-            if (dataItemForUpdate != null) {
+            if (dataItemForUpdate != null && dataItemForUpdate.getProductDetails() != null) {
                 for (int i = 0; i < dataItemForUpdate.getProductDetails().size(); i++) {
                     if (dataItemForUpdate.getProductDetails().get(i).getProductId().equals(brands.getProductId() + "")) {
-//                        String samples = dataItemForUpdate.getProductDetails().get(i).getProductQty() + "";
-//                        holder.editBrandSampleValue.setText(samples);
+                        String samples = dataItemForUpdate.getProductDetails().get(i).getQuantity() + "";
+                        holder.editBrandSampleValue.setText(samples);
                     }
                 }
             }
@@ -153,8 +153,8 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
         MySampleHolder(View itemView) {
             super(itemView);
 
-            textBrandSampleName = (TextView) itemView.findViewById(R.id.text_brand_sampel_name);
-            editBrandSampleValue = (EditText) itemView.findViewById(R.id.edit_brand_sample_value);
+            textBrandSampleName = itemView.findViewById(R.id.text_brand_sampel_name);
+            editBrandSampleValue = itemView.findViewById(R.id.edit_brand_sample_value);
         }
 
     }

@@ -149,6 +149,7 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
 
                         intent.putExtra(AppConstants.PASS_INPUT, passInput);
                         if (isUpdateInput) {
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             intent.putExtra(AppConstants.PASS_UPDATE_INPUT, previousInputStr);
                             intent.putExtra(AppConstants.IS_INPUT_UPDATE, true);
                         }
@@ -180,7 +181,7 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
             input.setInputId(previousInputObj.getInputId());
 
             //set to this class
-            textVisitDate.setText(previousInputObj.getVisitDate());
+            textVisitDate.setText(convertIntoDD_MM_YYYY(previousInputObj.getVisitDate()));
             editStartTime.setText(time24To12Hour(previousInputObj.getStartTime()));
             editEndTime.setText(time24To12Hour(previousInputObj.getEndTime()));
             editFeedback.setText(previousInputObj.getComment());
@@ -321,6 +322,18 @@ public class AddInputActivity extends BaseActivity implements View.OnClickListen
 
     public void getDoctorsReport(String token){
 
+    }
+
+    public String convertIntoDD_MM_YYYY(String date){
+        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+        SimpleDateFormat dateOnlyFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String dt = "";
+        try {
+          dt = dateOnlyFormat.format(dateTimeFormat.parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return dt;
     }
 
     public void getDateFromDialog(TextView textView) {

@@ -2,6 +2,8 @@ package com.planera.mis.planera2.activities.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Input{
 
 	@SerializedName("InputId")
@@ -42,6 +44,28 @@ public class Input{
 
 	@SerializedName("VisitDate")
 	private String visitDate;
+
+	@SerializedName("productdetail")
+	private List<InputOrders> productDetalis;
+
+	@SerializedName("giftdetail")
+	private List<InputGift> giftDetails;
+
+	public List<InputOrders> getProductDetalis() {
+		return productDetalis;
+	}
+
+	public void setProductDetalis(List<InputOrders> productDetalis) {
+		this.productDetalis = productDetalis;
+	}
+
+	public List<InputGift> getGiftDetails() {
+		return giftDetails;
+	}
+
+	public void setGiftDetails(List<InputGift> giftDetails) {
+		this.giftDetails = giftDetails;
+	}
 
 	public String getEarlierEntryFeedback() {
 		return earlierEntryFeedback;

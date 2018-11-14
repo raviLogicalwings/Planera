@@ -68,7 +68,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
 
     private void setGiftsData(int position, MyGiftHolder holder, List<GiftsData> giftsData, GiftsData giftsDataObj, DataItem previousInputUpdate){
         holder.textGift.setText(giftsDataObj.getName());
-        if (previousInputUpdate != null) {
+        if (previousInputUpdate != null && previousInputUpdate.getGiftDetails() != null) {
             for (int i = 0; i < previousInputUpdate.getGiftDetails().size(); i++) {
                 if (previousInputUpdate.getGiftDetails().get(i).getGiftId().equals(giftsDataObj.getGiftId() + "")) {
                     String samples = previousInputUpdate.getGiftDetails().get(i).getGiftQuantity() + "";

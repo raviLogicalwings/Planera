@@ -62,7 +62,7 @@ public class AppConstants {
     public static final String UPDATE_CHEMIST = "chemist/updateChemist";
     public static final String UPDATE_USER = "user/updateUser";
     public static final String UPDATE_PLAN = "plan/updatePlan";
-    public static final String UPDATE_INPUT = "input/updateInput";
+    public static final String UPDATE_MR_INPUT = "input/editMrInput";
 
     public static final String IMPORT_DOCTORS_DATA = "Importrecords/doctorsData";
     public static final String IMPORT_CHEMIST_DATA = "Importrecords/chemistsData";

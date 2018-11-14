@@ -10,7 +10,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ApiClient {
+public class ApiClient{
     public static Retrofit instance;
     public static Retrofit instanceForPalces;
     public static Gson gson;
