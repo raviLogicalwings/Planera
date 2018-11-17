@@ -13,19 +13,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
+import com.planera.mis.planera2.activities.ActivityUpdateUser;
 import com.planera.mis.planera2.activities.Retrofit.ApiClient;
 import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
-import com.planera.mis.planera2.activities.ActivityUpdateUser;
 import com.planera.mis.planera2.activities.adapters.UsersListAdapter;
 import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.models.UserData;
 import com.planera.mis.planera2.activities.models.UserListResponse;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -34,7 +36,7 @@ import retrofit2.Response;
 
 import static android.content.ContentValues.TAG;
 
-public class UsersFragment extends BaseFragment{
+public class UsersFragment extends BaseFragment implements SearchView.OnQueryTextListener{
 
     public static UsersFragment instance;
     private View view;
@@ -42,6 +44,8 @@ public class UsersFragment extends BaseFragment{
     private List<UserData> userDataList;
     private RecyclerView listViewUsers;
     private LinearLayout layoutNoData;
+    private SearchView searchViewUser;
+    private UsersListAdapter adapter;
     private int selectedUser;
 
     public UsersFragment() {
@@ -84,7 +88,14 @@ public class UsersFragment extends BaseFragment{
     protected void initUi() {
         super.initUi();
         listViewUsers = view.findViewById(R.id.list_users);
+        searchViewUser = view.findViewById(R.id.search_view_users);
         layoutNoData = view.findViewById(R.id.layout_no_data);
+        searchViewUser.setActivated(true);
+        searchViewUser.onActionViewExpanded();
+        searchViewUser.setIconified(false);
+        searchViewUser.clearFocus();
+
+        searchViewUser.setOnQueryTextListener(this);
     }
 
 
@@ -126,8 +137,21 @@ public class UsersFragment extends BaseFragment{
 
     }
 
+    void filter(String text){
+        List<UserData> temp = new ArrayList<>();
+        for(UserData d: userDataList){
+            //or use .equal(text) with you want equal match
+            //use .toLowerCase() for better matches
+            if(d.getFirstName().toLowerCase().contains(text.toLowerCase())){
+                temp.add(d);
+            }
+        }
+        adapter.updateList(temp);
+    }
+
     public void initAdapter(List<UserData> list, RecyclerView recyclerView){
-        UsersListAdapter adapter = new UsersListAdapter(mContext, list, (view, position) -> {
+
+        adapter = new UsersListAdapter(mContext, list, (view, position) -> {
             switch (view.getId()){
                 case R.id.img_user_delete:
                     popupDialog(token, list.get(position).getUserId());
@@ -243,5 +267,16 @@ public class UsersFragment extends BaseFragment{
                 Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        filter(newText);
+        return false;
     }
 }

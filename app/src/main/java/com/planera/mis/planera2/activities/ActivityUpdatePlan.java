@@ -157,7 +157,6 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
         textPlanRemark = findViewById(R.id.text_plan_remark);
         buttonAddPlan = findViewById(R.id.button_create_plan);
         buttonAddPlan.setText(getString(R.string.update));
-
         if(isDoctorRadioChecked) {
             radioDoctor.setChecked(isDoctorRadioChecked);
             chemistSpinnerLayout.setVisibility(View.GONE);

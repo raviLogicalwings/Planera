@@ -52,6 +52,11 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.MyUs
        }
     }
 
+    public void updateList(List<UserData> userDataList){
+        list = userDataList;
+        notifyDataSetChanged();
+    }
+
     public class MyUsersHolder extends RecyclerView.ViewHolder  implements View.OnClickListener{
         private TextView textUserName;
         private TextView textUserEmail;

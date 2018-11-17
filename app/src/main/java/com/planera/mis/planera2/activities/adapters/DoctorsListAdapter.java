@@ -83,6 +83,11 @@ public class DoctorsListAdapter extends RecyclerView.Adapter<DoctorsListAdapter.
         }
     }
 
+    public void updateList(List<Doctors> doctorsList){
+        this.doctorsList = doctorsList;
+        notifyDataSetChanged();
+    }
+
     public interface OnItemClickListener{
          void onItemClick(View view, int position);
     }

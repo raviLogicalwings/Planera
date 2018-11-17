@@ -117,6 +117,8 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
         textChemistRating = findViewById(R.id.text_chemist_rating);
         buttonAddChemist = findViewById(R.id.button_add_chemist);
 
+        buttonAddChemist.setText(getString(R.string.update));
+
         buttonAddChemist.setOnClickListener(this);
         setSupportActionBar(toolbarChemist);
         getSupportActionBar().setTitle("Update Chemist's Detail");

@@ -9,8 +9,8 @@ public class InputOrders {
 	@SerializedName("ProductName")
 	private String productName;
 //
-//	@SerializedName("IsBrand")
-//	private int isBrand;
+	@SerializedName("IsBrand")
+	private int isBrand;
 
 	@SerializedName("InputId")
 	private String inputId;
@@ -83,14 +83,14 @@ public class InputOrders {
 		this.productName = productName;
 	}
 
-//	public int getIsBrand() {
-//		return isBrand;
-//	}
-//
-//	public void setIsBrand(int isBrand) {
-//		this.isBrand = isBrand;
-//	}
-//
+	public int getIsBrand() {
+		return isBrand;
+	}
+
+	public void setIsBrand(int isBrand) {
+		this.isBrand = isBrand;
+	}
+
 
 	@Override
  	public String toString(){

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -25,6 +26,7 @@ import com.planera.mis.planera2.activities.models.DoctorsListResponce;
 import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -33,7 +35,7 @@ import retrofit2.Response;
 
 import static android.content.ContentValues.TAG;
 
-public class DoctorsFragment extends BaseFragment{
+public class DoctorsFragment extends BaseFragment implements SearchView.OnQueryTextListener{
 
     public static DoctorsFragment instance;
     private View view;
@@ -41,14 +43,16 @@ public class DoctorsFragment extends BaseFragment{
     private List<Doctors> doctorsList;
     private RecyclerView listViewDoctors;
     private LinearLayout layoutNoData;
+    private SearchView searchViewDoctor;
     private int selectedDoctor;
+    private DoctorsListAdapter adapter;
 
     public DoctorsFragment() {
 
     }
 
     public static DoctorsFragment newInstance() {
-        if(instance == null){
+        if (instance == null) {
             instance = new DoctorsFragment();
         }
 
@@ -64,7 +68,7 @@ public class DoctorsFragment extends BaseFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view =  inflater.inflate(R.layout.fragment_doctors, container, false);
+        view = inflater.inflate(R.layout.fragment_doctors, container, false);
         initUi();
         initData();
         return view;
@@ -74,7 +78,7 @@ public class DoctorsFragment extends BaseFragment{
     protected void initData() {
         super.initData();
         apiInterface = ApiClient.getInstance();
-        if(token!=null){
+        if (token != null) {
             getDoctorsList(token);
         }
     }
@@ -84,30 +88,34 @@ public class DoctorsFragment extends BaseFragment{
         super.initUi();
         listViewDoctors = view.findViewById(R.id.list_doctors);
         layoutNoData = view.findViewById(R.id.layout_no_data);
+        searchViewDoctor = view.findViewById(R.id.search_view_doctor);
+        searchViewDoctor.setActivated(true);
+        searchViewDoctor.onActionViewExpanded();
+        searchViewDoctor.setIconified(false);
+        searchViewDoctor.clearFocus();
+
+        searchViewDoctor.setOnQueryTextListener(this);
     }
 
 
-
-
-    public void getDoctorsList(String token){
+    public void getDoctorsList(String token) {
         processDialog.showDialog(mContext, false);
         Call<DoctorsListResponce> call = apiInterface.doctorsList(token);
         call.enqueue(new Callback<DoctorsListResponce>() {
             @Override
             public void onResponse(Call<DoctorsListResponce> call, Response<DoctorsListResponce> response) {
                 processDialog.dismissDialog();
-                Log.e(TAG, "onResponse: "+new Gson().toJson(response.body()));
-                if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                Log.e(TAG, "onResponse: " + new Gson().toJson(response.body()));
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     doctorsList = response.body().getData();
-                    if (doctorsList!=null) {
+                    if (doctorsList != null) {
                         listViewDoctors.setVisibility(View.VISIBLE);
                         layoutNoData.setVisibility(View.GONE);
                         System.out.println(doctorsList.size());
 
                         initAdapter(doctorsList, listViewDoctors);
                     }
-            }
-            else{
+                } else {
                     layoutNoData.setVisibility(View.VISIBLE);
                     listViewDoctors.setVisibility(View.GONE);
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
@@ -125,9 +133,10 @@ public class DoctorsFragment extends BaseFragment{
 
     }
 
-    public void initAdapter(List<Doctors> list, RecyclerView recyclerView){
-        DoctorsListAdapter adapter = new DoctorsListAdapter(mContext, list, (view, position) -> {
-            switch (view.getId()){
+    public void initAdapter(List<Doctors> list, RecyclerView recyclerView) {
+
+        adapter = new DoctorsListAdapter(mContext, list, (view, position) -> {
+            switch (view.getId()) {
                 case R.id.img_doctor_delete:
                     popupDialog(token, doctorsList.get(position).getDoctorId());
                     break;
@@ -146,8 +155,8 @@ public class DoctorsFragment extends BaseFragment{
     }
 
 
-    public void doctorDetailsForUpdate(int pos, List<Doctors> doctorsData){
-        selectedDoctor= doctorsData.get(pos).getDoctorId();
+    public void doctorDetailsForUpdate(int pos, List<Doctors> doctorsData) {
+        selectedDoctor = doctorsData.get(pos).getDoctorId();
         Intent intentDoctorCall = new Intent(mContext, ActivityUpdateDoctor.class);
         intentDoctorCall.putExtra(AppConstants.UPDATE_DOCTOR_KEY, selectedDoctor);
         intentDoctorCall.putExtra(AppConstants.FIRST_NAME, doctorsData.get(pos).getFirstName());
@@ -172,18 +181,19 @@ public class DoctorsFragment extends BaseFragment{
         mContext.startActivity(intentDoctorCall);
 
     }
-    public void setAdapter(RecyclerView recyclerView, DoctorsListAdapter adapter){
+
+    public void setAdapter(RecyclerView recyclerView, DoctorsListAdapter adapter) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.hasFixedSize();
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
     }
-
 
 
     @Override
@@ -192,15 +202,27 @@ public class DoctorsFragment extends BaseFragment{
 
     }
 
+    void filter(String text){
+        List<Doctors> temp = new ArrayList<>();
+        for(Doctors d: doctorsList){
+            //or use .equal(text) with you want equal match
+            //use .toLowerCase() for better matches
+            if(d.getFirstName().toLowerCase().contains(text.toLowerCase())){
+                temp.add(d);
+            }
+        }
+        adapter.updateList(temp);
+    }
 
-    public void popupDialog( String token, int doctorId){
+
+    public void popupDialog(String token, int doctorId) {
         AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
 
         alertDialog.setMessage("Are you sure you want to delete this?");
 
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", (dialogInterface, i) -> {
             dialogInterface.cancel();
-            deleteDoctorApi(token, doctorId );
+            deleteDoctorApi(token, doctorId);
         });
 
 
@@ -213,19 +235,17 @@ public class DoctorsFragment extends BaseFragment{
     }
 
 
-
-    public void deleteDoctorApi(String token, int doctorId){
+    public void deleteDoctorApi(String token, int doctorId) {
         processDialog.showDialog(mContext, false);
         Call<MainResponse> call = apiInterface.deleteDoctor(token, doctorId);
         call.enqueue(new Callback<MainResponse>() {
             @Override
             public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
                 processDialog.dismissDialog();
-                if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     getFragmentManager().beginTransaction().detach(DoctorsFragment.this).attach(DoctorsFragment.this).commit();
                     Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                }
-                else{
+                } else {
                     Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
@@ -237,5 +257,16 @@ public class DoctorsFragment extends BaseFragment{
                 Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        filter(newText);
+        return false;
     }
 }

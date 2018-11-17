@@ -74,7 +74,7 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
     }
 
 
-    public void bindItemsWithView(MyBrandsHolder holder, int pos) {
+    private void bindItemsWithView(MyBrandsHolder holder, int pos) {
         if (dataItemForUpdate != null) {
             if (brandsList.get(pos).getProductId() == dataItemForUpdate.getProductId()) {
                 switch (dataItemForUpdate.getInterestedLevel()) {

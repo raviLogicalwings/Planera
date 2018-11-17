@@ -7,11 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.models.Chemists;
-
 
 import java.util.List;
 
@@ -49,6 +47,11 @@ public class ChemistListAdapter extends RecyclerView.Adapter<ChemistListAdapter.
         else {
             return 0;
         }
+    }
+
+    public void updateList(List<Chemists> chemists) {
+        this.chemists = chemists;
+        notifyDataSetChanged();
     }
 
     public class MyChemistHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

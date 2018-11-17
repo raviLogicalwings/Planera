@@ -312,8 +312,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
             inputLayoutChemistReport.setError("Please select chemist");
         } else if (spinnerUserReport.getSelectedItemPosition() == 0) {
             inputLayoutUserReport.setError("Please select chemist");
-        }
-        else if (TextUtils.isEmpty(strStartDate)) {
+        } else if (TextUtils.isEmpty(strStartDate)) {
             editStartTime.setError(getString(R.string.invalid_input));
             editStartTime.requestFocus();
 
@@ -373,7 +372,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         DatePickerDialog datePickerDialog = new DatePickerDialog(ActivityAdminReports.this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                strPickedDate = year + "-" + month + "-" + dayOfMonth;
+                strPickedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
 
                 editText.setText(strPickedDate);
 
@@ -677,7 +676,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                         Toast.makeText(ActivityAdminReports.this, "Error Code", Toast.LENGTH_LONG).show();
                     }
                     if (response.body().getStatuscode() == AppConstants.RESULT_OK) {
-                        Log.e("Data of Items", new Gson().toJson(response.body()));
+                        Log.e("Data of Doctor Report", new Gson().toJson(response.body()));
                         dataItemsList = response.body().getData();
 
                         if (dataItemsList != null) {
@@ -829,7 +828,11 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
 
             textArray[4] = new TextView(this);
             textArray[4].setId(i + 111);
-            textArray[4].setText(dataItemsList.get(i).getProductName() + "(" + dataItemsList.get(i).getProductQty() + ")");
+            String productDetail = "";
+            for (int productIterettor = 0; productIterettor < dataItemsList.get(i).getProductDetails().size(); productIterettor++) {
+                productDetail += dataItemsList.get(i).getProductDetails().get(productIterettor).getProductName() + "(" + dataItemsList.get(i).getProductDetails().get(productIterettor).getQuantity() + ")";
+            }
+            textArray[4].setText(productDetail);
             textArray[4].setTextColor(Color.WHITE);
             textArray[4].setPadding(8, 8, 8, 8);
             tr_headObj[i].addView(textArray[4]);
@@ -917,28 +920,32 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
 
             textArray[1] = new TextView(this);
             textArray[1].setId(i + 111);
-            textArray[1].setText(dataItemsList.get(i).getUserName());
+            textArray[1].setText(dataItemsList.get(i).getDoctorName());
             textArray[1].setTextColor(Color.WHITE);
             textArray[1].setPadding(8, 8, 8, 8);
             tr_headObj[i].addView(textArray[1]);
 
             textArray[2] = new TextView(this);
             textArray[2].setId(i + 111);
-            textArray[2].setText(dataItemsList.get(i).getStartDate());
+            textArray[2].setText(dataItemsList.get(i).getStartTime());
             textArray[2].setTextColor(Color.WHITE);
             textArray[2].setPadding(8, 8, 8, 8);
             tr_headObj[i].addView(textArray[2]);
 
             textArray[3] = new TextView(this);
             textArray[3].setId(i + 111);
-            textArray[3].setText(dataItemsList.get(i).getEndDate());
+            textArray[3].setText(dataItemsList.get(i).getEndTime());
             textArray[3].setTextColor(Color.WHITE);
             textArray[3].setPadding(8, 8, 8, 8);
             tr_headObj[i].addView(textArray[3]);
 
             textArray[4] = new TextView(this);
             textArray[4].setId(i + 111);
-            textArray[4].setText(dataItemsList.get(i).getProductName() + "(" + dataItemsList.get(i).getProductQty() + ")");
+            String productDetail = "";
+            for (int productIterettor = 0; productIterettor < dataItemsList.get(i).getProductDetails().size(); productIterettor++) {
+                productDetail += dataItemsList.get(i).getProductDetails().get(productIterettor).getProductName() + "(" + dataItemsList.get(i).getProductDetails().get(productIterettor).getQuantity() + ")";
+            }
+            textArray[4].setText(productDetail);
             textArray[4].setTextColor(Color.WHITE);
             textArray[4].setPadding(8, 8, 8, 8);
             tr_headObj[i].addView(textArray[4]);
@@ -974,6 +981,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     }
 
     public void userDataTable(List<DataItem> dataItemsList) {
+        Log.e("User input report", new Gson().toJson(dataItemsList));
         TextView label_number = new TextView(this);
         label_number.setText("S. No.");
         label_number.setId(COLUMN_ID + 11);
@@ -1091,14 +1099,14 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
             // StartDate
             textArray[3] = new TextView(this);
             textArray[3].setId(i + 111);
-            textArray[3].setText(dataItemsList.get(i).getStartDate());
+            textArray[3].setText(dataItemsList.get(i).getStartTime());
             textArray[3].setTextColor(Color.WHITE);
             textArray[3].setPadding(8, 8, 8, 8);
             tr_headObj[i].addView(textArray[3]);
 
             textArray[4] = new TextView(this);
             textArray[4].setId(i + 111);
-            textArray[4].setText(dataItemsList.get(i).getEndDate());
+            textArray[4].setText(dataItemsList.get(i).getEndTime());
             textArray[4].setTextColor(Color.WHITE);
             textArray[4].setPadding(8, 8, 8, 8);
             tr_headObj[i].addView(textArray[4]);
@@ -1116,12 +1124,17 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
 
             textArray[6] = new TextView(this);
             textArray[6].setId(i + 111);
-            if (dataItemsList.get(i).getIsBrand().equals("1")) {
-                textArray[6].setText(dataItemsList.get(i).getProductName()
-                        + "(" + dataItemsList.get(i).getProductQty() + ")");
-            } else {
-                textArray[6].setText("---");
+//            if (dataItemsList.get(i).getIsBrand().equals("1")) {
+            String productDetail = "";
+            if (dataItemsList.get(i).getProductDetails() != null) {
+                for (int productIterettor = 0; productIterettor < dataItemsList.get(i).getProductDetails().size(); productIterettor++) {
+                    productDetail += dataItemsList.get(i).getProductDetails().get(productIterettor).getProductName() + " (" + dataItemsList.get(i).getProductDetails().get(productIterettor).getQuantity() + ") , \n";
+                }
             }
+            textArray[6].setText(productDetail);
+//            } else {
+//                textArray[6].setText("---");
+//            }
             textArray[6].setTextColor(Color.WHITE);
             textArray[6].setPadding(8, 8, 8, 8);
             tr_headObj[i].addView(textArray[6]);
@@ -1142,9 +1155,12 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
 
             textArray[8] = new TextView(this);
             textArray[8].setId(i + 111);
-            if (dataItemsList.get(i).getGiftId() != 0) {
-                textArray[8].setText(dataItemsList.get(i).getGiftName()
-                        + "(" + dataItemsList.get(i).getGiftQty() + ")");
+            String giftDetalis = "";
+            if (dataItemsList.get(i).getGiftDetails() != null) {
+                for (int giftIterettor = 0; giftIterettor < dataItemsList.get(i).getGiftDetails().size(); giftIterettor++) {
+                    giftDetalis += dataItemsList.get(i).getGiftDetails().get(giftIterettor).getGiftName() + " (" + dataItemsList.get(i).getGiftDetails().get(giftIterettor).getQuantity() + ") , \n";
+                }
+                textArray[8].setText(giftDetalis);
             } else {
                 textArray[8].setText("---");
             }

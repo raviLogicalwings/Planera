@@ -68,7 +68,7 @@ public class InputListAdapter extends RecyclerView.Adapter<InputListAdapter.MyIn
         if(inputListItems.get(pos).getDoctorId() == 0){
             holder.textNameInput.setText(inputListItems.get(pos).getChemistName());
         }
-        if (inputListItems.get(pos).getChemistsId().equals("0")){
+        else{
             holder.textNameInput.setText(inputListItems.get(pos).getDoctorName());
         }
 

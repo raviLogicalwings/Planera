@@ -29,7 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class AddInputActivity extends BaseActivity implements View.OnClickListener {
+public class  AddInputActivity extends BaseActivity implements View.OnClickListener {
     private AppBarLayout appBar;
     private Toolbar toolbarTime;
     private TextView textCustomerName;

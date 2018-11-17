@@ -80,10 +80,19 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
 
             if (dataItemForUpdate != null && dataItemForUpdate.getProductDetails() != null) {
                 for (int i = 0; i < dataItemForUpdate.getProductDetails().size(); i++) {
+                    //loading previous data to generated array list !{
+                        orders = new InputOrders();
+                        orders.setProductId(dataItemForUpdate.getProductDetails().get(i).getProductId());
+                        orders.setQuantity(dataItemForUpdate.getProductDetails().get(i).getQuantity());
+                        orders.setIsSample(dataItemForUpdate.getProductDetails().get(i).getIsSample());
+                        sampleListSelected.add(orders);
+
                     if (dataItemForUpdate.getProductDetails().get(i).getProductId().equals(brands.getProductId() + "")) {
                         String samples = dataItemForUpdate.getProductDetails().get(i).getQuantity() + "";
                         holder.editBrandSampleValue.setText(samples);
                     }
+
+
                 }
             }
 
@@ -97,37 +106,46 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     String changedText = s.toString().trim();
                     boolean isUpdated = false;
-                    if (!changedText.equals("")) {
 
                         if (sampleListSelected.size()>0){
                             for (int i= 0; i< sampleListSelected.size(); i++){
                                 if (sampleListSelected.get(i).getProductId().equals(brands.getProductId()+"")){
-                                    sampleListSelected.get(i).setQuantity(changedText);
-                                    isUpdated = true;
+                                    if (changedText.equals("")){
+                                        sampleListSelected.remove(i);
+                                    }
+                                    else {
+                                        sampleListSelected.get(i).setQuantity(changedText);
+                                        isUpdated = true;
+                                    }
                                 }
 
                             }
 
                             if (!isUpdated){
+                                if (!changedText.equals("")) {
                                 orders = new InputOrders();
                                 orders.setProductId(brands.getProductId() + "");
                                 orders.setIsSample("1");
                                 orders.setQuantity(changedText);
                                 orders.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + "");
                                 sampleListSelected.add(orders);
+                                }
                             }
                         }
                         else {
+                            if (!changedText.equals("")){
                             orders = new InputOrders();
                             orders.setProductId(brands.getProductId() + "");
                             orders.setIsSample("1");
                             orders.setQuantity(changedText);
                             orders.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + "");
                             sampleListSelected.add(orders);
+                            }
                         }
 
-                    }
-                    setSampleListSelected(sampleListSelected);
+                        if (!changedText.equals("")) {
+                            setSampleListSelected(sampleListSelected);
+                        }
                 }
 
                 @Override

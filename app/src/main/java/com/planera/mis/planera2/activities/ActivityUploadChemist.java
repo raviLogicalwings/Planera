@@ -26,6 +26,8 @@ import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.RuntimePermissionCheck;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
@@ -36,13 +38,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ActivityUploadChemist extends BaseActivity implements View.OnClickListener{
+public class ActivityUploadChemist extends BaseActivity implements View.OnClickListener {
 
     public static ActivityUploadDoctor instance;
     private CardView cardUploadChemistView;
@@ -84,7 +87,7 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
         buttonUploadChemistSheet.setOnClickListener(this);
     }
 
-    public void checkRequiredPermission(){
+    public void checkRequiredPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             // Do the file write
             pickFile();
@@ -101,7 +104,7 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
         }
     }
 
-    public void pickFile(){
+    public void pickFile() {
         Intent intent = new Intent();
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         // Set your required file type
@@ -118,8 +121,6 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
         }
 //        startActivityForResult(Intent.createChooser(intent, "Choose CSV"), 100);
     }
-
-
 
 
     @Override
@@ -142,9 +143,8 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
 
 //                    readExcelData(uri);
                     String path = myFile.getAbsolutePath();
-                    Log.e(TAG, "FILE PATH"+path);
+                    Log.e(TAG, "FILE PATH" + path);
                     displayName = null;
-
 
 
 //                    Toast.makeText(ActivityUploadDoctor.this, myFile.toString(), Toast.LENGTH_LONG).show();
@@ -174,8 +174,8 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
     }
 
 
-    public void toggleView(String name){
-        if(name!= null){
+    public void toggleView(String name) {
+        if (name != null) {
             cardUploadChemistView.setVisibility(View.GONE);
             imageSheetView.setVisibility(View.VISIBLE);
             textFileName.setVisibility(View.VISIBLE);
@@ -195,154 +195,186 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
 
     private void readExcelData(Uri uri) {
 
-        Toast.makeText(this, "Working fine", Toast.LENGTH_LONG).show();
         try {
-//            File fileB = new File(filePath);
+            // Creating Input Stream
+            Log.e("File Path", uri.toString());
+//            File file = new File (uri.getPath());
             InputStream inputStream = getContentResolver().openInputStream(uri);
-//                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-//                StringBuilder stringBuilder = new StringBuilder();
-//                String line;
-//                while ((line = reader.readLine()) != null){
-//                    stringBuilder.append(line);
-//                }
-//
-//                inputStream.close();
-//              Log.e("String Result", stringBuilder.toString());
-//
-            XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
-            XSSFSheet sheet = workbook.getSheetAt(CHEMIST_SHEET);
-            int rowsCount = sheet.getPhysicalNumberOfRows();
-            Toast.makeText(this, "rowCount"+rowsCount, Toast.LENGTH_LONG).show();
-            FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
-            StringBuilder sb = new StringBuilder();
-            //loop, loops through rows
-            for (int r = 1; r < rowsCount; r++) {
-                Row row = sheet.getRow(r);
-                int cellsCount = row.getPhysicalNumberOfCells();
-                chemists = new ChemistImport();
-                //inner loop, loops through columns
-                if (isCellNull){
-                    break;
-                }
-                for (int c = 0; c < cellsCount; c++) {
-                    String value = getCellAsString(row, c, formulaEvaluator);
 
-                    if (c==0 && value.isEmpty()){
-                        isCellNull = true;
-                        break;
-                    }
-                    if (c == AppConstants.DOCTOR_ID_EXCEL){
-                        chemists.setChemistId(value);
-                    }
-                    if (c == AppConstants.PATCH_ID_EXCEL){
-                        if (!value.isEmpty()){
-                            chemists.setPatchId(value);
-                        }
-                    }
-                    if (c == AppConstants.FIRST_NAME_EXCEL){
-                        if (!value.isEmpty()){
-                            chemists.setFirstName(value);
-                        }
-                    }
-                    if (c == AppConstants.MIDDLE_NAME_EXCEL){
-                        if (!value.isEmpty()){
-//                                chemists.setMiddleName(value);
-                        }
-                    }
-                    if (c == AppConstants.LAST_NAME_EXCEL){
-                        if (!value.isEmpty()){
-                            chemists.setLastName(value);
-                        }
-                    }
-                    if (c == AppConstants.DOB_EXCEL){
-                        if (!value.isEmpty()){
-//                                chemists.setDOB(value);
-                        }
-                    }
-                    if (c == AppConstants.EMAIL_EXCEL){
-                        if (!value.isEmpty()){
-//                                chemists.setEmail(value);
-                        }
-                    }
-                    if (c == AppConstants.ACTIVE_EXCEL){
-                        if (!value.isEmpty()){
-                            chemists.setActive(value);
-                        }
-                    }
-                    if (c == AppConstants.PREFERRED_MEET_TIME_EXCEL){
-                        if (!value.isEmpty()){
-                            chemists.setPreferredMeetTime(value);
-                        }
-                    }
-                    if (c == AppConstants.COMPANY_NAME_EXCEL){
-                        if (!value.isEmpty()){
-                            chemists.setCompanyName(value);
-                        }
-                    }
-                    if (c == AppConstants.PHONE_EXCEL){
-                        if (!value.isEmpty()){
-//                                chemists.setPhone(value);
-                        }
-                    }
-                    if (c == AppConstants.ADDRESS_1_EXCEL){
-                        if (!value.isEmpty()){
-                            chemists.setAddressLine1(value);
-                        }
-                    }
-                    if (c == AppConstants.ADDRESS_2_EXCEL){
-                        if (!value.isEmpty()){
-                            chemists.setAddressLine2(value);
-                        }
-                    }
-                    if (c == AppConstants.ADDRESS_3_EXCEL){
-                        if (!value.isEmpty()){
-                            chemists.setAddressLine3(value);
-                        }
-                    }
-                    if (c == AppConstants.CITY_EXCEL){
-                        if (!value.isEmpty()){
-                            chemists.setCity(value);
-                        }
-                    }
-                    if (c == AppConstants.DISTRICT_EXCEL){
-                        if (!value.isEmpty()){
-                            chemists.setDistrict(value);
-                        }
-                    }
-                    if (c == AppConstants.STATE_EXCEL){
-                        if (!value.isEmpty()){
-                            chemists.setState(value);
-                        }
-                    }
-
-                    if (c == AppConstants.PINCODE_EXCEL){
-                        if (!value.isEmpty()){
-                            chemists.setPIN(value);
-                        }
-                    }
-
-                    else{
-
-                        String cellInfo = "r:" + r + "; c:" + c + "; v:" + value;
-                        Log.d(TAG, "readExcelData: Data from row: " + cellInfo);
-                        sb.append(value + ", ");
-                        Toast.makeText(this, new String(sb), Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-
-                chemistImportList.add(chemists);
-            }
-            sb.append(":");
-
-            if (chemistImportList != null){
-                apiImportChemistFromExcel(token, chemistImportList);
+            // Create a workbook using the File System
+            XSSFWorkbook myWorkBook = null;
+            if (inputStream != null) {
+                myWorkBook = new XSSFWorkbook(inputStream);
             }
 
-        }catch (Exception e) {
-            Log.e(TAG, "readExcelData: FileNotFoundException. " + e.getMessage() );
+            // Get the first sheet from workbook
+            XSSFSheet mySheet = myWorkBook.getSheetAt(CHEMIST_SHEET);
+
+            /** We now need something to iterate through the cells.**/
+            Iterator<Row> rowIter = mySheet.rowIterator();
+
+            while (rowIter.hasNext()) {
+                HSSFRow myRow = (HSSFRow) rowIter.next();
+                Iterator<Cell> cellIter = myRow.cellIterator();
+                while (cellIter.hasNext()) {
+                    HSSFCell myCell = (HSSFCell) cellIter.next();
+                    Log.w("FileUtils", "Cell Value: " + myCell.toString());
+                    Toast.makeText(ActivityUploadChemist.this, "cell Value: " + myCell.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        } catch (Exception e) {
+            Log.e("Exception", e.getMessage());
         }
 
+
+
+//        Toast.makeText(this, "Working fine", Toast.LENGTH_LONG).show();
+//        try {
+////            File fileB = new File(filePath);
+//            InputStream inputStream = getContentResolver().openInputStream(uri);
+////                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+////                StringBuilder stringBuilder = new StringBuilder();
+////                String line;
+////                while ((line = reader.readLine()) != null){
+////                    stringBuilder.append(line);
+////                }
+////
+////                inputStream.close();
+////              Log.e("String Result", stringBuilder.toString());
+////
+//            XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+//            XSSFSheet sheet = workbook.getSheetAt(CHEMIST_SHEET);
+//            int rowsCount = sheet.getPhysicalNumberOfRows();
+//            Toast.makeText(this, "rowCount"+rowsCount, Toast.LENGTH_LONG).show();
+//            FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
+//            StringBuilder sb = new StringBuilder();
+//            //loop, loops through rows
+//            for (int r = 1; r < rowsCount; r++) {
+//                Row row = sheet.getRow(r);
+//                int cellsCount = row.getPhysicalNumberOfCells();
+//                chemists = new ChemistImport();
+//                //inner loop, loops through columns
+//                if (isCellNull){
+//                    break;
+//                }
+//                for (int c = 0; c < cellsCount; c++) {
+//                    String value = getCellAsString(row, c, formulaEvaluator);
+//
+//                    if (c==0 && value.isEmpty()){
+//                        isCellNull = true;
+//                        break;
+//                    }
+//                    if (c == AppConstants.DOCTOR_ID_EXCEL){
+//                        chemists.setChemistId(value);
+//                    }
+//                    if (c == AppConstants.PATCH_ID_EXCEL){
+//                        if (!value.isEmpty()){
+//                            chemists.setPatchId(value);
+//                        }
+//                    }
+//                    if (c == AppConstants.FIRST_NAME_EXCEL){
+//                        if (!value.isEmpty()){
+//                            chemists.setFirstName(value);
+//                        }
+//                    }
+//                    if (c == AppConstants.MIDDLE_NAME_EXCEL){
+//                        if (!value.isEmpty()){
+////                                chemists.setMiddleName(value);
+//                        }
+//                    }
+//                    if (c == AppConstants.LAST_NAME_EXCEL){
+//                        if (!value.isEmpty()){
+//                            chemists.setLastName(value);
+//                        }
+//                    }
+//                    if (c == AppConstants.DOB_EXCEL){
+//                        if (!value.isEmpty()){
+////                                chemists.setDOB(value);
+//                        }
+//                    }
+//                    if (c == AppConstants.EMAIL_EXCEL){
+//                        if (!value.isEmpty()){
+////                                chemists.setEmail(value);
+//                        }
+//                    }
+//                    if (c == AppConstants.ACTIVE_EXCEL){
+//                        if (!value.isEmpty()){
+//                            chemists.setActive(value);
+//                        }
+//                    }
+//                    if (c == AppConstants.PREFERRED_MEET_TIME_EXCEL){
+//                        if (!value.isEmpty()){
+//                            chemists.setPreferredMeetTime(value);
+//                        }
+//                    }
+//                    if (c == AppConstants.COMPANY_NAME_EXCEL){
+//                        if (!value.isEmpty()){
+//                            chemists.setCompanyName(value);
+//                        }
+//                    }
+//                    if (c == AppConstants.PHONE_EXCEL){
+//                        if (!value.isEmpty()){
+////                                chemists.setPhone(value);
+//                        }
+//                    }
+//                    if (c == AppConstants.ADDRESS_1_EXCEL){
+//                        if (!value.isEmpty()){
+//                            chemists.setAddressLine1(value);
+//                        }
+//                    }
+//                    if (c == AppConstants.ADDRESS_2_EXCEL){
+//                        if (!value.isEmpty()){
+//                            chemists.setAddressLine2(value);
+//                        }
+//                    }
+//                    if (c == AppConstants.ADDRESS_3_EXCEL){
+//                        if (!value.isEmpty()){
+//                            chemists.setAddressLine3(value);
+//                        }
+//                    }
+//                    if (c == AppConstants.CITY_EXCEL){
+//                        if (!value.isEmpty()){
+//                            chemists.setCity(value);
+//                        }
+//                    }
+//                    if (c == AppConstants.DISTRICT_EXCEL){
+//                        if (!value.isEmpty()){
+//                            chemists.setDistrict(value);
+//                        }
+//                    }
+//                    if (c == AppConstants.STATE_EXCEL){
+//                        if (!value.isEmpty()){
+//                            chemists.setState(value);
+//                        }
+//                    }
+//
+//                    if (c == AppConstants.PINCODE_EXCEL){
+//                        if (!value.isEmpty()){
+//                            chemists.setPIN(value);
+//                        }
+//                    }
+//
+//                    else{
+//
+//                        String cellInfo = "r:" + r + "; c:" + c + "; v:" + value;
+//                        Log.d(TAG, "readExcelData: Data from row: " + cellInfo);
+//                        sb.append(value + ", ");
+//                        Toast.makeText(this, new String(sb), Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                }
+//
+//                chemistImportList.add(chemists);
+//            }
+//            sb.append(":");
+//
+//            if (chemistImportList != null){
+//                apiImportChemistFromExcel(token, chemistImportList);
+//            }
+//
+//        }catch (Exception e) {
+//            Log.e(TAG, "readExcelData: FileNotFoundException. " + e.getMessage() );
+//        }
 
 
     }

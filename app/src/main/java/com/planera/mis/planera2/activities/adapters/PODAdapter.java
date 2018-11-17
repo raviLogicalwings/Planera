@@ -74,11 +74,12 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder> {
 
             brands = brandsList.get(pos);
             myPobHolder.textPodProductName.setText(brandsList.get(pos).getName());
-            if (previousInputForUpdate != null) {
+            if (previousInputForUpdate != null && previousInputForUpdate.getProductDetails() != null) {
                 for (int i = 0; i < previousInputForUpdate.getProductDetails().size(); i++) {
                     if (previousInputForUpdate.getProductDetails().get(i).getProductId().equals(brands.getProductId() + "")) {
-//                        String qty = previousInputForUpdate.getProductDetails().get(i).getProductQty() + "";
-//                        myPobHolder.editPodProductValue.setText(qty);
+                            String qty = previousInputForUpdate.getProductDetails().get(i).getQuantity() + "";
+                            myPobHolder.editPodProductValue.setText(qty);
+
                     }
                 }
             }
@@ -115,7 +116,7 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder> {
                             orders.setProductId(brands.getProductId() + "");
                             POBOrdersList.add(orders);
                         }
-
+                        setPOBOrdersList(POBOrdersList);
                     }
                 }
 

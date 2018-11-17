@@ -104,7 +104,7 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
         textDoctorState = findViewById(R.id.text_doctor_state);
         textDoctorPincode = findViewById(R.id.text_doctor_pincode);
         buttonAddDoctor = findViewById(R.id.button_add_doctor);
-
+        buttonAddDoctor.setText(getString(R.string.update));
         buttonAddDoctor.setOnClickListener(this);
         textDoctorDob.setOnClickListener(this);
         setSupportActionBar(toolbarDoctor);

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -25,6 +26,7 @@ import com.planera.mis.planera2.activities.models.Chemists;
 import com.planera.mis.planera2.activities.models.MainResponse;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -33,7 +35,7 @@ import retrofit2.Response;
 
 import static android.content.ContentValues.TAG;
 
-public class ChemistFragment extends BaseFragment{
+public class ChemistFragment extends BaseFragment implements SearchView.OnQueryTextListener{
 
     public static ChemistFragment instance;
     private View view;
@@ -41,6 +43,8 @@ public class ChemistFragment extends BaseFragment{
     private List<Chemists> chemistsList;
     private RecyclerView listViewChemist;
     private LinearLayout layoutNoData;
+    private SearchView searchViewChemist;
+    private ChemistListAdapter adapter;
     private int selectedChemist;
 
     public ChemistFragment() {
@@ -84,6 +88,13 @@ public class ChemistFragment extends BaseFragment{
         super.initUi();
         listViewChemist = view.findViewById(R.id.list_chemists);
         layoutNoData = view.findViewById(R.id.layout_no_data);
+        searchViewChemist = view.findViewById(R.id.search_view_chemist);
+        searchViewChemist.setActivated(true);
+        searchViewChemist.onActionViewExpanded();
+        searchViewChemist.setIconified(false);
+        searchViewChemist.clearFocus();
+
+        searchViewChemist.setOnQueryTextListener(this);
     }
 
 
@@ -126,7 +137,8 @@ public class ChemistFragment extends BaseFragment{
     }
 
     public void initAdapter(List<Chemists> list, RecyclerView recyclerView){
-        ChemistListAdapter adapter = new ChemistListAdapter(mContext, list, (view, position) -> {
+
+        adapter = new ChemistListAdapter(mContext, list, (view, position) -> {
             switch (view.getId()){
                 case R.id.img_chemist_delete:
                     popupDialog(token, list.get(position).getChemistId());
@@ -197,6 +209,16 @@ public class ChemistFragment extends BaseFragment{
 
     }
 
+    void filter(String text){
+        List<Chemists> temp = new ArrayList<>();
+        for(Chemists d: chemistsList){
+            if(d.getFirstName().toLowerCase().contains(text.toLowerCase())){
+                temp.add(d);
+            }
+        }
+        adapter.updateList(temp);
+    }
+
 
     public void popupDialog( String token, int ChemistId){
         AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
@@ -242,5 +264,16 @@ public class ChemistFragment extends BaseFragment{
                 Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        filter(newText.trim());
+        return false;
     }
 }

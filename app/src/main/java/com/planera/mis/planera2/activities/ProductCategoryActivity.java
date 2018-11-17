@@ -132,7 +132,13 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
             case R.id.button_confirm_product:
                 if (isUpdateInput){
                     input.setGiftDetails(new GiftsAdapter().getInputGiftList());
-                    input.setProductDetalis(new SampleListAdapter().getSampleListSelected());
+                    if (new PODAdapter().getPOBOrdersList() != null){
+                        input.setProductDetalis(new PODAdapter().getPOBOrdersList());
+                    }
+                    if (new SampleListAdapter().getSampleListSelected() != null){
+                        input.setProductDetalis(new SampleListAdapter().getSampleListSelected());
+                    }
+
                     apiUpdateMrInput(token, input);
                 }
                 else if (InternetConnection.isNetworkAvailable(ProductCategoryActivity.this)) {
@@ -328,16 +334,19 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                     }
                 }
 
-                if (new PODAdapter().getPOBOrdersList() != null) {
-                    List<InputOrders> inputOrders = new PODAdapter().getPOBOrdersList();
-                    if (inputOrders.size() > 0) {
-                        for (int i = 0; i < inputOrders.size(); i++) {
-                            inputOrders.get(i).setInputId(INPUT_ID);
-                        }
-                        Log.e("POB", new Gson().toJson(new PODAdapter().getPOBOrdersList()));
-                        apiAddInputBrands(token, inputOrders);
+
+        }
+        else{
+            if (new PODAdapter().getPOBOrdersList() != null) {
+                List<InputOrders> inputOrders = new PODAdapter().getPOBOrdersList();
+                if (inputOrders.size() > 0) {
+                    for (int i = 0; i < inputOrders.size(); i++) {
+                        inputOrders.get(i).setInputId(INPUT_ID);
                     }
+                    Log.e("POB", new Gson().toJson(inputOrders));
+                    apiAddInputBrands(token, inputOrders);
                 }
+            }
         }
     }
 

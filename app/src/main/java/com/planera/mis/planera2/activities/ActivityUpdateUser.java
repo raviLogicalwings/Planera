@@ -103,6 +103,7 @@ public class ActivityUpdateUser extends BaseActivity implements View.OnClickList
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
+        buttonAddUser.setText(getString(R.string.update));
         textUserDoj.setOnClickListener(this);
         textUserDob.setOnClickListener(this);
         buttonAddUser.setOnClickListener(this);
