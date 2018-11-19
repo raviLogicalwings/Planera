@@ -1,7 +1,7 @@
 package com.planera.mis.planera2.activities.utils;
 
 public class AppConstants {
-    public static final int SPLASH_TIME_OUT = 5000;
+    public static final int SPLASH_TIME_OUT = 3000;
     public static final String PREFRENCE_FILE_NAME = "PlaneraPrefFile";
 
 

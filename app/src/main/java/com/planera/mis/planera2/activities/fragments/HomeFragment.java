@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -44,12 +47,14 @@ import com.planera.mis.planera2.activities.models.UserPlanListRespnce;
 import com.planera.mis.planera2.activities.utils.AppConstants;
 
 import java.util.List;
+import java.util.Objects;
 
 import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.view.View.GONE;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 public class HomeFragment extends BaseFragment implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
@@ -61,17 +66,19 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     private ApiInterface apiInterface;
     private List<UserPlan> plansList;
     private LocationRequest mLocationRequest;
-    private final static int REQUEST_CHECK_SETTINGS_GPS=0x1;
+    private final static int REQUEST_CHECK_SETTINGS_GPS = 0x1;
     private Location mLocation;
     public static final int INTERVAL = 1000 * 60;
-    public static final int FASTEST_INTERVAL = 1000 *30;
-    int  isInLocation;
+    public static final int FASTEST_INTERVAL = 1000 * 30;
+    int isInLocation;
     double lat;
     double lng;
     private GoogleApiClient googleApiClient;
     private Integer patchId;
     private boolean isPermissionCancelled = false;
-
+    private LinearLayout linearHomeNoInternet;
+    private Button buttonHomeRetry;
+    BottomNavigationView navigationView;
 
     public HomeFragment() {
     }
@@ -83,13 +90,23 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 //        return instance;
 //    }
 
-
     @Override
     protected void initUi() {
         super.initUi();
         visitList = mainView.findViewById(R.id.visitList);
+        linearHomeNoInternet = mainView.findViewById(R.id.linear_home_no_internet);
+        buttonHomeRetry = mainView.findViewById(R.id.button_home_retry);
+        navigationView = Objects.requireNonNull(getActivity()).findViewById(R.id.navigation);
+        navigationView.setVisibility(View.VISIBLE);
 
-
+        buttonHomeRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getFragmentManager() != null) {
+                    getFragmentManager().beginTransaction().detach(HomeFragment.this).attach(HomeFragment.this).commit();
+                }
+            }
+        });
     }
 
     @Override
@@ -99,7 +116,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         mLocationRequest = new LocationRequest();
         patchId = connector.getInteger(AppConstants.KEY_PATCH_ID);
         setUpGClient();
-
     }
 
     @Override
@@ -109,10 +125,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
         }
     }
-
-
-
-
 
     public void getAllPlansList(String token) {
 
@@ -125,11 +137,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     plansList = response.body().getData();
-
+//                    linearHomeNoInternet.setVisibility(View.GONE);
+//                    buttonHomeRetry.setVisibility(View.GONE);
+//                    visitList.setVisibility(View.VISIBLE);
+//                    processDialog.dismissDialog();
                     Log.e(" UserPlanList : ", new Gson().toJson(plansList));
                     if (plansList != null) {
                         initAdapter(plansList, visitList);
-
 
 //                       visitLat =   plansList.get(1).getChemistLatitude();
 //                      visitLong =  plansList.get(1).getChemistLongitude();
@@ -144,8 +158,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
             @Override
             public void onFailure(Call<UserPlanListRespnce> call, Throwable t) {
+                linearHomeNoInternet.setVisibility(View.VISIBLE);
+                buttonHomeRetry.setVisibility(View.VISIBLE);
+                visitList.setVisibility(View.GONE);
+                navigationView.setVisibility(View.GONE);
                 processDialog.dismissDialog();
-                Snackbar.make(rootView, t.getMessage(), Snackbar.LENGTH_LONG).show();
             }
         });
     }
@@ -153,7 +170,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     public void initAdapter(List<UserPlan> plansData, RecyclerView recyclerView) {
         VisitsAdapter adapter = new VisitsAdapter(mContext, plansData, mLocation, (view, position, isDoctor, dist) -> {
-            switch (view.getId()){
+            switch (view.getId()) {
                 case R.id.button_check_in:
                     gotoScheduleTimeActivity(position, isDoctor, dist);
                     break;
@@ -171,8 +188,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         initData();
         return mainView;
     }
-
-
 
     @Override
     public void onAttach(Context context) {
@@ -200,7 +215,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     }
 
-    public void setAdapter(RecyclerView recyclerView, VisitsAdapter adapter){
+    public void setAdapter(RecyclerView recyclerView, VisitsAdapter adapter) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.hasFixedSize();
 
@@ -218,13 +233,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     }
 
 
-    private void getMyLocation(){
-        if(googleApiClient!=null) {
+    private void getMyLocation() {
+        if (googleApiClient != null) {
             if (googleApiClient.isConnected()) {
                 int permissionLocation = ContextCompat.checkSelfPermission(mContext,
                         Manifest.permission.ACCESS_FINE_LOCATION);
                 if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
-                    mLocation =                     LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                    mLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
 //                    onLocationChanged(mLocation);
                     mLocationRequest = new LocationRequest();
                     mLocationRequest.setInterval(INTERVAL);
@@ -239,8 +254,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         }
     }
 
-
-    public void checkLocationSettings(){
+    public void checkLocationSettings() {
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(mLocationRequest);
         builder.setAlwaysShow(true);
@@ -258,7 +272,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                             .checkSelfPermission(mContext,
                                     Manifest.permission.ACCESS_FINE_LOCATION);
                     if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
-                       getMyLocation();
+                        getMyLocation();
                     }
                     break;
                 case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
@@ -303,12 +317,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         }
     }
 
-    public void gotoScheduleTimeActivity(int pos, boolean isDoctor, float dist){
+    public void gotoScheduleTimeActivity(int pos, boolean isDoctor, float dist) {
 
-        if(Math.round(dist)<=1){
-          isInLocation = AppConstants.USER_IN_LOCATION;
-        }
-        else{
+        if (Math.round(dist) <= 1) {
+            isInLocation = AppConstants.USER_IN_LOCATION;
+        } else {
             isInLocation = AppConstants.USER_NOT_IN_LOCATION;
         }
         Intent intent = new Intent(mContext, AddInputActivity.class);
@@ -316,7 +329,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         intent.putExtra(AppConstants.KEY_ROLE, isDoctor);
         intent.putExtra(AppConstants.KEY_IN_LOCATION, isInLocation);
         intent.putExtra(AppConstants.CUSTOMER_NAME, getCustomerName(pos, plansList, isDoctor));
-        intent.putExtra(AppConstants.VISIT_DATE, plansList.get(pos).getMonth()+"/"+plansList.get(pos).getYear());
+        intent.putExtra(AppConstants.VISIT_DATE, plansList.get(pos).getMonth() + "/" + plansList.get(pos).getYear());
         intent.putExtra(AppConstants.LATITUDE, lat);
         intent.putExtra(AppConstants.DOCTOR_ID, plansList.get(pos).getDoctorId());
         intent.putExtra(AppConstants.CHEMIST_ID, plansList.get(pos).getChemistsId());
@@ -325,39 +338,44 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         intent.putExtra(AppConstants.KEY_USER_ID, plansList.get(pos).getUserId());
         startActivity(intent);
     }
+
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.button_check_in:
                 Intent intent = new Intent(getContext(), ProductCategoryActivity.class);
                 getActivity().startActivity(intent);
                 break;
+
+//            case R.id.button_home_retry:
+//                processDialog.showDialog(mContext, true);
+//                getAllPlansList(token);
+//                break;
         }
 
     }
 
 
-   public String getCustomerName(int pos, List<UserPlan> listPlans, boolean isDoctor){
+    public String getCustomerName(int pos, List<UserPlan> listPlans, boolean isDoctor) {
         String customerName;
-       if(isDoctor){
-           customerName = listPlans.get(pos).getDoctorFirstName()
-                   +" "+listPlans.get(pos).getDoctorMiddleName()
-                   +" "+listPlans.get(pos).getDoctorLastName();
-           lat = listPlans.get(pos).getDoctorLatitude();
-           lng = listPlans.get(pos).getDoctorLongitude();
+        if (isDoctor) {
+            customerName = listPlans.get(pos).getDoctorFirstName()
+                    + " " + listPlans.get(pos).getDoctorMiddleName()
+                    + " " + listPlans.get(pos).getDoctorLastName();
+            lat = listPlans.get(pos).getDoctorLatitude();
+            lng = listPlans.get(pos).getDoctorLongitude();
 
-       }
-       else{
-           customerName = listPlans.get(pos).getChemistFirstName()
-                   +" "+listPlans.get(pos).getChemistMiddleName()
-                   +" "+listPlans.get(pos).getChemistLastName();
-           lat = listPlans.get(pos).getChemistLatitude();
-           lng = listPlans.get(pos).getChemistLongitude();
+        } else {
+            customerName = listPlans.get(pos).getChemistFirstName()
+                    + " " + listPlans.get(pos).getChemistMiddleName()
+                    + " " + listPlans.get(pos).getChemistLastName();
+            lat = listPlans.get(pos).getChemistLatitude();
+            lng = listPlans.get(pos).getChemistLongitude();
 
-       }
+        }
 
         return customerName;
-   }
+    }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -379,9 +397,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onLocationChanged(Location location) {
         mLocation = location;
-        Log.e("Current Location", mLocation.getLatitude()+" "+mLocation.getLongitude());
+        Log.e("Current Location", mLocation.getLatitude() + " " + mLocation.getLongitude());
         getAllPlansList(token);
-
     }
 
     public interface OnFragmentInteractionListener {

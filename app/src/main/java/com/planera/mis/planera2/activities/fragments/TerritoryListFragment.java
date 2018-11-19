@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -35,7 +36,8 @@ public class TerritoryListFragment extends BaseFragment implements EditTerritory
     private ApiInterface apiInterface;
     private List<Territories> statesList;
     private RecyclerView listViewStates;
-    private LinearLayout layoutNoData;
+    private LinearLayout linearNoData, linearNoInternet;
+    Button buttonRetry;
 
     public TerritoryListFragment() {
 
@@ -61,6 +63,15 @@ public class TerritoryListFragment extends BaseFragment implements EditTerritory
         view =  inflater.inflate(R.layout.fragment_state_list, container, false);
         initUi();
         initData();
+
+        buttonRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getFragmentManager() != null) {
+                    getFragmentManager().beginTransaction().detach(TerritoryListFragment.this).attach(TerritoryListFragment.this).commit();
+                }
+            }
+        });
         return view;
     }
 
@@ -77,10 +88,10 @@ public class TerritoryListFragment extends BaseFragment implements EditTerritory
     protected void initUi() {
         super.initUi();
         listViewStates = view.findViewById(R.id.list_state);
-        layoutNoData = view.findViewById(R.id.layout_no_data);
+        linearNoData = view.findViewById(R.id.linear_no_data);
+        linearNoInternet = view.findViewById(R.id.linear_no_internet);
+        buttonRetry = view.findViewById(R.id.button_retry);
     }
-
-
 
     public void deleteTerritory(String token, int territoryId){
         processDialog.showDialog(mContext, false);
@@ -107,7 +118,6 @@ public class TerritoryListFragment extends BaseFragment implements EditTerritory
 
     }
 
-
     public void getTerritoryList(String token){
         processDialog.showDialog(mContext, false);
         Call<TerritoryListResponse> call = apiInterface.territoryList(token);
@@ -119,19 +129,20 @@ public class TerritoryListFragment extends BaseFragment implements EditTerritory
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                         statesList = response.body().getTerritorysList();
                         initAdapter(statesList, listViewStates);
-
                     }
                     else{
+                        linearNoData.setVisibility(View.VISIBLE);
                         listViewStates.setVisibility(View.GONE);
-                        layoutNoData.setVisibility(View.VISIBLE);
                     }
-
 
                 }
             }
 
             @Override
             public void onFailure(Call<TerritoryListResponse> call, Throwable t) {
+                processDialog.dismissDialog();
+                linearNoInternet.setVisibility(View.VISIBLE);
+                buttonRetry.setVisibility(View.VISIBLE);
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });

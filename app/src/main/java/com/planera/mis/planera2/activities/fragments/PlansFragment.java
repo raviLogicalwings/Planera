@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -41,9 +42,9 @@ public class PlansFragment extends BaseFragment{
     private ApiInterface apiInterface;
     private List<Plans> plansList = null;
     private RecyclerView listViewPlans;
-    private LinearLayout layoutNoData;
     private int selectedPlan;
-
+    private LinearLayout linearNoData, linearNoInternet;
+    private Button buttonRetry;
 
     public PlansFragment() {
 
@@ -86,12 +87,19 @@ public class PlansFragment extends BaseFragment{
     protected void initUi() {
         super.initUi();
         listViewPlans = view.findViewById(R.id.list_plans);
-        layoutNoData = view.findViewById(R.id.layout_no_data);
+        linearNoData = view.findViewById(R.id.linear_no_data);
+        linearNoInternet = view.findViewById(R.id.linear_no_internet);
+        buttonRetry = view.findViewById(R.id.button_retry);
+
+        buttonRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getFragmentManager() != null) {
+                    getFragmentManager().beginTransaction().detach(PlansFragment.this).attach(PlansFragment.this).commit();
+                }
+            }
+        });
     }
-
-
-
-
 
     public void getStatesList(String token) {
         processDialog.showDialog(mContext, false);
@@ -105,20 +113,19 @@ public class PlansFragment extends BaseFragment{
                         plansList = response.body().getData();
                         System.out.println(plansList.size());
                         listViewPlans.setVisibility(View.VISIBLE);
-                        layoutNoData.setVisibility(View.GONE);
                         initAdapter(plansList, listViewPlans);
                     } else {
                         listViewPlans.setVisibility(View.GONE);
-                        layoutNoData.setVisibility(View.VISIBLE);
+                        linearNoData.setVisibility(View.VISIBLE);
                     }
-
-
                 }
             }
 
             @Override
             public void onFailure(Call<PlansListResponce> call, Throwable t) {
                 processDialog.dismissDialog();
+                linearNoInternet.setVisibility(View.VISIBLE);
+                buttonRetry.setVisibility(View.VISIBLE);
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });

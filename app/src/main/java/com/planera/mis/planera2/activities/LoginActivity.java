@@ -63,6 +63,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         buttonSignIn.setOnClickListener(this);
         textForgetPassword.setOnClickListener(this);
         textSignUp.setOnClickListener(this);
+
+        editUserName.setSelection(editUserName.getText().length());
+        editPassword.setSelection(editPassword.getText().length());
     }
 
 
@@ -71,6 +74,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         inputLayoutUserName.setError(null);
         String emailIdStr = editUserName.getText().toString();
         String passwordStr = editPassword.getText().toString();
+
             if(!isEmailValid(emailIdStr)){
                 inputLayoutUserName.setError("Invalid email address.");
             }
@@ -116,6 +120,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     if(response.body().getData().getType().equals(AppConstants.USER)) {
                         connector.setBoolean(AppConstants.IS_USER, true);
                         Intent intentHome = new Intent(LoginActivity.this, MainActivity.class);
+                        ActivityCompat.finishAffinity(LoginActivity.this);
                         startActivity(intentHome);
                     }
                     else{

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -56,7 +58,7 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
     private EditText textPlanCall;
     private EditText textPlanRemark;
     private LinearLayout doctorSpinnerLayout;
-    private LinearLayout chemistSpinnerLayout;
+    private LinearLayout chemistSpinnerLayout, linearNoInternet;
     private List<Patches> patchesList;
     private List<UserData> usersList;
     private List<Chemists> chemistsList;
@@ -64,7 +66,7 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
     private RadioGroup radioGroupSelect;
     private RadioButton radioDoctor;
     private RadioButton radioChemist;
-    private Button buttonAddPlan;
+    private Button buttonAddPlan, buttonRetry;
     private Plans plans;
     private List<String> months;
     private boolean isDoctorRadioChecked = true;
@@ -73,7 +75,7 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
     String  userId,status;
     String  yearStr, callStr, remarkStr;
     private int runningYear;
-
+    private CardView cardView;
     private List<String> years;
     private List<Territories> territoriesList;
     private int territoryId;
@@ -156,6 +158,9 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
         textPlanCall = findViewById(R.id.text_plan_call);
         textPlanRemark = findViewById(R.id.text_plan_remark);
         buttonAddPlan = findViewById(R.id.button_create_plan);
+        buttonRetry = findViewById(R.id.button_retry);
+        linearNoInternet = findViewById(R.id.linear_no_internet);
+        cardView = findViewById(R.id.card_view);
         buttonAddPlan.setText(getString(R.string.update));
         if(isDoctorRadioChecked) {
             radioDoctor.setChecked(isDoctorRadioChecked);
@@ -165,6 +170,14 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
         getSupportActionBar().setTitle("Update Plan");
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
         loadFormIntent(intent);
+
+        buttonRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(getIntent());
+            }
+        });
     }
 
 
@@ -318,8 +331,6 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
             }
         });
 
-
-
         radioGroupSelect.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId){
                 case R.id.radio_chemist:
@@ -333,7 +344,6 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
                     chemistSpinnerLayout.setVisibility(View.GONE);
                     doctorSpinnerLayout.setVisibility(View.VISIBLE);
                     break;
-
             }
 
         });
@@ -345,8 +355,6 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
         getTerritoryList(token);
 
     }
-
-
 
     public void getTerritoryList(String token) {
         processDialog.showDialog(ActivityUpdatePlan.this, false);
@@ -365,7 +373,6 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
                         }
                         setArrayAdapter(stringTerritoryList, spinnerTerritory);
 
-
                     } else {
                         Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                     }
@@ -375,6 +382,10 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
 
             @Override
             public void onFailure(Call<TerritoryListResponse> call, Throwable t) {
+                processDialog.dismissDialog();
+                cardView.setVisibility(View.GONE);
+                linearNoInternet.setVisibility(View.VISIBLE);
+                buttonRetry.setVisibility(View.VISIBLE);
                 Toast.makeText(ActivityUpdatePlan.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
@@ -406,6 +417,10 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
 
             @Override
             public void onFailure(Call<PatchListResponse> call, Throwable t) {
+                processDialog.dismissDialog();
+                cardView.setVisibility(View.GONE);
+                linearNoInternet.setVisibility(View.VISIBLE);
+                buttonRetry.setVisibility(View.VISIBLE);
 //                DataController.getmInstance().dismissProcessDialog();
 
                 Toast.makeText(ActivityUpdatePlan.this, t.getMessage(), Toast.LENGTH_LONG).show();
@@ -439,6 +454,10 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
 
             @Override
             public void onFailure(Call<DoctorsListResponce> call, Throwable t) {
+                processDialog.dismissDialog();
+                cardView.setVisibility(View.GONE);
+                linearNoInternet.setVisibility(View.VISIBLE);
+                buttonRetry.setVisibility(View.VISIBLE);
 //                DataController.getmInstance().dismissProcessDialog();
                 Toast.makeText(ActivityUpdatePlan.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -471,6 +490,10 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
 
             @Override
             public void onFailure(Call<UserListResponse> call, Throwable t) {
+                processDialog.dismissDialog();
+                cardView.setVisibility(View.GONE);
+                linearNoInternet.setVisibility(View.VISIBLE);
+                buttonRetry.setVisibility(View.VISIBLE);
 //                DataController.getmInstance().dismissProcessDialog();
                 Snackbar.make(rootView, t.getMessage(), Snackbar.LENGTH_LONG).show();
             }
@@ -510,6 +533,10 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
 
             @Override
             public void onFailure(Call<ChemistListResponse> call, Throwable t) {
+                processDialog.dismissDialog();
+                cardView.setVisibility(View.GONE);
+                linearNoInternet.setVisibility(View.VISIBLE);
+                buttonRetry.setVisibility(View.VISIBLE);
 //                DataController.getmInstance().dismissProcessDialog();
                 Snackbar.make(rootView, t.getMessage(), Snackbar.LENGTH_LONG).show();
             }

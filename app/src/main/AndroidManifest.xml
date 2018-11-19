@@ -44,9 +44,9 @@
             android:name=".activities.AdminPanelActivity"
             android:label="@string/title_activity_admin_panel"
             android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.planera.mis.planera2.activities.AdminPanelActivity" />
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value="com.planera.mis.planera2.activities.AdminPanelActivity" />-->
         </activity>
         <activity
             android:name=".activities.SingleListActivity"

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -37,20 +38,17 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
     private ApiInterface apiInterface;
     private List<States> statesList = null;
     private RecyclerView listViewStates;
-    private LinearLayout layoutNoData;
-
+    private LinearLayout linearNoInternet, linearNoData;
+    private Button buttonRetry;
 
     public StateListFragment() {
-
     }
 
     public static android.support.v4.app.Fragment newInstance() {
         if (instance == null) {
             instance = new StateListFragment();
         }
-
         return instance;
-
     }
 
     @Override
@@ -65,6 +63,15 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
         view = inflater.inflate(R.layout.fragment_state_list, container, false);
         initUi();
         initData();
+
+        buttonRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getFragmentManager() != null) {
+                    getFragmentManager().beginTransaction().detach(StateListFragment.this).attach(StateListFragment.this).commit();
+                }
+            }
+        });
         return view;
     }
 
@@ -81,9 +88,10 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
     protected void initUi() {
         super.initUi();
         listViewStates = view.findViewById(R.id.list_state);
-        layoutNoData = view.findViewById(R.id.layout_no_data);
+        linearNoInternet = view.findViewById(R.id.linear_no_internet);
+        linearNoData = view.findViewById(R.id.linear_no_data);
+        buttonRetry = view.findViewById(R.id.button_retry);
     }
-
 
     public void deleteStateApi(String token, int stateId){
         processDialog.showDialog(mContext, false);
@@ -114,8 +122,6 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
 
     }
 
-
-
     public void getStatesList(String token) {
         processDialog.showDialog(mContext, false);
         Call<StateListResponse> call = apiInterface.statesListApi(token);
@@ -129,13 +135,11 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
                         statesList = response.body().getData();
                         System.out.println(statesList.size());
                         listViewStates.setVisibility(View.VISIBLE);
-                        layoutNoData.setVisibility(View.GONE);
                         initAdapter(statesList, listViewStates);
                     } else {
+                        linearNoData.setVisibility(View.VISIBLE);
                         listViewStates.setVisibility(View.GONE);
-                        layoutNoData.setVisibility(View.VISIBLE);
                     }
-
 
                 }
             }
@@ -144,6 +148,8 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
             public void onFailure(Call<StateListResponse> call, Throwable t) {
                 processDialog.dismissDialog();
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                linearNoInternet.setVisibility(View.VISIBLE);
+                buttonRetry.setVisibility(View.VISIBLE);
             }
         });
 

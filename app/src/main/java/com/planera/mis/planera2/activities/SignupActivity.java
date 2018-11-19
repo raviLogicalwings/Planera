@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -134,9 +135,9 @@ public class SignupActivity extends BaseActivity implements View.OnClickListener
             user.setStatus(ON_HOLD);
             try {
                 if (InternetConnection.isNetworkAvailable(SignupActivity.this)){
-                callUserRegistrationApi(user);}
-                else
-                {
+                    callUserRegistrationApi(user);
+                }
+                else {
                     Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
                 }
             }catch (Exception e){
@@ -164,6 +165,8 @@ public class SignupActivity extends BaseActivity implements View.OnClickListener
                     else{
                         Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_SHORT).show();
                     }
+                } else {
+                    Log.e("response", response.body().toString());
                 }
             }
 

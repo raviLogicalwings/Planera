@@ -155,6 +155,7 @@ public class EditGiftDialog extends BaseDialogFragment implements View.OnClickLi
 
         if (giftName!=null){
             editTextName.setText(giftName);
+            editTextName.setSelection(editTextName.getText().length());
         }
 
 

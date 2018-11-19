@@ -137,6 +137,7 @@ public class EditStateDialog  extends BaseDialogFragment implements View.OnClick
 
         if (item!=null)
         editTextName.setText(item);
+        editTextName.setSelection(editTextName.getText().length());
     }
 
     @Override

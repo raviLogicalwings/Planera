@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.planera.mis.planera2.activities.utils.InternetConnection;
 
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,7 +42,8 @@ public class PatchListFragment extends BaseFragment implements EditPatchDialog.O
     private ApiInterface apiInterface;
     private List<Patches> patchesList;
     private RecyclerView listViewStates;
-    private LinearLayout layoutNoData;
+    private LinearLayout linearNodata, linearNoInternet;
+    private Button buttonRetry;
 
     public PatchListFragment() {
 
@@ -82,9 +85,19 @@ public class PatchListFragment extends BaseFragment implements EditPatchDialog.O
     protected void initUi() {
         super.initUi();
         listViewStates = view.findViewById(R.id.list_state);
-        layoutNoData = view.findViewById(R.id.layout_no_data);
-    }
+        linearNodata = view.findViewById(R.id.linear_no_data);
+        linearNoInternet = view.findViewById(R.id.linear_no_internet);
+        buttonRetry = view.findViewById(R.id.button_retry);
 
+        buttonRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getFragmentManager() != null) {
+                    getFragmentManager().beginTransaction().detach(PatchListFragment.this).attach(PatchListFragment.this).commit();
+                }
+            }
+        });
+    }
 
     public void deletePatchApi(String token, int patchId){
         Log.d(TAG, "deletePatchApi() called with: token = [" + token + "], patchId = [" + patchId + "]");
@@ -128,15 +141,16 @@ public class PatchListFragment extends BaseFragment implements EditPatchDialog.O
                     }
                     else{
                         listViewStates.setVisibility(View.GONE);
-                        layoutNoData.setVisibility(View.VISIBLE);
+                        linearNodata.setVisibility(View.VISIBLE);
                     }
-
-
                 }
             }
 
             @Override
             public void onFailure(Call<PatchListResponse> call, Throwable t) {
+                processDialog.dismissDialog();
+                linearNoInternet.setVisibility(View.VISIBLE);
+                buttonRetry.setVisibility(View.VISIBLE);
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
@@ -165,7 +179,7 @@ public class PatchListFragment extends BaseFragment implements EditPatchDialog.O
                     bundle.putString(AppConstants.KEY_PATCH_NAME, patchesList.get(position).getPatchName());
                     dialog.setTargetFragment(PatchListFragment.this, 0);
                     dialog.setArguments(bundle);
-                    dialog.show(getFragmentManager(), "Update Patch");
+                    dialog.show(Objects.requireNonNull(getFragmentManager()), "Update Patch");
                     break;
 
             }

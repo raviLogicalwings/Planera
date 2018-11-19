@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.support.v4.app.Fragment;
@@ -36,7 +37,8 @@ public class ProductFragment extends BaseFragment implements EditProductDialog.O
     private ApiInterface apiInterface;
     private List<Brands> productList;
     private RecyclerView listViewProducts;
-    private LinearLayout layoutNoData;
+    private LinearLayout linearNoData, linearNoInternet;
+    private Button buttonRetry;
 
     public ProductFragment() {
 
@@ -78,25 +80,37 @@ public class ProductFragment extends BaseFragment implements EditProductDialog.O
     protected void initUi() {
         super.initUi();
         listViewProducts = view.findViewById(R.id.list_products);
-        layoutNoData = view.findViewById(R.id.layout_no_data);
+        linearNoData = view.findViewById(R.id.linear_no_data);
+        linearNoInternet = view.findViewById(R.id.linear_no_internet);
+        buttonRetry = view.findViewById(R.id.button_retry);
+
+        buttonRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getFragmentManager() != null) {
+                    getFragmentManager().beginTransaction().detach(ProductFragment.this).attach(ProductFragment.this).commit();
+                }
+            }
+        });
     }
 
 
     public void getProductsListApi(String token) {
+        processDialog.showDialog(mContext, false);
         Call<BrandsListResponse> call = apiInterface.brandsListApi(token, AppConstants.BRAND);
         call.enqueue(new Callback<BrandsListResponse>() {
             @Override
             public void onResponse(Call<BrandsListResponse> call, Response<BrandsListResponse> response) {
+                processDialog.dismissDialog();
                 if (response != null) {
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
 
                         productList = response.body().getData();
                         if (productList != null) {
                             initAdapter(productList, listViewProducts);
-                            layoutNoData.setVisibility(View.GONE);
                         } else {
                             listViewProducts.setVisibility(View.GONE);
-                            layoutNoData.setVisibility(View.VISIBLE);
+                            linearNoData.setVisibility(View.VISIBLE);
                         }
 
                     } else {
@@ -107,6 +121,9 @@ public class ProductFragment extends BaseFragment implements EditProductDialog.O
 
             @Override
             public void onFailure(Call<BrandsListResponse> call, Throwable t) {
+                processDialog.dismissDialog();
+                linearNoInternet.setVisibility(View.VISIBLE);
+                buttonRetry.setVisibility(View.VISIBLE);
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

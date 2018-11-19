@@ -90,4 +90,6 @@
     <string name="select_file">Select File</string>
     <string name="file_name">File Name</string>
     <string name="upload">Upload</string>
+    <string name="please_check_your_internet_connection">Please check your internet connection!</string>
+    <string name="retry">Retry</string>
 </resources>
