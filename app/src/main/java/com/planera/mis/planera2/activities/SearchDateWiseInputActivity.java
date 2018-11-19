@@ -84,7 +84,13 @@ public class SearchDateWiseInputActivity extends BaseActivity implements View.On
 
         else {
             obtainReport.setStartDate(formatDate(strStartDate));
-            obtainReport.setEndDate(formatDate(srtEndDate));
+           if (formatDate(srtEndDate) != null){
+               String a[]  = formatDate(srtEndDate).split(" ");
+               String end = a[0]+ " 23:59:59";
+               obtainReport.setEndDate(end);
+           }
+
+
             obtainReport.setUserId(userId);
             objectToString = new Gson().toJson(obtainReport);
             Intent intent = new Intent(SearchDateWiseInputActivity.this, UserInputListActivity.class);

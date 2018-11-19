@@ -141,7 +141,7 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
     }
 
 
-    public void setArrayAdapter(Spinner spinner) {
+    private void setArrayAdapter(Spinner spinner) {
 
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>
                 (context, android.R.layout.simple_spinner_item,

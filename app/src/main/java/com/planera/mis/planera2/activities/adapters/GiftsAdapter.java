@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.controller.DataController;
@@ -19,6 +20,8 @@ import com.planera.mis.planera2.activities.utils.PreferenceConnector;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder> {
     private Context context;
@@ -36,12 +39,13 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
         this.previousInputUpdate = previousInputUpdate;
     }
 
-    public GiftsAdapter(){
+    public GiftsAdapter() {
 
     }
+
     @Override
     public MyGiftHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        holderView = LayoutInflater.from(context).inflate(R.layout.item_gifts,parent,  false);
+        holderView = LayoutInflater.from(context).inflate(R.layout.item_gifts, parent, false);
         return new MyGiftHolder(holderView);
     }
 
@@ -50,25 +54,28 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
         inputGift = new InputGift();
         GiftsData giftsDataObj = giftsData.get(position);
         inputGiftList = new ArrayList<>();
+        if (inputGiftList == null){
+            Toasty.success(context, "List is null", Toast.LENGTH_LONG).show();
+        }
         connector = new PreferenceConnector(context);
         setGiftsData(position, holder, giftsData, giftsDataObj, previousInputUpdate);
     }
 
 
-
     @Override
     public int getItemCount() {
-       if(giftsData!=null){
-           return giftsData.size();
-       }
-       else{
-           return 0;
-       }
+        if (giftsData != null) {
+            return giftsData.size();
+        } else {
+            return 0;
+        }
     }
 
-    private void setGiftsData(int position, MyGiftHolder holder, List<GiftsData> giftsData, GiftsData giftsDataObj, DataItem previousInputUpdate){
+    private void setGiftsData(int position, MyGiftHolder holder, List<GiftsData> giftsData, GiftsData giftsDataObj, DataItem previousInputUpdate) {
         holder.textGift.setText(giftsDataObj.getName());
         if (previousInputUpdate != null && previousInputUpdate.getGiftDetails() != null) {
+            inputGiftList = previousInputUpdate.getGiftDetails();
+            setInputGiftList(inputGiftList);
             for (int i = 0; i < previousInputUpdate.getGiftDetails().size(); i++) {
                 if (previousInputUpdate.getGiftDetails().get(i).getGiftId().equals(giftsDataObj.getGiftId() + "")) {
                     String samples = previousInputUpdate.getGiftDetails().get(i).getGiftQuantity() + "";
@@ -86,33 +93,43 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String quantityGift = s.toString().trim();
                 boolean isUpdated = false;
-                if (!quantityGift.equals("")) {
 
-                     if (inputGiftList.size()>0){
+
+                    if (inputGiftList.size() > 0) {
                         for (int i = 0; i < inputGiftList.size(); i++) {
                             InputGift d = inputGiftList.get(i);
                             if (Integer.parseInt(d.getGiftId()) == giftsDataObj.getGiftId()) {
                                 inputGiftList.get(i).setGiftId(giftsDataObj.getGiftId() + "");
-                                inputGiftList.get(i).setQuantity(quantityGift);
-                                isUpdated = true;
+                                if (!quantityGift.equals("")) {
+                                    inputGiftList.get(i).setQuantity(quantityGift);
+                                }
+                                else{
+                                    inputGiftList.remove(i);
+
                             }
+                                isUpdated = true;
                         }
-                        if (!isUpdated){
-                            inputGift = new InputGift();
-                            inputGift.setQuantity(quantityGift);
-                            inputGift.setGiftId(giftsDataObj.getGiftId() + "");
-                            inputGiftList.add(inputGift);
-                        }
+
 
 
                     }
-                    else{
-                         inputGift = new InputGift();
-                         inputGift.setQuantity(quantityGift);
-                         inputGift.setGiftId(giftsDataObj.getGiftId() + "");
-                         inputGiftList.add(inputGift);
-                     }
+                        if (!isUpdated) {
+                            if (!quantityGift.equals("")) {
+                                inputGift = new InputGift();
+                                inputGift.setQuantity(quantityGift);
+                                inputGift.setGiftId(giftsDataObj.getGiftId() + "");
+                                inputGiftList.add(inputGift);
+                            }
+                        }
 
+                }
+                else {
+                    if (!quantityGift.equals("")) {
+                        inputGift = new InputGift();
+                        inputGift.setQuantity(quantityGift);
+                        inputGift.setGiftId(giftsDataObj.getGiftId() + "");
+                        inputGiftList.add(inputGift);
+                    }
                 }
 
 //
@@ -130,14 +147,14 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
 
 
     public List<InputGift> getInputGiftList() {
-       return DataController.getmInstance().getInputGiftList();
+        return DataController.getmInstance().getInputGiftList();
     }
 
     public void setInputGiftList(List<InputGift> inputGiftList) {
-      DataController.getmInstance().setInputGiftList(inputGiftList);
+        DataController.getmInstance().setInputGiftList(inputGiftList);
     }
 
-    public class MyGiftHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MyGiftHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private EditText editGiftQuantity;
         private TextView textGift;
 
@@ -154,8 +171,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
     }
 
 
-
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
 
         void onItemClick(View view, int position);
     }

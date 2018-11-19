@@ -1,5 +1,6 @@
 package com.planera.mis.planera2.activities.utils;
 
+import android.annotation.SuppressLint;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
@@ -8,6 +9,7 @@ import android.util.Log;
 import java.lang.reflect.Field;
 
 public class BottomNavigationViewHelper {
+    @SuppressLint("RestrictedApi")
     public static void removeShiftMode(BottomNavigationView navigationView){
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) navigationView.getChildAt(0);
         try {
@@ -17,7 +19,7 @@ public class BottomNavigationViewHelper {
             shiftingMode.setAccessible(false);
             for (int i = 0; i < menuView.getChildCount(); i++) {
                 BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
-                item.setShifting(false);
+                item.setShiftingMode(false);
                 // set once again checked value, so view will be updated
                 item.setChecked(item.getItemData().isChecked());
             }

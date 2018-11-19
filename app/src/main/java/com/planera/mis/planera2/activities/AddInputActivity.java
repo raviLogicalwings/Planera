@@ -325,7 +325,7 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
     }
 
     public String convertIntoDD_MM_YYYY(String date){
-        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat dateOnlyFormat = new SimpleDateFormat("dd-MM-yyyy");
         String dt = "";
         try {

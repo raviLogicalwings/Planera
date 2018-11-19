@@ -42,8 +42,9 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder> {
 
     }
 
+    @NonNull
     @Override
-    public MyPobHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyPobHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         holderView = LayoutInflater.from(context).inflate(R.layout.item_pob_detalis, parent, false);
         return new MyPobHolder(holderView);
     }
@@ -75,10 +76,12 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder> {
             brands = brandsList.get(pos);
             myPobHolder.textPodProductName.setText(brandsList.get(pos).getName());
             if (previousInputForUpdate != null && previousInputForUpdate.getProductDetails() != null) {
+                POBOrdersList = previousInputForUpdate.getProductDetails();
+                setPOBOrdersList(POBOrdersList);
                 for (int i = 0; i < previousInputForUpdate.getProductDetails().size(); i++) {
                     if (previousInputForUpdate.getProductDetails().get(i).getProductId().equals(brands.getProductId() + "")) {
-                            String qty = previousInputForUpdate.getProductDetails().get(i).getQuantity() + "";
-                            myPobHolder.editPodProductValue.setText(qty);
+                        String qty = previousInputForUpdate.getProductDetails().get(i).getQuantity() + "";
+                        myPobHolder.editPodProductValue.setText(qty);
 
                     }
                 }
@@ -94,30 +97,36 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder> {
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     String changedText = s.toString().trim();
                     boolean isUpdated = false;
-                    if (!changedText.equals("")) {
-                        if (POBOrdersList.size() > 0) {
-                            for (int i = 0; i < POBOrdersList.size(); i++) {
-                                if (POBOrdersList.get(i).getProductId().equals(brands.getProductId() + "")) {
+                    if (POBOrdersList.size() > 0) {
+                        for (int i = 0; i < POBOrdersList.size(); i++) {
+                            if (POBOrdersList.get(i).getProductId().equals(brands.getProductId() + "")) {
+                                if (!changedText.equals("")) {
                                     POBOrdersList.get(i).setQuantity(changedText);
-                                    isUpdated = true;
+                                } else {
+                                    POBOrdersList.remove(i);
                                 }
+                                isUpdated = true;
                             }
-                            if (!isUpdated) {
+                        }
+                        if (!isUpdated) {
+                            if (!changedText.equals("")) {
                                 orders = new InputOrders();
                                 orders.setQuantity(changedText);
                                 orders.setProductId(brands.getProductId() + "");
                                 POBOrdersList.add(orders);
                             }
+                        }
 
 
-                        } else {
+                    } else {
+                        if (!changedText.equals("")) {
                             orders = new InputOrders();
                             orders.setQuantity(changedText);
                             orders.setProductId(brands.getProductId() + "");
                             POBOrdersList.add(orders);
                         }
-                        setPOBOrdersList(POBOrdersList);
                     }
+                    setPOBOrdersList(POBOrdersList);
                 }
 
                 @Override
@@ -125,7 +134,6 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder> {
                     Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
                 }
             });
-            setPOBOrdersList(POBOrdersList);
         }
     }
 

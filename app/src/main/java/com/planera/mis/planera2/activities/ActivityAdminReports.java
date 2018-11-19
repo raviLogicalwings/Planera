@@ -642,6 +642,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                         if (dataItemsList != null) {
                             chemistDataTable(dataItemsList);
 //                            initAdapter(dataItemsList, reportsListView);
+                            destroyTable();
                         }
 
 
@@ -682,6 +683,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                         if (dataItemsList != null) {
                             doctorDataTable(dataItemsList);
                             initAdapter(dataItemsList, reportsListView);
+                            destroyTable();
                         }
 
 
@@ -722,6 +724,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                         if (dataItemsList != null) {
                             userDataTable(dataItemsList);
                             initAdapter(dataItemsList, reportsListView);
+                            destroyTable();
                         }
 
 
@@ -942,27 +945,32 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
             textArray[4] = new TextView(this);
             textArray[4].setId(i + 111);
             String productDetail = "";
-            for (int productIterettor = 0; productIterettor < dataItemsList.get(i).getProductDetails().size(); productIterettor++) {
-                productDetail += dataItemsList.get(i).getProductDetails().get(productIterettor).getProductName() + "(" + dataItemsList.get(i).getProductDetails().get(productIterettor).getQuantity() + ")";
+            if ( dataItemsList.get(i).getProductDetails() != null) {
+                for (int productIterettor = 0; productIterettor < dataItemsList.get(i).getProductDetails().size(); productIterettor++) {
+                    productDetail += dataItemsList.get(i).getProductDetails().get(productIterettor).getProductName() + "(" + dataItemsList.get(i).getProductDetails().get(productIterettor).getQuantity() + ")";
+                }
+                textArray[4].setText(productDetail);
             }
-            textArray[4].setText(productDetail);
             textArray[4].setTextColor(Color.WHITE);
             textArray[4].setPadding(8, 8, 8, 8);
             tr_headObj[i].addView(textArray[4]);
 
+
             textArray[5] = new TextView(this);
             textArray[5].setId(i + 111);
             if (dataItemsList.get(i).getInterestedLevel() != null) {
-                if (dataItemsList.get(i).getInterestedLevel().equals("3")) {
-                    textArray[5].setText(dataItemsList.get(i).getProductName() + "(Low)");
-                }
-                if (dataItemsList.get(i).getInterestedLevel().equals("2")) {
-                    textArray[5].setText(dataItemsList.get(i).getProductName() + "(Regular)");
+                for (int productIterettor = 0; productIterettor < dataItemsList.get(i).getProductDetails().size(); productIterettor++) {
+                    if (dataItemsList.get(i).getProductDetails().get(productIterettor).equals("3")) {
+                        textArray[5].setText(dataItemsList.get(i).getProductName() + "(Low)");
+                    }
+                    if (dataItemsList.get(i).getProductDetails().get(productIterettor).equals("2")) {
+                        textArray[5].setText(dataItemsList.get(i).getProductName() + "(Regular)");
 
-                }
-                if (dataItemsList.get(i).getInterestedLevel().equals("1")) {
-                    textArray[5].setText(dataItemsList.get(i).getProductName() + "(Super)");
+                    }
+                    if (dataItemsList.get(i).getProductDetails().get(productIterettor).equals("1")) {
+                        textArray[5].setText(dataItemsList.get(i).getProductName() + "(Super)");
 
+                    }
                 }
             } else {
                 textArray[5].setText("---");
@@ -1191,6 +1199,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
 
     public void destroyTable() {
         mainTableLayout.removeAllViews();
+        tr_head = null;
     }
 
 

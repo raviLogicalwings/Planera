@@ -2,6 +2,7 @@ package com.planera.mis.planera2.activities.FragmentDialog.addDialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
 import android.util.Log;
@@ -25,6 +26,7 @@ import com.planera.mis.planera2.activities.utils.AppConstants;
 
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -84,7 +86,7 @@ public class AddPatchDialog extends BaseDialogFragment implements View.OnClickLi
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
-        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        Objects.requireNonNull(dialog.getWindow()).requestFeature(Window.FEATURE_NO_TITLE);
         return dialog;
 
     }
@@ -95,7 +97,7 @@ public class AddPatchDialog extends BaseDialogFragment implements View.OnClickLi
         if (dialog != null) {
             int width = ViewGroup.LayoutParams.MATCH_PARENT;
             int height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            dialog.getWindow().setLayout(width, height);
+            Objects.requireNonNull(dialog.getWindow()).setLayout(width, height);
         }
     }
 
@@ -105,16 +107,18 @@ public class AddPatchDialog extends BaseDialogFragment implements View.OnClickLi
         Call<MainResponse> call = apiInterface.addPatch(token, name, territoryId);
         call.enqueue(new Callback<MainResponse>() {
             @Override
-            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+            public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
                processDialog.dismissDialog();
                 if (response!= null){
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-                        Log.e(TAG, "onResponse: "+response.body().getMessage() );
-                        onAddPatchDialogDismissListener.onAddPatchPatchDialogDismiss();
-                        dismiss();
-                    }
-                    else{
-                        Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    if (response.body() != null) {
+                        if (Objects.requireNonNull(response.body()).getStatusCode() == AppConstants.RESULT_OK){
+                            Log.e(TAG, "onResponse: "+ Objects.requireNonNull(response.body()).getMessage() );
+                            onAddPatchDialogDismissListener.onAddPatchPatchDialogDismiss();
+                            dismiss();
+                        }
+                        else{
+                            Toast.makeText(mContext, Objects.requireNonNull(response.body()).getMessage(), Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
             }
@@ -146,14 +150,14 @@ public class AddPatchDialog extends BaseDialogFragment implements View.OnClickLi
             @Override
             public void onResponse(Call<TerritoryListResponse> call, Response<TerritoryListResponse> response) {
                 processDialog.dismissDialog();
-                if (response.body().getStatusCode()== AppConstants.RESULT_OK){
-                    patchesList = response.body().getTerritorysList();
+                if (Objects.requireNonNull(response.body()).getStatusCode()== AppConstants.RESULT_OK){
+                    patchesList = Objects.requireNonNull(response.body()).getTerritorysList();
                     spinnerPatchAdapter = new CustomSpinnerPatchAdapter(mContext, patchesList);
                     spinnerTerritory.setAdapter(spinnerPatchAdapter);
 
                 }
                 else{
-                    Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, Objects.requireNonNull(response.body()).getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -176,12 +180,14 @@ public class AddPatchDialog extends BaseDialogFragment implements View.OnClickLi
     public int onSpinnerItemClicked(){
 
         spinnerTerritory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Log.e("You select ","=====> "+patchesList.get(i).getStateId());
                 patchId= patchesList.get(i).getTerritoryId();
             }
 
-            @Override            public void onNothingSelected(AdapterView<?> adapterView) {
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
         return patchId;

@@ -60,6 +60,7 @@ public class UserInputListActivity extends BaseActivity implements InputListAdap
         ObtainReport report = new Gson().fromJson(obtainReport, ObtainReport.class);
         if (report != null){
             if (InternetConnection.isNetworkAvailable(this)){
+                Log.e("Param of List Report", new Gson().toJson(report));
                 getUserReport(token, report);
             }
         }

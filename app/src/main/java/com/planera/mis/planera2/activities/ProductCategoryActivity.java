@@ -33,6 +33,7 @@ import com.planera.mis.planera2.activities.utils.AppConstants;
 import com.planera.mis.planera2.activities.utils.InternetConnection;
 
 import java.util.List;
+import java.util.Objects;
 
 import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
@@ -134,9 +135,17 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                     input.setGiftDetails(new GiftsAdapter().getInputGiftList());
                     if (new PODAdapter().getPOBOrdersList() != null){
                         input.setProductDetalis(new PODAdapter().getPOBOrdersList());
+                        for( int i=0; i<input.getProductDetalis().size(); i++)  {
+                            String inputId = input.getInputId();
+                            input.getProductDetalis().get(i).setInputId(inputId);
+                        }
                     }
-                    if (new SampleListAdapter().getSampleListSelected() != null){
+                    if (new SampleListAdapter().getSampleListSelected()!= null){
                         input.setProductDetalis(new SampleListAdapter().getSampleListSelected());
+                        for( int i=0; i<input.getProductDetalis().size(); i++)  {
+                            String inputId = input.getInputId();
+                            input.getProductDetalis().get(i).setInputId(inputId);
+                        }
                     }
 
                     apiUpdateMrInput(token, input);
@@ -201,7 +210,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
 
         call.enqueue(new Callback<MainResponse>() {
             @Override
-            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+            public void onResponse(@NonNull Call<MainResponse> call, Response<MainResponse> response) {
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
@@ -210,7 +219,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                     new SampleListAdapter().setSampleListSelected(null);
                     DataController.getmInstance().setOrderListSelected(null);
 
-                    // On Responce of Input Brand Calling add input Gift Api
+                    // On Response of Input Brand Calling add input Gift Api
                     //---------------
                     Intent startMainActivity = new Intent(ProductCategoryActivity.this, MainActivity.class);
                     startActivity(startMainActivity);
@@ -221,7 +230,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
             }
 
             @Override
-            public void onFailure(Call<MainResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MainResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 Snackbar.make(rootView, t.getMessage(), Snackbar.LENGTH_LONG).show();
             }
@@ -239,15 +248,15 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
             public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
                 processDialog.dismissDialog();
                 if (response.isSuccessful()){
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-                        Toasty.success(ProductCategoryActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    if (Objects.requireNonNull(response.body()).getStatusCode() == AppConstants.RESULT_OK){
+                        Toasty.success(ProductCategoryActivity.this, Objects.requireNonNull(response.body()).getMessage(), Toast.LENGTH_LONG).show();
                         Intent inUserReportList = new Intent(ProductCategoryActivity.this, SearchDateWiseInputActivity.class);
                         inUserReportList.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(inUserReportList);
                         finish();
                     }
                     else{
-                        Toasty.error(ProductCategoryActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                        Toasty.error(ProductCategoryActivity.this, Objects.requireNonNull(response.body()).getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -271,7 +280,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
 
         call.enqueue(new Callback<MainResponse>() {
             @Override
-            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+            public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
@@ -324,12 +333,13 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                     }
                 }
 
-                if (new SampleListAdapter().getSampleListSelected() != null) {
+                if (new SampleListAdapter().getSampleListSelected()!= null) {
                     List<InputOrders> inputSamples = new SampleListAdapter().getSampleListSelected();
                     if (inputSamples.size() > 0) {
                         for (int i = 0; i < inputSamples.size(); i++) {
                             inputSamples.get(i).setInputId(INPUT_ID);
                         }
+                        Log.e( "inputSamples: ", new Gson().toJson(inputSamples));
                         apiAddInputSamples(token, inputSamples);
                     }
                 }

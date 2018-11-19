@@ -272,22 +272,22 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onAddTerritoryDialogDismiss() {
-        refreshFragment(AppConstants.TERRITORY_FRAGMENT);
+        loadFragment(AppConstants.TERRITORY_FRAGMENT);
     }
 
     @Override
     public void onAddGiftDialogDismiss() {
-        refreshFragment(AppConstants.GIFT_FRAGMENT);
+        loadFragment(AppConstants.GIFT_FRAGMENT);
     }
 
     @Override
     public void onAddProductDialogDismiss() {
-        refreshFragment(AppConstants.PRODUCT_FRAGMENT);
+        loadFragment(AppConstants.PRODUCT_FRAGMENT);
     }
 
     @Override
     public void onAddPatchPatchDialogDismiss() {
-        refreshFragment(AppConstants.PATCH_FRAGMENT);
+        loadFragment(AppConstants.PATCH_FRAGMENT);
     }
 
 }

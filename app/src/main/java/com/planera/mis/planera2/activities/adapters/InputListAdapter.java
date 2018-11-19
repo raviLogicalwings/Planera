@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.planera.mis.planera2.R;
+import com.planera.mis.planera2.activities.AddInputActivity;
 import com.planera.mis.planera2.activities.models.DataItem;
 import com.planera.mis.planera2.activities.utils.PreferenceConnector;
 
@@ -63,7 +64,8 @@ public class InputListAdapter extends RecyclerView.Adapter<InputListAdapter.MyIn
     public void bindItemsWithView(MyInputItemHolder holder, int pos) {
 
         item = inputListItems.get(pos);
-        holder.textDateInput.setText(inputListItems.get(pos).getStartTime());
+        holder.textDateInput.setText(new AddInputActivity().convertIntoDD_MM_YYYY(inputListItems.get(pos).getVisitDate()));
+        holder.textTimeInput.setText(inputListItems.get(pos).getStartTime());
         holder.textVisitCounter.setText(inputListItems.get(pos).getVisitedRank()+"");
         if(inputListItems.get(pos).getDoctorId() == 0){
             holder.textNameInput.setText(inputListItems.get(pos).getChemistName());
@@ -79,6 +81,7 @@ public class InputListAdapter extends RecyclerView.Adapter<InputListAdapter.MyIn
         private TextView textNameInput;
         private TextView textDateInput;
         private Button buttonEditInput;
+        private TextView textTimeInput;
         private TextView textVisitCounter;
 
 
@@ -89,6 +92,7 @@ public class InputListAdapter extends RecyclerView.Adapter<InputListAdapter.MyIn
             textNameInput = itemView.findViewById(R.id.text_name_input);
             textDateInput = itemView.findViewById(R.id.text_date_input);
             buttonEditInput = itemView.findViewById(R.id.button_edit_input);
+            textTimeInput = itemView.findViewById(R.id.text_time_input);
 
             buttonEditInput.setOnClickListener(this);
         }

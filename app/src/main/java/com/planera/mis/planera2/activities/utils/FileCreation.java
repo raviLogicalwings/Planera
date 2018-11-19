@@ -84,20 +84,44 @@ public class FileCreation {
                         sheet.addCell(new Label(0, i + 1, reportList.get(i).getDoctorName()));
                         sheet.addCell(new Label(1, i + 1, reportList.get(i).getStartDate()));
                         sheet.addCell(new Label(2, i + 1, reportList.get(i).getEndDate()));
-                        if (reportList.get(i).getInterestedLevel() != null) {
-                            if (reportList.get(i).getInterestedLevel().equals("1")) {
-                                sheet.addCell(new Label(3, i + 1, reportList.get(i).getProductName() + "(Super)"));
-                            }
-                            if (reportList.get(i).getInterestedLevel().equals("2")) {
-                                sheet.addCell(new Label(3, i + 1, reportList.get(i).getProductName() + "(Regular)"));
-                            }
-                            if (reportList.get(i).getInterestedLevel().equals("3")) {
-                                sheet.addCell(new Label(3, i + 1, reportList.get(i).getProductName() + "(Low)"));
+                        if (reportList.get(i).getProductDetails() != null) {
+                            String values = "";
+                            for (int iterate  =  0; iterate<reportList.get(i).getProductDetails().size() ; iterate++) {
+
+                                if (reportList.get(i).getProductDetails().get(iterate).getInterestedLevel().equals("1")) {
+                                  values = reportList.get(i).getProductName() + "(Super)";
+                                }
+                                if (reportList.get(i).getProductDetails().get(iterate).getInterestedLevel().equals("2")) {
+                                   if (values.equals("")) {
+                                      values =reportList.get(i).getProductDetails().get(iterate).getProductName()  + "(Regular)";
+                                   }
+                                   values += " ,"+reportList.get(i).getProductDetails().get(iterate).getProductName() + "(Regular)";
+                                }
+                                if (reportList.get(i).getProductDetails().get(iterate).getInterestedLevel().equals("3")) {
+                                   if (values.equals("")) {
+                                      values=  reportList.get(i).getProductDetails().get(iterate).getProductName() + "(Low)";
+                                   }
+                                   values += " ,"+reportList.get(i).getProductDetails().get(iterate).getProductName() + "(Low)";
+                                }
+
+                                sheet.addCell(new Label(3, i+1, values));
                             }
 
                         }
-                            if (reportList.get(i).getProductQty()!=0) {
-                                sheet.addCell(new Label(4, i + 1, reportList.get(i).getProductName() + "(" + reportList.get(i).getProductQty() + ")"));
+                            if (reportList.get(i).getProductDetails() != null) {
+                            String quantity = "";
+                            for (int t=0 ; t<reportList.get(i).getProductDetails().size() ; t++) {
+                                if (reportList.get(i).getProductDetails().get(i).getProductName() != null || reportList.get(i).getProductDetails().get(t).getQuantity() != null) {
+                                    if (!quantity.equals("")) {
+                                        quantity = quantity + " ,"+reportList.get(i).getProductDetails().get(t).getProductName() + "(" + reportList.get(i).getProductQty() + ")";
+                                    }
+                                    else{
+                                        quantity = reportList.get(i).getProductDetails().get(t).getProductName() + "(" + reportList.get(i).getProductQty() + ")";
+                                    }
+                                    sheet.addCell(new Label(4, i+1, quantity));
+                                }
+
+                            }
                             }
 
 

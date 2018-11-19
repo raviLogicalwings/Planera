@@ -79,14 +79,9 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
             Brands brands = brandsList.get(pos);
 
             if (dataItemForUpdate != null && dataItemForUpdate.getProductDetails() != null) {
+                sampleListSelected = dataItemForUpdate.getProductDetails();
+                setSampleListSelected(sampleListSelected);
                 for (int i = 0; i < dataItemForUpdate.getProductDetails().size(); i++) {
-                    //loading previous data to generated array list !{
-                        orders = new InputOrders();
-                        orders.setProductId(dataItemForUpdate.getProductDetails().get(i).getProductId());
-                        orders.setQuantity(dataItemForUpdate.getProductDetails().get(i).getQuantity());
-                        orders.setIsSample(dataItemForUpdate.getProductDetails().get(i).getIsSample());
-                        sampleListSelected.add(orders);
-
                     if (dataItemForUpdate.getProductDetails().get(i).getProductId().equals(brands.getProductId() + "")) {
                         String samples = dataItemForUpdate.getProductDetails().get(i).getQuantity() + "";
                         holder.editBrandSampleValue.setText(samples);
@@ -115,8 +110,8 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
                                     }
                                     else {
                                         sampleListSelected.get(i).setQuantity(changedText);
-                                        isUpdated = true;
                                     }
+                                    isUpdated = true;
                                 }
 
                             }
@@ -143,9 +138,7 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
                             }
                         }
 
-                        if (!changedText.equals("")) {
                             setSampleListSelected(sampleListSelected);
-                        }
                 }
 
                 @Override
