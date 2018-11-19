@@ -6,13 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.crashlytics.android.Crashlytics;
-import com.planera.mis.planera2.activities.Retrofit.ApiClient;
-import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
-import com.planera.mis.planera2.activities.controller.DataController;
-import com.planera.mis.planera2.activities.utils.AppConstants;
-import com.planera.mis.planera2.activities.utils.PreferenceConnector;
-import com.planera.mis.planera2.activities.utils.ProcessDialog;
-import com.planera.mis.planera2.activities.utils.RuntimePermissionCheck;
+import com.planera.mis.planera2.Retrofit.ApiClient;
+import com.planera.mis.planera2.Retrofit.ApiInterface;
+import com.planera.mis.planera2.controller.DataController;
+import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.PreferenceConnector;
+import com.planera.mis.planera2.utils.ProcessDialog;
+import com.planera.mis.planera2.utils.RuntimePermissionCheck;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -22,7 +22,7 @@ public class BaseActivity extends AppCompatActivity {
     public PreferenceConnector connector;
     public ProcessDialog processDialog;
     public View rootView;
-    public RuntimePermissionCheck permissionCheck;
+    //public RuntimePermissionCheck permissionCheck;
 
     public ApiInterface apiInterface;
     public String token;
@@ -33,7 +33,7 @@ public class BaseActivity extends AppCompatActivity {
         Fabric.with(this, new Crashlytics());
         rootView = getWindow().getDecorView().getRootView();
         connector = PreferenceConnector.getInstance(this);
-        permissionCheck = new RuntimePermissionCheck(getBaseContext());
+        //permissionCheck = new RuntimePermissionCheck(getBaseContext());
         apiInterface  = ApiClient.getInstance();
         token = connector.getString(AppConstants.TOKEN);
         apbInterfaceForGooglePlaces = ApiClient.getInstanceForLocation();

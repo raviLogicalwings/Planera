@@ -15,11 +15,11 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.models.GooglePlacesModel.GooglePlaces;
-import com.planera.mis.planera2.activities.models.MainResponse;
-import com.planera.mis.planera2.activities.models.UserData;
-import com.planera.mis.planera2.activities.utils.AppConstants;
-import com.planera.mis.planera2.activities.utils.InternetConnection;
+import com.planera.mis.planera2.models.GooglePlacesModel.GooglePlaces;
+import com.planera.mis.planera2.models.MainResponse;
+import com.planera.mis.planera2.models.UserData;
+import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.InternetConnection;
 
 import java.util.Calendar;
 

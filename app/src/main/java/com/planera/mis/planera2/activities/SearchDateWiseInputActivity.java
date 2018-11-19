@@ -15,8 +15,8 @@ import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.models.ObtainReport;
-import com.planera.mis.planera2.activities.utils.AppConstants;
+import com.planera.mis.planera2.models.ObtainReport;
+import com.planera.mis.planera2.utils.AppConstants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

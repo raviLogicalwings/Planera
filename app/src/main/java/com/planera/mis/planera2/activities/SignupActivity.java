@@ -14,12 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.Retrofit.ApiClient;
-import com.planera.mis.planera2.activities.Retrofit.ApiInterface;
-import com.planera.mis.planera2.activities.models.RegistrationResponse;
-import com.planera.mis.planera2.activities.models.UserData;
-import com.planera.mis.planera2.activities.utils.AppConstants;
-import com.planera.mis.planera2.activities.utils.InternetConnection;
+import com.planera.mis.planera2.Retrofit.ApiClient;
+import com.planera.mis.planera2.Retrofit.ApiInterface;
+import com.planera.mis.planera2.models.RegistrationResponse;
+import com.planera.mis.planera2.models.UserData;
+import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.InternetConnection;
 
 import es.dmoral.toasty.Toasty;
 import retrofit2.Call;

@@ -7,36 +7,62 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.utils.AppConstants;
-import com.planera.mis.planera2.activities.utils.PreferenceConnector;
-import com.planera.mis.planera2.activities.utils.RuntimePermissionCheck;
+import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.PreferenceConnector;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.planera.mis.planera2.activities.utils.RuntimePermissionCheck.REQUEST_ID_MULTIPLE_PERMISSIONS;
+import static com.planera.mis.planera2.utils.RuntimePermissionCheck.REQUEST_ID_MULTIPLE_PERMISSIONS;
 
 
 public class SplashActivity extends BaseActivity {
+    //public RuntimePermissionCheck permissionCheck;
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     public boolean isUserLogin;
     public boolean isUser;
-    public RuntimePermissionCheck permissionCheck;
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
-        initUi();
-        try {
-            initData();
-        } catch (Exception e) {
-            Log.e("Exception ", e.getMessage());
-        }
 
+        setContentView(R.layout.activity_splash);
+
+        initData();
+
+        initUi();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                goToNextScreen();
+            }
+        }, AppConstants.SPLASH_TIME_OUT);
+
+    }
+
+    private void goToNextScreen() {
+        if (!checkAndRequestPermissions()) {
+            return;
+        }
+        if (isUserLogin) {
+            if (isUser) {
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                ActivityCompat.finishAffinity(SplashActivity.this);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(SplashActivity.this, AdminPanelActivity.class);
+                ActivityCompat.finishAffinity(SplashActivity.this);
+                startActivity(intent);
+            }
+        } else {
+            Intent intentLogin = new Intent(SplashActivity.this, LoginActivity.class);
+            ActivityCompat.finishAffinity(SplashActivity.this);
+            startActivity(intentLogin);
+        }
     }
 
     @Override
@@ -46,86 +72,14 @@ public class SplashActivity extends BaseActivity {
     }
 
     @Override
-    public void initData(){
+    public void initData() {
         super.initData();
         PreferenceConnector connector = PreferenceConnector.getInstance(this);
 
         isUserLogin = connector.getBoolean(AppConstants.IS_LOGIN);
         isUser = connector.getBoolean(AppConstants.IS_USER);
-        permissionCheck = new RuntimePermissionCheck(SplashActivity.this);
+        //permissionCheck = new RuntimePermissionCheck(SplashActivity.this);
 
-        if (checkAndRequestPermissions()) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (isUserLogin){
-                        if (isUser) {
-                            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                            ActivityCompat.finishAffinity(SplashActivity.this);
-                            startActivity(intent);
-                        } else {
-                            Intent intent = new Intent(SplashActivity.this, AdminPanelActivity.class);
-                            ActivityCompat.finishAffinity(SplashActivity.this);
-                            startActivity(intent);
-                        }
-                    }
-                    else {
-//                Toast.makeText(this, isUserLogin+"", Toast.LENGTH_SHORT).show();
-//                        callSplash();
-                        Intent intentLogin = new Intent(SplashActivity.this, LoginActivity.class);
-                        ActivityCompat.finishAffinity(SplashActivity.this);
-                        startActivity(intentLogin);
-                    }
-                }
-            }, AppConstants.SPLASH_TIME_OUT);
-        } else {
-            checkAndRequestPermissions();
-        }
-
-
-
-    }
-
-    public void callSplash(){
-        new Handler().postDelayed(() -> {
-                Intent intentLogin = new Intent(SplashActivity.this, LoginActivity.class);
-                intentLogin.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intentLogin);
-        }, AppConstants.SPLASH_TIME_OUT);
-
-    }
-
-
-
-    public boolean checkLocationPermission(){
-        if (ContextCompat.checkSelfPermission(SplashActivity.this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Asking user if explanation is needed
-            if (ActivityCompat.shouldShowRequestPermissionRationale(SplashActivity.this,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-                //Prompt the user once explanation has been shown
-                ActivityCompat.requestPermissions(SplashActivity.this,
-                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION);
-
-
-            } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(SplashActivity.this,
-                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION);
-            }
-            return false;
-        } else {
-            return true;
-        }
     }
 
     @Override
@@ -137,12 +91,10 @@ public class SplashActivity extends BaseActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    // permission was granted. Do the
-                    // contacts-related task you need to do.
                     if (ContextCompat.checkSelfPermission(SplashActivity.this,
                             android.Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
-                        initData();
+                        goToNextScreen();
                         Toast.makeText(SplashActivity.this, "Permission granted", Toast.LENGTH_LONG).show();
                     }
 

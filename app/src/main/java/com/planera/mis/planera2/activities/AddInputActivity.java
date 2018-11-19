@@ -19,10 +19,10 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.models.DataItem;
-import com.planera.mis.planera2.activities.models.Input;
-import com.planera.mis.planera2.activities.utils.AppConstants;
-import com.planera.mis.planera2.activities.utils.InternetConnection;
+import com.planera.mis.planera2.models.DataItem;
+import com.planera.mis.planera2.models.Input;
+import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.InternetConnection;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

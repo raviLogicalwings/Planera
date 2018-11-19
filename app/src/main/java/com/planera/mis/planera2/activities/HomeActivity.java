@@ -15,11 +15,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.models.PatchListResponse;
-import com.planera.mis.planera2.activities.models.Patches;
-import com.planera.mis.planera2.activities.models.Territories;
-import com.planera.mis.planera2.activities.models.TerritoryListResponse;
-import com.planera.mis.planera2.activities.utils.AppConstants;
+import com.planera.mis.planera2.models.PatchListResponse;
+import com.planera.mis.planera2.models.Patches;
+import com.planera.mis.planera2.models.Territories;
+import com.planera.mis.planera2.models.TerritoryListResponse;
+import com.planera.mis.planera2.utils.AppConstants;
 
 import java.util.ArrayList;
 import java.util.List;

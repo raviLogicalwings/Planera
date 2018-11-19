@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.planera.mis.planera2.activities.UserInputListActivity"
+    tools:context="com.planera.mis.planera2.UserInputListActivity"
     tools:showIn="@layout/activity_user_input_list">
 
     <android.support.v7.widget.RecyclerView

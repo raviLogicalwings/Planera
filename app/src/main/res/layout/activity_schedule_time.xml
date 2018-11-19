@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:id="@+id/parentPanel"
     android:orientation="vertical"
-    tools:context=".activities.AddInputActivity">
+    tools:context=".AddInputActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"

@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
-        android:name=".activities.controller.DataController"
+        android:name=".controller.DataController"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name="activities.SplashActivity">
+
+        <activity android:name=".activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,7 +47,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <!--<meta-data-->
                 <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value="com.planera.mis.planera2.activities.AdminPanelActivity" />-->
+                <!--android:value="com.planera.mis.planera2.AdminPanelActivity" />-->
         </activity>
         <activity
             android:name=".activities.SingleListActivity"

@@ -18,16 +18,16 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.fragments.ChemistFragment;
-import com.planera.mis.planera2.activities.models.Chemists;
-import com.planera.mis.planera2.activities.models.DoctorResponse;
-import com.planera.mis.planera2.activities.models.Doctors;
-import com.planera.mis.planera2.activities.models.GooglePlacesModel.GooglePlaces;
-import com.planera.mis.planera2.activities.models.MainResponse;
-import com.planera.mis.planera2.activities.models.PatchListResponse;
-import com.planera.mis.planera2.activities.models.Patches;
-import com.planera.mis.planera2.activities.utils.AppConstants;
-import com.planera.mis.planera2.activities.utils.InternetConnection;
+import com.planera.mis.planera2.fragments.ChemistFragment;
+import com.planera.mis.planera2.models.Chemists;
+import com.planera.mis.planera2.models.DoctorResponse;
+import com.planera.mis.planera2.models.Doctors;
+import com.planera.mis.planera2.models.GooglePlacesModel.GooglePlaces;
+import com.planera.mis.planera2.models.MainResponse;
+import com.planera.mis.planera2.models.PatchListResponse;
+import com.planera.mis.planera2.models.Patches;
+import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.InternetConnection;
 
 import java.io.IOException;
 import java.util.ArrayList;

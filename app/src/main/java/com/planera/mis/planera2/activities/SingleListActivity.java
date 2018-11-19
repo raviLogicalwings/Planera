@@ -10,21 +10,21 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.FragmentDialog.addDialogs.AddGiftDialog;
-import com.planera.mis.planera2.activities.FragmentDialog.addDialogs.AddPatchDialog;
-import com.planera.mis.planera2.activities.FragmentDialog.addDialogs.AddProductDialog;
-import com.planera.mis.planera2.activities.FragmentDialog.addDialogs.AddStateDialog;
-import com.planera.mis.planera2.activities.FragmentDialog.addDialogs.AddTerritoryDialog;
-import com.planera.mis.planera2.activities.fragments.ChemistFragment;
-import com.planera.mis.planera2.activities.fragments.DoctorsFragment;
-import com.planera.mis.planera2.activities.fragments.GiftListFragment;
-import com.planera.mis.planera2.activities.fragments.PatchListFragment;
-import com.planera.mis.planera2.activities.fragments.PlansFragment;
-import com.planera.mis.planera2.activities.fragments.ProductFragment;
-import com.planera.mis.planera2.activities.fragments.StateListFragment;
-import com.planera.mis.planera2.activities.fragments.TerritoryListFragment;
-import com.planera.mis.planera2.activities.fragments.UsersFragment;
-import com.planera.mis.planera2.activities.utils.AppConstants;
+import com.planera.mis.planera2.FragmentDialog.addDialogs.AddGiftDialog;
+import com.planera.mis.planera2.FragmentDialog.addDialogs.AddPatchDialog;
+import com.planera.mis.planera2.FragmentDialog.addDialogs.AddProductDialog;
+import com.planera.mis.planera2.FragmentDialog.addDialogs.AddStateDialog;
+import com.planera.mis.planera2.FragmentDialog.addDialogs.AddTerritoryDialog;
+import com.planera.mis.planera2.fragments.ChemistFragment;
+import com.planera.mis.planera2.fragments.DoctorsFragment;
+import com.planera.mis.planera2.fragments.GiftListFragment;
+import com.planera.mis.planera2.fragments.PatchListFragment;
+import com.planera.mis.planera2.fragments.PlansFragment;
+import com.planera.mis.planera2.fragments.ProductFragment;
+import com.planera.mis.planera2.fragments.StateListFragment;
+import com.planera.mis.planera2.fragments.TerritoryListFragment;
+import com.planera.mis.planera2.fragments.UsersFragment;
+import com.planera.mis.planera2.utils.AppConstants;
 
 
 public class SingleListActivity extends BaseActivity implements View.OnClickListener,

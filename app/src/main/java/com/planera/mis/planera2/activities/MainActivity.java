@@ -15,11 +15,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.fragments.HomeFragment;
-import com.planera.mis.planera2.activities.fragments.ProfileFragment;
-import com.planera.mis.planera2.activities.utils.AppConstants;
-import com.planera.mis.planera2.activities.utils.BottomNavigationViewHelper;
-import com.planera.mis.planera2.activities.utils.InternetConnection;
+import com.planera.mis.planera2.fragments.HomeFragment;
+import com.planera.mis.planera2.fragments.ProfileFragment;
+import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.BottomNavigationViewHelper;
+import com.planera.mis.planera2.utils.InternetConnection;
 
 public class MainActivity extends BaseActivity implements
         View.OnClickListener {

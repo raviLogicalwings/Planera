@@ -10,9 +10,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.fragments.AdminAccessFragment;
-import com.planera.mis.planera2.activities.fragments.UploadDataFragment;
-import com.planera.mis.planera2.activities.utils.AppConstants;
+import com.planera.mis.planera2.fragments.AdminAccessFragment;
+import com.planera.mis.planera2.fragments.UploadDataFragment;
+import com.planera.mis.planera2.utils.AppConstants;
 
 
 public class AdminPanelActivity extends BaseActivity {

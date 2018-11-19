@@ -21,10 +21,10 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.activities.models.ChemistImport;
-import com.planera.mis.planera2.activities.models.MainResponse;
-import com.planera.mis.planera2.activities.utils.AppConstants;
-import com.planera.mis.planera2.activities.utils.RuntimePermissionCheck;
+import com.planera.mis.planera2.models.ChemistImport;
+import com.planera.mis.planera2.models.MainResponse;
+import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.RuntimePermissionCheck;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
