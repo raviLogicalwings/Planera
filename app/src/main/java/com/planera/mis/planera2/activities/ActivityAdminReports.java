@@ -642,7 +642,6 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                         if (dataItemsList != null) {
                             chemistDataTable(dataItemsList);
 //                            initAdapter(dataItemsList, reportsListView);
-                            destroyTable();
                         }
 
 
@@ -683,7 +682,6 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                         if (dataItemsList != null) {
                             doctorDataTable(dataItemsList);
                             initAdapter(dataItemsList, reportsListView);
-                            destroyTable();
                         }
 
 
@@ -724,7 +722,6 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                         if (dataItemsList != null) {
                             userDataTable(dataItemsList);
                             initAdapter(dataItemsList, reportsListView);
-                            destroyTable();
                         }
 
 
@@ -1199,7 +1196,6 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
 
     public void destroyTable() {
         mainTableLayout.removeAllViews();
-        tr_head = null;
     }
 
 

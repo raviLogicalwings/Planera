@@ -346,7 +346,7 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
                     listDoctors.add(doctors);
                 }
                 sb.append(":");
-
+                Log.e("list doctors", new Gson().toJson(listDoctors));
 
                 if (listDoctors != null){
                     apiImportDoctorsFromExcel(token, listDoctors);

@@ -8,7 +8,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -147,8 +146,8 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                             input.getProductDetalis().get(i).setInputId(inputId);
                         }
                     }
-
                     apiUpdateMrInput(token, input);
+
                 }
                 else if (InternetConnection.isNetworkAvailable(ProductCategoryActivity.this)) {
                     addInputApi(token, input);
@@ -163,16 +162,15 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
 
 
     public void addInputGiftApi(String token, List<InputGift> inputGifts) {
-        Log.e("AddInputGifts : ", new Gson().toJson(inputGifts));
         processDialog.showDialog(ProductCategoryActivity.this, false);
         Call<InputGiftResponce> call = apiInterface.addInputGift(token, inputGifts);
         call.enqueue(new Callback<InputGiftResponce>() {
             @Override
-            public void onResponse(@NonNull Call<InputGiftResponce> call, Response<InputGiftResponce> response) {
+            public void onResponse(@NonNull Call<InputGiftResponce> call, @NonNull Response<InputGiftResponce> response) {
                 processDialog.dismissDialog();
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
-                        if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
+                        if (Objects.requireNonNull(response.body()).getStatusCode() == AppConstants.RESULT_OK) {
                             // Set Array Lis to null
                             //----------
                             new GiftsAdapter().setInputGiftList(null);
@@ -182,9 +180,9 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                             Intent startMainActivity = new Intent(ProductCategoryActivity.this, MainActivity.class);
                             startActivity(startMainActivity);
 
-                            Toast.makeText(ProductCategoryActivity.this, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
+                            Toast.makeText(ProductCategoryActivity.this, Objects.requireNonNull(response.body()).getMessage(), Snackbar.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(ProductCategoryActivity.this, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
+                            Toast.makeText(ProductCategoryActivity.this, Objects.requireNonNull(response.body()).getMessage(), Snackbar.LENGTH_LONG).show();
 
                         }
                     }
@@ -204,7 +202,6 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
     public void apiAddInputSamples(String token, List<InputOrders> inputOrders) {
 
 
-        Log.e("Inputs", new Gson().toJson(DataController.getmInstance().getOrderListSelected()));
         processDialog.showDialog(ProductCategoryActivity.this, false);
         Call<MainResponse> call = apiInterface.addInputProductList(token, inputOrders);
 
@@ -241,7 +238,6 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
 
     public void apiUpdateMrInput(String token, Input input){
         processDialog.showDialog(ProductCategoryActivity.this, false);
-        Log.e("Input for update", new Gson().toJson(input));
         Call<MainResponse> call = apiInterface.updateMrInput(token, input);
         call.enqueue(new Callback<MainResponse>() {
             @Override
@@ -250,6 +246,9 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                 if (response.isSuccessful()){
                     if (Objects.requireNonNull(response.body()).getStatusCode() == AppConstants.RESULT_OK){
                         Toasty.success(ProductCategoryActivity.this, Objects.requireNonNull(response.body()).getMessage(), Toast.LENGTH_LONG).show();
+                        new SampleListAdapter().setSampleListSelected(null);
+                        new PODAdapter().setPOBOrdersList(null);
+                        new GiftsAdapter().setInputGiftList(null);
                         Intent inUserReportList = new Intent(ProductCategoryActivity.this, SearchDateWiseInputActivity.class);
                         inUserReportList.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(inUserReportList);
@@ -272,9 +271,6 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
 
 
     public void apiAddInputBrands(String token, List<InputOrders> inputOrders) {
-
-
-        Log.e("Inputs", new Gson().toJson(DataController.getmInstance().getOrderListSelected()));
         processDialog.showDialog(ProductCategoryActivity.this, false);
         Call<MainResponse> call = apiInterface.addInputProductList(token, inputOrders);
 
@@ -317,7 +313,6 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                         for (int i = 0; i < inputB.size(); i++) {
                             inputB.get(i).setInputId(INPUT_ID);
                         }
-                        Log.e("Product", new Gson().toJson(inputB));
                         apiAddInputBrands(token, inputB);
                     }
                 }
@@ -339,11 +334,9 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                         for (int i = 0; i < inputSamples.size(); i++) {
                             inputSamples.get(i).setInputId(INPUT_ID);
                         }
-                        Log.e( "inputSamples: ", new Gson().toJson(inputSamples));
                         apiAddInputSamples(token, inputSamples);
                     }
                 }
-
 
         }
         else{
@@ -353,7 +346,6 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                     for (int i = 0; i < inputOrders.size(); i++) {
                         inputOrders.get(i).setInputId(INPUT_ID);
                     }
-                    Log.e("POB", new Gson().toJson(inputOrders));
                     apiAddInputBrands(token, inputOrders);
                 }
             }
@@ -361,19 +353,16 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
     }
 
     public void addInputApi(String token, Input input) {
-        Log.e("Input Object", new Gson().toJson(input));
         processDialog.showDialog(ProductCategoryActivity.this, false);
         Call<InputResponce> call = apiInterface.addInput(token, input);
         call.enqueue(new Callback<InputResponce>() {
             @Override
-            public void onResponse(Call<InputResponce> call, Response<InputResponce> response) {
-                Log.e(TAG, "onResponse: " + new Gson().toJson(response.body()));
-                Log.e(TAG, new Gson().toJson(input));
+            public void onResponse(@NonNull Call<InputResponce> call, @NonNull Response<InputResponce> response) {
                 processDialog.dismissDialog();
                 if (response.isSuccessful()) {
 
                     if (response.code() == 200) {
-                        if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
+                        if (Objects.requireNonNull(response.body()).getStatusCode() == AppConstants.RESULT_OK) {
                             // Calling all api, product, gift, and Pod
                             INPUT_ID = response.body().getData().getInputId();
                             callingAllApi();
@@ -386,7 +375,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
             }
 
             @Override
-            public void onFailure(Call<InputResponce> call, Throwable t) {
+            public void onFailure(@NonNull Call<InputResponce> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 Snackbar.make(rootView, t.getMessage(), Snackbar.LENGTH_INDEFINITE).show();
 
