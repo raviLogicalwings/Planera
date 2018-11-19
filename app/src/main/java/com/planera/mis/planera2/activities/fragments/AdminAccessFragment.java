@@ -28,7 +28,6 @@ public class AdminAccessFragment extends BaseFragment implements View.OnClickLis
     private CardView cardReports;
     public static AdminAccessFragment instance;
 
-
     public static AdminAccessFragment getInstance(){
         if(instance== null){
             instance = new AdminAccessFragment();
@@ -62,7 +61,6 @@ public class AdminAccessFragment extends BaseFragment implements View.OnClickLis
         initData();
         return view;
     }
-
 
     @Override
     protected void initUi() {

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
@@ -33,11 +34,6 @@ public class SearchDateWiseInputActivity extends BaseActivity implements View.On
     String objectToString;
     private TextInputLayout inputLayoutStartDate;
     private TextInputLayout inputLayoutEndDate;
-
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

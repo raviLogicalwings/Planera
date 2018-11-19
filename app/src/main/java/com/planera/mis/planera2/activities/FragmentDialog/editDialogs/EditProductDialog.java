@@ -155,6 +155,7 @@ public class EditProductDialog extends BaseDialogFragment implements View.OnClic
 
         if (productName!=null && isBrands!= null){
             editTextName.setText(productName);
+            editTextName.setSelection(editTextName.getText().length());
             if(Integer.parseInt(isBrands)  == 1){
                 switchIsBrand.setChecked(true);
             }

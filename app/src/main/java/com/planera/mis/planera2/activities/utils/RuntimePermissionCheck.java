@@ -9,6 +9,7 @@ package com.planera.mis.planera2.activities.utils;
         import android.support.v4.app.Fragment;
         import android.support.v4.content.ContextCompat;
         import android.util.Log;
+        import android.widget.Toast;
 
         import java.util.ArrayList;
         import java.util.List;
@@ -369,4 +370,5 @@ public class RuntimePermissionCheck {
         }
 
     }
+
 }

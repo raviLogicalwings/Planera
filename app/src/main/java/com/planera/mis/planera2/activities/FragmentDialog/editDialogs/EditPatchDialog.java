@@ -38,10 +38,6 @@ public class EditPatchDialog extends BaseDialogFragment implements View.OnClickL
     private int territoryId ;
     private String patchName;
 
-
-
-
-
     public EditPatchDialog() {
     }
 
@@ -136,14 +132,11 @@ public class EditPatchDialog extends BaseDialogFragment implements View.OnClickL
     @Override
     protected void initUi() {
         super.initUi();
-
-
         textTerritoryPatch = view.findViewById(R.id.text_territory_patch);
         inputLayoutUserName = view.findViewById(R.id.input_layout_user_name);
         editTextName = view.findViewById(R.id.edit_text_name);
         buttonUpdatePatch = view.findViewById(R.id.button_update_patch);
         textTerritoryPatch.setVisibility(View.GONE);
-
 
         buttonUpdatePatch.setOnClickListener(this);
 
@@ -159,6 +152,7 @@ public class EditPatchDialog extends BaseDialogFragment implements View.OnClickL
 
         if (patchName!=null){
             editTextName.setText(patchName);
+            editTextName.setSelection(editTextName.getText().length());
         }
 
 

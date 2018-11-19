@@ -1,295 +1,346 @@
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:cardElevation="6dp"
-    app:cardUseCompatPadding="true">
+    android:layout_height="match_parent">
 
-    <ScrollView
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="horizontal">
+        app:cardElevation="6dp"
+        app:cardUseCompatPadding="true"
+        android:id="@+id/card_view">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            style="@style/BaseMargin"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:scrollbars="horizontal">
 
-            <TextView
-                style="@style/NormalText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/fab_margin"
-                android:padding="@dimen/fab_margin"
-                android:text="Select For" />
-
-            <RadioGroup
-
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/radio_group_select"
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                style="@style/BaseMargin"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <RadioButton
-                    android:id="@+id/radio_doctor"
+                <TextView
+                    style="@style/NormalText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:text="Doctor" />
+                    android:layout_marginTop="@dimen/fab_margin"
+                    android:padding="@dimen/fab_margin"
+                    android:text="Select For" />
 
-                <RadioButton
-                    android:id="@+id/radio_chemist"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:text="Chemist" />
-            </RadioGroup>
+                <RadioGroup
 
-            <LinearLayout
-                android:id="@+id/territory_spinner_update"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="@dimen/drawable_padding"
-                android:weightSum="2">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="0.8"
-                    android:text="Territory" />
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="0dp"
-                    android:id="@+id/input_layout_territory_plan"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.2">
-
-                    <Spinner
-                        android:id="@+id/spinner_plan_territory"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </android.support.design.widget.TextInputLayout>
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="@dimen/drawable_padding"
-                android:weightSum="2">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight=".8"
-                    android:text="Patch" />
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="0dp"
-                    android:id="@+id/input_layout_patch_plan"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.2">
-
-                    <Spinner
-                        android:id="@+id/spinner_plan_patch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </android.support.design.widget.TextInputLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/doctor_spinner_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="@dimen/drawable_padding"
-                android:weightSum="2">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="0.8"
-                    android:text="Doctor" />
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="0dp"
-                    android:id="@+id/input_layout_doctor_plan"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.2">
-
-                    <Spinner
-                        android:id="@+id/spinner_plan_doctor"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </android.support.design.widget.TextInputLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/chemist_spinner_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="@dimen/drawable_padding"
-                android:visibility="gone"
-                android:weightSum="2">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="0.8"
-                    android:text="Chemist" />
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="0dp"
-                    android:id="@+id/input_layout_chemist_plan"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.2">
-
-                    <Spinner
-                        android:id="@+id/spinner_plan_chemist"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </android.support.design.widget.TextInputLayout>
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="@dimen/drawable_padding"
-                android:weightSum="2">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight=".8"
-                    android:text="User" />
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="0dp"
-                    android:id="@+id/input_layout_user_plan"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.2">
-
-                    <Spinner
-                        android:id="@+id/spinner_plan_user"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="@dimen/drawable_padding"
-                android:weightSum="2">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight=".8"
-                    android:text="Month" />
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="0dp"
-                    android:id="@+id/input_layout_month_plan"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.2">
-
-                    <Spinner
-                        android:id="@+id/spinner_plan_month"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </android.support.design.widget.TextInputLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="@dimen/drawable_padding"
-                android:weightSum="2">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight=".8"
-                    android:text="Year" />
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="0dp"
-                    android:id="@+id/input_layout_year_plan"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.2">
-
-                    <Spinner
-                        android:id="@+id/spinner_plan_year"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </android.support.design.widget.TextInputLayout>
-
-            </LinearLayout>
-
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:maxLength="3"
-                    android:id="@+id/text_plan_call"
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/radio_group_select"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Call"
-                    android:inputType="number" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-            </android.support.design.widget.TextInputLayout>
+                    <RadioButton
+                        android:id="@+id/radio_doctor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="Doctor" />
 
+                    <RadioButton
+                        android:id="@+id/radio_chemist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="Chemist" />
+                </RadioGroup>
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/text_plan_remark"
+                <LinearLayout
+                    android:id="@+id/territory_spinner_update"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Remark"
-                    android:inputType="textCapSentences"
-                    android:maxLength="10" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/drawable_padding"
+                    android:weightSum="2">
 
-            </android.support.design.widget.TextInputLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.8"
+                        android:text="Territory" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:id="@+id/input_layout_territory_plan"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2">
+
+                        <Spinner
+                            android:id="@+id/spinner_plan_territory"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
 
 
-        </LinearLayout>
-    </ScrollView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/drawable_padding"
+                    android:weightSum="2">
 
-    <Button
-        android:id="@+id/button_create_plan"
-        style="@style/ButtonText"
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight=".8"
+                        android:text="Patch" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:id="@+id/input_layout_patch_plan"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2">
+
+                        <Spinner
+                            android:id="@+id/spinner_plan_patch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/doctor_spinner_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/drawable_padding"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.8"
+                        android:text="Doctor" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:id="@+id/input_layout_doctor_plan"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2">
+
+                        <Spinner
+                            android:id="@+id/spinner_plan_doctor"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/chemist_spinner_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/drawable_padding"
+                    android:visibility="gone"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.8"
+                        android:text="Chemist" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:id="@+id/input_layout_chemist_plan"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2">
+
+                        <Spinner
+                            android:id="@+id/spinner_plan_chemist"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/drawable_padding"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight=".8"
+                        android:text="User" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:id="@+id/input_layout_user_plan"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2">
+
+                        <Spinner
+                            android:id="@+id/spinner_plan_user"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/drawable_padding"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight=".8"
+                        android:text="Month" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:id="@+id/input_layout_month_plan"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2">
+
+                        <Spinner
+                            android:id="@+id/spinner_plan_month"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/drawable_padding"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight=".8"
+                        android:text="Year" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:id="@+id/input_layout_year_plan"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2">
+
+                        <Spinner
+                            android:id="@+id/spinner_plan_year"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:maxLength="3"
+                        android:id="@+id/text_plan_call"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Call"
+                        android:inputType="number" />
+
+                </android.support.design.widget.TextInputLayout>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/text_plan_remark"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Remark"
+                        android:inputType="textCapSentences"
+                        android:maxLength="10" />
+
+                </android.support.design.widget.TextInputLayout>
+
+
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/button_create_plan"
+            style="@style/ButtonText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/colorPrimary"
+            android:text="Submit" />
+    </android.support.v7.widget.CardView>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/colorPrimary"
-        android:text="Submit" />
-</android.support.v7.widget.CardView>
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:id="@+id/linear_no_internet">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/please_check_your_internet_connection"
+            android:padding="2dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="#333"
+            android:id="@+id/text_input_list_internet"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_mood_bad"/>
+
+    </LinearLayout>
+
+    <Button
+        style="@style/normalButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:padding="5dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        android:text="@string/retry"
+        android:id="@+id/button_retry"/>
+
+</RelativeLayout>

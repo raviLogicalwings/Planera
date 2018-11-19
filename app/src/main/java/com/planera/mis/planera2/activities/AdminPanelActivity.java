@@ -32,7 +32,6 @@ public class AdminPanelActivity extends BaseActivity {
         setContentView(R.layout.activity_admin_panel);
         initUi();
         initData();
-
     }
 
     @Override
@@ -45,10 +44,10 @@ public class AdminPanelActivity extends BaseActivity {
         super.initUi();
         adminNavigation = findViewById(R.id.admin_navigation);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.back_arrow_whit);
+//        toolbar.setNavigationIcon(R.drawable.back_arrow_whit);
         adminNavigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(view -> onBackPressed());
+//        toolbar.setNavigationOnClickListener(view -> onBackPressed());
     }
 
     @Override

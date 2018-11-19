@@ -151,6 +151,7 @@ public class EditTerritoryDialog extends BaseDialogFragment implements View.OnCl
         if (territoryName!=null && stateName!=null) {
          textStateEdit.setText(stateName);
             editTextName.setText(territoryName);
+            editTextName.setSelection(editTextName.getText().length());
         }
     }
 

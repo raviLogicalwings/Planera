@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -7,10 +7,9 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/list_products"
-        >
-
+        android:id="@+id/list_products">
     </android.support.v7.widget.RecyclerView>
+
     <LinearLayout
         android:id="@+id/layout_no_data"
         android:visibility="gone"
@@ -20,4 +19,72 @@
         android:layout_height="wrap_content">
     </LinearLayout>
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:id="@+id/linear_no_internet">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/please_check_your_internet_connection"
+            android:padding="2dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="#333"
+            android:id="@+id/text_input_list_internet"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_mood_bad"/>
+
+    </LinearLayout>
+
+    <Button
+        style="@style/normalButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:padding="5dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        android:text="@string/retry"
+        android:id="@+id/button_retry"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:id="@+id/linear_no_data">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="No Data Available!"
+            android:padding="2dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="#333" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_mood_bad"/>
+
+    </LinearLayout>
+</RelativeLayout>

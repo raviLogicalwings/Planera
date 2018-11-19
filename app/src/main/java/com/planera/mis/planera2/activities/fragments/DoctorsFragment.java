@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -42,11 +43,11 @@ public class DoctorsFragment extends BaseFragment implements SearchView.OnQueryT
     private ApiInterface apiInterface;
     private List<Doctors> doctorsList;
     private RecyclerView listViewDoctors;
-    private LinearLayout layoutNoData;
     private SearchView searchViewDoctor;
     private int selectedDoctor;
     private DoctorsListAdapter adapter;
-
+    private LinearLayout linearNoData, linearNoInternet;
+    private Button buttonRetry;
     public DoctorsFragment() {
 
     }
@@ -87,7 +88,9 @@ public class DoctorsFragment extends BaseFragment implements SearchView.OnQueryT
     protected void initUi() {
         super.initUi();
         listViewDoctors = view.findViewById(R.id.list_doctors);
-        layoutNoData = view.findViewById(R.id.layout_no_data);
+        linearNoData = view.findViewById(R.id.linear_no_data);
+        linearNoInternet = view.findViewById(R.id.linear_no_internet);
+        buttonRetry = view.findViewById(R.id.button_retry);
         searchViewDoctor = view.findViewById(R.id.search_view_doctor);
         searchViewDoctor.setActivated(true);
         searchViewDoctor.onActionViewExpanded();
@@ -95,6 +98,15 @@ public class DoctorsFragment extends BaseFragment implements SearchView.OnQueryT
         searchViewDoctor.clearFocus();
 
         searchViewDoctor.setOnQueryTextListener(this);
+
+        buttonRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getFragmentManager() != null) {
+                    getFragmentManager().beginTransaction().detach(DoctorsFragment.this).attach(DoctorsFragment.this).commit();
+                }
+            }
+        });
     }
 
 
@@ -110,23 +122,22 @@ public class DoctorsFragment extends BaseFragment implements SearchView.OnQueryT
                     doctorsList = response.body().getData();
                     if (doctorsList != null) {
                         listViewDoctors.setVisibility(View.VISIBLE);
-                        layoutNoData.setVisibility(View.GONE);
                         System.out.println(doctorsList.size());
-
                         initAdapter(doctorsList, listViewDoctors);
                     }
                 } else {
-                    layoutNoData.setVisibility(View.VISIBLE);
+                    linearNoData.setVisibility(View.VISIBLE);
                     listViewDoctors.setVisibility(View.GONE);
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                 }
-
 
             }
 
             @Override
             public void onFailure(Call<DoctorsListResponce> call, Throwable t) {
                 processDialog.dismissDialog();
+                linearNoInternet.setVisibility(View.VISIBLE);
+                buttonRetry.setVisibility(View.VISIBLE);
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -42,11 +43,11 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
     private ApiInterface apiInterface;
     private List<Chemists> chemistsList;
     private RecyclerView listViewChemist;
-    private LinearLayout layoutNoData;
     private SearchView searchViewChemist;
     private ChemistListAdapter adapter;
     private int selectedChemist;
-
+    private LinearLayout linearNoData, linearNoInternet;
+    private Button buttonRetry;
     public ChemistFragment() {
 
     }
@@ -87,18 +88,25 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
     protected void initUi() {
         super.initUi();
         listViewChemist = view.findViewById(R.id.list_chemists);
-        layoutNoData = view.findViewById(R.id.layout_no_data);
+        linearNoData = view.findViewById(R.id.linear_no_data);
+        linearNoInternet = view.findViewById(R.id.linear_no_internet);
+        buttonRetry = view.findViewById(R.id.button_retry);
         searchViewChemist = view.findViewById(R.id.search_view_chemist);
         searchViewChemist.setActivated(true);
         searchViewChemist.onActionViewExpanded();
         searchViewChemist.setIconified(false);
         searchViewChemist.clearFocus();
-
         searchViewChemist.setOnQueryTextListener(this);
+
+        buttonRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getFragmentManager() != null) {
+                    getFragmentManager().beginTransaction().detach(ChemistFragment.this).attach(ChemistFragment.this).commit();
+                }
+            }
+        });
     }
-
-
-
 
     public void getDoctorsList(String token){
         processDialog.showDialog(mContext, false);
@@ -112,24 +120,22 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
                     chemistsList = response.body().getData();
                     if (chemistsList!=null) {
                         listViewChemist.setVisibility(View.VISIBLE);
-                        layoutNoData.setVisibility(View.GONE);
                         System.out.println(chemistsList.size());
-
                         initAdapter(chemistsList, listViewChemist);
                     }
                 }
                 else{
-                    layoutNoData.setVisibility(View.VISIBLE);
+                    linearNoData.setVisibility(View.VISIBLE);
                     listViewChemist.setVisibility(View.GONE);
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                 }
-
-
             }
 
             @Override
             public void onFailure(Call<ChemistListResponse> call, Throwable t) {
                 processDialog.dismissDialog();
+                linearNoInternet.setVisibility(View.VISIBLE);
+                buttonRetry.setVisibility(View.VISIBLE);
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
