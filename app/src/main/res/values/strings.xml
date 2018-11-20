@@ -92,4 +92,25 @@
     <string name="upload">Upload</string>
     <string name="please_check_your_internet_connection">Please check your internet connection!</string>
     <string name="retry">Retry</string>
+
+    //invalid inputs
+    <string name="first_name_invalid">Invalid First Name</string>
+    <string name="last_name">Invalid Last Name</string>
+    <string name="dob">Invalid Date of Birth</string>
+    <string name="email_invalid">Invalid Email</string>
+    <string name="qualification">Invalid Qualification</string>
+    <string name="specialization">Invalid Specialization</string>
+    <string name="phone">Invalid Phone</string>
+    <string name="address">Invalid Address</string>
+    <string name="pincode">Invalid Pincode</string>
+    <string name="district">Invalid District</string>
+    <string name="state">Invalid State</string>
+    <string name="city">Invalid City</string>
+    <string name="shop_size">Invalid Shop Size</string>
+    <string name="company_name">Invalid Company Name</string>
+    <string name="monthly_potential">Invalid Monthly Volume Potential</string>
+    <string name="billing_email">Invalid Billing Email</string>
+    <string name="billing_phone">Invalid Billing Phone</string>
+    <string name="rating">Invalid Rating</string>
+
 </resources>

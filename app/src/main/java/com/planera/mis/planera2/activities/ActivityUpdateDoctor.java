@@ -216,10 +216,8 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
         if (TextUtils.isEmpty(firstNameStr)) {
             textDoctorFirstName.requestFocus();
             textDoctorFirstName.setError(getString(R.string.invalid_input));
-        } else if (TextUtils.isEmpty(middleNameStr)) {
-            textDoctorMiddleName.requestFocus();
-            textDoctorMiddleName.setError(getString(R.string.invalid_input));
-        } else if (TextUtils.isEmpty(lastNameStr)) {
+        }
+        else if (TextUtils.isEmpty(lastNameStr)) {
             textDoctorLastName.requestFocus();
             textDoctorLastName.setError(getString(R.string.invalid_input));
         } else if (TextUtils.isEmpty(dobStr)) {
@@ -231,16 +229,20 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
         } else if (TextUtils.isEmpty(qualificationStr)) {
             textDoctorQualification.requestFocus();
             textDoctorQualification.setError(getString(R.string.invalid_input));
-        } else if (TextUtils.isEmpty(middleNameStr)) {
+        }
+        /*else if (TextUtils.isEmpty(middleNameStr)) {
             textDoctorMiddleName.requestFocus();
             textDoctorMiddleName.setError(getString(R.string.invalid_input));
-        } else if (TextUtils.isEmpty(emailStr)) {
+        }*/
+        else if (TextUtils.isEmpty(emailStr)) {
             textDoctorEmail.requestFocus();
             textDoctorEmail.setError(getString(R.string.invalid_input));
-        } else if (TextUtils.isEmpty(phoneStr)) {
+        }
+        else if (TextUtils.isEmpty(phoneStr)) {
             textDoctorPhone.requestFocus();
             textDoctorPhone.setError(getString(R.string.invalid_input));
-        } else if (TextUtils.isEmpty(address1Str)) {
+        }
+        else if (TextUtils.isEmpty(address1Str)) {
             textDoctorAddress1.requestFocus();
             textDoctorAddress1.setError(getString(R.string.invalid_input));
         } else if (TextUtils.isEmpty(address2Str)) {
@@ -269,47 +271,43 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
             textDoctorPincode.setError(getString(R.string.invalid_input));
         } else {
 
-            if (doctorId!=0){
+            if (doctorId != 0){
                 doctors.setDoctorId(doctorId);
-
             }
-        }
-        doctors.setMeetFrequency(meetFreq + "");
-        doctors.setPreferredMeetTime(meetTime + "");
-        doctors.setFirstName(firstNameStr);
-        doctors.setMiddleName(middleNameStr);
-        doctors.setLastName(lastNameStr);
-        doctors.setDOB(dobStr);
-        doctors.setPhone(phoneStr);
-        doctors.setEmail(emailStr);
-        doctors.setPhone(phoneStr);
-        doctors.setAddress1(address1Str);
-        doctors.setAddress2(address2Str);
-        doctors.setAddress3(address3Str);
-        doctors.setAddress4(address4Str);
-        doctors.setCity(cityStr);
-        doctors.setDistrict(districtStr);
-        doctors.setQualifications(qualificationStr);
-        doctors.setSpecializations(specializationStr);
-        doctors.setPincode(pincodeStr);
-        doctors.setState(stateStr);
-        doctors.setPatchId(patchId + "");
-        doctors.setStatus("1");
-        doctors.setCRM("1");
 
+            doctors.setMeetFrequency(meetFreq + "");
+            doctors.setPreferredMeetTime(meetTime + "");
+            doctors.setFirstName(firstNameStr);
+            doctors.setMiddleName(middleNameStr);
+            doctors.setLastName(lastNameStr);
+            doctors.setDOB(dobStr);
+            doctors.setPhone(phoneStr);
+            doctors.setEmail(emailStr);
+            doctors.setPhone(phoneStr);
+            doctors.setAddress1(address1Str);
+            doctors.setAddress2(address2Str);
+            doctors.setAddress3(address3Str);
+            doctors.setAddress4(address4Str);
+            doctors.setCity(cityStr);
+            doctors.setDistrict(districtStr);
+            doctors.setQualifications(qualificationStr);
+            doctors.setSpecializations(specializationStr);
+            doctors.setPincode(pincodeStr);
+            doctors.setState(stateStr);
+            doctors.setPatchId(patchId + "");
+            doctors.setStatus("1");
+            doctors.setCRM("1");
 
-        if (InternetConnection.isNetworkAvailable(ActivityUpdateDoctor.this)) {
+            if (InternetConnection.isNetworkAvailable(ActivityUpdateDoctor.this)) {
 
-            getAddressLatLong(address1Str + ", " + pincodeStr);
+                getAddressLatLong(address1Str + ", " + pincodeStr);
 
-        } else {
-            Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+            } else {
+                Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+            }
         }
 
     }
-
-
-
 
     public void getPatchList(String token) {
         processDialog.showDialog(ActivityUpdateDoctor.this, false);

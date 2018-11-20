@@ -218,72 +218,77 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
 
         if (TextUtils.isEmpty(firstNameStr)) {
             textChemistFirstName.requestFocus();
-            textChemistFirstName.setError(getString(R.string.invalid_input));
-        } else if (TextUtils.isEmpty(middleNameStr)) {
+            textChemistFirstName.setError(getString(R.string.first_name_invalid));
+        }
+        /*else if (TextUtils.isEmpty(middleNameStr)) {
             textChemistMiddleName.requestFocus();
             textChemistMiddleName.setError(getString(R.string.invalid_input));
-        } else if (TextUtils.isEmpty(lastNameStr)) {
+        }*/
+        else if (TextUtils.isEmpty(lastNameStr)) {
             textChemistLastName.requestFocus();
-            textChemistLastName.setError(getString(R.string.invalid_input));
+            textChemistLastName.setError(getString(R.string.last_name));
         } else if (TextUtils.isEmpty(shopSizeStr)) {
             textChemistShopSize.requestFocus();
-            textChemistShopSize.setError(getString(R.string.invalid_input));
+            textChemistShopSize.setError(getString(R.string.shop_size));
         } else if (TextUtils.isEmpty(monthtlyVolumeStr)) {
             textChemistMonthlyVolume.requestFocus();
-            textChemistMonthlyVolume.setError(getString(R.string.invalid_input));
+            textChemistMonthlyVolume.setError(getString(R.string.monthly_potential));
         } else if (TextUtils.isEmpty(companyNameStr)) {
             textChemistCompanyName.requestFocus();
-            textChemistCompanyName.setError(getString(R.string.invalid_input));
-        } else if (TextUtils.isEmpty(middleNameStr)) {
+            textChemistCompanyName.setError(getString(R.string.company_name));
+        }
+        /*else if (TextUtils.isEmpty(middleNameStr)) {
             textChemistMiddleName.requestFocus();
             textChemistMiddleName.setError(getString(R.string.invalid_input));
-        } else if (TextUtils.isEmpty(emailStr)) {
+        }*/
+        else if (TextUtils.isEmpty(emailStr)) {
             textChemistEmail.requestFocus();
-            textChemistEmail.setError(getString(R.string.invalid_input));
+            textChemistEmail.setError(getString(R.string.email_invalid));
         } else if (TextUtils.isEmpty(phoneStr)) {
             textChemistPhone.requestFocus();
-            textChemistPhone.setError(getString(R.string.invalid_input));
+            textChemistPhone.setError(getString(R.string.phone));
         } else if (TextUtils.isEmpty(address1Str)) {
             textChemistAddress1.requestFocus();
-            textChemistAddress1.setError(getString(R.string.invalid_input));
+            textChemistAddress1.setError(getString(R.string.address));
         } else if (TextUtils.isEmpty(address2Str)) {
             textChemistAddress2.requestFocus();
-            textChemistAddress2.setError(getString(R.string.invalid_input));
+            textChemistAddress2.setError(getString(R.string.address));
         } else if (TextUtils.isEmpty(address3Str)) {
             textChemistAddress3.requestFocus();
-            textChemistAddress3.setError(getString(R.string.invalid_input));
+            textChemistAddress3.setError(getString(R.string.address));
         } else if (TextUtils.isEmpty(address4Str)) {
             textChemistAddress4.requestFocus();
-            textChemistAddress4.setError(getString(R.string.invalid_input));
+            textChemistAddress4.setError(getString(R.string.address));
         } else if (TextUtils.isEmpty(districtStr)) {
             textChemistDistrict.requestFocus();
-            textChemistDistrict.setError(getString(R.string.invalid_input));
+            textChemistDistrict.setError(getString(R.string.district));
         } else if (TextUtils.isEmpty(cityStr)) {
             textChemistCity.requestFocus();
-            textChemistCity.setError(getString(R.string.invalid_input));
+            textChemistCity.setError(getString(R.string.city));
         } else if (TextUtils.isEmpty(stateStr)) {
             textChemistState.requestFocus();
-            textChemistState.setError(getString(R.string.invalid_input));
+            textChemistState.setError(getString(R.string.state));
         } else if (TextUtils.isEmpty(billingEmailStr)) {
             textChemistBillingEmail.requestFocus();
-            textChemistBillingEmail.setError(getString(R.string.invalid_input));
-        } else if (TextUtils.isEmpty(phoneStr)) {
+            textChemistBillingEmail.setError(getString(R.string.billing_email));
+        }
+        /*else if (TextUtils.isEmpty(phoneStr)) {
             textChemistPincode.requestFocus();
             textChemistPincode.setError(getString(R.string.invalid_input));
-        }
+        }*/
 
         else if (TextUtils.isEmpty(billingPhone1Str)) {
             textChemistBillingPhone1.requestFocus();
-            textChemistBillingPhone1.setError(getString(R.string.invalid_input));
+            textChemistBillingPhone1.setError(getString(R.string.billing_phone));
         }
 
         else if (TextUtils.isEmpty(billingPhone2Str)) {
             textChemistBillingPhone2.requestFocus();
-            textChemistBillingPhone2.setError(getString(R.string.invalid_input));
+            textChemistBillingPhone2.setError(getString(R.string.billing_phone));
         }
         else if (TextUtils.isEmpty(ratingStr)) {
             textChemistRating.requestFocus();
-            textChemistRating.setError(getString(R.string.invalid_input));
+            textChemistRating.setError(getString(R.string.rating));
         }
 
         else {
@@ -292,43 +297,45 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
                 chemists.setChemistId(chemistId);
 
             }
+
+            chemists.setShopSize(shopSizeStr);
+            chemists.setBillingEmail(billingEmailStr);
+            chemists.setBillingPhone1(billingPhone1Str);
+            chemists.setBillingPhone2(billingPhone2Str);
+            chemists.setRating(ratingStr);
+            chemists.setMonthlyVolumePotential(monthtlyVolumeStr);
+            chemists.setCompanyName(companyNameStr);
+            chemists.setPreferredMeetTime(meetTime + "");
+            chemists.setFirstName(firstNameStr);
+            chemists.setMiddleName(middleNameStr);
+            chemists.setLastName(lastNameStr);
+            chemists.setPhone(phoneStr);
+            chemists.setEmail(emailStr);
+            chemists.setPhone(phoneStr);
+            chemists.setAddress1(address1Str);
+            chemists.setAddress2(address2Str);
+            chemists.setAddress3(address3Str);
+            chemists.setAddress4(address4Str);
+            chemists.setCity(cityStr);
+            chemists.setDistrict(districtStr);
+            chemists.setPincode(pincodeStr);
+            chemists.setState(stateStr);
+            chemists.setPatchId(patchId + "");
+            chemists.setStatus("1");
+
+
+            if (InternetConnection.isNetworkAvailable(ActivityUpdateChemist.this)) {
+
+                getAddressLatLong(address1Str + ", " + pincodeStr);
+
+            } else {
+                Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+            }
+
         }
-        chemists.setShopSize(shopSizeStr);
-        chemists.setBillingEmail(billingEmailStr);
-        chemists.setBillingPhone1(billingPhone1Str);
-        chemists.setBillingPhone2(billingPhone2Str);
-        chemists.setRating(ratingStr);
-        chemists.setMonthlyVolumePotential(monthtlyVolumeStr);
-        chemists.setCompanyName(companyNameStr);
-        chemists.setPreferredMeetTime(meetTime + "");
-        chemists.setFirstName(firstNameStr);
-        chemists.setMiddleName(middleNameStr);
-        chemists.setLastName(lastNameStr);
-        chemists.setPhone(phoneStr);
-        chemists.setEmail(emailStr);
-        chemists.setPhone(phoneStr);
-        chemists.setAddress1(address1Str);
-        chemists.setAddress2(address2Str);
-        chemists.setAddress3(address3Str);
-        chemists.setAddress4(address4Str);
-        chemists.setCity(cityStr);
-        chemists.setDistrict(districtStr);
-        chemists.setPincode(pincodeStr);
-        chemists.setState(stateStr);
-        chemists.setPatchId(patchId + "");
-        chemists.setStatus("1");
 
-
-        if (InternetConnection.isNetworkAvailable(ActivityUpdateChemist.this)) {
-
-            getAddressLatLong(address1Str + ", " + pincodeStr);
-
-        } else {
-            Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
-        }
 
     }
-
 
     public void addDoctorsApi(String token, Doctors chemists) {
         processDialog.showDialog(mContext, false);
@@ -385,8 +392,6 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
         });
 
     }
-
-
 
     public void updateChemistDetails(String token, Chemists chemists){
         processDialog.showDialog(ActivityUpdateChemist.this, false);
@@ -466,7 +471,6 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
         });
     }
 
-
     public void loadFromIntent(Intent intent) {
         textChemistFirstName.setText(intent.getStringExtra(AppConstants.FIRST_NAME));
         textChemistMiddleName.setText(intent.getStringExtra(AppConstants.MIDDLE_NAME));
@@ -492,7 +496,6 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
         chemistId = intent.getIntExtra(AppConstants.UPDATE_CHEMIST_KEY, 0);
         previousPatchId = intent.getStringExtra(AppConstants.PATCH_ID);
     }
-
 
     public void setArrayAdapter(List<String> listString, Spinner spinner) {
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>
@@ -527,7 +530,6 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
         dpDialog.show();
 
     }
-
 
     @Override
     public void onClick(View view) {

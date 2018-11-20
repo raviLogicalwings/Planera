@@ -33,7 +33,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ActivityAddChemist extends BaseActivity implements View.OnClickListener{
+public class ActivityAddChemist extends BaseActivity implements View.OnClickListener {
     private EditText textChemistCompanyName;
     private EditText textChemistMonthlyVolume;
     private EditText textChemistShopSize;
@@ -162,7 +162,7 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
         startActivity(intent);
     }
 
-    public void uiValidation(){
+    public void uiValidation() {
         String strCompanyName = textChemistCompanyName.getText().toString().trim();
         String strChemistMonthlyVolume = textChemistMonthlyVolume.getText().toString().trim();
         String strChemistShopSize = textChemistShopSize.getText().toString().trim();
@@ -185,103 +185,81 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
         String strChemistRating = textChemistRating.getText().toString().trim();
 
 
-        if (TextUtils.isEmpty(strCompanyName)){
+        if (TextUtils.isEmpty(strCompanyName)) {
             textChemistCompanyName.requestFocus();
-            inputLayoutCompanyNameChemist.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(strChemistMonthlyVolume)){
+            inputLayoutCompanyNameChemist.setError(getString(R.string.company_name));
+        } else if (TextUtils.isEmpty(strChemistMonthlyVolume)) {
             textChemistMonthlyVolume.requestFocus();
-            inputLayoutMonthlyVolumeChemist.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(strChemistShopSize)){
+            inputLayoutMonthlyVolumeChemist.setError(getString(R.string.monthly_potential));
+        } else if (TextUtils.isEmpty(strChemistShopSize)) {
             textChemistShopSize.requestFocus();
-            inputLayoutShopSizeChemist.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(strFirstName)){
+            inputLayoutShopSizeChemist.setError(getString(R.string.shop_size));
+        } else if (TextUtils.isEmpty(strFirstName)) {
             textChemistFirstName.requestFocus();
-            inputLayoutFirstNameChemist.setError(getString(R.string.invalid_input));
+            inputLayoutFirstNameChemist.setError(getString(R.string.first_name_invalid));
         }
-        else if (TextUtils.isEmpty(strMiddleName)){
+        /*else if (TextUtils.isEmpty(strMiddleName)) {
             textChemistMiddleName.requestFocus();
             inputLayoutMiddleNameChemist.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(strLastName)){
+        }*/
+        else if (TextUtils.isEmpty(strLastName)) {
             textChemistLastName.requestFocus();
-            inputLayoutLastNameChemist.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(strChemistEmail)){
+            inputLayoutLastNameChemist.setError(getString(R.string.last_name));
+        } else if (TextUtils.isEmpty(strChemistEmail)) {
             textChemistEmail.requestFocus();
-            inputLayoutEmailChemist.setError(getString(R.string.invalid_input));
-        }
-        else if (!isValidEmailId(strChemistEmail)){
+            inputLayoutEmailChemist.setError(getString(R.string.email_invalid));
+        } else if (!isValidEmailId(strChemistEmail)) {
             textChemistEmail.requestFocus();
             inputLayoutEmailChemist.setError("Invalid Email");
-        }
-        else if (TextUtils.isEmpty(strChemistPhone)){
+        } else if (TextUtils.isEmpty(strChemistPhone)) {
             textChemistPhone.requestFocus();
-            inputLayoutPhoneChemist.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(strAddress1)){
+            inputLayoutPhoneChemist.setError(getString(R.string.phone));
+        } else if (TextUtils.isEmpty(strAddress1)) {
             textChemistAddress1.requestFocus();
-            inputLayoutAddress1Chemist.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(strAddress2)){
+            inputLayoutAddress1Chemist.setError(getString(R.string.address));
+        } else if (TextUtils.isEmpty(strAddress2)) {
             textChemistAddress2.requestFocus();
-            inputLayoutAddress2Chemist.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(strAddress3)){
+            inputLayoutAddress2Chemist.setError(getString(R.string.address));
+        } else if (TextUtils.isEmpty(strAddress3)) {
             textChemistAddress3.requestFocus();
-            inputLayoutAddress3Chemist.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(strAddress4)){
+            inputLayoutAddress3Chemist.setError(getString(R.string.address));
+        } else if (TextUtils.isEmpty(strAddress4)) {
             textChemistAddress4.requestFocus();
-            inputLayoutAddress4Chemist.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(strChemistDistrict)){
+            inputLayoutAddress4Chemist.setError(getString(R.string.address));
+        } else if (TextUtils.isEmpty(strChemistDistrict)) {
             textChemistDistrict.requestFocus();
-            inputLayoutDistrictChemist.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(strChemistCity)){
+            inputLayoutDistrictChemist.setError(getString(R.string.district));
+        } else if (TextUtils.isEmpty(strChemistCity)) {
             textChemistCity.requestFocus();
-            inputLayoutCityChemist.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(strChemistState)){
+            inputLayoutCityChemist.setError(getString(R.string.city));
+        } else if (TextUtils.isEmpty(strChemistState)) {
             textChemistState.requestFocus();
-            inputLayoutStateChemist.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(strChemistPincode)){
+            inputLayoutStateChemist.setError(getString(R.string.state));
+        } else if (TextUtils.isEmpty(strChemistPincode)) {
             textChemistPincode.requestFocus();
             inputLayoutPincodeChemist.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(strChemistBillingEmail)){
+        } else if (TextUtils.isEmpty(strChemistBillingEmail)) {
             textChemistBillingEmail.requestFocus();
-            inputLayoutBillingEmailChemist.setError(getString(R.string.invalid_input));
-        }
-        else if (!isValidEmailId(strChemistBillingEmail)){
+            inputLayoutBillingEmailChemist.setError(getString(R.string.billing_email));
+        } else if (!isValidEmailId(strChemistBillingEmail)) {
             textChemistBillingEmail.requestFocus();
             inputLayoutBillingEmailChemist.setError("Invalid Email");
-        }
-        else if (TextUtils.isEmpty(strChemistBillingPhone1)){
+        } else if (TextUtils.isEmpty(strChemistBillingPhone1)) {
             textChemistBillingPhone1.requestFocus();
-            inputLayoutBillingPhone1Chemist.setError(getString(R.string.invalid_input));
-        }
-        else if (strChemistBillingPhone1.length()<10){
+            inputLayoutBillingPhone1Chemist.setError(getString(R.string.billing_phone));
+        } else if (strChemistBillingPhone1.length() < 10) {
             textChemistBillingPhone1.requestFocus();
             inputLayoutBillingPhone1Chemist.setError("Invalid phone number.");
-        }
-        else if (TextUtils.isEmpty(strChemistBillingPhone2)){
+        } else if (TextUtils.isEmpty(strChemistBillingPhone2)) {
             textChemistBillingPhone2.requestFocus();
             inputLayoutBillingPhone2Chemist.setError(getString(R.string.invalid_input));
-        }
-        else if (strChemistBillingPhone2.length()<10){
+        } else if (strChemistBillingPhone2.length() < 10) {
             textChemistBillingPhone2.requestFocus();
             inputLayoutBillingPhone2Chemist.setError("Invalid phone number.");
-        }
-        else if (TextUtils.isEmpty(strChemistRating)){
+        } else if (TextUtils.isEmpty(strChemistRating)) {
             textChemistRating.requestFocus();
-            inputLayoutRatingChemist.setError(getString(R.string.invalid_input));
-        }
-        else{
+            inputLayoutRatingChemist.setError(getString(R.string.rating));
+        } else {
             chemists.setCompanyName(strCompanyName);
             chemists.setMonthlyVolumePotential(strChemistMonthlyVolume);
             chemists.setShopSize(strChemistShopSize);
@@ -290,7 +268,7 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
             chemists.setLastName(strLastName);
             chemists.setEmail(strChemistEmail);
             chemists.setPhone(strChemistPhone);
-            chemists.setPatchId(patchId+"");
+            chemists.setPatchId(patchId + "");
             chemists.setAddress1(strAddress1);
             chemists.setAddress2(strAddress2);
             chemists.setAddress3(strAddress3);
@@ -304,18 +282,17 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
             chemists.setBillingPhone2(strChemistBillingPhone2);
             chemists.setRating(strChemistRating);
             chemists.setStatus("1");
-            chemists.setPreferredMeetTime(prefferdMeetTime+"");
-            if (InternetConnection.isNetworkAvailable(ActivityAddChemist.this)){
-                getAddressLatLong(strAddress1 + ", "+ strChemistPincode);
-            }
-            else{
+            chemists.setPreferredMeetTime(prefferdMeetTime + "");
+            if (InternetConnection.isNetworkAvailable(ActivityAddChemist.this)) {
+                getAddressLatLong(strAddress1 + ", " + strChemistPincode);
+            } else {
                 Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
             }
         }
     }
 
 
-    private boolean isValidEmailId(String email){
+    private boolean isValidEmailId(String email) {
 
         return Pattern.compile("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
                 + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
@@ -324,14 +301,14 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
                 + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
                 + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$").matcher(email).matches();
     }
+
     @Override
     public void initData() {
         super.initData();
         chemists = new Chemists();
-        if (InternetConnection.isNetworkAvailable(ActivityAddChemist.this)){
+        if (InternetConnection.isNetworkAvailable(ActivityAddChemist.this)) {
             getPatchList(token);
-        }
-        else{
+        } else {
             Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
         }
         spinnerMeetTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -384,7 +361,6 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
 
     }
 
-
     public void getAddressLatLong(String input) {
         processDialog.showDialog(ActivityAddChemist.this, false);
         Call<GooglePlaces> call = apbInterfaceForGooglePlaces.getPlaceLatLong(input, AppConstants.INPUT_TYPE, AppConstants.FIELDS, AppConstants.KEY_GOOGLE_PLACES);
@@ -399,7 +375,7 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
                         chemists.setLongitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLng() + "");
                         Log.e("Patches Object", "onResponse: " + new Gson().toJson(chemists));
                         addChemistDetailsApi(token, chemists);
-                }
+                    }
                 } else if (response.body().getStatus().equals(AppConstants.STATUS_ZERO_RESULTS)) {
                     Snackbar.make(rootView, "Address not found, Please Try again", Snackbar.LENGTH_LONG).show();
                 } else {
@@ -445,20 +421,19 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
     }
 
 
-    public void addChemistDetailsApi(String token, Chemists chemists){
+    public void addChemistDetailsApi(String token, Chemists chemists) {
         processDialog.showDialog(ActivityAddChemist.this, false);
         Call<ChemistResponse> call = apiInterface.addChemist(token, chemists);
         call.enqueue(new Callback<ChemistResponse>() {
             @Override
             public void onResponse(Call<ChemistResponse> call, Response<ChemistResponse> response) {
                 processDialog.dismissDialog();
-                if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     Intent intentSingleList = new Intent(ActivityAddChemist.this, SingleListActivity.class);
                     intentSingleList.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.CHEMIST_FRAGMENT);
                     startActivity(intentSingleList);
                     finish();
-                }
-                else{
+                } else {
                     Toast.makeText(ActivityAddChemist.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
@@ -474,7 +449,7 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.button_add_chemist:
                 uiValidation();
                 break;
@@ -482,10 +457,5 @@ public class ActivityAddChemist extends BaseActivity implements View.OnClickList
         }
 
     }
-
-
-
-
-
 
 }

@@ -8,7 +8,7 @@ public class AppConstants {
     //Retrofit Constants
     public static final int RESULT_OK = 1;
     public static final long REQUEST_TIMEOUT = 3;
-    public static final String BASE_URL = "http://35.231.248.33/mrapi/";
+    public static final String BASE_URL = "http://soleralife.com/apimrapp/";
     public static final String LOGIN = "login/login";
     public static final String USER_REGISTRATION = "register/registerUserDetails";
     public static final String CHANGE_PASSWORD = "login/changePassword";
