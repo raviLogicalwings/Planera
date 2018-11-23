@@ -19,8 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-
-        <activity android:name=".activities.SplashActivity">
+        <activity android:name=".activities.AdminPanelActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,14 +40,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.planera.mis.planera2.activities.AddInputActivity" />
         </activity>
-        <activity
-            android:name=".activities.AdminPanelActivity"
-            android:label="@string/title_activity_admin_panel"
-            android:theme="@style/AppTheme.NoActionBar">
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value="com.planera.mis.planera2.AdminPanelActivity" />-->
-        </activity>
+        <!--<activity-->
+            <!--android:name=".activities.AdminPanelActivity"-->
+            <!--android:label="@string/title_activity_admin_panel"-->
+            <!--android:theme="@style/AppTheme.NoActionBar">-->
+
+            <!--&lt;!&ndash; <meta-data &ndash;&gt;-->
+            <!--&lt;!&ndash; android:name="android.support.PARENT_ACTIVITY" &ndash;&gt;-->
+            <!--&lt;!&ndash; android:value="com.planera.mis.planera2.AdminPanelActivity" /> &ndash;&gt;-->
+        <!--</activity>-->
         <activity
             android:name=".activities.SingleListActivity"
             android:label="@string/title_activity_single_list"
@@ -145,7 +145,11 @@
             android:name=".activities.ActivityUploadChemist"
             android:label="@string/title_activity_upload_chemist"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.ActivityUploadPlan"/>
+        <activity android:name=".activities.ActivityUploadPlan" />
+        <activity
+            android:name=".activities.ActivityUploadUser"
+            android:label="@string/title_activity_upload_user"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

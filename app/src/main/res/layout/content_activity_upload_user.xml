@@ -11,7 +11,7 @@
 
 
     <LinearLayout
-        android:id="@+id/card_upload_doctor_view"
+        android:id="@+id/card_upload_user_view"
         android:layout_margin="@dimen/fab_margin"
         android:background="@drawable/bg_excel_view"
         android:layout_width="match_parent"
@@ -61,7 +61,7 @@
             android:layout_marginStart="@dimen/fab_margin" />
     </LinearLayout>
     <Button
-        android:id="@+id/button_upload_doctor_sheet"
+        android:id="@+id/button_upload_user_sheet"
         android:layout_width="match_parent"
         style="@style/ButtonText"
         android:text="Upload"

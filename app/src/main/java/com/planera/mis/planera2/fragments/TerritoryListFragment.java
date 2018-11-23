@@ -101,7 +101,8 @@ public class TerritoryListFragment extends BaseFragment implements EditTerritory
             public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode()  == AppConstants.RESULT_OK){
-                    manager.beginTransaction().detach(TerritoryListFragment.this).attach(TerritoryListFragment.this).commit();
+//                    manager.beginTransaction().detach(TerritoryListFragment.this).attach(TerritoryListFragment.this).commit();
+                    getTerritoryList(token);
                     Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 else{
@@ -143,7 +144,6 @@ public class TerritoryListFragment extends BaseFragment implements EditTerritory
                 processDialog.dismissDialog();
                 linearNoInternet.setVisibility(View.VISIBLE);
                 buttonRetry.setVisibility(View.VISIBLE);
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 

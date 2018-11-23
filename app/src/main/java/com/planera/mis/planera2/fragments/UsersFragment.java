@@ -151,15 +151,15 @@ public class UsersFragment extends BaseFragment implements SearchView.OnQueryTex
 
     public void initAdapter(List<UserData> list, RecyclerView recyclerView){
 
-        adapter = new UsersListAdapter(mContext, list, (view, position) -> {
+        adapter = new UsersListAdapter(mContext, list, (view, user) -> {
             switch (view.getId()){
                 case R.id.img_user_delete:
-                    popupDialog(token, list.get(position).getUserId());
+                    popupDialog(token, user.getUserId());
 //                    deleteUserApi(token, list.get(position).getUserId());
                     break;
 
                 case R.id.img_user_edit:
-                    userDetailsForUpdate(position, list);
+                    userDetailsForUpdate(user);
                     UsersFragment.this.getActivity().finish();
 
                     break;
@@ -172,32 +172,33 @@ public class UsersFragment extends BaseFragment implements SearchView.OnQueryTex
     }
 
 
-    public void userDetailsForUpdate(int pos, List<UserData> usersData){
-        selectedUser= Integer.parseInt(usersData.get(pos).getUserId());
+    public void userDetailsForUpdate(UserData user){
+        selectedUser= Integer.parseInt(user.getUserId());
         Intent intentDoctorCall = new Intent(mContext, ActivityUpdateUser.class);
         intentDoctorCall.putExtra(AppConstants.UPDATE_DOCTOR_KEY, selectedUser);
-        intentDoctorCall.putExtra(AppConstants.FIRST_NAME, usersData.get(pos).getFirstName());
-        intentDoctorCall.putExtra(AppConstants.MIDDLE_NAME, usersData.get(pos).getMiddleName());
-        intentDoctorCall.putExtra(AppConstants.LAST_NAME, usersData.get(pos).getLastName());
-        intentDoctorCall.putExtra(AppConstants.LOGIN_ID, usersData.get(pos).getLoginId());
-        intentDoctorCall.putExtra(AppConstants.PASSWORD, usersData.get(pos).getPassword());
-        intentDoctorCall.putExtra(AppConstants.PHONE1, usersData.get(pos).getPhone1());
-        intentDoctorCall.putExtra(AppConstants.EMAIL1, usersData.get(pos).getEmail1());
-        intentDoctorCall.putExtra(AppConstants.PHONE2, usersData.get(pos).getPhone2());
-        intentDoctorCall.putExtra(AppConstants.EMAIL2, usersData.get(pos).getEmail2());
-        intentDoctorCall.putExtra(AppConstants.QUALIFICATION, usersData.get(pos).getQualifications());
-        intentDoctorCall.putExtra(AppConstants.EXPERIENCE_YEAR, usersData.get(pos).getExperienceYear());
-        intentDoctorCall.putExtra(AppConstants.DOJ, usersData.get(pos).getDOJ());
-        intentDoctorCall.putExtra(AppConstants.PAN, usersData.get(pos).getPAN());
-        intentDoctorCall.putExtra(AppConstants.DOB, usersData.get(pos).getDOB());
-        intentDoctorCall.putExtra(AppConstants.ADDRESS1, usersData.get(pos).getAddress1());
-        intentDoctorCall.putExtra(AppConstants.ADDRESS2, usersData.get(pos).getAddress2());
-        intentDoctorCall.putExtra(AppConstants.ADDRESS3, usersData.get(pos).getAddress3());
-        intentDoctorCall.putExtra(AppConstants.ADDRESS4, usersData.get(pos).getAddress4());
-        intentDoctorCall.putExtra(AppConstants.DISTRICT, usersData.get(pos).getDistrict());
-        intentDoctorCall.putExtra(AppConstants.STATE, usersData.get(pos).getState());
-        intentDoctorCall.putExtra(AppConstants.CITY, usersData.get(pos).getCity());
-        intentDoctorCall.putExtra(AppConstants.PINCODE, usersData.get(pos).getPincode());
+        intentDoctorCall.putExtra(AppConstants.FIRST_NAME, user.getFirstName());
+        intentDoctorCall.putExtra(AppConstants.MIDDLE_NAME, user.getMiddleName());
+        intentDoctorCall.putExtra(AppConstants.LAST_NAME, user.getLastName());
+        intentDoctorCall.putExtra(AppConstants.LOGIN_ID, user.getLoginId());
+        intentDoctorCall.putExtra(AppConstants.PASSWORD, user.getPassword());
+        intentDoctorCall.putExtra(AppConstants.PHONE1, user.getPhone1());
+        intentDoctorCall.putExtra(AppConstants.EMAIL1, user.getEmail1());
+        intentDoctorCall.putExtra(AppConstants.PHONE2, user.getPhone2());
+        intentDoctorCall.putExtra(AppConstants.EMAIL2, user.getEmail2());
+        intentDoctorCall.putExtra(AppConstants.QUALIFICATION, user.getQualifications());
+        intentDoctorCall.putExtra(AppConstants.EXPERIENCE_YEAR, user.getExperienceYear());
+        intentDoctorCall.putExtra(AppConstants.DOJ, user.getDOJ());
+        intentDoctorCall.putExtra(AppConstants.PAN, user.getPAN());
+        intentDoctorCall.putExtra(AppConstants.DOB, user.getDOB());
+        intentDoctorCall.putExtra(AppConstants.ADDRESS1, user.getAddress1());
+        intentDoctorCall.putExtra(AppConstants.ADDRESS2, user.getAddress2());
+        intentDoctorCall.putExtra(AppConstants.ADDRESS3, user.getAddress3());
+        intentDoctorCall.putExtra(AppConstants.ADDRESS4, user.getAddress4());
+        intentDoctorCall.putExtra(AppConstants.DISTRICT, user.getDistrict());
+        intentDoctorCall.putExtra(AppConstants.STATE, user.getState());
+        intentDoctorCall.putExtra(AppConstants.CITY, user.getCity());
+        intentDoctorCall.putExtra(AppConstants.PINCODE, user.getPincode());
+        intentDoctorCall.putExtra(AppConstants.USER_TYPE, user.getType());
         intentDoctorCall.putExtra(AppConstants.UPDATE_USER_KEY, selectedUser);
         mContext.startActivity(intentDoctorCall);
 
@@ -252,8 +253,9 @@ public class UsersFragment extends BaseFragment implements SearchView.OnQueryTex
             public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-                    getFragmentManager().beginTransaction().detach(UsersFragment.this).attach(UsersFragment.this).commit();
+//                    getFragmentManager().beginTransaction().detach(UsersFragment.this).attach(UsersFragment.this).commit();
                     Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    getUsersList(token);
                 }
                 else{
                     Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();

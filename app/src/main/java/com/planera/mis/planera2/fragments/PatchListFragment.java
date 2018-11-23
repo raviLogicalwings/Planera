@@ -42,7 +42,7 @@ public class PatchListFragment extends BaseFragment implements EditPatchDialog.O
     private ApiInterface apiInterface;
     private List<Patches> patchesList;
     private RecyclerView listViewStates;
-    private LinearLayout linearNodata, linearNoInternet;
+    private LinearLayout linearNoData, linearNoInternet;
     private Button buttonRetry;
 
     public PatchListFragment() {
@@ -85,22 +85,19 @@ public class PatchListFragment extends BaseFragment implements EditPatchDialog.O
     protected void initUi() {
         super.initUi();
         listViewStates = view.findViewById(R.id.list_state);
-        linearNodata = view.findViewById(R.id.linear_no_data);
+        linearNoData = view.findViewById(R.id.linear_no_data);
         linearNoInternet = view.findViewById(R.id.linear_no_internet);
         buttonRetry = view.findViewById(R.id.button_retry);
 
-        buttonRetry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getFragmentManager() != null) {
-                    getFragmentManager().beginTransaction().detach(PatchListFragment.this).attach(PatchListFragment.this).commit();
-                }
+        buttonRetry.setOnClickListener(v -> {
+            if (getFragmentManager() != null) {
+                getFragmentManager().beginTransaction().detach(PatchListFragment.this).attach(PatchListFragment.this).commit();
             }
         });
     }
 
     public void deletePatchApi(String token, int patchId){
-        Log.d(TAG, "deletePatchApi() called with: token = [" + token + "], patchId = [" + patchId + "]");
+        Log.e(TAG, "deletePatchApi() called with: token = [" + token + "], patchId = [" + patchId + "]");
         processDialog.showDialog(mContext, false);
         Call<MainResponse> call = apiInterface.deletePatch(token, patchId);
         call.enqueue(new Callback<MainResponse>() {
@@ -109,7 +106,8 @@ public class PatchListFragment extends BaseFragment implements EditPatchDialog.O
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                     Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                    getFragmentManager().beginTransaction().detach(PatchListFragment.this).attach(PatchListFragment.this).commit();
+//                    getFragmentManager().beginTransaction().detach(PatchListFragment.this).attach(PatchListFragment.this).commit();
+                    getPatchList(token);
                 }
                 else{
                     Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
@@ -141,7 +139,7 @@ public class PatchListFragment extends BaseFragment implements EditPatchDialog.O
                     }
                     else{
                         listViewStates.setVisibility(View.GONE);
-                        linearNodata.setVisibility(View.VISIBLE);
+                        linearNoData.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -151,7 +149,6 @@ public class PatchListFragment extends BaseFragment implements EditPatchDialog.O
                 processDialog.dismissDialog();
                 linearNoInternet.setVisibility(View.VISIBLE);
                 buttonRetry.setVisibility(View.VISIBLE);
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 

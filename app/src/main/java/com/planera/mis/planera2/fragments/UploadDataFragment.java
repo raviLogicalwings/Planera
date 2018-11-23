@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.ActivityUploadChemist;
 import com.planera.mis.planera2.activities.ActivityUploadDoctor;
+import com.planera.mis.planera2.activities.ActivityUploadUser;
 
 public class UploadDataFragment extends BaseFragment implements View.OnClickListener{
     public  View view;
@@ -53,7 +54,7 @@ public class UploadDataFragment extends BaseFragment implements View.OnClickList
     @Override
     protected void initUi() {
         super.initUi();
-        cardUploadPlans = view.findViewById(R.id.card_upload_plans);
+        cardUploadPlans = view.findViewById(R.id.card_upload_users);
         cardUploadDoctor = view.findViewById(R.id.card_upload_doctor);
         cardUploadChemist = view.findViewById(R.id.card_upload_chemist);
 
@@ -66,8 +67,9 @@ public class UploadDataFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.card_upload_plans:
-
+            case R.id.card_upload_users:
+                Intent intentUserUpload = new Intent(mContext, ActivityUploadUser.class);
+                startActivity(intentUserUpload);
                 break;
             case R.id.card_upload_doctor:
                 Intent intentDoctorUpload = new Intent(mContext, ActivityUploadDoctor.class);

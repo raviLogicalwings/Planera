@@ -15,13 +15,13 @@ import java.util.List;
 
 public class ChemistListAdapter extends RecyclerView.Adapter<ChemistListAdapter.MyChemistHolder> {
     private Context mContext;
-    private List<Chemists> chemists;
+    private List<Chemists> chemistsList;
     private OnItemClickListener onItemClickListener;
     protected View view;
 
     public ChemistListAdapter(Context mContext, List<Chemists> chemists, OnItemClickListener onItemClickListener ) {
         this.mContext = mContext;
-        this.chemists = chemists;
+        this.chemistsList = chemists;
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -41,8 +41,8 @@ public class ChemistListAdapter extends RecyclerView.Adapter<ChemistListAdapter.
 
     @Override
     public int getItemCount() {
-        if(chemists!=null){
-            return chemists.size();
+        if(chemistsList !=null){
+            return chemistsList.size();
         }
         else {
             return 0;
@@ -50,7 +50,7 @@ public class ChemistListAdapter extends RecyclerView.Adapter<ChemistListAdapter.
     }
 
     public void updateList(List<Chemists> chemists) {
-        this.chemists = chemists;
+        this.chemistsList = chemists;
         notifyDataSetChanged();
     }
 
@@ -83,27 +83,27 @@ public class ChemistListAdapter extends RecyclerView.Adapter<ChemistListAdapter.
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.img_chemist_delete:
-                    onItemClickListener.onItemClick(view, getAdapterPosition());
+                    onItemClickListener.onItemClick(view, chemistsList.get(getAdapterPosition()));
                     break;
                 case R.id.img_chemist_edit:
-                    onItemClickListener.onItemClick(view, getAdapterPosition());
+                    onItemClickListener.onItemClick(view, chemistsList.get(getAdapterPosition()));
                     break;
             }
         }
     }
 
     public interface OnItemClickListener{
-        void onItemClick(View view, int position);
+        void onItemClick(View view, Chemists chemists);
     }
 
 
 
     public void loadItems(int position, MyChemistHolder holder){
-        holder.textChemistContact.setText(chemists.get(position).getPhone());
-        holder.textChemistEmail.setText(chemists.get(position).getEmail());
-        holder.textChemistName.setText(chemists.get(position).getFirstName()+" "+
-                chemists.get(position).getMiddleName()+ " " +chemists.get(position).getLastName());
-        holder.textQualification.setText(chemists.get(position).getCompanyName());
+        holder.textChemistContact.setText(chemistsList.get(position).getPhone());
+        holder.textChemistEmail.setText(chemistsList.get(position).getEmail());
+        holder.textChemistName.setText(chemistsList.get(position).getFirstName()+" "+
+                chemistsList.get(position).getMiddleName()+ " " + chemistsList.get(position).getLastName());
+        holder.textQualification.setText(chemistsList.get(position).getCompanyName());
 
     }
 }

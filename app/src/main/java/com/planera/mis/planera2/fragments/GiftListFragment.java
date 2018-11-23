@@ -126,7 +126,6 @@ public class GiftListFragment extends BaseFragment implements EditGiftDialog.OnD
                 processDialog.dismissDialog();
                 linearNoInternet.setVisibility(View.VISIBLE);
                 buttonRetry.setVisibility(View.VISIBLE);
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -170,7 +169,8 @@ public class GiftListFragment extends BaseFragment implements EditGiftDialog.OnD
                 if (response != null) {
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                         Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                        manager.beginTransaction().detach(GiftListFragment.this).attach(GiftListFragment.this).commit();
+//                        manager.beginTransaction().detach(GiftListFragment.this).attach(GiftListFragment.this).commit();
+                        getGiftList(token);
                     } else {
                         Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
 

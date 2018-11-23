@@ -27,6 +27,7 @@ import com.planera.mis.planera2.models.ReportListResponce;
 import com.planera.mis.planera2.models.StateListResponse;
 import com.planera.mis.planera2.models.TerritoryListResponse;
 import com.planera.mis.planera2.models.UserData;
+import com.planera.mis.planera2.models.UserImport;
 import com.planera.mis.planera2.models.UserListResponse;
 import com.planera.mis.planera2.models.UserPlanListRespnce;
 import com.planera.mis.planera2.utils.AppConstants;
@@ -245,13 +246,17 @@ public interface ApiInterface {
     @POST(AppConstants.UPDATE_MR_INPUT)
     Call<MainResponse> updateMrInput (@Header("Authorization") String token, @Body Input input);
 
+
     @POST(AppConstants.IMPORT_DOCTORS_DATA)
     Call<MainResponse> importDoctorFromExcel (@Header("Authorization") String token,
-                                              @Body List<DoctorImport> doctorImport);
+                                              @Body DoctorImport doctorImport);
 
     @POST(AppConstants.IMPORT_CHEMIST_DATA)
     Call<MainResponse> importChemistFromExcel (@Header("Authorization") String token,
-                                              @Body List<ChemistImport> chemistImports);
+                                               @Body ChemistImport chemistImports);
+    @POST(AppConstants.IMPORT_USER_DATA)
+    Call<MainResponse> importDoctorFromExcel (@Header("Authorization") String token,
+                                              @Body UserImport userImport);
     //Google  Places api Call
     @GET(AppConstants.FIND_PALCE)
     Call<GooglePlaces> getPlaceLatLong(@Query("input") String input,

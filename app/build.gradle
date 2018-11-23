@@ -23,7 +23,7 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-        multiDexEnabled true
+//        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -59,7 +59,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 
-    implementation 'com.android.support:multidex:1.0.1'
+    // implementation 'com.android.support:multidex:1.0.1'
 
     //excel operation dependency
     implementation 'net.sourceforge.jexcelapi:jxl:2.6.12'

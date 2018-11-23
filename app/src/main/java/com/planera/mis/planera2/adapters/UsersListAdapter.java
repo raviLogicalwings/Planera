@@ -18,11 +18,11 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.MyUs
     private OnItemClickListener onItemClickListener;
     private View view;
     private Context mContext;
-    private List<UserData> list;
+    private List<UserData> userDataList;
 
 
     public UsersListAdapter(Context mContext, List<UserData> list,  OnItemClickListener onItemClickListener) {
-        this.list  = list;
+        this.userDataList = list;
         this.mContext = mContext;
         this.onItemClickListener = onItemClickListener;
     }
@@ -44,8 +44,8 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.MyUs
 
     @Override
     public int getItemCount() {
-       if(list.size()>0){
-           return list.size();
+       if(userDataList.size()>0){
+           return userDataList.size();
        }
        else{
            return 0;
@@ -53,7 +53,7 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.MyUs
     }
 
     public void updateList(List<UserData> userDataList){
-        list = userDataList;
+        this.userDataList = userDataList;
         notifyDataSetChanged();
     }
 
@@ -84,11 +84,11 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.MyUs
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.img_user_delete:
-                    onItemClickListener.onItemClick(v, getAdapterPosition());
+                    onItemClickListener.onItemClick(v, userDataList.get(getAdapterPosition()));
                     break;
 
                 case R.id.img_user_edit:
-                    onItemClickListener.onItemClick(v, getAdapterPosition());
+                    onItemClickListener.onItemClick(v, userDataList.get(getAdapterPosition()));
                     break;
 
             }
@@ -98,22 +98,22 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.MyUs
 
 
     public void bindView(MyUsersHolder holder, int pos){
-        String userName = list.get(pos).getFirstName();
-        if (list.get(pos).getMiddleName() != null){
-            userName += list.get(pos).getMiddleName();
+        String userName = userDataList.get(pos).getFirstName();
+        if (userDataList.get(pos).getMiddleName() != null){
+            userName += userDataList.get(pos).getMiddleName();
         }
-        if (list.get(pos).getLastName() != null){
-            userName += list.get(pos).getLastName();
+        if (userDataList.get(pos).getLastName() != null){
+            userName += userDataList.get(pos).getLastName();
         }
         holder.textUserName.setText(userName);
-        holder.textUserEmail.setText(list.get(pos).getEmail1());
-        holder.textUserContact.setText(list.get(pos).getPhone1());
-        holder.textQualification.setText(list.get(pos).getQualifications());
+        holder.textUserEmail.setText(userDataList.get(pos).getEmail1());
+        holder.textUserContact.setText(userDataList.get(pos).getPhone1());
+        holder.textQualification.setText(userDataList.get(pos).getQualifications());
     }
 
 
 
     public interface OnItemClickListener{
-        void onItemClick(View view, int position);
+        void onItemClick(View view, UserData user);
     }
 }

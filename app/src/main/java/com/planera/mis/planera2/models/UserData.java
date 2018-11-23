@@ -74,7 +74,7 @@ public class UserData {
 	private String confirmPassword;
 
 	@SerializedName("Type")
-	private String type;
+	private int type;
 
 	@SerializedName("State")
 	private String state;
@@ -276,11 +276,11 @@ public class UserData {
 		return confirmPassword;
 	}
 
-	public void setType(String type){
+	public void setType(int type){
 		this.type = type;
 	}
 
-	public String getType(){
+	public int getType(){
 		return type;
 	}
 

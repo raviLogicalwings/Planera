@@ -81,6 +81,7 @@ public class AppConstants {
     public static final String EMAIL2 = "email2";
     public static final String DOJ = "doj";
     public static final String PAN  = "pan";
+    public static final String USER_TYPE = "type";
 
     //User's Plan constants
     public static final int ROLE_DOCTOR = 1;
@@ -156,39 +157,41 @@ public class AppConstants {
     public static final String STATUS_OVER_LIMIT = "OVER_QUERY_LIMIT";
 
     //Doctor Constants for excel Upload Data
-    public static final int DOCTOR_ID_EXCEL = 0;
-    public static final int PATCH_ID_EXCEL = 1;
-    public static final int ACTIVE_EXCEL = 2;
-    public static final int FIRST_NAME_EXCEL = 3;
-    public static final int MIDDLE_NAME_EXCEL = 4;
-    public static final int LAST_NAME_EXCEL = 5;
-    public static final int DOB_EXCEL = 6;
-    public static final int EMAIL_EXCEL = 8;
-    public static final int QUALIFICATION_EXCEL = 9;
-    public static final int SPECIALIZATION_EXCEL = 10;
-    public static final int PREFERRED_MEET_TIME_EXCEL = 12;
-    public static final int MEET_FREQUENCY_EXCEL = 13;
-    public static final int PHONE_EXCEL  = 14;
-    public static final int ADDRESS_1_EXCEL = 15;
-    public static final int ADDRESS_2_EXCEL = 16;
-    public static final int ADDRESS_3_EXCEL = 17;
-    public static final int ADDRESS_4_EXCEL = 18;
-    public static final int CITY_EXCEL = 20;
-    public static final int DISTRICT_EXCEL = 21;
-    public static final int STATE_EXCEL = 22;
-    public static final int PINCODE_EXCEL = 23;
+    public static final int DOCTOR_ID_DOCTOR_EXCEL = 0;
+    public static final int PATCH_ID_DOCTOR_EXCEL = 1;
+    public static final int ACTIVE_DOCTOR_EXCEL = 2;
+    public static final int FIRST_NAME_DOCTOR_EXCEL = 3;
+    public static final int MIDDLE_NAME_DOCTOR_EXCEL = 4;
+    public static final int LAST_NAME_DOCTOR_EXCEL = 5;
+    public static final int DOB_DOCTOR_EXCEL = 6;
+    public static final int EMAIL_DOCTOR_EXCEL = 8;
+    public static final int QUALIFICATION_DOCTOR_EXCEL = 9;
+    public static final int SPECIALIZATION_DOCTOR_EXCEL = 10;
+    public static final int PREFERRED_MEET_TIME_DOCTOR_EXCEL = 12;
+    public static final int MEET_FREQUENCY_DOCTOR_EXCEL = 13;
+    public static final int PHONE_DOCTOR_EXCEL  = 14;
+    public static final int ADDRESS_1_DOCTOR_EXCEL = 15;
+    public static final int ADDRESS_2_DOCTOR_EXCEL = 16;
+    public static final int ADDRESS_3_DOCTOR_EXCEL = 17;
+    public static final int ADDRESS_4_DOCTOR_EXCEL = 18;
+    public static final int CITY_DOCTOR_EXCEL = 20;
+    public static final int DISTRICT_DOCTOR_EXCEL = 21;
+    public static final int STATE_DOCTOR_EXCEL = 22;
+    public static final int PINCODE_DOCTOR_EXCEL = 23;
 
     //Chemist Constants for excel upload data.
     public static final int CHEMIST_ID_EXCEL = 0;
-    public static final int COMPANY_NAME_EXCEL = 3;
-    public static final int MONTHLY_VOLUME_POTENTIAL_EXCEL = 4;
-    public static final int SHOP_SIZE_EXCEL = 5;
-    public static final int ADDRESS1_EXCEL = 6;
-    public static final int ADDRESS2_EXCEL = 7;
-    public static final int ADDRESS3_EXCEL = 8;
-    public static final int BILLING_PHONE1_EXCEL = 9;
-    public static final int BILLING_PHONE2_EXCEL = 10;
-    public static final int BILLING_EMAIL_EXCEL = 11;
+    public static final int PATCH_ID_CHEMIST_EXCEL = 1;
+    public static final int ACTIVE_CHEMIST_EXCEL = 2;
+    public static final int COMPANY_NAME_CHEMIST_EXCEL = 3;
+    public static final int MONTHLY_VOLUME_POTENTIAL_CHEMIST_EXCEL = 4;
+    public static final int SHOP_SIZE_CHEMIST_EXCEL = 5;
+    public static final int ADDRESS1_CHEMIST_EXCEL = 6;
+    public static final int ADDRESS2_CHEMIST_EXCEL = 7;
+    public static final int ADDRESS3_CHEMIST_EXCEL = 8;
+    public static final int BILLING_PHONE1_CHEMIST_EXCEL = 9;
+    public static final int BILLING_PHONE2_CHEMIST_EXCEL = 10;
+    public static final int BILLING_EMAIL_CHEMIST_EXCEL = 11;
     public static final int CITY_CHEMIST_EXCEL = 12;
     public static final int DISTRICT_CHEMIST_EXCEL = 13;
     public static final int STATE_CHEMIST_EXCEL = 14;
@@ -198,11 +201,32 @@ public class AppConstants {
     public static final int LAST_NAME_CHEMSIT_EXCEL = 18;
     public static final int OWNER_PHONE_CHEMSIT_EXCEL = 19;
     public static final int OWNER_EMAIL_CHEMSIT_EXCEL = 20;
-    public static final int PREFFERED_MEET_TIME_CHEMSIT_EXCEL = 21;
+    public static final int PREFFERED_MEET_TIME_CHEMIST_EXCEL = 21;
 
-
-
-
+    //User's Constants for excel upload data.
+    public static final int USER_ID_EXCEL = 0;
+    public static final int USER_NAME_EXCEL = 1;
+    public static final int TYPE = 2;
+    public static final int ACTIVE_USER_EXCEL = 3;
+    public static final int FIRST_NAME_USER_EXCEL = 4;
+    public static final int MIDDLE_NAME_USER_EXCEL = 5;
+    public static final int LAST_NAME_USER_EXCEL = 6;
+    public static final int DOJ_USER_EXCEL = 7;
+    public static final int DOB_USER_EXCEL = 8;
+    public static final int QUALIFICATION_USER_EXCEL = 9;
+    public static final int EXPERIENCE_USER_EXCEL = 10;
+    public static final int EMAIL1_USER_EXCEL = 11;
+    public static final int EMAIL2_USER_EXCEL = 12;
+    public static final int PHONE1_USER_EXCEL = 13;
+    public static final int PHONE2_USER_EXCEL = 14;
+    public static final int PAN_USER_EXCEL = 15;
+    public static final int ADDRESS1_USER_EXCEL = 16;
+    public static final int ADDRESS2_USER_EXCEL = 17;
+    public static final int ADDRESS3_USER_EXCEL = 18;
+    public static final int CITY_USER_EXCEL = 19;
+    public static final int DISTRICT_USER_EXCEL = 20;
+    public static final int STATE_USER_EXCEL = 21;
+    public static final int PIN_USER_EXCEL = 22;
 
 
     //Update Data
@@ -262,6 +286,14 @@ public class AppConstants {
 
     public static final String KEY_PLAN_ID = "plan_id";
     public static final String KEY_USER_ID = "user_id";
+
+
+
+    //User type constants//
+    public static final int DEFAULT_MR_USER_TYPE = 0;
+    public static final int MR_USER_TYPE = 1;
+    public static final int ZM_USER_TYPE = 2;
+    public static final int AM_USER_TYPE = 3;
 
 
     //interested Levels

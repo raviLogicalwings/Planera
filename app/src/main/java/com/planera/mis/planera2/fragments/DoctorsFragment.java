@@ -138,7 +138,6 @@ public class DoctorsFragment extends BaseFragment implements SearchView.OnQueryT
                 processDialog.dismissDialog();
                 linearNoInternet.setVisibility(View.VISIBLE);
                 buttonRetry.setVisibility(View.VISIBLE);
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -146,14 +145,14 @@ public class DoctorsFragment extends BaseFragment implements SearchView.OnQueryT
 
     public void initAdapter(List<Doctors> list, RecyclerView recyclerView) {
 
-        adapter = new DoctorsListAdapter(mContext, list, (view, position) -> {
+        adapter = new DoctorsListAdapter(mContext, list, (view, doctors) -> {
             switch (view.getId()) {
                 case R.id.img_doctor_delete:
-                    popupDialog(token, doctorsList.get(position).getDoctorId());
+                    popupDialog(token, doctors.getDoctorId());
                     break;
 
                 case R.id.img_doctor_edit:
-                    doctorDetailsForUpdate(position, doctorsList);
+                    doctorDetailsForUpdate(doctors);
                     DoctorsFragment.this.getActivity().finish();
 
                     break;
@@ -166,29 +165,29 @@ public class DoctorsFragment extends BaseFragment implements SearchView.OnQueryT
     }
 
 
-    public void doctorDetailsForUpdate(int pos, List<Doctors> doctorsData) {
-        selectedDoctor = doctorsData.get(pos).getDoctorId();
+    public void doctorDetailsForUpdate(Doctors doctors) {
+        selectedDoctor = doctors.getDoctorId();
         Intent intentDoctorCall = new Intent(mContext, ActivityUpdateDoctor.class);
         intentDoctorCall.putExtra(AppConstants.UPDATE_DOCTOR_KEY, selectedDoctor);
-        intentDoctorCall.putExtra(AppConstants.FIRST_NAME, doctorsData.get(pos).getFirstName());
-        intentDoctorCall.putExtra(AppConstants.MIDDLE_NAME, doctorsData.get(pos).getMiddleName());
-        intentDoctorCall.putExtra(AppConstants.LAST_NAME, doctorsData.get(pos).getLastName());
-        intentDoctorCall.putExtra(AppConstants.PHONE, doctorsData.get(pos).getPhone());
-        intentDoctorCall.putExtra(AppConstants.EMAIL, doctorsData.get(pos).getEmail());
-        intentDoctorCall.putExtra(AppConstants.PREFERRED_MEET_TIME, doctorsData.get(pos).getPreferredMeetTime());
-        intentDoctorCall.putExtra(AppConstants.MEET_FREQUENCY, doctorsData.get(pos).getMeetFrequency());
-        intentDoctorCall.putExtra(AppConstants.PATCH_ID, doctorsData.get(pos).getPatchId());
-        intentDoctorCall.putExtra(AppConstants.QUALIFICATION, doctorsData.get(pos).getQualifications());
-        intentDoctorCall.putExtra(AppConstants.SPECIALIZATION, doctorsData.get(pos).getSpecializations());
-        intentDoctorCall.putExtra(AppConstants.DOB, doctorsData.get(pos).getDOB());
-        intentDoctorCall.putExtra(AppConstants.ADDRESS1, doctorsData.get(pos).getAddress1());
-        intentDoctorCall.putExtra(AppConstants.ADDRESS2, doctorsData.get(pos).getAddress2());
-        intentDoctorCall.putExtra(AppConstants.ADDRESS3, doctorsData.get(pos).getAddress3());
-        intentDoctorCall.putExtra(AppConstants.ADDRESS4, doctorsData.get(pos).getAddress4());
-        intentDoctorCall.putExtra(AppConstants.DISTRICT, doctorsData.get(pos).getDistrict());
-        intentDoctorCall.putExtra(AppConstants.STATE, doctorsData.get(pos).getState());
-        intentDoctorCall.putExtra(AppConstants.CITY, doctorsData.get(pos).getCity());
-        intentDoctorCall.putExtra(AppConstants.PINCODE, doctorsData.get(pos).getPincode());
+        intentDoctorCall.putExtra(AppConstants.FIRST_NAME, doctors.getFirstName());
+        intentDoctorCall.putExtra(AppConstants.MIDDLE_NAME, doctors.getMiddleName());
+        intentDoctorCall.putExtra(AppConstants.LAST_NAME, doctors.getLastName());
+        intentDoctorCall.putExtra(AppConstants.PHONE, doctors.getPhone());
+        intentDoctorCall.putExtra(AppConstants.EMAIL, doctors.getEmail());
+        intentDoctorCall.putExtra(AppConstants.PREFERRED_MEET_TIME, doctors.getPreferredMeetTime());
+        intentDoctorCall.putExtra(AppConstants.MEET_FREQUENCY, doctors.getMeetFrequency());
+        intentDoctorCall.putExtra(AppConstants.PATCH_ID, doctors.getPatchId());
+        intentDoctorCall.putExtra(AppConstants.QUALIFICATION, doctors.getQualifications());
+        intentDoctorCall.putExtra(AppConstants.SPECIALIZATION, doctors.getSpecializations());
+        intentDoctorCall.putExtra(AppConstants.DOB, doctors.getDOB());
+        intentDoctorCall.putExtra(AppConstants.ADDRESS1, doctors.getAddress1());
+        intentDoctorCall.putExtra(AppConstants.ADDRESS2, doctors.getAddress2());
+        intentDoctorCall.putExtra(AppConstants.ADDRESS3, doctors.getAddress3());
+        intentDoctorCall.putExtra(AppConstants.ADDRESS4, doctors.getAddress4());
+        intentDoctorCall.putExtra(AppConstants.DISTRICT, doctors.getDistrict());
+        intentDoctorCall.putExtra(AppConstants.STATE, doctors.getState());
+        intentDoctorCall.putExtra(AppConstants.CITY, doctors.getCity());
+        intentDoctorCall.putExtra(AppConstants.PINCODE, doctors.getPincode());
         mContext.startActivity(intentDoctorCall);
 
     }
@@ -254,7 +253,8 @@ public class DoctorsFragment extends BaseFragment implements SearchView.OnQueryT
             public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
-                    getFragmentManager().beginTransaction().detach(DoctorsFragment.this).attach(DoctorsFragment.this).commit();
+//                    getFragmentManager().beginTransaction().detach(DoctorsFragment.this).attach(DoctorsFragment.this).commit();
+                    getDoctorsList(token);
                     Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();

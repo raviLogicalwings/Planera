@@ -8,8 +8,11 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +24,9 @@ import com.planera.mis.planera2.models.UserData;
 import com.planera.mis.planera2.utils.AppConstants;
 import com.planera.mis.planera2.utils.InternetConnection;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,6 +55,8 @@ public class ActivityUpdateUser extends BaseActivity implements View.OnClickList
     private EditText textUserState;
     private EditText textUserPincode;
     private Button buttonAddUser;
+    private LinearLayout layoutUserUpdate;
+    private Spinner spinnerUserType;
     String firstNameStr, middleNameStr, lastNameStr, email1Str, email2Str, dobStr, qualificationStr, dojStr, phone1Str, phone2Str,
             experienceStr, panStr, address1Str, address2Str, address3Str, address4Str, districtStr, cityStr, stateStr, pincodeStr,
             strLoginId;
@@ -68,6 +75,7 @@ public class ActivityUpdateUser extends BaseActivity implements View.OnClickList
     @Override
     public void initData() {
         super.initData();
+        initUserTypeArray();
         userData = new UserData();
 
     }
@@ -100,6 +108,8 @@ public class ActivityUpdateUser extends BaseActivity implements View.OnClickList
         textUserState = findViewById(R.id.text_user_state);
         textUserPincode = findViewById(R.id.text_user_pincode);
         buttonAddUser = findViewById(R.id.button_add_user);
+        layoutUserUpdate = findViewById(R.id.layout_user_update);
+        spinnerUserType = findViewById(R.id.spinner_user_type);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
@@ -119,6 +129,26 @@ public class ActivityUpdateUser extends BaseActivity implements View.OnClickList
         Intent intent = new Intent(ActivityUpdateUser.this, SingleListActivity.class);
         intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.USER_FRAGMENT);
         startActivity(intent);
+    }
+
+
+    public void initUserTypeArray(){
+        List<String> listUserType = new ArrayList<>();
+        listUserType.add("MR");
+        listUserType.add("ZM");
+        listUserType.add("AM");
+
+        setArrayAdapter(listUserType, spinnerUserType);
+    }
+
+    public void setArrayAdapter(List<String> listString, Spinner spinner) {
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>
+                (this, android.R.layout.simple_spinner_item,
+                        listString);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout
+                .simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerArrayAdapter);
+
     }
 
     public void uiValidation() {
@@ -146,6 +176,18 @@ public class ActivityUpdateUser extends BaseActivity implements View.OnClickList
         dobStr = textUserDob.getText().toString().trim();
         strLoginId = textUserLoginId.getText().toString().trim();
 
+        switch (spinnerUserType.getSelectedItemPosition()){
+            case 0:
+                userData.setType(AppConstants.MR_USER_TYPE);
+                break;
+            case 1:
+                userData.setType(AppConstants.ZM_USER_TYPE);
+                break;
+            case 2:
+                userData.setType(AppConstants.AM_USER_TYPE);
+                break;
+        }
+
 
         if (TextUtils.isEmpty(firstNameStr)) {
             textUserFirstName.requestFocus();
@@ -154,49 +196,6 @@ public class ActivityUpdateUser extends BaseActivity implements View.OnClickList
         } else if (TextUtils.isEmpty(lastNameStr)) {
             textUserLastName.requestFocus();
             textUserLastName.setError(getString(R.string.invalid_input));
-        } else if (TextUtils.isEmpty(dobStr)) {
-            textUserEmail.requestFocus();
-            textUserEmail.setError(getString(R.string.invalid_input));
-        } else if (TextUtils.isEmpty(qualificationStr)) {
-            textUserQualification.requestFocus();
-            textUserQualification.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(phone1Str)) {
-            textUserPhone.requestFocus();
-            textUserPhone.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(dobStr)) {
-            textUserDob.requestFocus();
-            textUserDob.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(dojStr)) {
-            textUserDoj.requestFocus();
-            textUserDoj.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(address1Str)) {
-            textUserAddress1.requestFocus();
-            textUserAddress1.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(address2Str)) {
-            textUserAddress2.requestFocus();
-            textUserAddress2.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(districtStr)) {
-            textUserDistrict.requestFocus();
-            textUserDistrict.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(cityStr)) {
-            textUserCity.requestFocus();
-            textUserCity.setError(getString(R.string.invalid_input));
-
-        }
-        else if (TextUtils.isEmpty(stateStr)) {
-            textUserState.requestFocus();
-            textUserState.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(pincodeStr)) {
-            textUserPincode.requestFocus();
-            textUserPincode.setError(getString(R.string.invalid_input));
         }
         else if (TextUtils.isEmpty(strLoginId)) {
             textUserLoginId.requestFocus();
@@ -267,6 +266,22 @@ public class ActivityUpdateUser extends BaseActivity implements View.OnClickList
         textUserState.setText(intent.getStringExtra(AppConstants.STATE));
         textUserPincode.setText(intent.getStringExtra(AppConstants.PINCODE));
         textUserPan.setText(intent.getStringExtra(AppConstants.PAN));
+        int userType = intent.getIntExtra(AppConstants.USER_TYPE, 0);
+        switch (userType){
+            case AppConstants.MR_USER_TYPE:
+                spinnerUserType.setSelection(0);
+                break;
+            case AppConstants.ZM_USER_TYPE:
+                spinnerUserType.setSelection(1);
+                break;
+            case AppConstants.AM_USER_TYPE:
+                spinnerUserType.setSelection(2);
+                break;
+                default:
+                    spinnerUserType.setSelection(0);
+
+        }
+
         userid = intent.getIntExtra(AppConstants.UPDATE_USER_KEY, 0);
     }
 
@@ -329,7 +344,6 @@ public class ActivityUpdateUser extends BaseActivity implements View.OnClickList
                             startActivity(intent);
                             finish();
 
-                            finish();
                         }
                         else{
                             Toast.makeText(ActivityUpdateUser.this, response.body().getMessage() , Toast.LENGTH_SHORT).show();

@@ -80,7 +80,7 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
         super.initData();
         apiInterface = ApiClient.getInstance();
         if(token!=null){
-            getDoctorsList(token);
+            getChemistsList(token);
         }
     }
 
@@ -108,7 +108,7 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
         });
     }
 
-    public void getDoctorsList(String token){
+    public void getChemistsList(String token){
         processDialog.showDialog(mContext, false);
         Call<ChemistListResponse> call = apiInterface.chemistList(token);
         call.enqueue(new Callback<ChemistListResponse>() {
@@ -136,7 +136,6 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
                 processDialog.dismissDialog();
                 linearNoInternet.setVisibility(View.VISIBLE);
                 buttonRetry.setVisibility(View.VISIBLE);
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -144,14 +143,14 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
 
     public void initAdapter(List<Chemists> list, RecyclerView recyclerView){
 
-        adapter = new ChemistListAdapter(mContext, list, (view, position) -> {
+        adapter = new ChemistListAdapter(mContext, list, (view, chemists) -> {
             switch (view.getId()){
                 case R.id.img_chemist_delete:
-                    popupDialog(token, list.get(position).getChemistId());
+                    popupDialog(token, chemists.getChemistId());
                     break;
 
                 case R.id.img_chemist_edit:
-                    chemistDetailsForUpdate(position, list);
+                    chemistDetailsForUpdate(chemists);
                     ChemistFragment.this.getActivity().finish();
 
                     break;
@@ -164,32 +163,32 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
     }
 
 
-    public void chemistDetailsForUpdate(int pos, List<Chemists> chemistData){
-        selectedChemist= chemistData.get(pos).getChemistId();
+    public void chemistDetailsForUpdate(Chemists chemists){
+        selectedChemist= chemists.getChemistId();
         Intent intentChemistCall = new Intent(mContext, ActivityUpdateChemist.class);
         intentChemistCall.putExtra(AppConstants.UPDATE_DOCTOR_KEY, selectedChemist);
-        intentChemistCall.putExtra(AppConstants.FIRST_NAME, chemistData.get(pos).getFirstName());
-        intentChemistCall.putExtra(AppConstants.MIDDLE_NAME, chemistData.get(pos).getMiddleName());
-        intentChemistCall.putExtra(AppConstants.LAST_NAME, chemistData.get(pos).getLastName());
-        intentChemistCall.putExtra(AppConstants.PHONE, chemistData.get(pos).getPhone());
-        intentChemistCall.putExtra(AppConstants.EMAIL, chemistData.get(pos).getEmail());
-        intentChemistCall.putExtra(AppConstants.COMPANY_NAME, chemistData.get(pos).getCompanyName());
-        intentChemistCall.putExtra(AppConstants.SHOP_SIZE, chemistData.get(pos).getShopSize());
-        intentChemistCall.putExtra(AppConstants.PREFERRED_MEET_TIME, chemistData.get(pos).getPreferredMeetTime());
-        intentChemistCall.putExtra(AppConstants.MONTHLY_VOLUME_POTENTIAL, chemistData.get(pos).getMonthlyVolumePotential());
-        intentChemistCall.putExtra(AppConstants.PATCH_ID, chemistData.get(pos).getPatchId());
-        intentChemistCall.putExtra(AppConstants.ADDRESS1, chemistData.get(pos).getAddress1());
-        intentChemistCall.putExtra(AppConstants.ADDRESS2, chemistData.get(pos).getAddress2());
-        intentChemistCall.putExtra(AppConstants.ADDRESS3, chemistData.get(pos).getAddress3());
-        intentChemistCall.putExtra(AppConstants.ADDRESS4, chemistData.get(pos).getAddress4());
-        intentChemistCall.putExtra(AppConstants.DISTRICT, chemistData.get(pos).getDistrict());
-        intentChemistCall.putExtra(AppConstants.STATE, chemistData.get(pos).getState());
-        intentChemistCall.putExtra(AppConstants.CITY, chemistData.get(pos).getCity());
-        intentChemistCall.putExtra(AppConstants.PINCODE, chemistData.get(pos).getPincode());
-        intentChemistCall.putExtra(AppConstants.BILLING_EMAIL, chemistData.get(pos).getBillingEmail());
-        intentChemistCall.putExtra(AppConstants.BILLING_PHONE1, chemistData.get(pos).getBillingPhone1());
-        intentChemistCall.putExtra(AppConstants.BILLING_PHONE2, chemistData.get(pos).getBillingPhone2());
-        intentChemistCall.putExtra(AppConstants.RATING, chemistData.get(pos).getRating());
+        intentChemistCall.putExtra(AppConstants.FIRST_NAME, chemists.getFirstName());
+        intentChemistCall.putExtra(AppConstants.MIDDLE_NAME, chemists.getMiddleName());
+        intentChemistCall.putExtra(AppConstants.LAST_NAME, chemists.getLastName());
+        intentChemistCall.putExtra(AppConstants.PHONE, chemists.getPhone());
+        intentChemistCall.putExtra(AppConstants.EMAIL, chemists.getEmail());
+        intentChemistCall.putExtra(AppConstants.COMPANY_NAME, chemists.getCompanyName());
+        intentChemistCall.putExtra(AppConstants.SHOP_SIZE, chemists.getShopSize());
+        intentChemistCall.putExtra(AppConstants.PREFERRED_MEET_TIME, chemists.getPreferredMeetTime());
+        intentChemistCall.putExtra(AppConstants.MONTHLY_VOLUME_POTENTIAL, chemists.getMonthlyVolumePotential());
+        intentChemistCall.putExtra(AppConstants.PATCH_ID, chemists.getPatchId());
+        intentChemistCall.putExtra(AppConstants.ADDRESS1, chemists.getAddress1());
+        intentChemistCall.putExtra(AppConstants.ADDRESS2, chemists.getAddress2());
+        intentChemistCall.putExtra(AppConstants.ADDRESS3, chemists.getAddress3());
+        intentChemistCall.putExtra(AppConstants.ADDRESS4, chemists.getAddress4());
+        intentChemistCall.putExtra(AppConstants.DISTRICT, chemists.getDistrict());
+        intentChemistCall.putExtra(AppConstants.STATE, chemists.getState());
+        intentChemistCall.putExtra(AppConstants.CITY, chemists.getCity());
+        intentChemistCall.putExtra(AppConstants.PINCODE, chemists.getPincode());
+        intentChemistCall.putExtra(AppConstants.BILLING_EMAIL, chemists.getBillingEmail());
+        intentChemistCall.putExtra(AppConstants.BILLING_PHONE1, chemists.getBillingPhone1());
+        intentChemistCall.putExtra(AppConstants.BILLING_PHONE2, chemists.getBillingPhone2());
+        intentChemistCall.putExtra(AppConstants.RATING, chemists.getRating());
 
         intentChemistCall.putExtra(AppConstants.UPDATE_CHEMIST_KEY, selectedChemist);
         mContext.startActivity(intentChemistCall);
@@ -255,7 +254,8 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
             public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-                    getFragmentManager().beginTransaction().detach(ChemistFragment.this).attach(ChemistFragment.this).commit();
+//                    getFragmentManager().beginTransaction().detach(ChemistFragment.this).attach(ChemistFragment.this).commit();
+                    getChemistsList(token);
                     Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
                 }
                 else{

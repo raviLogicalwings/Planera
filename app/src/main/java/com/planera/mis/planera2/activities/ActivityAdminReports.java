@@ -749,7 +749,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         tr_head.addView(label_number);
 
         TextView label_user = new TextView(this);
-        label_user.setText("Mr/User");
+        label_user.setText("Chemist");
         label_user.setId(COLUMN_ID + 1);
         label_user.setTextColor(Color.BLACK);
         label_user.setPadding(8, 8, 8, 8);
@@ -786,60 +786,67 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         TableRow[] tr_headObj = new TableRow[dataItemsList.size()];
         TextView[] textArray = new TextView[5];
 
+
         for (int i = 0; i < dataItemsList.size(); i++) {
-            tr_headObj[i] = new TableRow(this);
-            tr_headObj[i].setId(i + 1);
-            if (i % 2 == 0) {
-                tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.lightGrayColor));
-            } else {
-                tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            if (dataItemsList.get(i).getProductDetails() != null) {
+                tr_headObj[i] = new TableRow(this);
+                tr_headObj[i].setId(i + 1);
+                if (i % 2 == 0) {
+                    tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.lightGrayColor));
+                } else {
+                    tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                }
+                tr_headObj[i].setLayoutParams(new TableRow.LayoutParams(
+                        TableRow.LayoutParams.MATCH_PARENT,
+                        TableRow.LayoutParams.WRAP_CONTENT));
+
+                textArray[0] = new TextView(this);
+                textArray[0].setId(i + 111);
+                textArray[0].setText(i + 1 + "");
+                textArray[0].setTextColor(Color.WHITE);
+                textArray[0].setPadding(8, 8, 8, 8);
+                tr_headObj[i].addView(textArray[0]);
+
+                textArray[1] = new TextView(this);
+                textArray[1].setId(i + 111);
+                textArray[1].setText(dataItemsList.get(i).getChemistName());
+                textArray[1].setTextColor(Color.WHITE);
+                textArray[1].setPadding(8, 8, 8, 8);
+                tr_headObj[i].addView(textArray[1]);
+
+                textArray[2] = new TextView(this);
+                textArray[2].setId(i + 111);
+                textArray[2].setText(dataItemsList.get(i).getStartTime());
+                textArray[2].setTextColor(Color.WHITE);
+                textArray[2].setPadding(8, 8, 8, 8);
+                tr_headObj[i].addView(textArray[2]);
+
+                textArray[3] = new TextView(this);
+                textArray[3].setId(i + 111);
+                textArray[3].setText(dataItemsList.get(i).getEndTime());
+                textArray[3].setTextColor(Color.WHITE);
+                textArray[3].setPadding(8, 8, 8, 8);
+                tr_headObj[i].addView(textArray[3]);
+
+
+                if (dataItemsList.get(i).getProductDetails() != null) {
+                    textArray[4] = new TextView(this);
+                    textArray[4].setId(i + 111);
+                    String productDetail = "";
+                    for (int productIterettor = 0; productIterettor < dataItemsList.get(i).getProductDetails().size(); productIterettor++) {
+                        productDetail += dataItemsList.get(i).getProductDetails().get(productIterettor).getProductName() + "(" + dataItemsList.get(i).getProductDetails().get(productIterettor).getQuantity() + ")";
+                    }
+                    textArray[4].setText(productDetail);
+                    textArray[4].setTextColor(Color.WHITE);
+                    textArray[4].setPadding(8, 8, 8, 8);
+                    tr_headObj[i].addView(textArray[4]);
+
+                }
+
+                mainTableLayout.addView(tr_headObj[i], new TableLayout.LayoutParams(
+                        TableLayout.LayoutParams.MATCH_PARENT,
+                        TableLayout.LayoutParams.WRAP_CONTENT));
             }
-            tr_headObj[i].setLayoutParams(new TableRow.LayoutParams(
-                    TableRow.LayoutParams.MATCH_PARENT,
-                    TableRow.LayoutParams.WRAP_CONTENT));
-
-            textArray[0] = new TextView(this);
-            textArray[0].setId(i + 111);
-            textArray[0].setText(i + 1 + "");
-            textArray[0].setTextColor(Color.WHITE);
-            textArray[0].setPadding(8, 8, 8, 8);
-            tr_headObj[i].addView(textArray[0]);
-
-            textArray[1] = new TextView(this);
-            textArray[1].setId(i + 111);
-            textArray[1].setText(dataItemsList.get(i).getUserName());
-            textArray[1].setTextColor(Color.WHITE);
-            textArray[1].setPadding(8, 8, 8, 8);
-            tr_headObj[i].addView(textArray[1]);
-
-            textArray[2] = new TextView(this);
-            textArray[2].setId(i + 111);
-            textArray[2].setText(dataItemsList.get(i).getStartDate());
-            textArray[2].setTextColor(Color.WHITE);
-            textArray[2].setPadding(8, 8, 8, 8);
-            tr_headObj[i].addView(textArray[2]);
-
-            textArray[3] = new TextView(this);
-            textArray[3].setId(i + 111);
-            textArray[3].setText(dataItemsList.get(i).getEndDate());
-            textArray[3].setTextColor(Color.WHITE);
-            textArray[3].setPadding(8, 8, 8, 8);
-            tr_headObj[i].addView(textArray[3]);
-
-            textArray[4] = new TextView(this);
-            textArray[4].setId(i + 111);
-            String productDetail = "";
-            for (int productIterettor = 0; productIterettor < dataItemsList.get(i).getProductDetails().size(); productIterettor++) {
-                productDetail += dataItemsList.get(i).getProductDetails().get(productIterettor).getProductName() + "(" + dataItemsList.get(i).getProductDetails().get(productIterettor).getQuantity() + ")";
-            }
-            textArray[4].setText(productDetail);
-            textArray[4].setTextColor(Color.WHITE);
-            textArray[4].setPadding(8, 8, 8, 8);
-            tr_headObj[i].addView(textArray[4]);
-
-            mainTableLayout.addView(tr_headObj[i], new TableLayout.LayoutParams(
-                    TableLayout.LayoutParams.MATCH_PARENT,
-                    TableLayout.LayoutParams.WRAP_CONTENT));
 
         }
 
@@ -900,85 +907,87 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         TextView[] textArray = new TextView[6];
 
         for (int i = 0; i < dataItemsList.size(); i++) {
-            tr_headObj[i] = new TableRow(this);
-            tr_headObj[i].setId(i + 1);
-            if (i % 2 == 0) {
-                tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.lightGrayColor));
-            } else {
-                tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-            }
-            tr_headObj[i].setLayoutParams(new TableRow.LayoutParams(
-                    TableRow.LayoutParams.MATCH_PARENT,
-                    TableRow.LayoutParams.WRAP_CONTENT));
-
-            textArray[0] = new TextView(this);
-            textArray[0].setId(i + 111);
-            textArray[0].setText(i + 1 + "");
-            textArray[0].setTextColor(Color.WHITE);
-            textArray[0].setPadding(8, 8, 8, 8);
-            tr_headObj[i].addView(textArray[0]);
-
-            textArray[1] = new TextView(this);
-            textArray[1].setId(i + 111);
-            textArray[1].setText(dataItemsList.get(i).getDoctorName());
-            textArray[1].setTextColor(Color.WHITE);
-            textArray[1].setPadding(8, 8, 8, 8);
-            tr_headObj[i].addView(textArray[1]);
-
-            textArray[2] = new TextView(this);
-            textArray[2].setId(i + 111);
-            textArray[2].setText(dataItemsList.get(i).getStartTime());
-            textArray[2].setTextColor(Color.WHITE);
-            textArray[2].setPadding(8, 8, 8, 8);
-            tr_headObj[i].addView(textArray[2]);
-
-            textArray[3] = new TextView(this);
-            textArray[3].setId(i + 111);
-            textArray[3].setText(dataItemsList.get(i).getEndTime());
-            textArray[3].setTextColor(Color.WHITE);
-            textArray[3].setPadding(8, 8, 8, 8);
-            tr_headObj[i].addView(textArray[3]);
-
-            textArray[4] = new TextView(this);
-            textArray[4].setId(i + 111);
-            String productDetail = "";
-            if ( dataItemsList.get(i).getProductDetails() != null) {
-                for (int productIterettor = 0; productIterettor < dataItemsList.get(i).getProductDetails().size(); productIterettor++) {
-                    productDetail += dataItemsList.get(i).getProductDetails().get(productIterettor).getProductName() + "(" + dataItemsList.get(i).getProductDetails().get(productIterettor).getQuantity() + ")";
+            if (dataItemsList.get(i).getProductDetails() != null) {
+                tr_headObj[i] = new TableRow(this);
+                tr_headObj[i].setId(i + 1);
+                if (i % 2 == 0) {
+                    tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.lightGrayColor));
+                } else {
+                    tr_headObj[i].setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 }
-                textArray[4].setText(productDetail);
-            }
-            textArray[4].setTextColor(Color.WHITE);
-            textArray[4].setPadding(8, 8, 8, 8);
-            tr_headObj[i].addView(textArray[4]);
+                tr_headObj[i].setLayoutParams(new TableRow.LayoutParams(
+                        TableRow.LayoutParams.MATCH_PARENT,
+                        TableRow.LayoutParams.WRAP_CONTENT));
 
+                textArray[0] = new TextView(this);
+                textArray[0].setId(i + 111);
+                textArray[0].setText(i + 1 + "");
+                textArray[0].setTextColor(Color.WHITE);
+                textArray[0].setPadding(8, 8, 8, 8);
+                tr_headObj[i].addView(textArray[0]);
 
-            textArray[5] = new TextView(this);
-            textArray[5].setId(i + 111);
-            if (dataItemsList.get(i).getInterestedLevel() != null) {
-                for (int productIterettor = 0; productIterettor < dataItemsList.get(i).getProductDetails().size(); productIterettor++) {
-                    if (dataItemsList.get(i).getProductDetails().get(productIterettor).equals("3")) {
-                        textArray[5].setText(dataItemsList.get(i).getProductName() + "(Low)");
+                textArray[1] = new TextView(this);
+                textArray[1].setId(i + 111);
+                textArray[1].setText(dataItemsList.get(i).getDoctorName());
+                textArray[1].setTextColor(Color.WHITE);
+                textArray[1].setPadding(8, 8, 8, 8);
+                tr_headObj[i].addView(textArray[1]);
+
+                textArray[2] = new TextView(this);
+                textArray[2].setId(i + 111);
+                textArray[2].setText(dataItemsList.get(i).getStartTime());
+                textArray[2].setTextColor(Color.WHITE);
+                textArray[2].setPadding(8, 8, 8, 8);
+                tr_headObj[i].addView(textArray[2]);
+
+                textArray[3] = new TextView(this);
+                textArray[3].setId(i + 111);
+                textArray[3].setText(dataItemsList.get(i).getEndTime());
+                textArray[3].setTextColor(Color.WHITE);
+                textArray[3].setPadding(8, 8, 8, 8);
+                tr_headObj[i].addView(textArray[3]);
+
+                textArray[4] = new TextView(this);
+                textArray[4].setId(i + 111);
+                String productDetail = "";
+                if (dataItemsList.get(i).getProductDetails() != null) {
+                    for (int productIterettor = 0; productIterettor < dataItemsList.get(i).getProductDetails().size(); productIterettor++) {
+                        productDetail += dataItemsList.get(i).getProductDetails().get(productIterettor).getProductName() + "(" + dataItemsList.get(i).getProductDetails().get(productIterettor).getQuantity() + ")";
                     }
-                    if (dataItemsList.get(i).getProductDetails().get(productIterettor).equals("2")) {
-                        textArray[5].setText(dataItemsList.get(i).getProductName() + "(Regular)");
-
-                    }
-                    if (dataItemsList.get(i).getProductDetails().get(productIterettor).equals("1")) {
-                        textArray[5].setText(dataItemsList.get(i).getProductName() + "(Super)");
-
-                    }
+                    textArray[4].setText(productDetail);
                 }
-            } else {
-                textArray[5].setText("---");
-            }
-            textArray[5].setTextColor(Color.WHITE);
-            textArray[5].setPadding(8, 8, 8, 8);
-            tr_headObj[i].addView(textArray[5]);
+                textArray[4].setTextColor(Color.WHITE);
+                textArray[4].setPadding(8, 8, 8, 8);
+                tr_headObj[i].addView(textArray[4]);
 
-            mainTableLayout.addView(tr_headObj[i], new TableLayout.LayoutParams(
-                    TableLayout.LayoutParams.MATCH_PARENT,
-                    TableLayout.LayoutParams.WRAP_CONTENT));
+
+                textArray[5] = new TextView(this);
+                textArray[5].setId(i + 111);
+                if (dataItemsList.get(i).getInterestedLevel() != null) {
+                    for (int productIterettor = 0; productIterettor < dataItemsList.get(i).getProductDetails().size(); productIterettor++) {
+                        if (dataItemsList.get(i).getProductDetails().get(productIterettor).equals("3")) {
+                            textArray[5].setText(dataItemsList.get(i).getProductName() + "(Low)");
+                        }
+                        if (dataItemsList.get(i).getProductDetails().get(productIterettor).equals("2")) {
+                            textArray[5].setText(dataItemsList.get(i).getProductName() + "(Regular)");
+
+                        }
+                        if (dataItemsList.get(i).getProductDetails().get(productIterettor).equals("1")) {
+                            textArray[5].setText(dataItemsList.get(i).getProductName() + "(Super)");
+
+                        }
+                    }
+                } else {
+                    textArray[5].setText("---");
+                }
+                textArray[5].setTextColor(Color.WHITE);
+                textArray[5].setPadding(8, 8, 8, 8);
+                tr_headObj[i].addView(textArray[5]);
+
+                mainTableLayout.addView(tr_headObj[i], new TableLayout.LayoutParams(
+                        TableLayout.LayoutParams.MATCH_PARENT,
+                        TableLayout.LayoutParams.WRAP_CONTENT));
+            }
 
         }
 

@@ -26,7 +26,7 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
     private Context context;
     private View mView;
     private List<Brands> brandsList;
-    public List<InputOrders> sampleListSelected;
+    private List<InputOrders> sampleListSelected;
     public PreferenceConnector connector;
     private InputOrders orders;
     private DataItem dataItemForUpdate;

@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
@@ -79,7 +78,7 @@ public class PlansFragment extends BaseFragment{
         super.initData();
         apiInterface = ApiClient.getInstance();
         if (token != null) {
-            getStatesList(token);
+            getPlanList(token);
         }
     }
 
@@ -101,7 +100,7 @@ public class PlansFragment extends BaseFragment{
         });
     }
 
-    public void getStatesList(String token) {
+    public void getPlanList(String token) {
         processDialog.showDialog(mContext, false);
         Call<PlansListResponce> call = apiInterface.planList(token);
         call.enqueue(new Callback<PlansListResponce>() {
@@ -126,7 +125,6 @@ public class PlansFragment extends BaseFragment{
                 processDialog.dismissDialog();
                 linearNoInternet.setVisibility(View.VISIBLE);
                 buttonRetry.setVisibility(View.VISIBLE);
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -189,6 +187,7 @@ public class PlansFragment extends BaseFragment{
                 if (response.isSuccessful()){
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                         Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
+                        getPlanList(token);
                     }
                     else{
                         Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();

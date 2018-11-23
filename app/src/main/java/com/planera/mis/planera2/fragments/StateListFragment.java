@@ -103,7 +103,8 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
                 if (response!= null){
                     if (response.body().getStatusCode()== AppConstants.RESULT_OK){
                         Toast.makeText(mContext, response.body().getMessage(),Toast.LENGTH_LONG).show();
-                        manager.beginTransaction().detach(StateListFragment.this).attach(StateListFragment.this).commit();
+                        getStatesList(token);
+//                        manager.beginTransaction().detach(StateListFragment.this).attach(StateListFragment.this).commit();
                     }
                     else{
                         Toast.makeText(mContext, response.body().getMessage(),Toast.LENGTH_LONG).show();
@@ -115,7 +116,6 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
             @Override
             public void onFailure(Call<MainResponse> call, Throwable t) {
                 processDialog.dismissDialog();
-                Toast.makeText(mContext, t.getMessage(),Toast.LENGTH_LONG).show();
 
             }
         });
@@ -147,7 +147,6 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
             @Override
             public void onFailure(Call<StateListResponse> call, Throwable t) {
                 processDialog.dismissDialog();
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
                 linearNoInternet.setVisibility(View.VISIBLE);
                 buttonRetry.setVisibility(View.VISIBLE);
             }

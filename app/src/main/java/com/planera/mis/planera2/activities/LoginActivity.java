@@ -75,7 +75,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         String emailIdStr = editUserName.getText().toString();
         String passwordStr = editPassword.getText().toString();
 
-            if(!isEmailValid(emailIdStr)){
+            if(TextUtils.isEmpty(emailIdStr)){
                 inputLayoutUserName.setError("Invalid email address.");
             }
             else if(TextUtils.isEmpty(passwordStr)){
@@ -117,7 +117,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     connector.setString(AppConstants.TOKEN, response.body().getData().getToken());
                     connector.setString(AppConstants.USER_ID, response.body().getData().getUserId());
                     connector.setBoolean(AppConstants.IS_LOGIN, true);
-                    if(response.body().getData().getType().equals(AppConstants.USER)) {
+                    if(response.body().getData().getType() == AppConstants.MR_USER_TYPE ||
+                            response.body().getData().getType() == AppConstants.DEFAULT_MR_USER_TYPE) {
                         connector.setBoolean(AppConstants.IS_USER, true);
                         Intent intentHome = new Intent(LoginActivity.this, MainActivity.class);
                         ActivityCompat.finishAffinity(LoginActivity.this);

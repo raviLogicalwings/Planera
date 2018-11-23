@@ -52,9 +52,24 @@ public class FileCreation {
 
 //                                if (reportListChemist.get(i).getIsBrand().equals("0")) {
                     sheet.addCell(new Label(0, i+1, reportList.get(i).getChemistName()));
-                    sheet.addCell(new Label(1, i+1, reportList.get(i).getStartDate()));
-                    sheet.addCell(new Label(2, i+1, reportList.get(i).getEndDate()));
-                    sheet.addCell(new Label(3, i+1, reportList.get(i).getProductName() + "(" + reportList.get(i).getProductQty() + ")"));
+                    sheet.addCell(new Label(1, i+1, reportList.get(i).getStartTime()));
+                    sheet.addCell(new Label(2, i+1, reportList.get(i).getEndTime()));
+
+                    if (reportList.get(i).getProductDetails() != null) {
+                        String quantity = "";
+                        for (int t=0 ; t<reportList.get(i).getProductDetails().size() ; t++) {
+                            if (reportList.get(i).getProductDetails().get(i).getProductName() != null || reportList.get(i).getProductDetails().get(t).getQuantity() != null) {
+                                if (!quantity.equals("")) {
+                                    quantity = quantity + " ,"+reportList.get(i).getProductDetails().get(t).getProductName() + "(" + reportList.get(i).getProductDetails().get(t).getQuantity() + ")";
+                                }
+                                else{
+                                    quantity = reportList.get(i).getProductDetails().get(t).getProductName() + "(" + reportList.get(i).getProductDetails().get(t).getQuantity() + ")";
+                                }
+                                sheet.addCell(new Label(3, i+1, quantity));
+                            }
+
+                        }
+                    }
 //                                }
 
 
@@ -113,10 +128,10 @@ public class FileCreation {
                             for (int t=0 ; t<reportList.get(i).getProductDetails().size() ; t++) {
                                 if (reportList.get(i).getProductDetails().get(i).getProductName() != null || reportList.get(i).getProductDetails().get(t).getQuantity() != null) {
                                     if (!quantity.equals("")) {
-                                        quantity = quantity + " ,"+reportList.get(i).getProductDetails().get(t).getProductName() + "(" + reportList.get(i).getProductQty() + ")";
+                                        quantity = quantity + " ,"+reportList.get(i).getProductDetails().get(t).getProductName() + "(" + reportList.get(i).getProductDetails().get(t).getQuantity() + ")";
                                     }
                                     else{
-                                        quantity = reportList.get(i).getProductDetails().get(t).getProductName() + "(" + reportList.get(i).getProductQty() + ")";
+                                        quantity = reportList.get(i).getProductDetails().get(t).getProductName() + "(" + reportList.get(i).getProductDetails().get(t).getQuantity() + ")";
                                     }
                                     sheet.addCell(new Label(4, i+1, quantity));
                                 }

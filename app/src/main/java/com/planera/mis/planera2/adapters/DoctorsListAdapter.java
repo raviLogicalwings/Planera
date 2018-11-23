@@ -74,10 +74,10 @@ public class DoctorsListAdapter extends RecyclerView.Adapter<DoctorsListAdapter.
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.img_doctor_delete:
-                    onItemClickListener.onItemClick(view, getAdapterPosition());
+                    onItemClickListener.onItemClick(view, doctorsList.get(getAdapterPosition()));
                     break;
                 case R.id.img_doctor_edit:
-                    onItemClickListener.onItemClick(view, getAdapterPosition());
+                    onItemClickListener.onItemClick(view, doctorsList.get(getAdapterPosition()));
                     break;
             }
         }
@@ -89,7 +89,7 @@ public class DoctorsListAdapter extends RecyclerView.Adapter<DoctorsListAdapter.
     }
 
     public interface OnItemClickListener{
-         void onItemClick(View view, int position);
+         void onItemClick(View view, Doctors doctors);
     }
 
 

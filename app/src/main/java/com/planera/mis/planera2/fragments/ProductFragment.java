@@ -124,7 +124,6 @@ public class ProductFragment extends BaseFragment implements EditProductDialog.O
                 processDialog.dismissDialog();
                 linearNoInternet.setVisibility(View.VISIBLE);
                 buttonRetry.setVisibility(View.VISIBLE);
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -162,7 +161,8 @@ public class ProductFragment extends BaseFragment implements EditProductDialog.O
                 if (response != null) {
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                         Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                        refreshFragment(ProductFragment.this);
+//                        refreshFragment(ProductFragment.this);
+                        getProductsListApi(token);
                     } else {
                         Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
 

@@ -1,5 +1,6 @@
 package com.planera.mis.planera2.activities;
 
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -133,6 +134,7 @@ public class SignupActivity extends BaseActivity implements View.OnClickListener
             user.setPhone1(phoneStr);
             user.setPassword(passwordStr);
             user.setStatus(ON_HOLD);
+            user.setType(AppConstants.MR_USER_TYPE);
             try {
                 if (InternetConnection.isNetworkAvailable(SignupActivity.this)){
                     callUserRegistrationApi(user);

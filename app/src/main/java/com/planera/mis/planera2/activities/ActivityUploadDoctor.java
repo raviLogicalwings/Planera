@@ -11,17 +11,20 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.models.DoctorImport;
+import com.planera.mis.planera2.models.DoctorImportItems;
 import com.planera.mis.planera2.models.MainResponse;
 import com.planera.mis.planera2.utils.AppConstants;
 import com.planera.mis.planera2.utils.RuntimePermissionCheck;
@@ -38,32 +41,38 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ActivityUploadDoctor extends BaseActivity implements View.OnClickListener{
 
-    public static ActivityUploadDoctor instance;
-    private CardView cardUploadPlanView;
+    private LinearLayout cardUploadPlanView;
     private ImageView imageSheetView;
     private Button buttonUploadPlanSheet;
     private RuntimePermissionCheck permissionCheck;
     private String displayName;
     private TextView textFileName;
     private ImageView imageClose;
-    private List<DoctorImport> listDoctors;
-    private DoctorImport doctors;
+    private List<DoctorImportItems> listDoctorsItems;
+    private DoctorImport doctorImport;
+    private CheckBox isOverrideCheck;
+    private DoctorImportItems doctors;
+    private Toolbar toolbarImportDoctors;
     private Uri uri = null;
     public static final String TAG = ActivityUploadDoctor.class.getSimpleName();
     private File myFile;
     private boolean isCellNull = false;
+    private int isOverride;
+    private int OVERRIDE = 1;
+    private int DONT_OVERRIDE = 0;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragmend_upload_plan);
+        setContentView(R.layout.activity_upload_doctor);
         initUi();
         initData();
 
@@ -73,11 +82,17 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
     @Override
     public void initUi() {
         super.initUi();
-        cardUploadPlanView = findViewById(R.id.card_upload_Plan_view);
+        toolbarImportDoctors = findViewById(R.id.toolbar_upload_doctor);
+        cardUploadPlanView = findViewById(R.id.card_upload_doctor_view);
         imageSheetView = findViewById(R.id.image_sheet_view);
-        buttonUploadPlanSheet = findViewById(R.id.button_upload_plan_sheet);
+        isOverrideCheck = findViewById(R.id.check_is_override);
+        buttonUploadPlanSheet = findViewById(R.id.button_upload_doctor_sheet);
         textFileName = findViewById(R.id.text_file_name);
-        imageClose = findViewById(R.id.img_close);
+
+        setSupportActionBar(toolbarImportDoctors);
+        toolbarImportDoctors.setNavigationIcon(R.drawable.back_arrow_whit);
+        getSupportActionBar().setTitle("Import Doctors");
+        toolbarImportDoctors.setNavigationOnClickListener(view -> onBackPressed());
         imageSheetView.setOnClickListener(this);
         cardUploadPlanView.setOnClickListener(this);
         buttonUploadPlanSheet.setOnClickListener(this);
@@ -175,7 +190,6 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
 
     public void toggleView(String name){
         if(name!= null){
-            cardUploadPlanView.setVisibility(View.GONE);
             imageSheetView.setVisibility(View.VISIBLE);
             textFileName.setVisibility(View.VISIBLE);
             textFileName.setText(name);
@@ -186,18 +200,30 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
     @Override
     public void initData() {
         super.initData();
-        listDoctors = new ArrayList<>();
-
+        listDoctorsItems = new ArrayList<>();
+        doctorImport = new DoctorImport();
         permissionCheck = new RuntimePermissionCheck(ActivityUploadDoctor.this);
     }
 
 
-    private void readExcelData(Uri uri) {
+    public void checkValidation(){
+        String text = textFileName.getText().toString();
+        if (text.equals(getString(R.string.select_file))){
+            Toasty.warning(this, "Please Select file.", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            readExcelData(uri);
+        }
+    }
 
-            Toast.makeText(this, "Working fine", Toast.LENGTH_LONG).show();
-            try {
+
+    private void readExcelData(Uri uri) {
+        processDialog.showDialog(ActivityUploadDoctor.this, false);
+        Toast.makeText(this, "Working fine", Toast.LENGTH_LONG).show();
+        try {
+
 //            File fileB = new File(filePath);
-                InputStream inputStream = getContentResolver().openInputStream(uri);
+            InputStream inputStream = getContentResolver().openInputStream(uri);
 //                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 //                StringBuilder stringBuilder = new StringBuilder();
 //                String line;
@@ -208,159 +234,172 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
 //                inputStream.close();
 //              Log.e("String Result", stringBuilder.toString());
 //
-                XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
-                XSSFSheet sheet = workbook.getSheetAt(0);
-                int rowsCount = sheet.getPhysicalNumberOfRows();
-                Toast.makeText(this, "rowCount"+rowsCount, Toast.LENGTH_LONG).show();
-                FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
-                StringBuilder sb = new StringBuilder();
-                //loop, loops through rows
-                for (int r = 1; r < rowsCount; r++) {
-                    Row row = sheet.getRow(r);
-                    int cellsCount = row.getPhysicalNumberOfCells();
-                    doctors = new DoctorImport();
-                    //inner loop, loops through columns
-                    if (isCellNull){
-                        if (listDoctors != null){
-                            apiImportDoctorsFromExcel(token, listDoctors);
-                        }
+            XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+            XSSFSheet sheet = workbook.getSheetAt(0);
+            int rowsCount = sheet.getPhysicalNumberOfRows();
+//                Toast.makeText(this, "rowCount"+rowsCount, Toast.LENGTH_LONG).show();
+            FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
+            StringBuilder sb = new StringBuilder();
+            //loop, loops through rows
+            for (int r = 1; r < rowsCount; r++) {
+                Row row = sheet.getRow(r);
+                int cellsCount = row.getPhysicalNumberOfCells();
+                doctors = new DoctorImportItems();
+                //inner loop, loops through columns
+                if (isCellNull) {
+//                        if (listDoctorsItems != null){
+//                            apiImportDoctorsFromExcel(token, listDoctorsItems);
+//                        }
+                    processDialog.dismissDialog();
+                    break;
+                }
+                for (int c = 0; c < cellsCount; c++) {
+                    String value = getCellAsString(row, c, formulaEvaluator);
+
+                    if (c == 0 && value.isEmpty()) {
+                        isCellNull = true;
+                        processDialog.dismissDialog();
                         break;
                     }
-                    for (int c = 0; c < cellsCount; c++) {
-                        String value = getCellAsString(row, c, formulaEvaluator);
-
-                        if (c==0 && value.isEmpty()){
-                            isCellNull = true;
-                            break;
+                    if (c == AppConstants.DOCTOR_ID_DOCTOR_EXCEL) {
+                        doctors.setDocId(value);
+                    }
+                    if (c == AppConstants.PATCH_ID_CHEMIST_EXCEL) {
+                        if (!value.isEmpty()) {
+                            doctors.setPatchId(value);
                         }
-                        if (c == AppConstants.DOCTOR_ID_EXCEL){
-                            doctors.setDocId(value);
+                    }
+                    if (c == AppConstants.FIRST_NAME_DOCTOR_EXCEL) {
+                        if (!value.isEmpty()) {
+                            doctors.setFirstName(value);
                         }
-                        if (c == AppConstants.PATCH_ID_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setPatchId(value);
-                            }
+                    }
+                    if (c == AppConstants.MIDDLE_NAME_DOCTOR_EXCEL) {
+                        if (!value.isEmpty()) {
+                                doctors.setMiddleName(value);
                         }
-                        if (c == AppConstants.FIRST_NAME_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setFirstName(value);
-                            }
+                    }
+                    if (c == AppConstants.LAST_NAME_DOCTOR_EXCEL) {
+                        if (!value.isEmpty()) {
+                            doctors.setLastName(value);
                         }
-                        if (c == AppConstants.MIDDLE_NAME_EXCEL){
-                            if (!value.isEmpty()){
-//                                doctors.setMiddleName(value);
-                            }
+                    }
+                    if (c == AppConstants.DOB_DOCTOR_EXCEL) {
+                        if (!value.isEmpty()) {
+                                doctors.setDOB(value);
                         }
-                        if (c == AppConstants.LAST_NAME_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setLastName(value);
-                            }
+                    }
+                    if (c == AppConstants.EMAIL_DOCTOR_EXCEL) {
+                        if (!value.isEmpty()) {
+                                doctors.setEmail(value);
                         }
-                        if (c == AppConstants.DOB_EXCEL){
-                            if (!value.isEmpty()){
-//                                doctors.setDOB(value);
-                            }
+                    }
+                    if (c == AppConstants.QUALIFICATION_DOCTOR_EXCEL) {
+                        if (!value.isEmpty()) {
+                            doctors.setQualifications(value);
                         }
-                        if (c == AppConstants.EMAIL_EXCEL){
-                            if (!value.isEmpty()){
-//                                doctors.setEmail(value);
-                            }
+                    }
+                    if (c == AppConstants.SPECIALIZATION_DOCTOR_EXCEL) {
+                        if (!value.isEmpty()) {
+                            doctors.setSpecializations(value);
                         }
-                        if (c == AppConstants.QUALIFICATION_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setQualifications(value);
-                            }
+                    }
+                    if (c == AppConstants.PREFERRED_MEET_TIME_DOCTOR_EXCEL) {
+                        if (!value.isEmpty()) {
+                            doctors.setPreferredMeetTime(value);
                         }
-                        if (c == AppConstants.SPECIALIZATION_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setSpecializations(value);
-                            }
+                    }
+                    if (c == AppConstants.PREFERRED_MEET_TIME_DOCTOR_EXCEL) {
+                        if (!value.isEmpty()) {
+                            doctors.setMeetFrequency(value);
                         }
-                        if (c == AppConstants.PREFERRED_MEET_TIME_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setPreferredMeetTime(value);
-                            }
+                    }
+                    if (c == AppConstants.PHONE_DOCTOR_EXCEL) {
+                        if (!value.isEmpty()) {
+                                doctors.setPhone(value);
                         }
-                        if (c == AppConstants.MEET_FREQUENCY_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setMeetFrequency(value);
-                            }
+                    }
+                    if (c == AppConstants.ADDRESS_1_DOCTOR_EXCEL) {
+                        if (!value.isEmpty()) {
+                            doctors.setAddressLine1(value);
                         }
-                        if (c == AppConstants.PHONE_EXCEL){
-                            if (!value.isEmpty()){
-//                                doctors.setPhone(value);
-                            }
+                    }
+                    if (c == AppConstants.ADDRESS_2_DOCTOR_EXCEL) {
+                        if (!value.isEmpty()) {
+                            doctors.setAddressLine2(value);
                         }
-                        if (c == AppConstants.ADDRESS_1_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setAddressLine1(value);
-                            }
+                    }
+                    if (c == AppConstants.ADDRESS_3_DOCTOR_EXCEL) {
+                        if (!value.isEmpty()) {
+                            doctors.setAddressLine3(value);
                         }
-                        if (c == AppConstants.ADDRESS_2_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setAddressLine2(value);
-                            }
+                    }
+                    if (c == AppConstants.ADDRESS_4_DOCTOR_EXCEL) {
+                        if (!value.isEmpty()) {
+                            doctors.setAddressLine4(value);
                         }
-                        if (c == AppConstants.ADDRESS_3_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setAddressLine3(value);
-                            }
+                    }
+                    if (c == AppConstants.CITY_DOCTOR_EXCEL) {
+                        if (!value.isEmpty()) {
+                            doctors.setCity(value);
                         }
-                        if (c == AppConstants.ADDRESS_4_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setAddressLine4(value);
-                            }
+                    }
+                    if (c == AppConstants.DISTRICT_DOCTOR_EXCEL) {
+                        if (!value.isEmpty()) {
+                            doctors.setDistrict(value);
                         }
-                        if (c == AppConstants.CITY_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setCity(value);
-                            }
+                    }
+                    if (c == AppConstants.STATE_DOCTOR_EXCEL) {
+                        if (!value.isEmpty()) {
+                            doctors.setState(value);
                         }
-                        if (c == AppConstants.DISTRICT_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setDistrict(value);
-                            }
-                        }
-                        if (c == AppConstants.STATE_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setState(value);
-                            }
-                        }
-
-                        if (c == AppConstants.PINCODE_EXCEL){
-                            if (!value.isEmpty()){
-                                doctors.setPIN(value);
-                            }
-                        }
-
-                        else{
-
-                            String cellInfo = "r:" + r + "; c:" + c + "; v:" + value;
-                            Log.d(TAG, "readExcelData: Data from row: " + cellInfo);
-                            sb.append(value + ", ");
-                            Toast.makeText(this, new String(sb), Toast.LENGTH_SHORT).show();
-                        }
-
                     }
 
-                    listDoctors.add(doctors);
-                }
-                sb.append(":");
-                Log.e("list doctors", new Gson().toJson(listDoctors));
+                    if (c == AppConstants.PINCODE_DOCTOR_EXCEL) {
+                        if (!value.isEmpty()) {
+                            doctors.setPIN(value);
+                        }
+                    } else {
 
-                if (listDoctors != null){
-                    apiImportDoctorsFromExcel(token, listDoctors);
+                        String cellInfo = "r:" + r + "; c:" + c + "; v:" + value;
+//                            Log.d(TAG, "readExcelData: Data from row: " + cellInfo);
+                        sb.append(value + ", ");
+                    }
+
+
                 }
-            }catch (Exception e) {
-                Log.e(TAG, "readExcelData: FileNotFoundException. " + e.getMessage() );
+
+                listDoctorsItems.add(doctors);
+
             }
+            sb.append(":");
+            Log.e("list doctors", new Gson().toJson(listDoctorsItems));
+
+            if (listDoctorsItems != null) {
+                if (isOverrideCheck.isChecked()) {
+                    isOverride = OVERRIDE;
+                    Toasty.info(this, "Checked", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    isOverride = DONT_OVERRIDE;
+                    Toasty.info(this, "Unchecked", Toast.LENGTH_SHORT).show();
+
+                }
+                doctorImport.setOverride(isOverride);
+                doctorImport.setDoctorImportList(listDoctorsItems);
+                callAPIToImportData(token, doctorImport);
+            }
+//
 
 
-
+        } catch (Exception e) {
+            Log.e(TAG, "readExcelData: FileNotFoundException. " + e.getMessage());
+        }
     }
 
 
-    private String getCellAsString(Row row, int c, FormulaEvaluator formulaEvaluator) {
+
+        private String getCellAsString(Row row, int c, FormulaEvaluator formulaEvaluator) {
         String value = "";
         try {
             Cell cell = row.getCell(c);
@@ -385,21 +424,24 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
         return value;
     }
 
+    public void callAPIToImportData(String token, DoctorImport doctorImport){
+        apiImportDoctorsFromExcel(token,  doctorImport);
+    }
 
-    public void apiImportDoctorsFromExcel(String token, List<DoctorImport> doctorImportList){
-        Log.e("Import Doctors params", new Gson().toJson(doctorImportList));
+    public void apiImportDoctorsFromExcel(String token,  DoctorImport doctorImport){
+        Log.e("Import Doctors params", new Gson().toJson(doctorImport));
 //        processDialog.showDialog(ActivityUploadDoctor.this, false);
-        Call<MainResponse> call = apiInterface.importDoctorFromExcel(token, doctorImportList);
+        Call<MainResponse> call = apiInterface.importDoctorFromExcel(token,  doctorImport);
         call.enqueue(new Callback<MainResponse>() {
             @Override
             public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
-//                processDialog.dismissDialog();
+                processDialog.dismissDialog();
                 if (response.isSuccessful()){
                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-                       Log.d("Import api response",  new Gson().toJson(response.body()));
+                       Toasty.info(ActivityUploadDoctor.this, new Gson().toJson(response.body()), Toast.LENGTH_LONG).show();
                    }
                    else{
-                       Log.d("Import api response",  new Gson().toJson(response.body()));
+                       Toasty.error(ActivityUploadDoctor.this, new Gson().toJson(response.body()), Toast.LENGTH_LONG).show();
                    }
                 }
             }
@@ -407,6 +449,7 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
             @Override
             public void onFailure(@NonNull Call<MainResponse> call, @NonNull Throwable t) {
 //                processDialog.dismissDialog();
+                Toasty.error(ActivityUploadDoctor.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -414,11 +457,11 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.card_upload_Plan_view:
+            case R.id.card_upload_doctor_view:
                 checkRequiredPermission();
                 break;
-            case R.id.button_upload_plan_sheet:
-                readExcelData(uri);
+            case R.id.button_upload_doctor_sheet:
+               checkValidation();
                 break;
             case R.id.image_sheet_view:
                 checkRequiredPermission();
