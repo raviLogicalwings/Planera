@@ -113,10 +113,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 processDialog.dismissDialog();
                 Log.e(TAG, "onResponse: "+ new Gson().toJson(response.body()));
+
                 if (response.body().getStatusCode()== AppConstants.RESULT_OK){
                     connector.setString(AppConstants.TOKEN, response.body().getData().getToken());
                     connector.setString(AppConstants.USER_ID, response.body().getData().getUserId());
                     connector.setBoolean(AppConstants.IS_LOGIN, true);
+
                     if(response.body().getData().getType() == AppConstants.MR_USER_TYPE ||
                             response.body().getData().getType() == AppConstants.DEFAULT_MR_USER_TYPE) {
                         connector.setBoolean(AppConstants.IS_USER, true);
