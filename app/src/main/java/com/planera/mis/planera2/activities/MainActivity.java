@@ -116,7 +116,7 @@ public class MainActivity extends BaseActivity implements
     }
 
     public void backToLogin(){
-        connector.setBoolean(AppConstants.IS_LOGIN, false);
+        connector.setString(AppConstants.TOKEN, null);
         Intent intentLogin = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intentLogin);
         finish();

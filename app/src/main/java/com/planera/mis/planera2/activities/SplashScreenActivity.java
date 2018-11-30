@@ -50,7 +50,7 @@ public class SplashScreenActivity extends BaseActivity {
         if (!checkAndRequestPermissions()) {
             return;
         }
-        if (isUserLogin && !token.isEmpty()) {
+        if (!token.isEmpty()) {
             Log.e("Check", "User LogedIn "+isUser + " token"+ token);
             if (isUser) {
                 Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
@@ -79,8 +79,6 @@ public class SplashScreenActivity extends BaseActivity {
     public void initData() {
         super.initData();
         PreferenceConnector connector = PreferenceConnector.getInstance(this);
-
-        isUserLogin = connector.getBoolean(AppConstants.IS_LOGIN);
         isUser = connector.getBoolean(AppConstants.IS_USER);
         //permissionCheck = new RuntimePermissionCheck(SplashScreenActivity.this);
 
