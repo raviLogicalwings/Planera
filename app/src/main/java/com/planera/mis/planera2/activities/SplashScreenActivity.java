@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.planera.mis.planera2.R;
@@ -31,9 +32,9 @@ public class SplashScreenActivity extends BaseActivity {
 
         setContentView(R.layout.activity_splash);
 
+        initUi();
         initData();
 
-        initUi();
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -45,10 +46,12 @@ public class SplashScreenActivity extends BaseActivity {
     }
 
     private void goToNextScreen() {
+        Log.e("Check", "mainFunction");
         if (!checkAndRequestPermissions()) {
             return;
         }
-        if (isUserLogin) {
+        if (isUserLogin && !token.isEmpty()) {
+            Log.e("Check", "User LogedIn "+isUser + " token"+ token);
             if (isUser) {
                 Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
                 ActivityCompat.finishAffinity(SplashScreenActivity.this);
@@ -59,6 +62,7 @@ public class SplashScreenActivity extends BaseActivity {
                 startActivity(intent);
             }
         } else {
+            Log.e("Check", "Not login");
             Intent intentLogin = new Intent(SplashScreenActivity.this, LoginActivity.class);
             ActivityCompat.finishAffinity(SplashScreenActivity.this);
             startActivity(intentLogin);
