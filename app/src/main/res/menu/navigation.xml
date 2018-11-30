@@ -8,15 +8,15 @@
     <item
         android:id    ="@+id/navigation_meeting"
         android:icon  ="@drawable/icon_calendar"
-        android:title ="@string/title_notifications" />
+        android:title ="@string/filter" />
     <item
         android:id    ="@+id/navigation_profile"
         android:icon  ="@drawable/icon_proflie"
-        android:title ="@string/title_dashboard" />
+        android:title ="@string/profile" />
 
     <item
         android:id    ="@+id/navigation_logout"
         android:icon  ="@drawable/icon_logout"
-        android:title ="@string/title_dashboard" />
+        android:title ="@string/logout" />
 
 </menu>

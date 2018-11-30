@@ -25,6 +25,7 @@ public class SplashScreenActivity extends BaseActivity {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     public boolean isUserLogin;
     public boolean isUser;
+    public String userToken = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class SplashScreenActivity extends BaseActivity {
         if (!checkAndRequestPermissions()) {
             return;
         }
-        if (!token.isEmpty()) {
+        if (isUserLogin) {
             Log.e("Check", "User LogedIn "+isUser + " token"+ token);
             if (isUser) {
                 Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
@@ -80,6 +81,8 @@ public class SplashScreenActivity extends BaseActivity {
         super.initData();
         PreferenceConnector connector = PreferenceConnector.getInstance(this);
         isUser = connector.getBoolean(AppConstants.IS_USER);
+        userToken = connector.getString(AppConstants.TOKEN);
+        isUserLogin = connector.getBoolean(AppConstants.IS_LOGIN);
         //permissionCheck = new RuntimePermissionCheck(SplashScreenActivity.this);
 
     }

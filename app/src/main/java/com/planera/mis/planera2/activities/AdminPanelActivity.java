@@ -76,7 +76,7 @@ public class AdminPanelActivity extends BaseActivity {
 
     private void backToLogin() {
         Intent intentLogin = new Intent(AdminPanelActivity.this, LoginActivity.class);
-        connector.setString(AppConstants.TOKEN, null);
+        connector.setBoolean(AppConstants.IS_LOGIN, false);
         startActivity(intentLogin);
         finish();
     }

@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SplashActivity">
+    tools:context="com.planera.mis.planera2.activities.SplashScreenActivity">
 
     <ImageView
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/splashIcon"
-        android:src="@drawable/icon_home_white"
+        android:src="@drawable/ic_launcher"
 
         />
 

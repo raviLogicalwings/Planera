@@ -116,4 +116,7 @@
     <string name="title_activity_upload_user">ActivityUploadUser</string>
     <string name="user_type">User Type</string>
     <string name="title_activity_login">login</string>
+    <string name="logout">Logout</string>
+    <string name="profile">Profile</string>
+    <string name="filter">Filter</string>
 </resources>
