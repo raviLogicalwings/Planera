@@ -7,7 +7,7 @@ public class AppConstants {
 
     //Retrofit Constants
     public static final int RESULT_OK = 1;
-    public static final long REQUEST_TIMEOUT = 3;
+    public static final long REQUEST_TIMEOUT = 10;
     public static final String BASE_URL = "http://soleralife.com/apimrapp/";
     public static final String LOGIN = "login/login";
     public static final String USER_REGISTRATION = "register/registerUserDetails";
@@ -306,4 +306,5 @@ public class AppConstants {
     public static final String OBTAIN_REPORT = "obtain_report";
     public static final String IS_INPUT_UPDATE = "is_update";
     public static final String PASS_UPDATE_INPUT = "pass_update_input";
+    public static String USER_PROFILE = "user_profile_key";
 }

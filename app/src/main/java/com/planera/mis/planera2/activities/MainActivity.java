@@ -21,6 +21,8 @@ import com.planera.mis.planera2.utils.AppConstants;
 import com.planera.mis.planera2.utils.BottomNavigationViewHelper;
 import com.planera.mis.planera2.utils.InternetConnection;
 
+import java.util.Objects;
+
 public class MainActivity extends BaseActivity implements
         View.OnClickListener {
 
@@ -82,7 +84,7 @@ public class MainActivity extends BaseActivity implements
 
             case AppConstants.PROFILE_FRAGMENT:
                 fragment = ProfileFragment.newInstance();
-                getSupportActionBar().setTitle("Profile");
+                Objects.requireNonNull(getSupportActionBar()).setTitle("Profile");
                 break;
 
 

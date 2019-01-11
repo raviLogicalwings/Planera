@@ -112,7 +112,7 @@ public class ActivityUpdateUser extends BaseActivity implements View.OnClickList
         spinnerUserType = findViewById(R.id.spinner_user_type);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
-
+        getSupportActionBar().setTitle("Update User");
         buttonAddUser.setText(getString(R.string.update));
         textUserDoj.setOnClickListener(this);
         textUserDob.setOnClickListener(this);

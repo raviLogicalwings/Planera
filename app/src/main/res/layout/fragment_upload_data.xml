@@ -20,7 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/LargeText"
-                android:text="Upload Users"
+                android:text="@string/upload_users"
                 android:drawableLeft="@drawable/icon_upload" />
 
     </android.support.v7.widget.CardView>
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/LargeText"
-            android:text="Upload Doctors"
+            android:text="@string/upload_doctors"
             android:drawableLeft="@drawable/icon_upload" />
 
     </android.support.v7.widget.CardView>
@@ -62,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/LargeText"
-            android:text="Upload Chemist"
+            android:text="@string/upload_chemist"
             android:drawableLeft="@drawable/icon_upload" />
 
     </android.support.v7.widget.CardView>

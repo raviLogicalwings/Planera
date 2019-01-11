@@ -17,7 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="3">
+            android:weightSum="3"
+            android:baselineAligned="false">
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -35,7 +36,7 @@
                     android:layout_margin="@dimen/fab_margin"
                     android:background="@drawable/bg_text_name"
                     android:gravity="center"
-                    android:text="T"
+                    android:text="@string/a"
                     android:textColor="@color/colorGray" />
 
             </RelativeLayout>
@@ -53,7 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="3dp"
-                    android:text="Dr. Aman Kashyap" />
+                    android:text="@string/dr_aman_kashyap" />
 
                 <RatingBar
                     android:id="@+id/rating_bar_doctor"
@@ -65,7 +66,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    android:text="1/578/B-17, Por Mohollo, Opp. State Bank of India, Athughar Timliyawadm, Nanpura, Surat, Gujrat, 395001"
+                    android:text="@string/demo_address"
                     android:textColor="@color/colorGray" />
 
                 <TextView
@@ -75,7 +76,7 @@
                     android:drawablePadding="@dimen/drawable_padding"
                     android:drawableStart="@drawable/icon_remark"
                     android:padding="3dp"
-                    android:text="Remark"
+                    android:text="@string/remark"
                     android:textColor="@color/colorPrimary"
                     android:textStyle="italic"
                     android:visibility="gone" />
@@ -87,7 +88,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:padding="3dp"
-                    android:text="Confirm"
+                    android:text="@string/confirm"
                     android:textColor="@color/colorGreen"
                     android:visibility="gone" />
 
@@ -97,7 +98,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Check in"
+                    android:text="@string/check_in"
                     android:textStyle="normal" />
 
             </LinearLayout>
@@ -115,7 +116,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="8dp"
                     android:padding="3dp"
-                    android:text="5 KM" />
+                    android:text="@string/_5_km" />
 
                 <ImageView
                     android:id="@+id/image_current_location_status"
@@ -124,7 +125,8 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="11dp"
-                    android:src="@drawable/icon_active_location" />
+                    android:src="@drawable/icon_active_location"
+                    android:contentDescription="@string/todo" />
 
 
             </RelativeLayout>

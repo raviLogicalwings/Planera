@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -27,7 +28,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
-                app:srcCompat="@drawable/icon_user_name" />
+                app:srcCompat="@drawable/icon_user_name"
+                tools:ignore="VectorDrawableCompat"
+                android:contentDescription="@string/todo"/>
 
             <TextView
                 android:id="@+id/text_user_name"
@@ -36,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.8"
-                android:text="Vikas" />
+                android:text="@string/vikas" />
 
         </LinearLayout>
 
@@ -51,7 +54,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
-                app:srcCompat="@drawable/icon_email" />
+                app:srcCompat="@drawable/icon_email"
+                tools:ignore="VectorDrawableCompat"
+                android:contentDescription="@string/todo"/>
 
             <TextView
                 android:id="@+id/text_user_email"
@@ -60,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.8"
-                android:text="vika123@gmail.com" />
+                android:text="@string/vika123_gmail_com" />
 
 
         </LinearLayout>
@@ -76,7 +81,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
-                app:srcCompat="@drawable/icon_phone" />
+                app:srcCompat="@drawable/icon_phone"
+                tools:ignore="VectorDrawableCompat"
+                android:contentDescription="@string/todo"/>
 
             <TextView
                 android:id="@+id/text_user_phone"
@@ -85,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.8"
-                android:text="+91 98765-43210" />
+                android:text="@string/_91_98765_43210" />
         </LinearLayout>
 
 
@@ -94,13 +101,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:orientation="horizontal"
+            android:visibility="gone"
             android:weightSum="1">
 
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
-                app:srcCompat="@drawable/icon_location_address" />
+                app:srcCompat="@drawable/icon_location_address"
+                tools:ignore="VectorDrawableCompat"
+                android:contentDescription="@string/todo"/>
 
             <TextView
                 android:id="@+id/text_user_address"
@@ -109,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.8"
-                android:text="1/568/B-57, Por Mohollo, Opp. State Bank of India, Athughar Timliyawad, Nanpura, Surat, Gujrat, 395001" />
+                android:text="@string/_1_568_b_57_por_mohollo_opp_state_bank_of_india_athughar_timliyawad_nanpura_surat_gujrat_395001" />
         </LinearLayout>
 
 
@@ -131,7 +141,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Change Password" />
+            android:text="@string/change_password" />
 
     </LinearLayout>
 

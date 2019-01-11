@@ -11,7 +11,8 @@
         android:weightSum="3"
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:padding="@dimen/layout_margin_top"
@@ -19,13 +20,14 @@
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_weight="1.4"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/layout_margin_top">
 
             <TextView
                 android:id="@+id/text_user_name"
                 android:padding="@dimen/fab_margin"
                 android:layout_width="match_parent"
-                android:text="Jhon Deo"
+                android:text="@string/john_deo"
                 style="@style/LargeTextBold"
                 android:textColor="@color/colorGray"
                 android:layout_height="wrap_content" />
@@ -36,12 +38,12 @@
                 android:textColor="@color/colorGray"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="john.deo123@gmail.com"/>
+                android:text="@string/john_deo123_gmail_com"/>
             <TextView
 
                 android:id="@+id/text_qualification"
                 style="@style/NormalText"
-                android:text="comment"
+                android:text="@string/comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -56,27 +58,27 @@
                 <TextView
                     android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:text="Gift"
+                    android:text="@string/gift"
                     android:layout_height="wrap_content" />
 
                 <TextView
                     android:layout_weight="1"
                     style="@style/NormalTextBlack"
                     android:layout_width="0dp"
-                    android:text="2"
+                    android:text="@string/_2"
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
+        <View
 
             android:layout_width="0dp"
             android:layout_weight="0.8"
             android:layout_height="wrap_content">
 
-        </LinearLayout>
+        </View>
 
         <LinearLayout
             android:orientation="vertical"

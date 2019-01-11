@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    android:orientation="vertical"
+    android:id="@+id/visible_layout_products"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,5 +13,19 @@
        android:layout_height="wrap_content">
 
    </android.support.v7.widget.RecyclerView>
+    <LinearLayout
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:id="@+id/linear_no_data">
 
-</FrameLayout>
+        <TextView
+            style="@style/no_data_text_view" />
+
+        <ImageView
+            style="@style/bad_emo"/>
+
+    </LinearLayout>
+</RelativeLayout>

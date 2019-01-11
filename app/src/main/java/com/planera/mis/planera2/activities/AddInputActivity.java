@@ -126,46 +126,57 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
         else if (TextUtils.isEmpty(startTimeStr)) {
             editStartTime.requestFocus();
             editStartTime.setError(getString(R.string.invalid_input));
-        } else if (TextUtils.isEmpty(endTimeStr)) {
+        }
+        else if (TextUtils.isEmpty(endTimeStr)) {
             editEndTime.requestFocus();
             editEndTime.setError(getString(R.string.invalid_input));
-        } else if (isEarlier) {
-            if (TextUtils.isEmpty(earlierFeedbackStr)) {
-                editEarlierFeedback.requestFocus();
-                editEarlierFeedback.setError(getString(R.string.invalid_input));
-            } else {
-                if (InternetConnection.isNetworkAvailable(AddInputActivity.this)) {
-                    input.setStartDate(timeWithDate);
-                    input.setEndDate(timeWithDate);
-
-                    input.setComment(feedbackStr);
-                    String visitD = textVisitDate.getText().toString();
-                    input.setVisitDate(formatDate(visitD));
-                    input.setEarlierEntryFeedback(earlierFeedbackStr);
-                    Gson gson = new Gson();
-                    String passInput = gson.toJson(input);
-                    Log.e("Input Params", passInput);
-                    Intent intent = new Intent(AddInputActivity.this, ProductCategoryActivity.class);
-
-                    intent.putExtra(AppConstants.PASS_INPUT, passInput);
-                    if (isUpdateInput) {
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        intent.putExtra(AppConstants.PASS_UPDATE_INPUT, previousInputStr);
-                        intent.putExtra(AppConstants.IS_INPUT_UPDATE, true);
-                    } else {
-                        intent.putExtra(AppConstants.IS_INPUT_UPDATE, false);
-                    }
-
-                    startActivity(intent);
-
-//                addInputApi(token, input);
-                } else {
-                    Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
-                }
+        }
+        else if (editEarlierFeedback.getVisibility() != View.VISIBLE) {
+            earlierFeedbackStr = null;
+            proceedInput();
+        }
+        else {
+               if (TextUtils.isEmpty(earlierFeedbackStr)){
+                   editEarlierFeedback.requestFocus();
+                   editEarlierFeedback.setError("Please enter a reason.");
+               }
+               else{
+                   proceedInput();
+               }
             }
         }
 
-    }
+
+        public void proceedInput(){
+            if (InternetConnection.isNetworkAvailable(AddInputActivity.this)) {
+                input.setStartDate(timeWithDate);
+                input.setEndDate(timeWithDate);
+
+                input.setComment(feedbackStr);
+                String visitD = textVisitDate.getText().toString();
+                input.setVisitDate(formatDate(visitD));
+                input.setEarlierEntryFeedback(earlierFeedbackStr);
+                Gson gson = new Gson();
+                String passInput = gson.toJson(input);
+                Log.e("Input Params", passInput);
+                Intent intent = new Intent(AddInputActivity.this, ProductCategoryActivity.class);
+
+                intent.putExtra(AppConstants.PASS_INPUT, passInput);
+                if (isUpdateInput) {
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra(AppConstants.PASS_UPDATE_INPUT, previousInputStr);
+                    intent.putExtra(AppConstants.IS_INPUT_UPDATE, true);
+                } else {
+                    intent.putExtra(AppConstants.IS_INPUT_UPDATE, false);
+                }
+
+                startActivity(intent);
+
+//                addInputApi(token, input);
+            } else {
+                Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+            }
+        }
 
 
     public void loadFormIntent(Intent intent) {
@@ -269,10 +280,8 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
                 if (date1.compareTo(date2) != 0) {
                     layoutEarlierEntryFeedBack.setVisibility(View.VISIBLE);
                     editEarlierFeedback.setVisibility(View.VISIBLE);
-                    isEarlier = true;
 
                 } else {
-                    isEarlier = false;
                     layoutEarlierEntryFeedBack.setVisibility(View.GONE);
                     editEarlierFeedback.setVisibility(View.GONE);
                 }

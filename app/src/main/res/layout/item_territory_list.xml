@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_marginTop="3dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -19,7 +20,8 @@
             android:id="@+id/text_state"
             android:text="@string/gujrat"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:paddingStart="15dp" />
 
         <TextView
             android:paddingLeft="15dp"
@@ -29,7 +31,8 @@
             android:id="@+id/text_territory"
             android:text="@string/gujrat"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:paddingStart="15dp" />
 
         <ImageView
             android:id="@+id/img_delete"
@@ -38,7 +41,8 @@
             app:srcCompat="@drawable/icon_delete"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            />
+            tools:ignore="VectorDrawableCompat"
+            android:contentDescription="@string/todo"/>
 
         <ImageView
             android:id="@+id/img_edit"
@@ -47,7 +51,8 @@
             app:srcCompat="@drawable/icon_edit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            />
+            tools:ignore="VectorDrawableCompat"
+            android:contentDescription="@string/todo" />
 
     </LinearLayout>
 

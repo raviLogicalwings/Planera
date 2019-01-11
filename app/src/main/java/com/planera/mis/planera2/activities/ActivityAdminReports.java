@@ -2,10 +2,11 @@ package com.planera.mis.planera2.activities;
 
 import android.app.DatePickerDialog;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -21,7 +22,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -52,6 +52,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,19 +62,14 @@ import static android.content.ContentValues.TAG;
 
 
 public class ActivityAdminReports extends BaseActivity implements View.OnClickListener {
-    private RelativeLayout parentPanel;
-    private AppBarLayout appBar;
-    private Toolbar toolbarReport;
     private Spinner spinnerRoleType;
     private EditText editStartTime;
     private EditText editEndTime;
-    private Button buttonSubmitReport;
     private Spinner spinnerTerritoryReport;
     private Spinner spinnerPatchReport;
     private Spinner spinnerChemistReport;
     private Spinner spinnerDoctorReport;
     private Spinner spinnerUserReport;
-    private TextInputLayout inputLayoutRoleType;
     private TextInputLayout inputLayoutTerritoryReport;
     private TextInputLayout inputLayoutPatchReport;
     private TextInputLayout inputLayoutChemistReport;
@@ -87,26 +83,20 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     private List<Doctors> doctorsList;
     private List<UserData> usersList;
     private List<DataItem> dataItemsList;
-    private FloatingActionButton buttonExport;
     public static final int DEFAULT_SELECT_VALUE = 1;
     public ObtainReport obtainReport;
     public int COLUMN_ID = 0;
 
 
     private String strPickedDate;
-    private List<String> listOfRoles;
     private int territoryId;
     private int patchId;
     private String selectedRole;
-    private String userId;
-    private ReportListAdapter.OnItemDeleteListener listener;
     private List<String> stringDoctorsList;
     private List<String> stringChemistList;
     private List<String> stringUserList;
     private List<String> stringPatchesList;
     private List<String> stringTerritoryList;
-    private String doctorId;
-    private String chemistId;
     private TableLayout mainTableLayout;
     private TableRow tr_head;
 
@@ -127,19 +117,16 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     @Override
     public void initUi() {
         super.initUi();
-        parentPanel = findViewById(R.id.parentPanel);
-        appBar = findViewById(R.id.appBar);
-        toolbarReport = findViewById(R.id.toolbarReports);
+        Toolbar toolbarReport = findViewById(R.id.toolbarReports);
         spinnerRoleType = findViewById(R.id.spinner_role_type);
         editStartTime = findViewById(R.id.edit_start_time);
         editEndTime = findViewById(R.id.edit_end_time);
-        buttonSubmitReport = findViewById(R.id.button_submit_report);
+        Button buttonSubmitReport = findViewById(R.id.button_submit_report);
         spinnerTerritoryReport = findViewById(R.id.spinner_territory_report);
         spinnerPatchReport = findViewById(R.id.spinner_patch_report);
         spinnerChemistReport = findViewById(R.id.spinner_chemist_report);
         spinnerDoctorReport = findViewById(R.id.spinner_doctor_report);
         spinnerUserReport = findViewById(R.id.spinner_user_report);
-        inputLayoutRoleType = findViewById(R.id.input_layout_role_type);
         inputLayoutTerritoryReport = findViewById(R.id.input_layout_territory_report);
         inputLayoutPatchReport = findViewById(R.id.input_layout_patch_report);
         inputLayoutDoctorReport = findViewById(R.id.input_layout_doctor_report);
@@ -149,7 +136,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         layoutChemistReport = findViewById(R.id.layout_chemist_report);
         layoutDoctorReport = findViewById(R.id.layout_doctor_report);
         layoutUserReport = findViewById(R.id.layout_user_report);
-        buttonExport = findViewById(R.id.button_export);
+        FloatingActionButton buttonExport = findViewById(R.id.button_export);
         mainTableLayout = findViewById(R.id.main_table);
 
         tr_head = new TableRow(this);
@@ -164,7 +151,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
 
         buttonExport.setOnClickListener(this);
         setSupportActionBar(toolbarReport);
-        getSupportActionBar().setTitle("Reports");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Reports");
         toolbarReport.setNavigationOnClickListener(view -> onBackPressed());
     }
 
@@ -300,7 +287,6 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     public void uiValidation() {
         String strStartDate = editStartTime.getText().toString().trim();
         String strEndDate = editEndTime.getText().toString().trim();
-        int pos = spinnerRoleType.getSelectedItemPosition();
 
         if (spinnerTerritoryReport.getSelectedItemPosition() == 0) {
             inputLayoutTerritoryReport.setError("Please select territory.");
@@ -328,36 +314,25 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                 obtainReport.setEndDate(strEndDate);
                 if (selectedRole.equals("1")) {
                     if (doctorsList != null) {
-                        doctorId = doctorsList.get(spinnerDoctorReport.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getDoctorId() + "";
+                        String doctorId = doctorsList.get(spinnerDoctorReport.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getDoctorId() + "";
                         obtainReport.setDoctorId(doctorId);
                         getDoctorsReport(token, obtainReport);
                     }
                 }
 
                 if (selectedRole.equals("2")) {
-                    chemistId = chemistsList.get(spinnerChemistReport.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getChemistId() + "";
+                    String chemistId = chemistsList.get(spinnerChemistReport.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getChemistId() + "";
                     obtainReport.setChemistId(chemistId);
                     getChemistReportList(token, obtainReport);
                 }
 
                 if (selectedRole.equals("3")) {
-                    userId = usersList.get(spinnerUserReport.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getUserId();
+                    String userId = usersList.get(spinnerUserReport.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getUserId();
                     obtainReport.setUserId(userId);
                     getUserReport(token, obtainReport);
                 }
 
 
-                if (userId != null) {
-
-
-                }
-                if (doctorId != null) {
-
-
-                }
-                if (chemistId != null) {
-
-                }
             }
         }
     }
@@ -387,7 +362,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     }
 
     public void initRoles() {
-        listOfRoles = new ArrayList<>();
+        List<String> listOfRoles = new ArrayList<>();
         listOfRoles.add("Doctor");
         listOfRoles.add("Chemist");
         listOfRoles.add("User/MR");
@@ -483,26 +458,24 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
             @Override
             public void onResponse(Call<TerritoryListResponse> call, Response<TerritoryListResponse> response) {
                 processDialog.dismissDialog();
-                if (response != null) {
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
-                        territoriesList = response.body().getTerritorysList();
-                        stringTerritoryList = new ArrayList<>();
-                        stringTerritoryList.add(getString(R.string.select));
-                        for (int i = 0; i < territoriesList.size(); i++) {
-                            stringTerritoryList.add(territoriesList.get(i).getTerritoryName());
-                        }
-                        loadSpinner(spinnerTerritoryReport, stringTerritoryList);
-
-
-                    } else {
-                        Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
+                    territoriesList = response.body().getTerritorysList();
+                    stringTerritoryList = new ArrayList<>();
+                    stringTerritoryList.add(getString(R.string.select));
+                    for (int i = 0; i < territoriesList.size(); i++) {
+                        stringTerritoryList.add(territoriesList.get(i).getTerritoryName());
                     }
+                    loadSpinner(spinnerTerritoryReport, stringTerritoryList);
 
+
+                } else {
+                    Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                 }
+
             }
 
             @Override
-            public void onFailure(Call<TerritoryListResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<TerritoryListResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 Toast.makeText(ActivityAdminReports.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -515,29 +488,27 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         Call<PatchListResponse> call = apiInterface.patchListByTerritory(token, territoryId);
         call.enqueue(new Callback<PatchListResponse>() {
             @Override
-            public void onResponse(Call<PatchListResponse> call, Response<PatchListResponse> response) {
+            public void onResponse(@NonNull Call<PatchListResponse> call, @NonNull Response<PatchListResponse> response) {
                 processDialog.dismissDialog();
-                if (response != null) {
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
-                        patchesList = response.body().getPatchesList();
-                        if (!patchesList.isEmpty()) {
-                            stringPatchesList = new ArrayList<>();
-                            stringPatchesList.add(getString(R.string.select));
-                            for (int i = 0; i < patchesList.size(); i++) {
-                                stringPatchesList.add(patchesList.get(i).getPatchName());
-                            }
-                            loadSpinner(spinnerPatchReport, stringPatchesList);
-
-
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
+                    patchesList = response.body().getPatchesList();
+                    if (!patchesList.isEmpty()) {
+                        stringPatchesList = new ArrayList<>();
+                        stringPatchesList.add(getString(R.string.select));
+                        for (int i = 0; i < patchesList.size(); i++) {
+                            stringPatchesList.add(patchesList.get(i).getPatchName());
                         }
-                    } else {
-                        Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
+                        loadSpinner(spinnerPatchReport, stringPatchesList);
+
+
                     }
+                } else {
+                    Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<PatchListResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<PatchListResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 Toast.makeText(ActivityAdminReports.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -550,9 +521,10 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         Call<DoctorsListResponce> call = apiInterface.patchesWiseDoctorList(token, patchId);
         call.enqueue(new Callback<DoctorsListResponce>() {
             @Override
-            public void onResponse(Call<DoctorsListResponce> call, Response<DoctorsListResponce> response) {
+            public void onResponse(@NonNull Call<DoctorsListResponce> call, @NonNull Response<DoctorsListResponce> response) {
                 processDialog.dismissDialog();
                 Log.e(TAG, "onResponse: DoctorsList" + new Gson().toJson(response.body()));
+                assert response.body() != null;
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     doctorsList = response.body().getData();
                     if (!doctorsList.isEmpty()) {
@@ -581,7 +553,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
             }
 
             @Override
-            public void onFailure(Call<DoctorsListResponce> call, Throwable t) {
+            public void onFailure(@NonNull Call<DoctorsListResponce> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 Toast.makeText(ActivityAdminReports.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -594,8 +566,9 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         Call<ChemistListResponse> call = apiInterface.patchesWiseChemistList(token, patchId);
         call.enqueue(new Callback<ChemistListResponse>() {
             @Override
-            public void onResponse(@NonNull Call<ChemistListResponse> call, Response<ChemistListResponse> response) {
+            public void onResponse(@NonNull Call<ChemistListResponse> call, @NonNull Response<ChemistListResponse> response) {
                 processDialog.dismissDialog();
+                assert response.body() != null;
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     chemistsList = response.body().getData();
                     stringChemistList = new ArrayList<>();
@@ -628,14 +601,16 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         Call<ReportListResponce> call = apiInterface.reportListChemist(token, report);
         if (call != null) {
             call.enqueue(new Callback<ReportListResponce>() {
+                @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
                 @Override
-                public void onResponse(Call<ReportListResponce> call, Response<ReportListResponce> response) {
+                public void onResponse(@NonNull Call<ReportListResponce> call, @NonNull Response<ReportListResponce> response) {
                     processDialog.dismissDialog();
 
                     if (response.code() == 400) {
                         processDialog.dismissDialog();
                         Toast.makeText(ActivityAdminReports.this, "Error Code", Toast.LENGTH_LONG).show();
                     }
+                    assert response.body() != null;
                     if (response.body().getStatuscode() == AppConstants.RESULT_OK) {
                         Log.e("Data of Items", new Gson().toJson(response.body()));
                         dataItemsList = response.body().getData();
@@ -651,7 +626,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                 }
 
                 @Override
-                public void onFailure(Call<ReportListResponce> call, Throwable t) {
+                public void onFailure(@NonNull Call<ReportListResponce> call, @NonNull Throwable t) {
                     processDialog.dismissDialog();
                     Toast.makeText(ActivityAdminReports.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -669,12 +644,13 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         if (call != null) {
             call.enqueue(new Callback<ReportListResponce>() {
                 @Override
-                public void onResponse(Call<ReportListResponce> call, Response<ReportListResponce> response) {
+                public void onResponse(@NonNull Call<ReportListResponce> call, @NonNull Response<ReportListResponce> response) {
                     processDialog.dismissDialog();
 
                     if (response.code() == 400) {
                         Toast.makeText(ActivityAdminReports.this, "Error Code", Toast.LENGTH_LONG).show();
                     }
+                    assert response.body() != null;
                     if (response.body().getStatuscode() == AppConstants.RESULT_OK) {
                         Log.e("Data of Doctor Report", new Gson().toJson(response.body()));
                         dataItemsList = response.body().getData();
@@ -740,6 +716,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void chemistDataTable(List<DataItem> dataItemsList) {
         TextView label_number = new TextView(this);
         label_number.setText("S. No.");
@@ -756,7 +733,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         tr_head.addView(label_user);
 
         TextView lable_start_date = new TextView(this);
-        lable_start_date.setText("Start Date");
+        lable_start_date.setText(R.string.start_date);
         lable_start_date.setId(COLUMN_ID + 2);
         lable_start_date.setGravity(View.TEXT_ALIGNMENT_CENTER);
         lable_start_date.setTextColor(Color.BLACK);
@@ -764,14 +741,14 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         tr_head.addView(lable_start_date);
 
         TextView lable_end_date = new TextView(this);
-        lable_end_date.setText("End Date");
+        lable_end_date.setText(R.string.end_date);
         lable_end_date.setId(COLUMN_ID + 3);
         lable_end_date.setTextColor(Color.BLACK);
         lable_end_date.setPadding(8, 8, 8, 8);
         tr_head.addView(lable_end_date);
 
         TextView lable_pob = new TextView(this);
-        lable_pob.setText("POB");
+        lable_pob.setText(R.string.pob);
         lable_pob.setId(COLUMN_ID + 4);
         lable_pob.setTextColor(Color.BLACK);
         lable_pob.setPadding(8, 8, 8, 8);
@@ -832,11 +809,11 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                 if (dataItemsList.get(i).getProductDetails() != null) {
                     textArray[4] = new TextView(this);
                     textArray[4].setId(i + 111);
-                    String productDetail = "";
+                    StringBuilder productDetail = new StringBuilder();
                     for (int productIterettor = 0; productIterettor < dataItemsList.get(i).getProductDetails().size(); productIterettor++) {
-                        productDetail += dataItemsList.get(i).getProductDetails().get(productIterettor).getProductName() + "(" + dataItemsList.get(i).getProductDetails().get(productIterettor).getQuantity() + ")";
+                        productDetail.append(dataItemsList.get(i).getProductDetails().get(productIterettor).getProductName()).append("(").append(dataItemsList.get(i).getProductDetails().get(productIterettor).getQuantity()).append(")");
                     }
-                    textArray[4].setText(productDetail);
+                    textArray[4].setText(productDetail.toString());
                     textArray[4].setTextColor(Color.WHITE);
                     textArray[4].setPadding(8, 8, 8, 8);
                     tr_headObj[i].addView(textArray[4]);

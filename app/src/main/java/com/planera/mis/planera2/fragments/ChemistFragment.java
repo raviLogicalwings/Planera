@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +30,7 @@ import com.planera.mis.planera2.utils.AppConstants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,6 +45,7 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
     private ApiInterface apiInterface;
     private List<Chemists> chemistsList;
     private RecyclerView listViewChemist;
+    private LinearLayout visibleLayout;
     private SearchView searchViewChemist;
     private ChemistListAdapter adapter;
     private int selectedChemist;
@@ -56,9 +59,7 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
         if(instance == null){
             instance = new ChemistFragment();
         }
-
         return instance;
-
     }
 
     @Override
@@ -67,7 +68,7 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view =  inflater.inflate(R.layout.fragment_chemist, container, false);
         initUi();
@@ -91,6 +92,7 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
         linearNoData = view.findViewById(R.id.linear_no_data);
         linearNoInternet = view.findViewById(R.id.linear_no_internet);
         buttonRetry = view.findViewById(R.id.button_retry);
+        visibleLayout = view.findViewById(R.id.visible_layout_chemist);
         searchViewChemist = view.findViewById(R.id.search_view_chemist);
         searchViewChemist.setActivated(true);
         searchViewChemist.onActionViewExpanded();
@@ -98,12 +100,9 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
         searchViewChemist.clearFocus();
         searchViewChemist.setOnQueryTextListener(this);
 
-        buttonRetry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getFragmentManager() != null) {
-                    getFragmentManager().beginTransaction().detach(ChemistFragment.this).attach(ChemistFragment.this).commit();
-                }
+        buttonRetry.setOnClickListener(v -> {
+            if (getFragmentManager() != null) {
+                getFragmentManager().beginTransaction().detach(ChemistFragment.this).attach(ChemistFragment.this).commit();
             }
         });
     }
@@ -113,26 +112,27 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
         Call<ChemistListResponse> call = apiInterface.chemistList(token);
         call.enqueue(new Callback<ChemistListResponse>() {
             @Override
-            public void onResponse(Call<ChemistListResponse> call, Response<ChemistListResponse> response) {
+            public void onResponse(@NonNull Call<ChemistListResponse> call, @NonNull Response<ChemistListResponse> response) {
                 processDialog.dismissDialog();
                 Log.e(TAG, "onResponse: "+new Gson().toJson(response.body()));
+                assert response.body() != null;
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                     chemistsList = response.body().getData();
                     if (chemistsList!=null) {
-                        listViewChemist.setVisibility(View.VISIBLE);
+                        visibleLayout.setVisibility(View.VISIBLE);
                         System.out.println(chemistsList.size());
                         initAdapter(chemistsList, listViewChemist);
                     }
                 }
                 else{
                     linearNoData.setVisibility(View.VISIBLE);
-                    listViewChemist.setVisibility(View.GONE);
+                    visibleLayout.setVisibility(View.GONE);
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<ChemistListResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<ChemistListResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 linearNoInternet.setVisibility(View.VISIBLE);
                 buttonRetry.setVisibility(View.VISIBLE);
@@ -151,7 +151,7 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
 
                 case R.id.img_chemist_edit:
                     chemistDetailsForUpdate(chemists);
-                    ChemistFragment.this.getActivity().finish();
+                    Objects.requireNonNull(ChemistFragment.this.getActivity()).finish();
 
                     break;
 
@@ -236,9 +236,7 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
         });
 
 
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", (dialog, which) -> {
-            dialog.cancel();
-        });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", (dialog, which) -> dialog.cancel());
 
         alertDialog.show();
 
@@ -251,8 +249,9 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
         Call<MainResponse> call = apiInterface.deleteChemist(token, chemistId);
         call.enqueue(new Callback<MainResponse>() {
             @Override
-            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+            public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
                 processDialog.dismissDialog();
+                assert response.body() != null;
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK){
 //                    getFragmentManager().beginTransaction().detach(ChemistFragment.this).attach(ChemistFragment.this).commit();
                     getChemistsList(token);
@@ -264,7 +263,7 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
             }
 
             @Override
-            public void onFailure(Call<MainResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MainResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
 
                 Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_LONG).show();

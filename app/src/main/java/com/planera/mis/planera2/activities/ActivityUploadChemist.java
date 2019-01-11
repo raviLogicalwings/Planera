@@ -1,11 +1,14 @@
 package com.planera.mis.planera2.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -55,18 +58,17 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
     private RuntimePermissionCheck permissionCheck;
     private String displayName;
     private Toolbar toolbarUploadChemist;
+    private ReadFileAsyncTask readFileAsyncTask;
     private TextView textFileName;
     private ImageView imageClose;
     private CheckBox isOverrideCheck;
     private ChemistImport chemistImport;
     private List<ChemistImportItems> chemistImportItemsList;
-    private ChemistImportItems chemists;
     private Uri uri = null;
     public static  int OVERRIDE = 1;
     public static  int DONT_OVERRIDE = 2;
     int isOverride;
     public static final String TAG = ActivityUploadDoctor.class.getSimpleName();
-    private File myFile;
     private boolean isCellNull = false;
     public static final int CHEMIST_SHEET = 1;
 
@@ -101,10 +103,8 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
 
     public void checkRequiredPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            // Do the file write
             pickFile();
         } else {
-            // Request permission from the user
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }
@@ -119,7 +119,6 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
     public void pickFile() {
         Intent intent = new Intent();
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        // Set your required file type
         intent.setType("*/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
 
@@ -127,13 +126,20 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
             startActivityForResult(
                     Intent.createChooser(intent, "Select a File to Upload"), 100);
         } catch (android.content.ActivityNotFoundException ex) {
-            // Potentially direct the user to the Market with a Dialog
-            Toast.makeText(this, "Please install a File Manager.",
+                       Toast.makeText(this, "Please install a File Manager.",
                     Toast.LENGTH_SHORT).show();
         }
 //        startActivityForResult(Intent.createChooser(intent, "Choose CSV"), 100);
     }
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (readFileAsyncTask != null){
+            readFileAsyncTask.cancel(true);
+        }
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -152,8 +158,9 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
                     if (data != null) {
                         uri = data.getData();
                     }
+                    assert uri != null;
                     String uriString = uri.toString();
-                    myFile = new File(uriString);
+                    File myFile = new File(uriString);
 
 //                    readExcelData(uri);
                     String path = myFile.getAbsolutePath();
@@ -173,6 +180,7 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
                                 toggleView(displayName);
                             }
                         } finally {
+                            assert cursor != null;
                             cursor.close();
                         }
                     } else if (uriString.startsWith("file://")) {
@@ -209,7 +217,7 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
 
 
     public void checkValidation(){
-        buttonUploadChemistSheet.setEnabled(false);
+//        buttonUploadChemistSheet.setEnabled(false);
         String text = textFileName.getText().toString();
         if (text.equals(getString(R.string.select_file))){
             buttonUploadChemistSheet.setEnabled(true);
@@ -221,31 +229,21 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
         }
     }
     private void readExcelData(Uri uri) {
-        processDialog.showDialog(ActivityUploadChemist.this, false);
+//        processDialog.showDialog(ActivityUploadChemist.this, false);
         try {
 //            File fileB = new File(filePath);
             InputStream inputStream = getContentResolver().openInputStream(uri);
-//                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-//                StringBuilder stringBuilder = new StringBuilder();
-//                String line;
-//                while ((line = reader.readLine()) != null){
-//                    stringBuilder.append(line);
-//                }
-//
-//                inputStream.close();
-//              Log.e("String Result", stringBuilder.toString());
-//
+            assert inputStream != null;
             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
             XSSFSheet sheet = workbook.getSheetAt(CHEMIST_SHEET);
             int rowsCount = sheet.getPhysicalNumberOfRows();
-//            Toast.makeText(this, "rowCount"+rowsCount, Toast.LENGTH_LONG).show();
             FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
             StringBuilder sb = new StringBuilder();
             //loop, loops through rows
             for (int r = 1; r < rowsCount; r++) {
                 Row row = sheet.getRow(r);
                 int cellsCount = row.getPhysicalNumberOfCells();
-                chemists = new ChemistImportItems();
+                ChemistImportItems chemists = new ChemistImportItems();
                 //inner loop, loops through columns
                 if (isCellNull){
                     break;
@@ -386,19 +384,7 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
             }
             sb.append(":");
 
-            if (chemistImportItemsList != null){
 
-                if (isOverrideCheck.isChecked()){
-                    isOverride = OVERRIDE;
-
-                }
-                else{
-                    isOverride = DONT_OVERRIDE;
-                }
-                chemistImport.setChemistImportList(chemistImportItemsList);
-                chemistImport.setIsOverride(isOverride);
-                callChemistImportApi(token, chemistImport);
-            }
 
         }catch (Exception e) {
 
@@ -439,7 +425,7 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
 
         if (chemistImports != null){
             apiImportChemistFromExcel(token,   chemistImports);
-        }
+    }
     }
 
 
@@ -451,6 +437,7 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
             public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
                 processDialog.dismissDialog();
                 if (response.isSuccessful()){
+                    assert response.body() != null;
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                         buttonUploadChemistSheet.setEnabled(true);
                         Log.e("Import api response", new Gson().toJson(response.body()));
@@ -479,13 +466,61 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
                 checkRequiredPermission();
                 break;
             case R.id.button_upload_chemist_sheet:
-               checkValidation();
+                readFileAsyncTask = new ReadFileAsyncTask();
+                readFileAsyncTask.execute();
                 break;
             case R.id.image_sheet_view:
                 checkRequiredPermission();
                 break;
             case R.id.text_file_name:
                 break;
+        }
+    }
+
+
+    @SuppressLint("StaticFieldLeak")
+    class ReadFileAsyncTask extends AsyncTask<Void, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+//            processDialog.showDialog(ActivityUploadChemist.this, false);
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+
+            checkValidation();
+
+            return "Success";
+        }
+
+        @Override
+        protected void onPostExecute(String onlineVersion) {
+            super.onPostExecute(onlineVersion);
+
+            if (onlineVersion.equals("Success") && chemistImportItemsList != null) {
+                new Handler().postDelayed(() -> {
+                    if (chemistImportItemsList != null){
+
+                        if (isOverrideCheck.isChecked()){
+                            isOverride = OVERRIDE;
+
+                        }
+                        else{
+                            isOverride = DONT_OVERRIDE;
+                        }
+                        chemistImport.setChemistImportList(chemistImportItemsList);
+                        chemistImport.setIsOverride(isOverride);
+                        callChemistImportApi(token, chemistImport);
+                    }
+                }, 3000);
+
+            }
+            else{
+                processDialog.dismissDialog();
+            }
         }
     }
 }

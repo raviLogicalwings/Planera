@@ -12,7 +12,6 @@ import com.planera.mis.planera2.controller.DataController;
 import com.planera.mis.planera2.utils.AppConstants;
 import com.planera.mis.planera2.utils.PreferenceConnector;
 import com.planera.mis.planera2.utils.ProcessDialog;
-import com.planera.mis.planera2.utils.RuntimePermissionCheck;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -30,6 +29,7 @@ public class BaseActivity extends AppCompatActivity {
 
 
     public void initData() {
+
         Fabric.with(this, new Crashlytics());
         rootView = getWindow().getDecorView().getRootView();
         connector = PreferenceConnector.getInstance(this);

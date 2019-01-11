@@ -24,11 +24,13 @@ import com.planera.mis.planera2.utils.AppConstants;
 import com.planera.mis.planera2.utils.InternetConnection;
 
 
+import java.util.Objects;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddProductDialog extends BaseDialogFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
+public class AddProductDialog extends BaseDialogFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     public OnAddProductDialogDismissListener onAddProductDialogDismissListener;
     private View view;
     private Switch switchIsBrand;
@@ -37,17 +39,17 @@ public class AddProductDialog extends BaseDialogFragment implements View.OnClick
     private Button buttonAddProduct;
     int isBrand;
 
-    public AddProductDialog(){
+    public AddProductDialog() {
     }
 
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       view = inflater.inflate(R.layout.dialog_add_product, container, false);
-       initUi();
-       initData();
-       return view;
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.dialog_add_product, container, false);
+        initUi();
+        initData();
+        return view;
     }
 
     @Override
@@ -55,8 +57,7 @@ public class AddProductDialog extends BaseDialogFragment implements View.OnClick
         super.onCreate(savedInstanceState);
         try {
             onAddProductDialogDismissListener = (OnAddProductDialogDismissListener) getActivity();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new ClassCastException("Calling Fragment must implement OnAddFriendListener");
         }
     }
@@ -79,26 +80,26 @@ public class AddProductDialog extends BaseDialogFragment implements View.OnClick
     }
 
 
-    public void addProductApi(String token , String name , int isBrand){
+    public void addProductApi(String token, String name, int isBrand) {
         processDialog.showDialog(mContext, false);
         Call<MainResponse> call = apiInterface.addProduct(token, name, isBrand);
         call.enqueue(new Callback<MainResponse>() {
             @Override
-            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+            public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
                 processDialog.dismissDialog();
-                if(response.body().getStatusCode()  == AppConstants.RESULT_OK){
+                assert response.body() != null;
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     onAddProductDialogDismissListener.onAddProductDialogDismiss();
                     dismiss();
 
-                }
-                else{
+                } else {
                     Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<MainResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MainResponse> call, @NonNull Throwable t) {
                 Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
@@ -119,18 +120,17 @@ public class AddProductDialog extends BaseDialogFragment implements View.OnClick
     }
 
 
-
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
-        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        Objects.requireNonNull(dialog.getWindow()).requestFeature(Window.FEATURE_NO_TITLE);
         return dialog;
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.button_add_product:
                 uiValidation();
                 break;
@@ -141,34 +141,29 @@ public class AddProductDialog extends BaseDialogFragment implements View.OnClick
 
     private void uiValidation() {
         inputLayoutUserName.setError(null);
-        String productStr= editTextName.getText().toString().trim();
+        String productStr = editTextName.getText().toString().trim();
 
 
-        if (!TextUtils.isEmpty(productStr)){
-            if (InternetConnection.isNetworkAvailable(mContext)){
+        if (!TextUtils.isEmpty(productStr)) {
+            if (InternetConnection.isNetworkAvailable(mContext)) {
                 addProductApi(token, productStr, isBrand);
-            }
-            else{
+            } else {
                 Snackbar.make(buttonAddProduct, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
             }
 
-        }
-        else {
+        } else {
             inputLayoutUserName.setError("Product name is required.");
         }
     }
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        switch (compoundButton.getId()){
+        switch (compoundButton.getId()) {
             case R.id.switch_is_brand:
-                if (b){
+                if (b) {
                     isBrand = 1;
-                    Toast.makeText(mContext, "True", Toast.LENGTH_SHORT).show();
-                }
-                else{
+                } else {
                     isBrand = 0;
-                    Toast.makeText(mContext, "False", Toast.LENGTH_SHORT).show();
                 }
         }
 

@@ -14,10 +14,11 @@
             android:id="@+id/text_brand_sampel_name"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:text="Abbott"
+            android:text="@string/abbott"
             android:layout_height="wrap_content" />
 
         <EditText
+            android:hint="@string/quantity"
             android:maxLength="3"
             android:inputType="number"
             android:id="@+id/edit_brand_sample_value"

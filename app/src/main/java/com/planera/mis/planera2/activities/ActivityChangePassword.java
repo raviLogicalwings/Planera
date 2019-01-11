@@ -14,9 +14,10 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.models.MainResponse;
-import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.models.ChemistResponse;
 import com.planera.mis.planera2.utils.InternetConnection;
+
+import java.util.Objects;
 
 import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
@@ -59,7 +60,11 @@ public class ActivityChangePassword extends BaseActivity implements View.OnClick
 
         buttonChangePassword.setOnClickListener(this);
         setSupportActionBar(toolbarChangePassword);
-        getSupportActionBar().setTitle("Change Password");
+        toolbarChangePassword.setNavigationIcon(R.drawable.back_arrow_whit);
+        toolbarChangePassword.setNavigationOnClickListener(view ->
+                onBackPressed()
+        );
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Change Password");
     }
 
     @Override
@@ -101,27 +106,27 @@ public class ActivityChangePassword extends BaseActivity implements View.OnClick
 
     public void apiChangePassword(String token, String oldPassword, String newPassword, String confPassword){
         processDialog.showDialog(this, false);
-        Call<MainResponse> call = apiInterface.changePasswordApi(token, oldPassword, newPassword, confPassword);
-        call.enqueue(new Callback<MainResponse>() {
+        Call<ChemistResponse> call = apiInterface.changePasswordApi(token, oldPassword, newPassword, confPassword);
+        call.enqueue(new Callback<ChemistResponse>() {
             @Override
-            public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
+            public void onResponse(@NonNull Call<ChemistResponse> call, @NonNull Response<ChemistResponse> response) {
                 Log.e("Response: ", new Gson().toJson(response.body()));
                 processDialog.dismissDialog();
-                if (response.code() == 400){
-                    Log.e("Error Body", new Gson().toJson(response.errorBody()));
-                }
-                if (response.isSuccessful()){
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-                      Toasty.success(ActivityChangePassword.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                    else{
-                        Toasty.error(ActivityChangePassword.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
+//                if (response.code() == 400){
+//                    Log.e("Error Body", new Gson().toJson(response.errorBody()));
+//                }
+//                if (response.isSuccessful()){
+//                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+//                      Toasty.success(ActivityChangePassword.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+//                    }
+//                    else{
+//                        Toasty.error(ActivityChangePassword.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                }
             }
 
             @Override
-            public void onFailure(@NonNull Call<MainResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ChemistResponse> call, @NonNull Throwable t) {
                 Log.e("Response: ", new Gson().toJson(t));
                 processDialog.dismissDialog();
                 Toasty.error(ActivityChangePassword.this, t.getMessage(), Toast.LENGTH_SHORT).show();

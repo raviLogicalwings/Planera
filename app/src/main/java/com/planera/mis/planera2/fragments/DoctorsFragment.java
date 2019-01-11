@@ -43,6 +43,7 @@ public class DoctorsFragment extends BaseFragment implements SearchView.OnQueryT
     private ApiInterface apiInterface;
     private List<Doctors> doctorsList;
     private RecyclerView listViewDoctors;
+    private LinearLayout visibleLayout;
     private SearchView searchViewDoctor;
     private int selectedDoctor;
     private DoctorsListAdapter adapter;
@@ -96,15 +97,13 @@ public class DoctorsFragment extends BaseFragment implements SearchView.OnQueryT
         searchViewDoctor.onActionViewExpanded();
         searchViewDoctor.setIconified(false);
         searchViewDoctor.clearFocus();
+        visibleLayout = view.findViewById(R.id.visible_layout);
 
         searchViewDoctor.setOnQueryTextListener(this);
 
-        buttonRetry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getFragmentManager() != null) {
-                    getFragmentManager().beginTransaction().detach(DoctorsFragment.this).attach(DoctorsFragment.this).commit();
-                }
+        buttonRetry.setOnClickListener(v -> {
+            if (getFragmentManager() != null) {
+                getFragmentManager().beginTransaction().detach(DoctorsFragment.this).attach(DoctorsFragment.this).commit();
             }
         });
     }
@@ -121,14 +120,13 @@ public class DoctorsFragment extends BaseFragment implements SearchView.OnQueryT
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     doctorsList = response.body().getData();
                     if (doctorsList != null) {
-                        listViewDoctors.setVisibility(View.VISIBLE);
+                        visibleLayout.setVisibility(View.VISIBLE);
                         System.out.println(doctorsList.size());
                         initAdapter(doctorsList, listViewDoctors);
                     }
                 } else {
                     linearNoData.setVisibility(View.VISIBLE);
-                    listViewDoctors.setVisibility(View.GONE);
-                    Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
+                    visibleLayout.setVisibility(View.GONE);
                 }
 
             }
@@ -217,7 +215,7 @@ public class DoctorsFragment extends BaseFragment implements SearchView.OnQueryT
         for(Doctors d: doctorsList){
             //or use .equal(text) with you want equal match
             //use .toLowerCase() for better matches
-            if(d.getFirstName().toLowerCase().contains(text.toLowerCase())){
+            if((d.getFirstName()+" "+d.getLastName()).toLowerCase().contains(text.toLowerCase())){
                 temp.add(d);
             }
         }

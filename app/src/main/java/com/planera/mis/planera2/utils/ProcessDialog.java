@@ -22,10 +22,6 @@ public class ProcessDialog {
         progress.setContentView(R.layout.loader_dialog);
         progress.setCancelable(isCancellable);
         progress.setCanceledOnTouchOutside(isCancellable);
-//        ImageView imageView = (ImageView) progress.findViewById(R.id.spinnerImageView);
-//        AnimationDrawable spinner = (AnimationDrawable) imageView
-//                .getBackground();
-//        spinner.start();
         if (!progress.isShowing())
             progress.show();
 

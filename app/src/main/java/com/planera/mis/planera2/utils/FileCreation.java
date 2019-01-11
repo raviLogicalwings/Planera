@@ -58,7 +58,7 @@ public class FileCreation {
                     if (reportList.get(i).getProductDetails() != null) {
                         String quantity = "";
                         for (int t=0 ; t<reportList.get(i).getProductDetails().size() ; t++) {
-                            if (reportList.get(i).getProductDetails().get(i).getProductName() != null || reportList.get(i).getProductDetails().get(t).getQuantity() != null) {
+                            if (reportList.get(i).getProductDetails().get(t).getProductName() != null || reportList.get(i).getProductDetails().get(t).getQuantity() != null) {
                                 if (!quantity.equals("")) {
                                     quantity = quantity + " ,"+reportList.get(i).getProductDetails().get(t).getProductName() + "(" + reportList.get(i).getProductDetails().get(t).getQuantity() + ")";
                                 }
@@ -126,7 +126,7 @@ public class FileCreation {
                             if (reportList.get(i).getProductDetails() != null) {
                             String quantity = "";
                             for (int t=0 ; t<reportList.get(i).getProductDetails().size() ; t++) {
-                                if (reportList.get(i).getProductDetails().get(i).getProductName() != null || reportList.get(i).getProductDetails().get(t).getQuantity() != null) {
+                                if (reportList.get(i).getProductDetails().get(t).getProductName() != null || reportList.get(i).getProductDetails().get(t).getQuantity() != null) {
                                     if (!quantity.equals("")) {
                                         quantity = quantity + " ,"+reportList.get(i).getProductDetails().get(t).getProductName() + "(" + reportList.get(i).getProductDetails().get(t).getQuantity() + ")";
                                     }

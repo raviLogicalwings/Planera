@@ -54,7 +54,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(AppConstants.CHANGE_PASSWORD)
-    Call<MainResponse> changePasswordApi(@Header("Authorization") String token,
+    Call<ChemistResponse> changePasswordApi(@Header("Authorization") String token,
                                          @Field("OldPassword") String oldPassword,
                                          @Field("Password") String password,
                                          @Field("ConfirmPassword") String confirmPassword);

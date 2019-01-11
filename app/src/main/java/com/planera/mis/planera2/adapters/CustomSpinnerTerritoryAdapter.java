@@ -47,11 +47,6 @@ public class CustomSpinnerTerritoryAdapter extends BaseAdapter{
 
     private class Holder{
         private TextView tvCountryName;
-        private ImageView imgDelete;
-        private ImageView imgEdit;
-
-
-
     }
 
     @Override    public View getView(int i, View convertView, ViewGroup viewGroup) {
@@ -62,20 +57,16 @@ public class CustomSpinnerTerritoryAdapter extends BaseAdapter{
 
             if (myView == null) {
                 inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                myView = inflater.inflate(R.layout.item_states_list, null);
+                myView = inflater.inflate(R.layout.item_spinner_territory_list, null);
 
                 holder = new Holder();
-                holder.tvCountryName = (TextView) myView.findViewById(R.id.text_state);
-                holder.imgDelete =  myView.findViewById(R.id.img_delete);
-                holder.imgEdit =  myView.findViewById(R.id.img_edit);
+                holder.tvCountryName = (TextView) myView.findViewById(R.id.text_spinner_patch);
                 myView.setTag(holder);
             } else {
                 holder = (Holder) myView.getTag();
             }
 
             holder.tvCountryName.setText(statesList.get(i).getName());
-            holder.imgDelete.setVisibility(View.GONE);
-            holder.imgEdit.setVisibility(View.GONE);
 
         } catch (Exception e) {
             e.printStackTrace();

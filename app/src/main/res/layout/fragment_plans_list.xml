@@ -63,22 +63,10 @@
         android:id="@+id/linear_no_data">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="No Data Available!"
-            android:padding="2dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textColor="#333" />
+            style="@style/no_data_text_view"/>
 
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_mood_bad"/>
+           style="@style/bad_emo"/>
 
     </LinearLayout>
 

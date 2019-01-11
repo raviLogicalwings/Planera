@@ -1,11 +1,15 @@
 package com.planera.mis.planera2.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -61,6 +65,7 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
     private DoctorImportItems doctors;
     private Toolbar toolbarImportDoctors;
     private Uri uri = null;
+    private ReadFileAsyncTask readFileAsyncTask;
     public static final String TAG = ActivityUploadDoctor.class.getSimpleName();
     private File myFile;
     private boolean isCellNull = false;
@@ -133,8 +138,13 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
 //        startActivityForResult(Intent.createChooser(intent, "Choose CSV"), 100);
     }
 
-
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (readFileAsyncTask != null){
+            readFileAsyncTask.cancel(true);
+        }
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -218,38 +228,21 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
 
 
     private void readExcelData(Uri uri) {
-        processDialog.showDialog(ActivityUploadDoctor.this, false);
-        Toast.makeText(this, "Working fine", Toast.LENGTH_LONG).show();
         try {
 
-//            File fileB = new File(filePath);
             InputStream inputStream = getContentResolver().openInputStream(uri);
-//                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-//                StringBuilder stringBuilder = new StringBuilder();
-//                String line;
-//                while ((line = reader.readLine()) != null){
-//                    stringBuilder.append(line);
-//                }
-//
-//                inputStream.close();
-//              Log.e("String Result", stringBuilder.toString());
-//
+            assert inputStream != null;
             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
             XSSFSheet sheet = workbook.getSheetAt(0);
             int rowsCount = sheet.getPhysicalNumberOfRows();
-//                Toast.makeText(this, "rowCount"+rowsCount, Toast.LENGTH_LONG).show();
             FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
-            StringBuilder sb = new StringBuilder();
-            //loop, loops through rows
             for (int r = 1; r < rowsCount; r++) {
                 Row row = sheet.getRow(r);
                 int cellsCount = row.getPhysicalNumberOfCells();
                 doctors = new DoctorImportItems();
                 //inner loop, loops through columns
                 if (isCellNull) {
-//                        if (listDoctorsItems != null){
-//                            apiImportDoctorsFromExcel(token, listDoctorsItems);
-//                        }
+//
                     processDialog.dismissDialog();
                     break;
                 }
@@ -258,7 +251,6 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
 
                     if (c == 0 && value.isEmpty()) {
                         isCellNull = true;
-                        processDialog.dismissDialog();
                         break;
                     }
                     if (c == AppConstants.DOCTOR_ID_DOCTOR_EXCEL) {
@@ -362,8 +354,7 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
                     } else {
 
                         String cellInfo = "r:" + r + "; c:" + c + "; v:" + value;
-//                            Log.d(TAG, "readExcelData: Data from row: " + cellInfo);
-                        sb.append(value + ", ");
+                            Log.d(TAG, "readExcelData: Data from row: " + cellInfo);
                     }
 
 
@@ -372,23 +363,10 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
                 listDoctorsItems.add(doctors);
 
             }
-            sb.append(":");
             Log.e("list doctors", new Gson().toJson(listDoctorsItems));
 
-            if (listDoctorsItems != null) {
-                if (isOverrideCheck.isChecked()) {
-                    isOverride = OVERRIDE;
-                    Toasty.info(this, "Checked", Toast.LENGTH_SHORT).show();
 
-                } else {
-                    isOverride = DONT_OVERRIDE;
-                    Toasty.info(this, "Unchecked", Toast.LENGTH_SHORT).show();
 
-                }
-                doctorImport.setOverride(isOverride);
-                doctorImport.setDoctorImportList(listDoctorsItems);
-                callAPIToImportData(token, doctorImport);
-            }
 //
 
 
@@ -397,6 +375,22 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
         }
     }
 
+
+    public void uploadDoctorsDataApi(List<DoctorImportItems> listDoctorsItems){
+            if (listDoctorsItems != null) {
+                if (isOverrideCheck.isChecked()) {
+                    isOverride = OVERRIDE;
+                } else {
+                    isOverride = DONT_OVERRIDE;
+
+                }
+                doctorImport.setOverride(isOverride);
+                doctorImport.setDoctorImportList(listDoctorsItems);
+                apiImportDoctorsFromExcel(token,  doctorImport);
+
+            }
+
+    }
 
 
         private String getCellAsString(Row row, int c, FormulaEvaluator formulaEvaluator) {
@@ -424,31 +418,25 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
         return value;
     }
 
-    public void callAPIToImportData(String token, DoctorImport doctorImport){
-        apiImportDoctorsFromExcel(token,  doctorImport);
-    }
 
     public void apiImportDoctorsFromExcel(String token,  DoctorImport doctorImport){
         Log.e("Import Doctors params", new Gson().toJson(doctorImport));
-//        processDialog.showDialog(ActivityUploadDoctor.this, false);
         Call<MainResponse> call = apiInterface.importDoctorFromExcel(token,  doctorImport);
         call.enqueue(new Callback<MainResponse>() {
             @Override
             public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
-                processDialog.dismissDialog();
                 if (response.isSuccessful()){
-                   if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-                       Toasty.info(ActivityUploadDoctor.this, new Gson().toJson(response.body()), Toast.LENGTH_LONG).show();
-                   }
-                   else{
-                       Toasty.error(ActivityUploadDoctor.this, new Gson().toJson(response.body()), Toast.LENGTH_LONG).show();
+                    assert response.body() != null;
+                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                        processDialog.dismissDialog();
+                        Toasty.success(ActivityUploadDoctor.this, new Gson().toJson(response.body()), Toast.LENGTH_LONG).show();
                    }
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<MainResponse> call, @NonNull Throwable t) {
-//                processDialog.dismissDialog();
+                processDialog.dismissDialog();
                 Toasty.error(ActivityUploadDoctor.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
@@ -461,13 +449,47 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
                 checkRequiredPermission();
                 break;
             case R.id.button_upload_doctor_sheet:
-               checkValidation();
+               readFileAsyncTask = new ReadFileAsyncTask();
+               readFileAsyncTask.execute();
                 break;
             case R.id.image_sheet_view:
                 checkRequiredPermission();
                 break;
             case R.id.text_file_name:
                 break;
+        }
+    }
+
+
+
+    @SuppressLint("StaticFieldLeak")
+    class ReadFileAsyncTask extends AsyncTask<Void, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            processDialog.showDialog(ActivityUploadDoctor.this, false);
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+
+            checkValidation();
+
+            return "Success";
+        }
+
+        @Override
+        protected void onPostExecute(String onlineVersion) {
+            super.onPostExecute(onlineVersion);
+
+            if (onlineVersion.equals("Success") && listDoctorsItems != null) {
+                new Handler().postDelayed(() -> uploadDoctorsDataApi(listDoctorsItems), 3000);
+
+            }
+            else{
+                processDialog.dismissDialog();
+            }
         }
     }
 }

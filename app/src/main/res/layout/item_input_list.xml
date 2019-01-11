@@ -38,7 +38,7 @@
                     android:id="@+id/text_name_input"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Name"
+                    android:text="@string/name"
                     android:textColor="@color/colorBlack"
                     android:textStyle="bold" />
                 <LinearLayout
@@ -55,7 +55,7 @@
                     android:layout_marginTop="5dp"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:text="Date"
+                    android:text="@string/date"
                     android:textColor="@color/colorGray" />
 
                     <TextView
@@ -66,7 +66,7 @@
                         android:layout_marginTop="5dp"
                         android:ellipsize="end"
                         android:maxLines="2"
-                        android:text="Date"
+                        android:text="@string/date"
                         android:textColor="@color/colorGray" />
                 </LinearLayout>
 
@@ -84,7 +84,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Visit 1"
+                    android:text="@string/visit_1"
                     android:padding="@dimen/fab_margin"
                     android:id="@+id/text_visit_counter"/>
                 <Button
@@ -92,7 +92,7 @@
                     android:background="@drawable/button_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Edit"
+                    android:text="@string/edit"
                     android:textColor="@color/colorPrimary"
                     android:textAllCaps="false" />
 

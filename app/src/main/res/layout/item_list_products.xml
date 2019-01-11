@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_marginTop="3dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -19,7 +20,9 @@
             android:id="@+id/text_product"
             android:text="@string/ranbaxy"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:paddingStart="15dp"
+            tools:ignore="RtlSymmetry" />
 
         <ImageView
             android:id="@+id/img_delete"
@@ -28,6 +31,8 @@
             app:srcCompat="@drawable/icon_delete"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            tools:ignore="VectorDrawableCompat"
+            android:contentDescription="@string/todo"
             />
 
         <ImageView
@@ -37,7 +42,8 @@
             app:srcCompat="@drawable/icon_edit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            />
+            tools:ignore="VectorDrawableCompat"
+            android:contentDescription="@string/todo"/>
 
     </LinearLayout>
 

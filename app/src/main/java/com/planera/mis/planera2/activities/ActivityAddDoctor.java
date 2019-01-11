@@ -3,7 +3,7 @@ package com.planera.mis.planera2.activities;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
-import com.planera.mis.planera2.adapters.BasicCustomAdapter;
 import com.planera.mis.planera2.models.DoctorResponse;
 import com.planera.mis.planera2.models.Doctors;
 import com.planera.mis.planera2.models.GooglePlacesModel.GooglePlaces;
@@ -31,6 +30,7 @@ import com.planera.mis.planera2.utils.InternetConnection;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,8 +41,6 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
     private List<String> prefferdMeetTime;
     private List<String> meetFequrency;
     private List<Patches> patches;
-    private AppBarLayout appBar;
-    private Toolbar toolbarDoctor;
     private EditText textDoctorFirstName;
     private EditText textDoctorMiddleName;
     private EditText textDoctorLastName;
@@ -62,9 +60,7 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
     private EditText textDoctorCity;
     private EditText textDoctorState;
     private EditText textDoctorPincode;
-    private Button buttonAddDoctor;
     private TextInputLayout inputLayoutFirstNameDoctor;
-    private TextInputLayout inputLayoutMiddleNameDoctor;
     private TextInputLayout inputLayoutLastNameDoctor;
     private TextInputLayout inputLayoutDobDoctor;
     private TextInputLayout inputLayoutEmailDoctor;
@@ -78,17 +74,16 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
     private TextInputLayout inputLayoutDistrictDoctor;
     private TextInputLayout inputLayoutCityDoctor;
     private TextInputLayout inputLayoutStateDoctor;
-    private TextInputLayout inputLayoutPincodeDoctor;
 
-    private BasicCustomAdapter patchBasicAdapter;
     private String dateOfBirthString;
     int meetTime;
     int meetFreq;
     int patchId;
-    int doctorId;
-    private boolean isUpdateCall;
     String firstNameStr, middleNameStr, lastNameStr, emailStr, dobStr, qualificationStr, specializationStr, phoneStr,
             address1Str, address2Str, address3Str, address4Str, districtStr, cityStr, stateStr, pincodeStr;
+
+    public ActivityAddDoctor() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,9 +96,7 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
     @Override
     public void initUi() {
         super.initUi();
-        Intent intent = getIntent();
-        appBar = findViewById(R.id.appBar);
-        toolbarDoctor = findViewById(R.id.toolbarDoctor);
+        Toolbar toolbarDoctor = findViewById(R.id.toolbarDoctor);
         textDoctorFirstName = findViewById(R.id.text_doctor_first_name);
         textDoctorMiddleName = findViewById(R.id.text_doctor_middle_name);
         textDoctorLastName = findViewById(R.id.text_doctor_last_name);
@@ -123,10 +116,9 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
         textDoctorCity = findViewById(R.id.text_doctor_city);
         textDoctorState = findViewById(R.id.text_doctor_state);
         textDoctorPincode = findViewById(R.id.text_doctor_pincode);
-        buttonAddDoctor = findViewById(R.id.button_add_doctor);
+        Button buttonAddDoctor = findViewById(R.id.button_add_doctor);
 
         inputLayoutFirstNameDoctor = findViewById(R.id.input_layout_first_name_doctor);
-        inputLayoutMiddleNameDoctor = findViewById(R.id.input_layout_middle_name_doctor);
         inputLayoutLastNameDoctor = findViewById(R.id.input_layout_last_name_doctor);
         inputLayoutDobDoctor = findViewById(R.id.input_layout_dob_doctor);
         inputLayoutEmailDoctor = findViewById(R.id.input_layout_email_doctor);
@@ -140,7 +132,7 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
         inputLayoutDistrictDoctor = findViewById(R.id.input_layout_district_doctor);
         inputLayoutCityDoctor = findViewById(R.id.input_layout_city_doctor);
         inputLayoutStateDoctor = findViewById(R.id.input_layout_state_doctor);
-        inputLayoutPincodeDoctor = findViewById(R.id.input_layout_pincode_doctor);
+        findViewById(R.id.input_layout_pincode_doctor);
 
 
         buttonAddDoctor.setOnClickListener(this);
@@ -148,7 +140,7 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
         setSupportActionBar(toolbarDoctor);
 
         toolbarDoctor.setNavigationOnClickListener(view -> onBackPressed());
-        getSupportActionBar().setTitle("Add Doctor's Detail");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Add Doctor's Detail");
         prefferdMeetTime = new ArrayList<>();
         prefferdMeetTime.add("Morning");
         prefferdMeetTime.add("Evening");
@@ -293,14 +285,6 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
             textDoctorState.requestFocus();
             inputLayoutStateDoctor.setError(getString(R.string.state));
         }
-        /*else if (TextUtils.isEmpty(qualificationStr)) {
-            textDoctorQualification.requestFocus();
-            inputLayoutQualificationDoctor.setError(getString(R.string.invalid_input));
-        }*/
-        /*else if (TextUtils.isEmpty(phoneStr)) {
-            textDoctorPincode.requestFocus();
-            inputLayoutPincodeDoctor.setError(getString(R.string.invalid_input));
-        }*/
         else {
             doctors.setMeetFrequency(meetFreq + "");
             doctors.setPreferredMeetTime(meetTime + "");
@@ -342,9 +326,10 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
         Call<DoctorResponse> call = apiInterface.addDoctor(token, doctors);
         call.enqueue(new Callback<DoctorResponse>() {
             @Override
-            public void onResponse(Call<DoctorResponse> call, Response<DoctorResponse> response) {
+            public void onResponse(@NonNull Call<DoctorResponse> call, @NonNull Response<DoctorResponse> response) {
                 processDialog.dismissDialog();
                 Log.e("Add Doctor", "onResponse: " + new Gson().toJson(response.body()));
+                assert response.body() != null;
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     Intent intent = new Intent(ActivityAddDoctor.this, SingleListActivity.class);
                     intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.DOCTOR_FRAGMENT);
@@ -356,7 +341,7 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
             }
 
             @Override
-            public void onFailure(Call<DoctorResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<DoctorResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 Toast.makeText(ActivityAddDoctor.this, t.getMessage(), Toast.LENGTH_LONG).show();
 
@@ -369,24 +354,23 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
         Call<PatchListResponse> call = apiInterface.patchList(token);
         call.enqueue(new Callback<PatchListResponse>() {
             @Override
-            public void onResponse(Call<PatchListResponse> call, Response<PatchListResponse> response) {
+            public void onResponse(@NonNull Call<PatchListResponse> call, @NonNull Response<PatchListResponse> response) {
                 processDialog.dismissDialog();
-                if (response != null) {
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
-                        List<String> tempList = new ArrayList<>();
-                        patches = response.body().getPatchesList();
-                        for (int i = 0; i < patches.size(); i++) {
-                            tempList.add(patches.get(i).getPatchName() + ", " + patches.get(i).getTerritoryName());
-                        }
-
-                        setArrayAdapter(tempList, spinnerPatchId);
-
+                assert response.body() != null;
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
+                    List<String> tempList = new ArrayList<>();
+                    patches = response.body().getPatchesList();
+                    for (int i = 0; i < patches.size(); i++) {
+                        tempList.add(patches.get(i).getPatchName() + ", " + patches.get(i).getTerritoryName());
                     }
+
+                    setArrayAdapter(tempList, spinnerPatchId);
+
                 }
             }
 
             @Override
-            public void onFailure(Call<PatchListResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<PatchListResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 Toast.makeText(ActivityAddDoctor.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -399,26 +383,31 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
         Call<GooglePlaces> call = apbInterfaceForGooglePlaces.getPlaceLatLong(input, AppConstants.INPUT_TYPE, AppConstants.FIELDS, AppConstants.KEY_GOOGLE_PLACES);
         call.enqueue(new Callback<GooglePlaces>() {
             @Override
-            public void onResponse(Call<GooglePlaces> call, Response<GooglePlaces> response) {
+            public void onResponse(@NonNull Call<GooglePlaces> call, @NonNull Response<GooglePlaces> response) {
                 processDialog.dismissDialog();
                 Log.e("AddDoctorActivity", "onResponse: " + new Gson().toJson(response.body()));
-                if (response.body().getStatus().equals(AppConstants.STATUS_OK)) {
-                    if (doctors != null) {
-                        doctors.setLatitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLat() + "");
-                        doctors.setLongitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLng() + "");
-                        Log.e("Doctors Object", "onResponse: " + new Gson().toJson(doctors));
+                assert response.body() != null;
+                switch (response.body().getStatus()) {
+                    case AppConstants.STATUS_OK:
+                        if (doctors != null) {
+                            doctors.setLatitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLat() + "");
+                            doctors.setLongitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLng() + "");
+                            Log.e("Doctors Object", "onResponse: " + new Gson().toJson(doctors));
                             addDoctorsApi(token, doctors);
-                    }
-                } else if (response.body().getStatus().equals(AppConstants.STATUS_ZERO_RESULTS)) {
-                    Snackbar.make(rootView, "Address not found, Please Try again", Snackbar.LENGTH_LONG).show();
-                } else {
-                    Snackbar.make(rootView, "Query Over Limit ! You have exceeded your daily request quota for this API. " +
-                            "If you did not set a custom daily request quota, verify your project has an active billing account: http://g.co/dev/maps-no-account", Snackbar.LENGTH_LONG).show();
+                        }
+                        break;
+                    case AppConstants.STATUS_ZERO_RESULTS:
+                        Snackbar.make(rootView, "Address not found, Please Try again", Snackbar.LENGTH_LONG).show();
+                        break;
+                    default:
+                        Snackbar.make(rootView, "Query Over Limit ! You have exceeded your daily request quota for this API. " +
+                                "If you did not set a custom daily request quota, verify your project has an active billing account: http://g.co/dev/maps-no-account", Snackbar.LENGTH_LONG).show();
+                        break;
                 }
             }
 
             @Override
-            public void onFailure(Call<GooglePlaces> call, Throwable t) {
+            public void onFailure(@NonNull Call<GooglePlaces> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 Log.e("AddDoctorActivity", "onFailure: " + t.getMessage());
                 Toast.makeText(ActivityAddDoctor.this, t.getMessage(), Toast.LENGTH_SHORT).show();

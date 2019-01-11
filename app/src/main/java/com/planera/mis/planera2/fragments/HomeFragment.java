@@ -99,12 +99,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         navigationView = Objects.requireNonNull(getActivity()).findViewById(R.id.navigation);
         navigationView.setVisibility(View.VISIBLE);
 
-        buttonHomeRetry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getFragmentManager() != null) {
-                    getFragmentManager().beginTransaction().detach(HomeFragment.this).attach(HomeFragment.this).commit();
-                }
+        buttonHomeRetry.setOnClickListener(v -> {
+            if (getFragmentManager() != null) {
+                getFragmentManager().beginTransaction().detach(HomeFragment.this).attach(HomeFragment.this).commit();
             }
         });
     }
@@ -133,14 +130,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
         call.enqueue(new Callback<UserPlanListRespnce>() {
             @Override
-            public void onResponse(Call<UserPlanListRespnce> call, Response<UserPlanListRespnce> response) {
+            public void onResponse(@NonNull Call<UserPlanListRespnce> call, @NonNull Response<UserPlanListRespnce> response) {
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     plansList = response.body().getData();
-//                    linearHomeNoInternet.setVisibility(View.GONE);
-//                    buttonHomeRetry.setVisibility(View.GONE);
-//                    visitList.setVisibility(View.VISIBLE);
-//                    processDialog.dismissDialog();
                     Log.e(" UserPlanList : ", new Gson().toJson(plansList));
                     if (plansList != null) {
                         initAdapter(plansList, visitList);
@@ -148,16 +141,17 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 //                       visitLat =   plansList.get(1).getChemistLatitude();
 //                      visitLong =  plansList.get(1).getChemistLongitude();
                     } else {
+                        linearHomeNoInternet.setVisibility(View.VISIBLE);
                         Snackbar.make(rootView, "No Plan Available", Snackbar.LENGTH_LONG).show();
                     }
                 } else {
-                    Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
+                    linearHomeNoInternet.setVisibility(View.VISIBLE);
                 }
 
             }
 
             @Override
-            public void onFailure(Call<UserPlanListRespnce> call, Throwable t) {
+            public void onFailure(@NonNull Call<UserPlanListRespnce> call, @NonNull Throwable t) {
                 linearHomeNoInternet.setVisibility(View.VISIBLE);
                 buttonHomeRetry.setVisibility(View.VISIBLE);
                 visitList.setVisibility(View.GONE);
@@ -240,7 +234,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                         Manifest.permission.ACCESS_FINE_LOCATION);
                 if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
                     mLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-//                    onLocationChanged(mLocation);
                     mLocationRequest = new LocationRequest();
                     mLocationRequest.setInterval(INTERVAL);
                     mLocationRequest.setFastestInterval(FASTEST_INTERVAL);

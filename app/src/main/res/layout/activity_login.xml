@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:weightSum="3"
-    tools:context=".LoginActivity">
+    tools:context="com.planera.mis.planera2.activities.LoginActivity">
 
 
     <LinearLayout
@@ -42,7 +42,6 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:text="admin@admin.com"
                 android:drawableLeft="@drawable/icon_user_name"
                 android:drawablePadding="@dimen/drawable_padding"
                 android:layout_width="match_parent"
@@ -67,7 +66,6 @@
 
 
             <EditText
-                android:text="admin1234"
                 android:drawableLeft="@drawable/icon_password"
                 android:drawablePadding="@dimen/drawable_padding"
                 android:layout_width="match_parent"

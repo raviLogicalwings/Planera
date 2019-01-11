@@ -1,5 +1,6 @@
 package com.planera.mis.planera2.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +30,7 @@ import com.planera.mis.planera2.utils.AppConstants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,9 +46,7 @@ public class UsersFragment extends BaseFragment implements SearchView.OnQueryTex
     private List<UserData> userDataList;
     private RecyclerView listViewUsers;
     private LinearLayout layoutNoData;
-    private SearchView searchViewUser;
     private UsersListAdapter adapter;
-    private int selectedUser;
 
     public UsersFragment() {
 
@@ -88,7 +88,7 @@ public class UsersFragment extends BaseFragment implements SearchView.OnQueryTex
     protected void initUi() {
         super.initUi();
         listViewUsers = view.findViewById(R.id.list_users);
-        searchViewUser = view.findViewById(R.id.search_view_users);
+        SearchView searchViewUser = view.findViewById(R.id.search_view_users);
         layoutNoData = view.findViewById(R.id.layout_no_data);
         searchViewUser.setActivated(true);
         searchViewUser.onActionViewExpanded();
@@ -106,9 +106,9 @@ public class UsersFragment extends BaseFragment implements SearchView.OnQueryTex
         Call<UserListResponse> call = apiInterface.usersList(token);
         call.enqueue(new Callback<UserListResponse>() {
             @Override
-            public void onResponse(Call<UserListResponse> call, Response<UserListResponse> response) {
+            public void onResponse(@NonNull Call<UserListResponse> call, @NonNull Response<UserListResponse> response) {
                 processDialog.dismissDialog();
-                Log.e(TAG, "onResponse: "+new Gson().toJson(response.body()));
+                assert response.body() != null;
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                     userDataList = response.body().getData();
                     if (userDataList!=null) {
@@ -129,7 +129,7 @@ public class UsersFragment extends BaseFragment implements SearchView.OnQueryTex
             }
 
             @Override
-            public void onFailure(Call<UserListResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<UserListResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -160,7 +160,7 @@ public class UsersFragment extends BaseFragment implements SearchView.OnQueryTex
 
                 case R.id.img_user_edit:
                     userDetailsForUpdate(user);
-                    UsersFragment.this.getActivity().finish();
+                    Objects.requireNonNull(UsersFragment.this.getActivity()).finish();
 
                     break;
 
@@ -173,7 +173,7 @@ public class UsersFragment extends BaseFragment implements SearchView.OnQueryTex
 
 
     public void userDetailsForUpdate(UserData user){
-        selectedUser= Integer.parseInt(user.getUserId());
+        int selectedUser = Integer.parseInt(user.getUserId());
         Intent intentDoctorCall = new Intent(mContext, ActivityUpdateUser.class);
         intentDoctorCall.putExtra(AppConstants.UPDATE_DOCTOR_KEY, selectedUser);
         intentDoctorCall.putExtra(AppConstants.FIRST_NAME, user.getFirstName());
@@ -250,7 +250,7 @@ public class UsersFragment extends BaseFragment implements SearchView.OnQueryTex
         Call<MainResponse> call = apiInterface.deleteUser(token, temp);
         call.enqueue(new Callback<MainResponse>() {
             @Override
-            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+            public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK){
 //                    getFragmentManager().beginTransaction().detach(UsersFragment.this).attach(UsersFragment.this).commit();
@@ -263,7 +263,7 @@ public class UsersFragment extends BaseFragment implements SearchView.OnQueryTex
             }
 
             @Override
-            public void onFailure(Call<MainResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MainResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
 
                 Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_LONG).show();

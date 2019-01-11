@@ -2,6 +2,7 @@ package com.planera.mis.planera2.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
@@ -110,10 +111,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         Call<LoginResponse> call = apiInterface.userLoginApi(userData);
         call.enqueue(new Callback<LoginResponse>() {
             @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+            public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
                 processDialog.dismissDialog();
                 Log.e(TAG, "onResponse: "+ new Gson().toJson(response.body()));
 
+                assert response.body() != null;
                 if (response.body().getStatusCode()== AppConstants.RESULT_OK){
                     connector.setString(AppConstants.TOKEN, response.body().getData().getToken());
                     connector.setString(AppConstants.USER_ID, response.body().getData().getUserId());
@@ -121,7 +123,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
                     if(response.body().getData().getType() == AppConstants.MR_USER_TYPE ||
                             response.body().getData().getType() == AppConstants.DEFAULT_MR_USER_TYPE) {
+                            UserData userDetails = response.body().getData();
                         connector.setBoolean(AppConstants.IS_USER, true);
+                        connector.setString(AppConstants.USER_PROFILE, new Gson().toJson(userDetails));
                         Intent intentHome = new Intent(LoginActivity.this, MainActivity.class);
                         ActivityCompat.finishAffinity(LoginActivity.this);
                         startActivity(intentHome);
@@ -141,7 +145,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 processDialog.dismissDialog();
-                Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                Snackbar mSnackbar = Snackbar.make(rootView, "Unable to connect", Snackbar.LENGTH_LONG)
+                        .setAction("RETRY", view ->   callUserLoginApi(userData));
+                mSnackbar.show();
 
             }
         });

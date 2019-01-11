@@ -3,6 +3,7 @@ package com.planera.mis.planera2.fragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.support.v4.app.Fragment;
 
@@ -32,26 +34,17 @@ import retrofit2.Response;
 
 public class ProductFragment extends BaseFragment implements EditProductDialog.OnDismissEditProductDialogListener{
 
-    public static ProductFragment instance;
     private View view;
     private ApiInterface apiInterface;
     private List<Brands> productList;
     private RecyclerView listViewProducts;
-    private LinearLayout linearNoData, linearNoInternet;
+    private LinearLayout linearNoInternet,linearNoData;
     private Button buttonRetry;
 
     public ProductFragment() {
 
     }
 
-    public static ProductFragment newInstance() {
-        if (instance == null) {
-            instance = new ProductFragment();
-        }
-
-        return instance;
-
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +52,7 @@ public class ProductFragment extends BaseFragment implements EditProductDialog.O
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_product, container, false);
         initUi();
@@ -83,13 +76,9 @@ public class ProductFragment extends BaseFragment implements EditProductDialog.O
         linearNoData = view.findViewById(R.id.linear_no_data);
         linearNoInternet = view.findViewById(R.id.linear_no_internet);
         buttonRetry = view.findViewById(R.id.button_retry);
-
-        buttonRetry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getFragmentManager() != null) {
-                    getFragmentManager().beginTransaction().detach(ProductFragment.this).attach(ProductFragment.this).commit();
-                }
+        buttonRetry.setOnClickListener(v -> {
+            if (getFragmentManager() != null) {
+                getFragmentManager().beginTransaction().detach(ProductFragment.this).attach(ProductFragment.this).commit();
             }
         });
     }
@@ -100,22 +89,22 @@ public class ProductFragment extends BaseFragment implements EditProductDialog.O
         Call<BrandsListResponse> call = apiInterface.brandsListApi(token, AppConstants.BRAND);
         call.enqueue(new Callback<BrandsListResponse>() {
             @Override
-            public void onResponse(Call<BrandsListResponse> call, Response<BrandsListResponse> response) {
+            public void onResponse(@NonNull Call<BrandsListResponse> call, @NonNull Response<BrandsListResponse> response) {
                 processDialog.dismissDialog();
-                if (response != null) {
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
+                assert response.body() != null;
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
 
-                        productList = response.body().getData();
-                        if (productList != null) {
-                            initAdapter(productList, listViewProducts);
-                        } else {
-                            listViewProducts.setVisibility(View.GONE);
-                            linearNoData.setVisibility(View.VISIBLE);
-                        }
-
+                    productList = response.body().getData();
+                    if (productList != null) {
+                        listViewProducts.setVisibility(View.VISIBLE);
+                        initAdapter(productList, listViewProducts);
                     } else {
-                        Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        linearNoData.setVisibility(View.VISIBLE);
+                        listViewProducts.setVisibility(View.GONE);
                     }
+
+                } else {
+                    linearNoData.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -143,7 +132,7 @@ public class ProductFragment extends BaseFragment implements EditProductDialog.O
                     bundle.putString(AppConstants.KEY_PRODUCT_NAME, productList.get(position).getName());
                     dialog.setArguments(bundle);
                     dialog.setTargetFragment(this, 0);
-                    dialog.show(getFragmentManager(), "Edit Product");
+                    dialog.show(manager, "Edit Product");
                     break;
             }
         });

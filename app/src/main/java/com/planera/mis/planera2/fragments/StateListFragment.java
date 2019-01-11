@@ -3,9 +3,9 @@ package com.planera.mis.planera2.fragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +13,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.FragmentDialog.editDialogs.EditStateDialog;
+import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.Retrofit.ApiClient;
 import com.planera.mis.planera2.Retrofit.ApiInterface;
 import com.planera.mis.planera2.adapters.StateAdapter;
@@ -30,10 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.content.ContentValues.TAG;
-
 public class StateListFragment extends BaseFragment implements EditStateDialog.OnDismissEditDialogListener {
-    public static StateListFragment instance;
     private View view;
     private ApiInterface apiInterface;
     private List<States> statesList = null;
@@ -44,12 +40,6 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
     public StateListFragment() {
     }
 
-    public static android.support.v4.app.Fragment newInstance() {
-        if (instance == null) {
-            instance = new StateListFragment();
-        }
-        return instance;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,18 +48,15 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_state_list, container, false);
         initUi();
         initData();
 
-        buttonRetry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getFragmentManager() != null) {
-                    getFragmentManager().beginTransaction().detach(StateListFragment.this).attach(StateListFragment.this).commit();
-                }
+        buttonRetry.setOnClickListener(v -> {
+            if (getFragmentManager() != null) {
+                getFragmentManager().beginTransaction().detach(StateListFragment.this).attach(StateListFragment.this).commit();
             }
         });
         return view;
@@ -98,23 +85,20 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
         Call<MainResponse> call = apiInterface.deleteState(token, stateId);
         call.enqueue(new Callback<MainResponse>() {
             @Override
-            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+            public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
                 processDialog.dismissDialog();
-                if (response!= null){
-                    if (response.body().getStatusCode()== AppConstants.RESULT_OK){
-                        Toast.makeText(mContext, response.body().getMessage(),Toast.LENGTH_LONG).show();
-                        getStatesList(token);
-//                        manager.beginTransaction().detach(StateListFragment.this).attach(StateListFragment.this).commit();
-                    }
-                    else{
-                        Toast.makeText(mContext, response.body().getMessage(),Toast.LENGTH_LONG).show();
+                assert response.body() != null;
+                if (response.body().getStatusCode()== AppConstants.RESULT_OK){
+                    Toast.makeText(mContext, response.body().getMessage(),Toast.LENGTH_LONG).show();
+                    getStatesList(token); }
+                else{
+                    Toast.makeText(mContext, response.body().getMessage(),Toast.LENGTH_LONG).show();
 
-                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<MainResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MainResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
 
             }
@@ -127,25 +111,23 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
         Call<StateListResponse> call = apiInterface.statesListApi(token);
         call.enqueue(new Callback<StateListResponse>() {
             @Override
-            public void onResponse(Call<StateListResponse> call, Response<StateListResponse> response) {
+            public void onResponse(@NonNull Call<StateListResponse> call, @NonNull Response<StateListResponse> response) {
                 processDialog.dismissDialog();
-                Log.e(TAG, "onResponse: " + new Gson().toJson(response.body()));
-                if (response != null) {
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
-                        statesList = response.body().getData();
-                        System.out.println(statesList.size());
-                        listViewStates.setVisibility(View.VISIBLE);
-                        initAdapter(statesList, listViewStates);
-                    } else {
-                        linearNoData.setVisibility(View.VISIBLE);
-                        listViewStates.setVisibility(View.GONE);
-                    }
-
+                assert response.body() != null;
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
+                    statesList = response.body().getData();
+                    System.out.println(statesList.size());
+                    listViewStates.setVisibility(View.VISIBLE);
+                    initAdapter(statesList, listViewStates);
+                } else {
+                    linearNoData.setVisibility(View.VISIBLE);
+                    listViewStates.setVisibility(View.GONE);
                 }
+
             }
 
             @Override
-            public void onFailure(Call<StateListResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<StateListResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 linearNoInternet.setVisibility(View.VISIBLE);
                 buttonRetry.setVisibility(View.VISIBLE);
@@ -214,9 +196,7 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
         });
 
 
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", (dialog, which) -> {
-            dialog.cancel();
-        });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", (dialog, which) -> dialog.cancel());
 
         alertDialog.show();
 
@@ -225,6 +205,7 @@ public class StateListFragment extends BaseFragment implements EditStateDialog.O
 
     @Override
     public void onDismissEditDialog() {
+        assert getFragmentManager() != null;
         getFragmentManager().beginTransaction().detach(this).attach(this).commit();
     }
 

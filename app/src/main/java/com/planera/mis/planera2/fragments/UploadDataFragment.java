@@ -2,6 +2,7 @@ package com.planera.mis.planera2.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +15,6 @@ import com.planera.mis.planera2.activities.ActivityUploadUser;
 
 public class UploadDataFragment extends BaseFragment implements View.OnClickListener{
     public  View view;
-    private CardView cardUploadPlans;
-    private CardView cardUploadDoctor;
-    private CardView cardUploadChemist;
 
     public static UploadDataFragment instance;
 
@@ -33,7 +31,7 @@ public class UploadDataFragment extends BaseFragment implements View.OnClickList
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view=  inflater.inflate(R.layout.fragment_upload_data, container, false);
         initUi();
@@ -54,9 +52,9 @@ public class UploadDataFragment extends BaseFragment implements View.OnClickList
     @Override
     protected void initUi() {
         super.initUi();
-        cardUploadPlans = view.findViewById(R.id.card_upload_users);
-        cardUploadDoctor = view.findViewById(R.id.card_upload_doctor);
-        cardUploadChemist = view.findViewById(R.id.card_upload_chemist);
+        CardView cardUploadPlans = view.findViewById(R.id.card_upload_users);
+        CardView cardUploadDoctor = view.findViewById(R.id.card_upload_doctor);
+        CardView cardUploadChemist = view.findViewById(R.id.card_upload_chemist);
 
         cardUploadChemist.setOnClickListener(this);
         cardUploadDoctor.setOnClickListener(this);
