@@ -84,6 +84,16 @@ public class UserPlan{
 	@SerializedName("ChemistLastName")
 	private String chemistLastName;
 
+	private double dist = 0.0;
+
+	public double getDist() {
+		return dist;
+	}
+
+	public void setDist(double dist) {
+		this.dist = dist;
+	}
+
 	public void setStatus(String status){
 		this.status = status;
 	}

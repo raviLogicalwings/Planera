@@ -450,6 +450,7 @@ public class ActivityUploadUser extends BaseActivity implements View.OnClickList
             public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
                 processDialog.dismissDialog();
                 if (response.isSuccessful()){
+                    assert response.body() != null;
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                         Toasty.success(ActivityUploadUser.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
                     }

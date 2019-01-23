@@ -2,9 +2,12 @@ package com.planera.mis.planera2.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +16,11 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.models.UserPlan;
 
+import java.util.Collections;
 import java.util.List;
 
 public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemHolder> {
@@ -26,11 +31,11 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
     private OnVisitAdapterClickListener onVisitAdapterClickListener;
     boolean isDoctor;
     float dist;
+    boolean decideRole;
 
 
-    public VisitsAdapter(Context context, List<UserPlan> planList, Location location, OnVisitAdapterClickListener onVisitAdapterClickListener) {
+    public VisitsAdapter(Context context,  Location location, OnVisitAdapterClickListener onVisitAdapterClickListener) {
         mContext = context;
-        this.planList = planList;
         this.location = location;
         this.onVisitAdapterClickListener = onVisitAdapterClickListener;
 
@@ -45,6 +50,8 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
 
     @Override
     public void onBindViewHolder(@NonNull VisitItemHolder holder, int position) {
+
+        Log.e("Api Response", new Gson().toJson(planList));
         onBindItems(holder, position);
     }
 
@@ -69,11 +76,11 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
                         planList.get(position).getDoctorLastName());
             String firstChar = getFirstName(planList.get(position).getDoctorFirstName());
             viewHolder.textNameFirstLetter.setText(firstChar.toUpperCase());
-
-                dist = calculateDistance(location,
-                        planList.get(position).getDoctorLatitude(),
-                        planList.get(position).getDoctorLongitude());
-                viewHolder.textDistance.setText(Math.round(dist) + " KM");
+//
+//                dist = calculateDistance(location,
+//                        planList.get(position).getDoctorLatitude(),
+//                        planList.get(position).getDoctorLongitude());
+                viewHolder.textDistance.setText(Math.round(planList.get(position).getDist()) + " KM");
             }
         }
         else {
@@ -84,8 +91,8 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
                 viewHolder.textNameFirstLetter.setText(firstChar.toUpperCase());
 
 
-                float dist = calculateDistance(location, planList.get(position).getChemistLatitude(), planList.get(position).getChemistLongitude());
-                viewHolder.textDistance.setText(Math.round(dist) + " KM");
+//                float dist = calculateDistance(location, planList.get(position).getChemistLatitude(), planList.get(position).getChemistLongitude());
+                viewHolder.textDistance.setText(Math.round(planList.get(position).getDist()) + " KM");
 
 
         }
@@ -119,7 +126,7 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
             buttonCheckIn = itemView.findViewById(R.id.button_check_in);
             textDistance = itemView.findViewById(R.id.text_distance);
             imageCurrentLocationStatus = itemView.findViewById(R.id.image_current_location_status);
-
+            imageCurrentLocationStatus.setOnClickListener(this);
             buttonCheckIn.setOnClickListener(this);
         }
 
@@ -127,14 +134,45 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.button_check_in:
-                    boolean decideRole = whichRole(getAdapterPosition());
+                     decideRole = whichRole(getAdapterPosition());
                     onVisitAdapterClickListener.onVisitClick(v, getAdapterPosition(), decideRole, dist);
+                    break;
+                case R.id.image_current_location_status:
+                    showOnMap(getAdapterPosition());
                     break;
             }
 
         }
     }
 
+
+   private void  showOnMap(int pos){
+       decideRole = whichRole(pos);
+        if (decideRole){
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                    Uri.parse("http://maps.google.com/maps?saddr="+location.getLatitude()+","+location.getLongitude()+"&daddr="+planList.get(pos).getDoctorLatitude()+","+planList.get(pos).getDoctorLongitude()+""));
+            mContext.startActivity(intent);
+        }
+        else{
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                    Uri.parse("http://maps.google.com/maps?saddr="+location.getLatitude()+","+location.getLongitude()+"&daddr="+planList.get(pos).getChemistLatitude()+","+planList.get(pos).getChemistLongitude()+""));
+            mContext.startActivity(intent);
+        }
+
+   }
+    public void setList(List<UserPlan> planList){
+        this.planList = planList;
+
+        Collections.sort(planList, (item, t1) -> {
+            double dist1;
+            double dist2;
+            dist1 = item.getDist();
+            dist2 = t1.getDist();
+            return Double.compare(dist1, dist2);
+        });
+
+        notifyDataSetChanged();
+    }
 
     private boolean whichRole(int pos){
 

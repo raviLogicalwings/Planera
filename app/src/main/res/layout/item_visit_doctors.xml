@@ -120,12 +120,13 @@
 
                 <ImageView
                     android:id="@+id/image_current_location_status"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:padding="2dp"
+                    android:layout_height="40dp"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="11dp"
-                    android:src="@drawable/icon_active_location"
+                    android:src="@drawable/route"
                     android:contentDescription="@string/todo" />
 
 

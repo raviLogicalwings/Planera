@@ -1,28 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".SignupActivity">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".activities.SignupActivity">
 
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:weightSum="1">
+
+
 
                 <LinearLayout
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:layout_weight="0.1"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp">
+                    android:layout_height="wrap_content">
 
                     <ImageView
                         android:layout_gravity="center"
@@ -34,8 +32,7 @@
                 <LinearLayout
                     android:gravity="center"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.4"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <android.support.design.widget.TextInputLayout
@@ -148,34 +145,30 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_weight="0.5"
-                    android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_height="0dp">
-                    <Button
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
 
-                        style="@style/ButtonText"
-                        android:id="@+id/button_sign_in"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/activity_horizontal_margin"
-                        android:background="@color/colorPrimary"
-                        android:text="@string/sign_up" />
+        <Button
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:id="@+id/text_sign_up"
-                        android:layout_height="wrap_content"
-                        android:padding="5dp"
-                        android:layout_margin="5dp"
-                        android:layout_gravity="center_horizontal"
-                        android:text="@string/already_have_an_account_sign_in"/>
-                </LinearLayout>
+            android:id="@+id/button_sign_in"
+            style="@style/ButtonText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:background="@color/colorPrimary"
+            android:text="@string/sign_up" />
 
-            </LinearLayout>
-
-    </ScrollView>
-
-</RelativeLayout>
+        <TextView
+            android:id="@+id/text_sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:text="@string/already_have_an_account_sign_in" />
+    </LinearLayout>
+</LinearLayout>
+</ScrollView>

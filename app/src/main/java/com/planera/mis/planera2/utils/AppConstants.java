@@ -10,7 +10,7 @@ public class AppConstants {
     public static final long REQUEST_TIMEOUT = 10;
     public static final String BASE_URL = "http://soleralife.com/apimrapp/";
     public static final String LOGIN = "login/login";
-    public static final String USER_REGISTRATION = "register/registerUserDetails";
+    public static final String USER_REGISTRATION = "newregister/registerUserdetails";
     public static final String CHANGE_PASSWORD = "login/changePassword";
 
     public static final String GIFT_LIST = "gift/getAllGifts";
@@ -42,7 +42,6 @@ public class AppConstants {
     public static final String ADD_INPUT_PRODUCT = "inputproduct/addInputProduct";
     public static final String ADD_INPUT = "input/addInput";
     public static final String ADD_INPUT_GIFT = "inputgift/addInputGift";
-
     public static final String DELETE_STATE = "state/deleteState";
     public static final String DELETE_GIFT = "gift/deleteGift";
     public static final String DELETE_TERRITORY = "territory/deleteTerritory";
@@ -52,7 +51,6 @@ public class AppConstants {
     public static final String DELETE_USERS = "user/deleteUser";
     public static final String DELETE_CHEMIST = "chemist/deleteChemist";
     public static final String DELETE_PLAN = "plan/deletePlan";
-
     public static final String UPDATE_DOCTOR = "doctor/updateDoctor";
     public static final String UPDATE_STATE = "state/updateState";
     public static final String UPDATE_TERRITORY = "territory/updateTerritory";
@@ -63,13 +61,11 @@ public class AppConstants {
     public static final String UPDATE_USER = "user/updateUser";
     public static final String UPDATE_PLAN = "plan/updatePlan";
     public static final String UPDATE_MR_INPUT = "input/editMrInput";
-
     public static final String IMPORT_DOCTORS_DATA = "Importrecords/doctorsData";
     public static final String IMPORT_CHEMIST_DATA = "Importrecords/chemistsData";
     public static final String IMPORT_USER_DATA = "Importrecords/usersData";
     public static final String IMPORT_PATCH_DATA = "Importrecords/patchData";
     public static final String IMPORT_TERRITORY_DATA = "Importrecords/territoryData";
-
     //User's Constant
     public static final String EXPERIENCE_YEAR = "experience_year";
     public static final String UPDATE_USER_KEY = "update_user";

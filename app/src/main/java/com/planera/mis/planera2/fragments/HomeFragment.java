@@ -46,6 +46,7 @@ import com.planera.mis.planera2.models.UserPlan;
 import com.planera.mis.planera2.models.UserPlanListRespnce;
 import com.planera.mis.planera2.utils.AppConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -132,14 +133,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             @Override
             public void onResponse(@NonNull Call<UserPlanListRespnce> call, @NonNull Response<UserPlanListRespnce> response) {
                 processDialog.dismissDialog();
+                assert response.body() != null;
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     plansList = response.body().getData();
                     Log.e(" UserPlanList : ", new Gson().toJson(plansList));
                     if (plansList != null) {
-                        initAdapter(plansList, visitList);
+                        initAdapter((ArrayList<UserPlan>) plansList, visitList);
 
-//                       visitLat =   plansList.get(1).getChemistLatitude();
-//                      visitLong =  plansList.get(1).getChemistLongitude();
                     } else {
                         linearHomeNoInternet.setVisibility(View.VISIBLE);
                         Snackbar.make(rootView, "No Plan Available", Snackbar.LENGTH_LONG).show();
@@ -162,8 +162,19 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     }
 
 
-    public void initAdapter(List<UserPlan> plansData, RecyclerView recyclerView) {
-        VisitsAdapter adapter = new VisitsAdapter(mContext, plansData, mLocation, (view, position, isDoctor, dist) -> {
+    public void initAdapter(ArrayList<UserPlan> plansData, RecyclerView recyclerView) {
+        // Calculating distance here
+        for (UserPlan plans : plansData)
+        {
+            if (!plans.getChemistsId().equals("0")){
+                plans.setDist(calculateDistance(mLocation, plans.getChemistLatitude(), plans.getChemistLongitude()));
+            }
+            else{
+                plans.setDist(calculateDistance(mLocation, plans.getDoctorLatitude(), plans.getDoctorLongitude()));
+            }
+        }
+
+        VisitsAdapter adapter = new VisitsAdapter(mContext, mLocation, (view, position, isDoctor, dist) -> {
             switch (view.getId()) {
                 case R.id.button_check_in:
                     gotoScheduleTimeActivity(position, isDoctor, dist);
@@ -171,6 +182,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
             }
         });
+
+        adapter.setList(plansList);
         setAdapter(recyclerView, adapter);
     }
 
@@ -346,6 +359,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 //                break;
         }
 
+    }
+
+    private float calculateDistance(Location mLocation, double lat2, double lon2) {
+        float[] results = new float[1];
+        Location.distanceBetween(mLocation.getLatitude(), mLocation.getLongitude(),
+                lat2, lon2,
+                results);
+        return results[0] / 1000;
     }
 
 
