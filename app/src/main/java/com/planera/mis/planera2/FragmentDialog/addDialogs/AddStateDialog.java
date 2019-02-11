@@ -19,6 +19,9 @@ import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.FragmentDialog.BaseDialogFragment;
 import com.planera.mis.planera2.models.MainResponse;
 import com.planera.mis.planera2.utils.AppConstants;
+
+import java.util.Objects;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -72,7 +75,7 @@ public class AddStateDialog  extends BaseDialogFragment implements View.OnClickL
         if (dialog != null) {
             int width = ViewGroup.LayoutParams.MATCH_PARENT;
             int height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            dialog.getWindow().setLayout(width, height);
+            Objects.requireNonNull(dialog.getWindow()).setLayout(width, height);
         }
     }
 

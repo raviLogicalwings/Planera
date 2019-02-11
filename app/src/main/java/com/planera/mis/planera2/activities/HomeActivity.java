@@ -2,6 +2,7 @@ package com.planera.mis.planera2.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -23,6 +24,7 @@ import com.planera.mis.planera2.utils.AppConstants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,7 +34,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private Spinner territorySpinnerHome;
     private Spinner patchSpinnerHome;
     private Button buttonSubmitQuery;
-    private Toolbar toolbar;
+    protected Toolbar toolbar;
 
     private List<Territories> territoryList;
     private List<Patches> patchesList = null;
@@ -65,7 +67,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         toolbar.setTitle("Select");
         buttonSubmitQuery.setVisibility(View.GONE);
         buttonSubmitQuery.setOnClickListener(this);
-        getSupportActionBar().setTitle("Select");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Select");
     }
 
     @Override
@@ -121,7 +123,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                     patchStr = stringPatchesList.get(position);
                     patchId = patchesList.get(position - DEFAULT_SELECT_VALUE).getPatchId();
 
-                    if (patchId != null && territoryId != null) {
+                    if (territoryId != null) {
                         if (!patchStr.equals(getString(R.string.select)) && !territoryStr.equals(getString(R.string.select))) {
                             buttonSubmitQuery.setVisibility(View.VISIBLE);
                             connector.setInteger(AppConstants.KEY_PATCH_ID, patchId);
@@ -146,32 +148,31 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         Call<TerritoryListResponse> call = apiInterface.territoryList(token);
         call.enqueue(new Callback<TerritoryListResponse>() {
             @Override
-            public void onResponse(Call<TerritoryListResponse> call, Response<TerritoryListResponse> response) {
+            public void onResponse(@NonNull Call<TerritoryListResponse> call, @NonNull Response<TerritoryListResponse> response) {
                 processDialog.dismissDialog();
-                if (response != null) {
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
-                        territoryList = response.body().getTerritorysList();
-                        if (territoryList.size() > 0) {
-                            patchSpinnerHome.setVisibility(View.VISIBLE);
+                assert response.body() != null;
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
+                    territoryList = response.body().getTerritorysList();
+                    if (territoryList.size() > 0) {
+                        patchSpinnerHome.setVisibility(View.VISIBLE);
 
-                            stringTerritoryList = new ArrayList<>();
-                            stringTerritoryList.add(getString(R.string.select));
-                            for (int i = 0; i < territoryList.size(); i++) {
-                                stringTerritoryList.add(territoryList.get(i).getTerritoryName());
-                            }
-                            setArrayAdapter(stringTerritoryList, territorySpinnerHome);
+                        stringTerritoryList = new ArrayList<>();
+                        stringTerritoryList.add(getString(R.string.select));
+                        for (int i = 0; i < territoryList.size(); i++) {
+                            stringTerritoryList.add(territoryList.get(i).getTerritoryName());
                         }
-
-
-                    } else {
-                        Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
+                        setArrayAdapter(stringTerritoryList, territorySpinnerHome);
                     }
 
+
+                } else {
+                    Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                 }
+
             }
 
             @Override
-            public void onFailure(Call<TerritoryListResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<TerritoryListResponse> call, @NonNull Throwable t) {
                 Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
@@ -184,28 +185,27 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         Call<PatchListResponse> call = apiInterface.patchListByTerritory(token, territoryId);
         call.enqueue(new Callback<PatchListResponse>() {
             @Override
-            public void onResponse(Call<PatchListResponse> call, Response<PatchListResponse> response) {
+            public void onResponse(@NonNull Call<PatchListResponse> call, @NonNull Response<PatchListResponse> response) {
                 processDialog.dismissDialog();
-                if (response != null) {
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
-                        patchesList = response.body().getPatchesList();
-                        if (!patchesList.isEmpty()) {
-                            stringPatchesList = new ArrayList<>();
-                            stringPatchesList.add(getString(R.string.select));
-                            for (int i = 0; i < patchesList.size(); i++) {
-                                stringPatchesList.add(patchesList.get(i).getPatchName());
-                            }
-                            setArrayAdapter(stringPatchesList, patchSpinnerHome);
-
+                assert response.body() != null;
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
+                    patchesList = response.body().getPatchesList();
+                    if (!patchesList.isEmpty()) {
+                        stringPatchesList = new ArrayList<>();
+                        stringPatchesList.add(getString(R.string.select));
+                        for (int i = 0; i < patchesList.size(); i++) {
+                            stringPatchesList.add(patchesList.get(i).getPatchName());
                         }
-                    } else {
-                        Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
+                        setArrayAdapter(stringPatchesList, patchSpinnerHome);
+
                     }
+                } else {
+                    Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<PatchListResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<PatchListResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }

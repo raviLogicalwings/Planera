@@ -101,10 +101,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
 
     }
-
-    public boolean isEmailValid(String target){
-        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
-    }
+    
 
     public void callUserLoginApi(UserData userData){
         processDialog.showDialog(LoginActivity.this, false);
@@ -180,6 +177,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             case R.id.text_forget_password:
                 Intent intentForget = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
                 startActivity(intentForget);
+                break;
         }
 
     }

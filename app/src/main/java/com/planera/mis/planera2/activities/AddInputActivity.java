@@ -1,10 +1,10 @@
 package com.planera.mis.planera2.activities;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
@@ -28,10 +28,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
+
+import es.dmoral.toasty.Toasty;
 
 public class  AddInputActivity extends BaseActivity implements View.OnClickListener {
-    private AppBarLayout appBar;
-    private Toolbar toolbarTime;
     private TextView textCustomerName;
     private TextView textVisitDate;
     private EditText editStartTime;
@@ -39,28 +40,23 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
     private EditText editFeedback;
     private EditText editEarlierFeedback;
     private TextInputLayout inputLayoutVisitDate;
-    private Button buttonSubmitInput;
     private LinearLayout layoutEarlierEntryFeedBack;
     private String startTimeStr, endTimeStr, feedbackStr;
     public static final String TAG = AddInputActivity.class.getSimpleName();
-    private boolean isDoctor;
-    private double longitude;
-    private double latitude;
-    private int isInLocation;
-    private int planId;
-    private int userId;
-    private boolean isEarlier;
+    protected double longitude;
+    protected double latitude;
+    protected int isInLocation;
+    protected int planId;
+    protected int userId;
     private String timeWithDate;
     private String selectedTime;
     private Input input;
-    private String chemistId;
-    private int doctorId;
+    protected String chemistId;
+    protected int doctorId;
     private String currentDate;
     private String selectedDate;
     private String earlierFeedbackStr;
-    private String strVisitDate;
     private boolean isUpdateInput;
-    private DataItem previousInputObj;
     private String previousInputStr;
 
     @Override
@@ -76,15 +72,14 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
     public void initUi() {
         super.initUi();
 
-        appBar = findViewById(R.id.appBar);
-        toolbarTime = findViewById(R.id.toolbarTime);
+        Toolbar toolbarTime = findViewById(R.id.toolbarTime);
         textCustomerName = findViewById(R.id.text_customer_name);
         textVisitDate = findViewById(R.id.text_visit_date);
         editStartTime = findViewById(R.id.edit_start_time);
         editEndTime = findViewById(R.id.edit_end_time);
         editFeedback = findViewById(R.id.edit_feedback);
         inputLayoutVisitDate = findViewById(R.id.input_layout_visit_date);
-        buttonSubmitInput = findViewById(R.id.button_submit_input);
+        Button buttonSubmitInput = findViewById(R.id.button_submit_input);
         editEarlierFeedback = findViewById(R.id.edit_earlier_feedback);
         layoutEarlierEntryFeedBack = findViewById(R.id.layout_earlier_entry_feedback);
         editStartTime.setFocusable(false);
@@ -93,7 +88,7 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
         editEarlierFeedback.setVisibility(View.GONE);
         setSupportActionBar(toolbarTime);
         toolbarTime.setNavigationIcon(R.drawable.back_arrow_whit);
-        getSupportActionBar().setTitle("Input");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Input");
         toolbarTime.setNavigationOnClickListener(view -> onBackPressed());
         textVisitDate.setOnClickListener(this);
         buttonSubmitInput.setOnClickListener(this);
@@ -117,7 +112,7 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
         endTimeStr = editEndTime.getText().toString().trim();
         feedbackStr = editFeedback.getText().toString().trim();
         earlierFeedbackStr = editEarlierFeedback.getText().toString().trim();
-        strVisitDate = textVisitDate.getText().toString().trim();
+        String strVisitDate = textVisitDate.getText().toString().trim();
 
         if (strVisitDate.equals(getString(R.string.select).replace("-", ""))  || strVisitDate.isEmpty()){
             inputLayoutVisitDate.setError("Please select date of visit.");
@@ -183,7 +178,7 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
         isUpdateInput = intent.getBooleanExtra(AppConstants.IS_INPUT_UPDATE, false);
         if (isUpdateInput){
             previousInputStr = intent.getStringExtra(AppConstants.PASS_UPDATE_INPUT);
-            previousInputObj = new Gson().fromJson(previousInputStr, DataItem.class);
+            DataItem previousInputObj = new Gson().fromJson(previousInputStr, DataItem.class);
             input.setLatitude(previousInputObj.getLatitude());
             input.setLongitude(previousInputObj.getLongitude());
             input.setIsInLocation(previousInputObj.getIsInLocation());
@@ -213,7 +208,7 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
             }
         }
         else {
-            isDoctor = intent.getBooleanExtra(AppConstants.KEY_ROLE, false);
+            boolean isDoctor = intent.getBooleanExtra(AppConstants.KEY_ROLE, false);
             textCustomerName.setText(intent.getStringExtra(AppConstants.CUSTOMER_NAME));
             longitude = intent.getDoubleExtra(AppConstants.LATITUDE, 0.0);
             latitude = intent.getDoubleExtra(AppConstants.LATITUDE, 0.0);
@@ -271,7 +266,7 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
             selectedDate = dayOfMonth + "-" + (month+1)+  "-" + year;
             textVisitDate.setText(selectedDate);
 
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             try {
                 Date date1 = sdf.parse(currentDate);
                 Date date2 = sdf.parse(selectedDate);
@@ -298,14 +293,14 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
 
     public void getCurrentDate() {
         Date c = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         currentDate = df.format(c.getTime());
     }
 
     public String formatDate(String date){
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");//yyyy-MM-dd'T'HH:mm:ss
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");//yyyy-MM-dd'T'HH:mm:ss
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
         Date data = null;
         try {
             data = sdf.parse(date);
@@ -323,20 +318,16 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
         Date inTime = new Date(Long.parseLong(stTime));
         Date outTime = new Date(Long.parseLong(edTime));
         if (outTime.before(inTime)) {
-            Toast.makeText(AddInputActivity.this, "End time should be greater than start time", Toast.LENGTH_LONG).show();
+            Toasty.error(AddInputActivity.this, "End time should be greater than start time", Toast.LENGTH_LONG).show();
         } else {
             uiValidation();
         }
 
     }
 
-    public void getDoctorsReport(String token){
-
-    }
-
     public String convertIntoDD_MM_YYYY(String date){
-        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat dateOnlyFormat = new SimpleDateFormat("dd-MM-yyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateOnlyFormat = new SimpleDateFormat("dd-MM-yyyy");
         String dt = "";
         try {
           dt = dateOnlyFormat.format(dateTimeFormat.parse(date));
@@ -349,11 +340,10 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
     public void getDateFromDialog(TextView textView) {
         Calendar mCurrentTime = Calendar.getInstance();
         Date c = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String todayDate  = df.format(c.getTime());
         int hour = mCurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mCurrentTime.get(Calendar.MINUTE);
-        int sec = mCurrentTime.get(Calendar.SECOND);
         TimePickerDialog timePickerDialog = new TimePickerDialog(AddInputActivity.this,
                 (view, hourOfDay, minute1) -> {
                     selectedTime = hourOfDay + ":" + minute1;
@@ -368,8 +358,8 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
 
 
     public String time24To12Hour(String timeForConvert){
-        SimpleDateFormat _24HourTime = new SimpleDateFormat("HH:mm");
-        SimpleDateFormat _12HourTime = new SimpleDateFormat("hh:mm a");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat _24HourTime = new SimpleDateFormat("HH:mm");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat _12HourTime = new SimpleDateFormat("hh:mm a");
         Date _24HourDate = null;
         try {
             _24HourDate = _24HourTime.parse(timeForConvert);

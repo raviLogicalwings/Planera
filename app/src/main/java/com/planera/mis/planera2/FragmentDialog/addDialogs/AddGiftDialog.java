@@ -2,6 +2,7 @@ package com.planera.mis.planera2.FragmentDialog.addDialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -110,7 +111,7 @@ public class AddGiftDialog  extends BaseDialogFragment implements View.OnClickLi
             }
 
             @Override
-            public void onFailure(Call<MainResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MainResponse> call, @NonNull Throwable t) {
                 Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_LONG).show();
 
             }

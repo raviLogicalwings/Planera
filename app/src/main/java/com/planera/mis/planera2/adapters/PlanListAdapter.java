@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.planera.mis.planera2.R;
+import com.planera.mis.planera2.models.AdminPlan;
 import com.planera.mis.planera2.models.Plans;
 
 import java.util.List;
@@ -17,10 +18,10 @@ import java.util.List;
 public class PlanListAdapter  extends RecyclerView.Adapter<PlanListAdapter.MyPlansHolder>{
    private View view;
    private Context context;
-   private List<Plans> plansList;
+   private List<AdminPlan> plansList;
    private OnItemClickListener onItemClickListener;
 
-    public PlanListAdapter( Context context, List<Plans> plansList, OnItemClickListener onItemClickListener) {
+    public PlanListAdapter( Context context, List<AdminPlan> plansList, OnItemClickListener onItemClickListener) {
         this.context = context;
         this.plansList = plansList;
         this.onItemClickListener = onItemClickListener;
@@ -29,7 +30,7 @@ public class PlanListAdapter  extends RecyclerView.Adapter<PlanListAdapter.MyPla
     @NonNull
     @Override
     public MyPlansHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        view   = LayoutInflater.from(context).inflate(R.layout.item_plans_view, viewGroup, false);
+        view   = LayoutInflater.from(context).inflate(R.layout.item_plan_list, viewGroup, false);
         return new MyPlansHolder(view);
     }
 
@@ -51,24 +52,24 @@ public class PlanListAdapter  extends RecyclerView.Adapter<PlanListAdapter.MyPla
 
     public class MyPlansHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView textPlanPatchName;
+        private TextView textPlanTerritoryName;
         private TextView textPlanDate;
         private TextView textPlanCalls;
         private TextView textPlanRemark;
         private ImageView imgPlanDelete;
-        private ImageView imgPlanEdit;
+        private TextView textUserName;
 
 
         public MyPlansHolder(@NonNull View itemView) {
             super(itemView);
 
             textPlanPatchName = itemView.findViewById(R.id.text_plan_patch_name);
-            textPlanDate = itemView.findViewById(R.id.text_plan_date);
-            textPlanCalls = itemView.findViewById(R.id.text_plan_calls);
-            textPlanRemark = itemView.findViewById(R.id.text_plan_remark);
+            textPlanTerritoryName = itemView.findViewById(R.id.text_plan_territory_name);
+            textPlanDate = itemView.findViewById(R.id.text_plan_date_name);
+            textUserName = itemView.findViewById(R.id.text_plan_user_name);
+            textPlanRemark = itemView.findViewById(R.id.text_plan_remark_name);
             imgPlanDelete = itemView.findViewById(R.id.img_plan_delete);
-            imgPlanEdit = itemView.findViewById(R.id.img_plan_edit);
 
-            imgPlanEdit.setOnClickListener(this);
             imgPlanDelete.setOnClickListener(this);
         }
 
@@ -78,19 +79,18 @@ public class PlanListAdapter  extends RecyclerView.Adapter<PlanListAdapter.MyPla
                 case R.id.img_plan_delete:
                     onItemClickListener.onItemCLick(getAdapterPosition(), v);
                     break;
-                case R.id.img_plan_edit:
-                    onItemClickListener.onItemCLick(getAdapterPosition(), v);
-                    break;
             }
         }
     }
 
 
     public void bindItems(int pos, MyPlansHolder parentView){
-        parentView.textPlanCalls.setText("Calls "+plansList.get(pos).getCalls());
+//        parentView.textPlanCalls.setText("Calls "+plansList.get(pos).getCalls());
         parentView.textPlanPatchName.setText(plansList.get(pos).getPatchName());
         parentView.textPlanRemark.setText(plansList.get(pos).getRemark());
-        parentView.textPlanDate.setText(plansList.get(pos).getMonth()+":"+plansList.get(pos).getYear());
+        parentView.textPlanDate.setText(plansList.get(pos).getCreatedDate());
+        parentView.textUserName.setText(plansList.get(pos).getUserName());
+        parentView.textPlanTerritoryName.setText(plansList.get(pos).getTerritoryName());
     }
 
 

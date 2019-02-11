@@ -2,16 +2,18 @@ package com.planera.mis.planera2.utils;
 
 public class AppConstants {
     public static final int SPLASH_TIME_OUT = 3000;
-    public static final String PREFRENCE_FILE_NAME = "PlaneraPrefFile";
+    static final String PREFRENCE_FILE_NAME = "PlaneraPrefFile";
 
 
-    //Retrofit Constants
+    //Retrofit
     public static final int RESULT_OK = 1;
     public static final long REQUEST_TIMEOUT = 10;
     public static final String BASE_URL = "http://soleralife.com/apimrapp/";
     public static final String LOGIN = "login/login";
     public static final String USER_REGISTRATION = "newregister/registerUserdetails";
     public static final String CHANGE_PASSWORD = "login/changePassword";
+    public static final String FORGET_PASSWORD = "login/forgotPassword";
+    public static final String SET_PASSWORD = "login/setPassword";
 
     public static final String GIFT_LIST = "gift/getAllGifts";
     public static final String BRANDS_LIST = "product/getAllProducts";
@@ -22,7 +24,7 @@ public class AppConstants {
     public static final String PRODUCT_LIST = "product/getAllProducts";
     public static final String CHEMIST_LIST = "chemist/getAllChemists";
     public static final String USER_LIST = "user/getAllUsers";
-    public static final String PLAN_LIST ="plan/getAllPlans" ;
+    public static final String PLAN_LIST ="plan/getAllPlansForAdmin" ;
     public static final String USER_PLAN_LIST = "plan/getUserPlans";
     public static final String TERRITORY_WISE_PATCHES = "patch/getTerritoryWisePatches";
     public static final String PATCH_WISE_DOCTORS_LIST = "doctor/getPatchWiseDoctor";
@@ -50,7 +52,7 @@ public class AppConstants {
     public static final String DELETE_PRODUCTS = "product/deleteProduct";
     public static final String DELETE_USERS = "user/deleteUser";
     public static final String DELETE_CHEMIST = "chemist/deleteChemist";
-    public static final String DELETE_PLAN = "plan/deletePlan";
+    public static final String DELETE_PLAN = "plan/deletePlanByPatch";
     public static final String UPDATE_DOCTOR = "doctor/updateDoctor";
     public static final String UPDATE_STATE = "state/updateState";
     public static final String UPDATE_TERRITORY = "territory/updateTerritory";
@@ -138,7 +140,6 @@ public class AppConstants {
     public static final String PINCODE = "pincode";
 
 
-    //Brands Contanst =
     public static final int BRAND = 1;
     public static final int NOT_BRAND = 2;
 

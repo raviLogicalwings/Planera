@@ -50,6 +50,7 @@ public class AdminPanelActivity extends BaseActivity {
 //        toolbar.setNavigationOnClickListener(view -> onBackPressed());
     }
 
+
     @Override
     public void initData() {
         super.initData();
@@ -97,8 +98,6 @@ public class AdminPanelActivity extends BaseActivity {
         alertDialog.show();
 
     }
-
-
     public void loadFragment(int type){
         currentFragment = type;
         switch (currentFragment){

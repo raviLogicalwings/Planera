@@ -46,13 +46,13 @@ import retrofit2.Response;
 import static android.content.ContentValues.TAG;
 
 public class ActivityUserPlanCreate extends BaseActivity implements View.OnClickListener{
-    private RadioGroup radioGroupSelect;
-    private RadioButton radioDoctor;
-    private RadioButton radioChemist;
+//    private RadioGroup radioGroupSelect;
+//    private RadioButton radioDoctor;
+//    private RadioButton radioChemist;
     private Spinner spinnerPlanTerritory;
     private Spinner spinnerPlanPatch;
-    private Spinner spinnerPlanDoctor;
-    private Spinner spinnerPlanChemist;
+//    private Spinner spinnerPlanDoctor;
+//    private Spinner spinnerPlanChemist;
     private Spinner spinnerPlanMonth;
     private Spinner spinnerPlanYear;
     private EditText textPlanCall;
@@ -101,22 +101,22 @@ public class ActivityUserPlanCreate extends BaseActivity implements View.OnClick
         toolbar = findViewById(R.id.toolbarUserPlan);
         layoutChemistSpinner = findViewById(R.id.chemist_spinner_layout);
         layoutDoctorSpinner = findViewById(R.id.doctor_spinner_layout);
-        radioGroupSelect = findViewById(R.id.radio_group_select);
-        spinnerPlanDoctor = findViewById(R.id.spinner_plan_doctor);
-        spinnerPlanChemist = findViewById(R.id.spinner_plan_chemist);
+//        radioGroupSelect = findViewById(R.id.radio_group_select);
+//        spinnerPlanDoctor = findViewById(R.id.spinner_plan_doctor);
+//        spinnerPlanChemist = findViewById(R.id.spinner_plan_chemist);
         spinnerPlanPatch = findViewById(R.id.spinner_plan_patch);
         spinnerPlanMonth = findViewById(R.id.spinner_plan_month);
         spinnerPlanYear = findViewById(R.id.spinner_plan_year);
         spinnerPlanTerritory = findViewById(R.id.spinner_plan_territory);
-        radioDoctor = findViewById(R.id.radio_doctor);
-        radioChemist = findViewById(R.id.radio_chemist);
+//        radioDoctor = findViewById(R.id.radio_doctor);
+//        radioChemist = findViewById(R.id.radio_chemist);
         textPlanCall = findViewById(R.id.text_plan_call);
         textPlanRemark = findViewById(R.id.text_plan_remark);
         buttonAddPlan = findViewById(R.id.button_add_plan);
-        if (isDoctorRadioChecked) {
-            radioDoctor.setChecked(isDoctorRadioChecked);
-            layoutChemistSpinner.setVisibility(View.GONE);
-        }
+//        if (isDoctorRadioChecked) {
+//            radioDoctor.setChecked(isDoctorRadioChecked);
+//            layoutChemistSpinner.setVisibility(View.GONE);
+//        }
         buttonAddPlan.setOnClickListener(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Add Plan");
@@ -128,26 +128,26 @@ public class ActivityUserPlanCreate extends BaseActivity implements View.OnClick
     public void initData() {
         super.initData();
 
-        chemistsList = new ArrayList<>();
-        doctorsList = new ArrayList<>();
+//        chemistsList = new ArrayList<>();
+//        doctorsList = new ArrayList<>();
         patchesList = new ArrayList<>();
         usersList = new ArrayList<>();
         loggedInUser = connector.getString(AppConstants.USER_ID);
         runningYear = Calendar.getInstance().get(Calendar.YEAR);
-        radioGroupSelect.setOnCheckedChangeListener((group, checkedId) -> {
-            switch (checkedId) {
-                case R.id.radio_chemist:
-                    layoutDoctorSpinner.setVisibility(View.GONE);
-                    layoutChemistSpinner.setVisibility(View.VISIBLE);
-                    isDoctorRadioChecked = false;
-                    break;
-                case R.id.radio_doctor:
-                    layoutDoctorSpinner.setVisibility(View.VISIBLE);
-                    layoutChemistSpinner.setVisibility(View.GONE);
-                    isDoctorRadioChecked = true;
-                    break;
-            }
-        });
+//        radioGroupSelect.setOnCheckedChangeListener((group, checkedId) -> {
+//            switch (checkedId) {
+//                case R.id.radio_chemist:
+//                    layoutDoctorSpinner.setVisibility(View.GONE);
+//                    layoutChemistSpinner.setVisibility(View.VISIBLE);
+//                    isDoctorRadioChecked = false;
+//                    break;
+//                case R.id.radio_doctor:
+//                    layoutDoctorSpinner.setVisibility(View.VISIBLE);
+//                    layoutChemistSpinner.setVisibility(View.GONE);
+//                    isDoctorRadioChecked = true;
+//                    break;
+//            }
+//        });
 
 
         months = new ArrayList<>();
@@ -216,11 +216,11 @@ public class ActivityUserPlanCreate extends BaseActivity implements View.OnClick
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
                     patchId = patchesList.get(position- DEFAULT_SELECT_VALUE).getPatchId();
-                    if (isDoctorRadioChecked) {
-                        getDoctorsList(token, patchId);
-                    } else {
-                        getChemistList(token, patchId);
-                    }
+//                    if (isDoctorRadioChecked) {
+//                        getDoctorsList(token, patchId);
+//                    } else {
+//                        getChemistList(token, patchId);
+//                    }
                 }
 
             }
@@ -237,26 +237,26 @@ public class ActivityUserPlanCreate extends BaseActivity implements View.OnClick
         callStr = textPlanCall.getText().toString().trim();
         remarkStr = textPlanRemark.getText().toString().trim();
         plans = new Plans();
-        if (isDoctorRadioChecked) {
-            if (!doctorsList.isEmpty()) {
-                if (spinnerPlanDoctor.getSelectedItemPosition()!=0) {
-                    doctorId = doctorsList.get(spinnerPlanDoctor.getSelectedItemPosition()- DEFAULT_SELECT_VALUE).getDoctorId() + "";
-                    chemistId = null;
-                }
-            } else {
-                Toast.makeText(ActivityUserPlanCreate.this, "Can create plan, doctor's list not found", Toast.LENGTH_LONG).show();
-            }
-        } else if (!isDoctorRadioChecked) {
-            if (!chemistsList.isEmpty()) {
-                if (spinnerPlanChemist.getSelectedItemPosition()!= 0) {
-                    chemistId = chemistsList.get(spinnerPlanChemist.getSelectedItemPosition()- DEFAULT_SELECT_VALUE).getChemistId() + "";
-                    doctorId = null;
-                }
-            } else {
-                Toast.makeText(ActivityUserPlanCreate.this, "Can create plan, chemist's list not found", Toast.LENGTH_LONG).show();
-
-            }
-        }
+//        if (isDoctorRadioChecked) {
+//            if (!doctorsList.isEmpty()) {
+//                if (spinnerPlanDoctor.getSelectedItemPosition()!=0) {
+//                    doctorId = doctorsList.get(spinnerPlanDoctor.getSelectedItemPosition()- DEFAULT_SELECT_VALUE).getDoctorId() + "";
+//                    chemistId = null;
+//                }
+//            } else {
+//                Toast.makeText(ActivityUserPlanCreate.this, "Can create plan, doctor's list not found", Toast.LENGTH_LONG).show();
+//            }
+//        } else if (!isDoctorRadioChecked) {
+//            if (!chemistsList.isEmpty()) {
+//                if (spinnerPlanChemist.getSelectedItemPosition()!= 0) {
+//                    chemistId = chemistsList.get(spinnerPlanChemist.getSelectedItemPosition()- DEFAULT_SELECT_VALUE).getChemistId() + "";
+//                    doctorId = null;
+//                }
+//            } else {
+//                Toast.makeText(ActivityUserPlanCreate.this, "Can create plan, chemist's list not found", Toast.LENGTH_LONG).show();
+//
+//            }
+//        }
         if (TextUtils.isEmpty(callStr)) {
             textPlanCall.requestFocus();
             textPlanCall.setError(getString(R.string.invalid_input));
@@ -265,8 +265,8 @@ public class ActivityUserPlanCreate extends BaseActivity implements View.OnClick
             textPlanRemark.setError(getString(R.string.invalid_input));
         } else {
             plans.setCalls(callStr);
-            plans.setChemistsId(chemistId);
-            plans.setDoctorId(doctorId);
+//            plans.setChemistsId(chemistId);
+//            plans.setDoctorId(doctorId);
             plans.setUserId(loggedInUser);
             plans.setPatchId(patchId + "");
             plans.setYear(yearStr);
@@ -376,7 +376,7 @@ public class ActivityUserPlanCreate extends BaseActivity implements View.OnClick
 
                             stringDoctorsList.add(docName);
                         }
-                        setArrayAdapter(stringDoctorsList, spinnerPlanDoctor);
+//                        setArrayAdapter(stringDoctorsList, spinnerPlanDoctor);
                     } else {
                         Snackbar.make(rootView, "No Doctors Found", Snackbar.LENGTH_LONG).show();
                     }
@@ -412,7 +412,7 @@ public class ActivityUserPlanCreate extends BaseActivity implements View.OnClick
                     for (int i = 0; i < chemistsList.size(); i++) {
                         stringChemistList.add(chemistsList.get(i).getFirstName() + " " + chemistsList.get(i).getLastName());
                     }
-                    setArrayAdapter(stringChemistList, spinnerPlanChemist);
+//                    setArrayAdapter(stringChemistList, spinnerPlanChemist);
                 } else {
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                 }

@@ -1,5 +1,6 @@
 package com.planera.mis.planera2.Retrofit;
 
+import com.planera.mis.planera2.models.AdminPlanResponse;
 import com.planera.mis.planera2.models.BrandsListResponse;
 import com.planera.mis.planera2.models.ChemistImport;
 import com.planera.mis.planera2.models.ChemistListResponse;
@@ -32,6 +33,8 @@ import com.planera.mis.planera2.models.UserListResponse;
 import com.planera.mis.planera2.models.UserPlanListRespnce;
 import com.planera.mis.planera2.utils.AppConstants;
 
+import org.apache.log4j.chainsaw.Main;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -52,12 +55,15 @@ public interface ApiInterface {
     @POST(AppConstants.USER_REGISTRATION)
     Call<RegistrationResponse> userRegistrationApi(@Body UserData userData);
 
-    @FormUrlEncoded
+
     @POST(AppConstants.CHANGE_PASSWORD)
-    Call<ChemistResponse> changePasswordApi(@Header("Authorization") String token,
-                                         @Field("OldPassword") String oldPassword,
-                                         @Field("Password") String password,
-                                         @Field("ConfirmPassword") String confirmPassword);
+    Call<ChemistResponse> changePasswordApi(@Header("Authorization") String token, @Body UserData userData);
+
+    @GET(AppConstants.FORGET_PASSWORD)
+    Call<MainResponse> forgetPassword( @Query("EmailId") String emailId);
+
+    @POST(AppConstants.SET_PASSWORD)
+    Call<MainResponse> setPassword(@Header("Authorization") String token, @Body UserData userData);
 
     @GET(AppConstants.GIFT_LIST)
     Call<GiftListResponse> giftListApi(@Header("Authorization") String token);
@@ -98,7 +104,7 @@ public interface ApiInterface {
 
 
     @GET(AppConstants.PLAN_LIST)
-    Call<PlansListResponce> planList(@Header("Authorization") String token);
+    Call<AdminPlanResponse> planList(@Header("Authorization") String token);
 
     @GET(AppConstants.USER_PLAN_LIST)
     Call<UserPlanListRespnce> userPlanList(@Header("Authorization") String token);
@@ -197,7 +203,7 @@ public interface ApiInterface {
 
     @GET(AppConstants.DELETE_PLAN)
     Call<MainResponse> deletePlan (@Header("Authorization") String token,
-                                   @Query("PlanId") int planId);
+                                   @Query("PatchId") int patchId);
 
     @GET(AppConstants.UPDATE_STATE)
     Call<MainResponse> updateStateDetails(@Header("Authorization") String token,

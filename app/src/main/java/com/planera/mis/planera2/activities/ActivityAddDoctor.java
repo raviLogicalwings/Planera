@@ -312,7 +312,7 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
 
             if (InternetConnection.isNetworkAvailable(ActivityAddDoctor.this)) {
 
-                getAddressLatLong(address1Str + ", " + pincodeStr);
+                getAddressLatLong(address1Str + ", "+cityStr +", "+ stateStr +", "+ pincodeStr);
 
             } else {
                 Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();

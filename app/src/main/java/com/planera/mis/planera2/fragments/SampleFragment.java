@@ -63,7 +63,7 @@ public class SampleFragment extends BaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view= inflater.inflate(R.layout.fragment_brands, container, false);
         initUi();
@@ -141,7 +141,7 @@ public class SampleFragment extends BaseFragment {
         Call<BrandsListResponse> call = apiInterface.brandsListApi(token, isBrand);
         call.enqueue(new Callback<BrandsListResponse>() {
             @Override
-            public void onResponse(Call<BrandsListResponse> call, Response<BrandsListResponse> response) {
+            public void onResponse(@NonNull Call<BrandsListResponse> call, @NonNull Response<BrandsListResponse> response) {
                 if (response!= null){
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                         listOfBrands = response.body().getData();

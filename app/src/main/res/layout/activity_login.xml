@@ -78,11 +78,8 @@
         </android.support.design.widget.TextInputLayout>
 
         <TextView
-            android:visibility="gone"
             android:id="@+id/text_forget_password"
             android:layout_width="wrap_content"
-            android:layout_gravity="end"
-            android:layout_margin="@dimen/activity_horizontal_margin"
             android:layout_height="wrap_content"
             android:text="@string/forget_password"/>
 
@@ -95,8 +92,8 @@
     android:orientation="vertical"
     android:gravity="center"
     android:layout_height="0dp">
-    <Button
 
+    <Button
         style="@style/ButtonText"
         android:id="@+id/button_sign_in"
         android:layout_width="match_parent"

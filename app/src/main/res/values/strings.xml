@@ -73,7 +73,6 @@
     <string name="sample_fargemt">SAMPLE</string>
     <string name="title_activity_changepassword">ActivityChangepassword</string>
     <string name="old_password">Old Password</string>
-    <string name="submit">Submit</string>
     <string name="new_password">New Password</string>
     <string name="title_activity_user_plan_create">ActivityUserPlanCreate</string>
     <string name="title_activity_home">HomeActivity</string>
@@ -146,4 +145,8 @@
     <string name="_1_568_b_57_por_mohollo_opp_state_bank_of_india_athughar_timliyawad_nanpura_surat_gujrat_395001">1/568/B-57, Por Mohollo, Opp. State Bank of India, Athughar Timliyawad, Nanpura, Surat, Gujrat, 395001</string>
     <string name="change_password">Change Password</string>
     <string name="is_brand">Is Brand</string>
+    <string name="enter_your_email">Enter Your Email</string>
+    <string name="enter_code_you_received">Enter code you received</string>
+    <string name="submit">Submit</string>
+    <string name="forgot_password">Forgot Password</string>
 </resources>

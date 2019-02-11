@@ -1,14 +1,13 @@
 <RelativeLayout android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
     
     <android.support.v7.widget.RecyclerView
-        android:visibility="gone"
+        android:visibility="visible"
         android:id="@+id/list_plans"
-        tools:listitem = "@layout/item_plans_view"
+        tools:listitem = "@layout/item_plan_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </android.support.v7.widget.RecyclerView>

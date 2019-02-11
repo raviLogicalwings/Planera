@@ -20,7 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
 
-        <activity android:name=".activities.SplashScreenActivity">
+        <activity android:name=".activities.SplashScreenActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -58,7 +59,7 @@
             android:name=".activities.SingleListActivity"
             android:label="@string/title_activity_single_list"
             android:noHistory="true"
-            android:theme="@style/AppTheme.NoActionBar">
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.planera.mis.planera2.activities.SingleListActivity" />
@@ -109,6 +110,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.planera.mis.planera2.activities.BaseActivity" />
         </activity>
+
         <activity
             android:name=".activities.ActivityUpdatePlan"
             android:label="@string/title_activity_update_plan"
@@ -150,11 +152,17 @@
             android:name=".activities.ActivityUploadChemist"
             android:label="@string/title_activity_upload_chemist"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".activities.ActivityUploadPlan" />
+
         <activity
             android:name=".activities.ActivityUploadUser"
             android:label="@string/title_activity_upload_user"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            >
+
+        </activity>
+
     </application>
 
 </manifest>

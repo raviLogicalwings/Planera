@@ -4,7 +4,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,8 @@ import com.planera.mis.planera2.models.InputOrders;
 import com.planera.mis.planera2.utils.AppConstants;
 import com.planera.mis.planera2.utils.PreferenceConnector;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +34,8 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
     public PreferenceConnector connector;
     private InputOrders orders;
     private DataItem dataItemForUpdate;
+    private static final String NULL_STRING = "";
+    private static final String SAMPLE_PRODUCT = "1";
 
 
 
@@ -55,12 +61,20 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
     public void onBindViewHolder(@NonNull MySampleHolder holder, int position) {
         sampleListSelected = new ArrayList<>();
         connector = new PreferenceConnector(context);
-        bindItemsWithView(holder, position);
+        bindItemsWithView(holder);
+    }
+
+
+
+    @Override
+    public long getItemId(int position)
+    {
+        return super.getItemId(position);
     }
 
     @Override
     public int getItemCount() {
-        if (brandsList != null) {
+        if (brandsList.size() > 0) {
             return brandsList.size();
         } else {
             return 0;
@@ -68,15 +82,14 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
     }
 
 
-    private void bindItemsWithView(MySampleHolder holder, int pos) {
-
+    private void bindItemsWithView(MySampleHolder holder) {
 
         if(brandsList.size()!=0) {
-            if (brandsList.get(pos).getIsBrand().equals(AppConstants.BRAND + "")) {
-                holder.textBrandSampleName.setText(brandsList.get(pos).getName());
+            if (brandsList.get(holder.getAdapterPosition()).getIsBrand().equals(AppConstants.BRAND + NULL_STRING)) {
+                holder.textBrandSampleName.setText(brandsList.get(holder.getAdapterPosition()).getName());
 
             }
-            Brands brands = brandsList.get(pos);
+            Brands brands = brandsList.get(holder.getAdapterPosition());
 
             if (dataItemForUpdate != null && dataItemForUpdate.getProductDetails() != null) {
                 sampleListSelected = dataItemForUpdate.getProductDetails();
@@ -99,55 +112,60 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    String changedText = s.toString().trim();
-                    boolean isUpdated = false;
 
-                        if (sampleListSelected.size()>0){
-                            for (int i= 0; i< sampleListSelected.size(); i++){
-                                if (sampleListSelected.get(i).getProductId().equals(brands.getProductId()+"")){
-                                    if (changedText.equals("")){
-                                        sampleListSelected.remove(i);
-                                    }
-                                    else {
-                                        sampleListSelected.get(i).setQuantity(changedText);
-                                    }
-                                    isUpdated = true;
-                                }
-
-                            }
-
-                            if (!isUpdated){
-                                if (!changedText.equals("")) {
-                                orders = new InputOrders();
-                                orders.setProductId(brands.getProductId() + "");
-                                orders.setIsSample("1");
-                                orders.setQuantity(changedText);
-                                orders.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + "");
-                                sampleListSelected.add(orders);
-                                }
-                            }
-                        }
-                        else {
-                            if (!changedText.equals("")){
-                            orders = new InputOrders();
-                            orders.setProductId(brands.getProductId() + "");
-                            orders.setIsSample("1");
-                            orders.setQuantity(changedText);
-                            orders.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + "");
-                            sampleListSelected.add(orders);
-                            }
-                        }
-
-                            setSampleListSelected(sampleListSelected);
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
+                    Log.e("Position+Value" ,holder.getAdapterPosition()+NULL_STRING);
 
+                    String changedText = s.toString().trim();
+                    boolean isUpdated = false;
+
+                    if (sampleListSelected.size()>0){
+                        for (int i= 0; i< sampleListSelected.size(); i++){
+                            if (sampleListSelected.get(i).getProductId().equals(brands.getProductId()+"")){
+                                if (changedText.equals(NULL_STRING)){
+                                    sampleListSelected.remove(i);
+                               }
+                                else {
+                                    sampleListSelected.get(i).setQuantity(changedText);
+                                }
+                                isUpdated = true;
+                            }
+
+                        }
+
+                        if (!isUpdated){
+                            if (!changedText.equals(NULL_STRING)) {
+                                orders = new InputOrders();
+                                orders.setProductId(brands.getProductId() + "");
+                                orders.setIsSample(SAMPLE_PRODUCT);
+                                orders.setQuantity(changedText);
+                               orders.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + "");
+                                sampleListSelected.add(orders);
+                            }
+                        }
+                    }
+                    else {
+                        if (!changedText.equals(NULL_STRING)){
+                            orders = new InputOrders();
+                            orders.setProductId(brands.getProductId() + NULL_STRING);
+                           orders.setIsSample(SAMPLE_PRODUCT);
+                            orders.setQuantity(changedText);
+                            orders.setInputId(connector.getInteger(AppConstants.KEY_INPUT_ID) + NULL_STRING);
+                            sampleListSelected.add(orders);
+
+                        }
+                    }
+
+                    setSampleListSelected(sampleListSelected);
                 }
-            });
+          });
         }
     }
+
+
 
     public List<InputOrders> getSampleListSelected() {
         return DataController.getmInstance().getSampleListSelected();

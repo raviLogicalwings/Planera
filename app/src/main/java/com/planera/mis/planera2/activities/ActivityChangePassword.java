@@ -1,5 +1,6 @@
 package com.planera.mis.planera2.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.models.ChemistResponse;
+import com.planera.mis.planera2.models.UserData;
+import com.planera.mis.planera2.utils.AppConstants;
 import com.planera.mis.planera2.utils.InternetConnection;
 
 import java.util.Objects;
@@ -33,6 +36,7 @@ public class ActivityChangePassword extends BaseActivity implements View.OnClick
     private TextInputLayout inputLayoutNewPassword;
     private EditText editNewPassword;
     private Button buttonChangePassword;
+    private UserData userData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +44,13 @@ public class ActivityChangePassword extends BaseActivity implements View.OnClick
         setContentView(R.layout.activity_changepassword);
         initUi();
         initData();
-
-
     }
 
     @Override
     public void initUi() {
         super.initUi();
 
+        userData = new UserData();
 
         toolbarChangePassword = findViewById(R.id.toolbarChangePassword);
         inputLayoutOldPassword = findViewById(R.id.input_layout_old_password);
@@ -105,24 +108,24 @@ public class ActivityChangePassword extends BaseActivity implements View.OnClick
 
 
     public void apiChangePassword(String token, String oldPassword, String newPassword, String confPassword){
+        if (oldPassword != null && !oldPassword.equals("") && newPassword != null && !newPassword.equals("") && confPassword != null && !confPassword.equals("")) {
+            userData.setOldPassword(oldPassword);
+            userData.setPassword(newPassword);
+            userData.setConfirmPassword(confPassword);
+        }
         processDialog.showDialog(this, false);
-        Call<ChemistResponse> call = apiInterface.changePasswordApi(token, oldPassword, newPassword, confPassword);
+        Call<ChemistResponse> call = apiInterface.changePasswordApi(token, userData);
         call.enqueue(new Callback<ChemistResponse>() {
             @Override
             public void onResponse(@NonNull Call<ChemistResponse> call, @NonNull Response<ChemistResponse> response) {
-                Log.e("Response: ", new Gson().toJson(response.body()));
                 processDialog.dismissDialog();
-//                if (response.code() == 400){
-//                    Log.e("Error Body", new Gson().toJson(response.errorBody()));
-//                }
-//                if (response.isSuccessful()){
-//                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-//                      Toasty.success(ActivityChangePassword.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
-//                    }
-//                    else{
-//                        Toasty.error(ActivityChangePassword.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                }
+
+                if (response.body().getStatusCode() == 1) {
+                    Toast.makeText(ActivityChangePassword.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    backToLogin();
+                } else {
+                    Toast.makeText(ActivityChangePassword.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
@@ -141,5 +144,12 @@ public class ActivityChangePassword extends BaseActivity implements View.OnClick
                 uiValidation();
                 break;
         }
+    }
+
+    private void backToLogin(){
+        connector.setBoolean(AppConstants.IS_LOGIN, false);
+        Intent intentLogin = new Intent(ActivityChangePassword.this, LoginActivity.class);
+        startActivity(intentLogin);
+        finish();
     }
 }

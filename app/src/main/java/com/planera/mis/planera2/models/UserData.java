@@ -100,7 +100,18 @@ public class UserData {
 	@SerializedName("ExperienceYear")
 	private String experienceYear;
 
-    public String getToken() {
+	@SerializedName("OldPassword")
+	private String OldPassword;
+
+	public String getOldPassword() {
+		return OldPassword;
+	}
+
+	public void setOldPassword(String oldPassword) {
+		OldPassword = oldPassword;
+	}
+
+	public String getToken() {
         return token;
     }
 

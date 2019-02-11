@@ -3,6 +3,8 @@ package com.planera.mis.planera2.activities;
 import android.content.Context;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 
 import com.crashlytics.android.Crashlytics;
@@ -51,6 +53,7 @@ public class BaseActivity extends AppCompatActivity {
         }
 
     }
+
 
     public String getToken() {
         return token;
