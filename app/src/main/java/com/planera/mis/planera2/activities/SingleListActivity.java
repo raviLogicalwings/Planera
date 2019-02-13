@@ -26,6 +26,8 @@ import com.planera.mis.planera2.fragments.TerritoryListFragment;
 import com.planera.mis.planera2.fragments.UsersFragment;
 import com.planera.mis.planera2.utils.AppConstants;
 
+import java.util.Objects;
+
 
 public class SingleListActivity extends BaseActivity implements View.OnClickListener,
         AddProductDialog.OnAddProductDialogDismissListener,
@@ -252,7 +254,7 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
 
             case AppConstants.PLAN_FRAGMENT:
                 fragment = new PlansFragment();
-                getSupportActionBar().setTitle("Plans");
+                Objects.requireNonNull(getSupportActionBar()).setTitle("Plans");
                 break;
         }
 

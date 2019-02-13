@@ -14,13 +14,24 @@ public class ObtainReport{
 	private String endDate;
 
 	@SerializedName("ChemistsId")
-	private String chemistId;
+	private String chemistId = null;
 
 	@SerializedName("DoctorId")
-	private String doctorId;
+	private String doctorId = null;
 
 	@SerializedName("UserId")
-	private String userId;
+	private String userId = null ;
+
+	@SerializedName("EmailId")
+	private String emailSendTo;
+
+	public String getEmailSendTo() {
+		return emailSendTo;
+	}
+
+	public void setEmailSendTo(String emailSendTo) {
+		this.emailSendTo = emailSendTo;
+	}
 
 	public String getDoctorId() {
 		return doctorId;

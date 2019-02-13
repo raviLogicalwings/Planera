@@ -68,6 +68,11 @@ public class PODAdapter extends RecyclerView.Adapter<PODAdapter.MyPobHolder> {
         }
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     public void bindValues(MyPobHolder myPobHolder, int pos) {
         Brands brands;
 

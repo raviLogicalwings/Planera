@@ -36,6 +36,7 @@ import com.planera.mis.planera2.models.Chemists;
 import com.planera.mis.planera2.models.DataItem;
 import com.planera.mis.planera2.models.Doctors;
 import com.planera.mis.planera2.models.DoctorsListResponce;
+import com.planera.mis.planera2.models.MainResponse;
 import com.planera.mis.planera2.models.ObtainReport;
 import com.planera.mis.planera2.models.PatchListResponse;
 import com.planera.mis.planera2.models.Patches;
@@ -54,6 +55,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -75,6 +77,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     private TextInputLayout inputLayoutChemistReport;
     private TextInputLayout inputLayoutDoctorReport;
     private TextInputLayout inputLayoutUserReport;
+    private EditText editSendTo;
     private LinearLayout layoutChemistReport, layoutDoctorReport, layoutUserReport;
     private RecyclerView reportsListView;
     private List<Patches> patchesList;
@@ -121,6 +124,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         spinnerRoleType = findViewById(R.id.spinner_role_type);
         editStartTime = findViewById(R.id.edit_start_time);
         editEndTime = findViewById(R.id.edit_end_time);
+        editSendTo = findViewById(R.id.edit_email_to);
         Button buttonSubmitReport = findViewById(R.id.button_submit_report);
         spinnerTerritoryReport = findViewById(R.id.spinner_territory_report);
         spinnerPatchReport = findViewById(R.id.spinner_patch_report);
@@ -287,6 +291,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     public void uiValidation() {
         String strStartDate = editStartTime.getText().toString().trim();
         String strEndDate = editEndTime.getText().toString().trim();
+        String strSendTo = editSendTo.getText().toString().trim();
 
         if (spinnerTerritoryReport.getSelectedItemPosition() == 0) {
             inputLayoutTerritoryReport.setError("Please select territory.");
@@ -306,16 +311,22 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
             editEndTime.setError(getString(R.string.invalid_input));
             editEndTime.requestFocus();
 
-        } else {
-
-
+        }
+        else if(TextUtils.isEmpty(strSendTo)){
+            editSendTo.setError("Please enter email address");
+            editSendTo.requestFocus();
+        }
+        else {
             if (InternetConnection.isNetworkAvailable(ActivityAdminReports.this)) {
                 obtainReport.setStartDate(strStartDate);
                 obtainReport.setEndDate(strEndDate);
+                obtainReport.setEmailSendTo(strSendTo);
                 if (selectedRole.equals("1")) {
                     if (doctorsList != null) {
                         String doctorId = doctorsList.get(spinnerDoctorReport.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getDoctorId() + "";
                         obtainReport.setDoctorId(doctorId);
+                        obtainReport.setChemistId("0");
+                        obtainReport.setUserId("0");
                         getDoctorsReport(token, obtainReport);
                     }
                 }
@@ -323,12 +334,16 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                 if (selectedRole.equals("2")) {
                     String chemistId = chemistsList.get(spinnerChemistReport.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getChemistId() + "";
                     obtainReport.setChemistId(chemistId);
+                    obtainReport.setUserId("0");
+                    obtainReport.setDoctorId("0");
                     getChemistReportList(token, obtainReport);
                 }
 
                 if (selectedRole.equals("3")) {
                     String userId = usersList.get(spinnerUserReport.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getUserId();
                     obtainReport.setUserId(userId);
+                    obtainReport.setDoctorId("0");
+                    obtainReport.setChemistId("0");
                     getUserReport(token, obtainReport);
                 }
 
@@ -451,12 +466,37 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     }
 
 
+    public void apiSendToEmail(String token, ObtainReport obtainReport){
+        processDialog.showDialog(ActivityAdminReports.this, false);
+        Call<MainResponse> call = apiInterface.sendFileToEmail(token, obtainReport);
+        call.enqueue(new Callback<MainResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
+                processDialog.dismissDialog();
+                if(response.isSuccessful()){
+                    assert response.body() != null;
+                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                        Toasty.success(ActivityAdminReports.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<MainResponse> call, @NonNull Throwable t) {
+                processDialog.dismissDialog();
+                Toasty.error(ActivityAdminReports.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
+
     public void getTerritoryList(String token) {
         processDialog.showDialog(ActivityAdminReports.this, false);
         Call<TerritoryListResponse> call = apiInterface.territoryList(token);
         call.enqueue(new Callback<TerritoryListResponse>() {
             @Override
-            public void onResponse(Call<TerritoryListResponse> call, Response<TerritoryListResponse> response) {
+            public void onResponse(@NonNull Call<TerritoryListResponse> call, @NonNull Response<TerritoryListResponse> response) {
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     territoriesList = response.body().getTerritorysList();
@@ -490,6 +530,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
             @Override
             public void onResponse(@NonNull Call<PatchListResponse> call, @NonNull Response<PatchListResponse> response) {
                 processDialog.dismissDialog();
+                assert response.body() != null;
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     patchesList = response.body().getPatchesList();
                     if (!patchesList.isEmpty()) {
@@ -1198,16 +1239,18 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                 pickDateFromDialog(editEndTime);
                 break;
             case R.id.button_export:
+                Log.e("ObtainREe", new Gson().toJson(obtainReport));
+                apiSendToEmail(token, obtainReport);
 
-                if (dataItemsList != null) {
-
-                    FileCreation fileCreation = new FileCreation();
-                    File toCreate = makeFolder();
-                    fileCreation.exportReport(dataItemsList, toCreate, ActivityAdminReports.this, Integer.parseInt(selectedRole));
-                    destroyTable();
-                } else {
-                    Snackbar.make(rootView, "No data available to export", Snackbar.LENGTH_SHORT).show();
-                }
+//                if (dataItemsList != null) {
+//
+//                    FileCreation fileCreation = new FileCreation();
+//                    File toCreate = makeFolder();
+//                    fileCreation.exportReport(dataItemsList, toCreate, ActivityAdminReports.this, Integer.parseInt(selectedRole));
+//                    destroyTable();
+//                } else {
+//                    Snackbar.make(rootView, "No data available to export", Snackbar.LENGTH_SHORT).show();
+//                }
                 break;
         }
 

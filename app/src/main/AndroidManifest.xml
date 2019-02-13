@@ -24,7 +24,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -41,20 +41,13 @@
             android:label="@string/title_activity_main" />
         <activity android:name=".activities.ProductCategoryActivity" />
         <activity android:name=".activities.ForgetPasswordActivity" />
-        <activity android:name=".activities.AddInputActivity">
+        <activity android:name=".activities.AddInputActivity"
+            android:windowSoftInputMode="adjustPan"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.planera.mis.planera2.activities.AddInputActivity" />
         </activity>
-        <!--<activity-->
-            <!--android:name=".activities.AdminPanelActivity"-->
-            <!--android:label="@string/title_activity_admin_panel"-->
-            <!--android:theme="@style/AppTheme.NoActionBar">-->
-
-            <!--&lt;!&ndash; <meta-data &ndash;&gt;-->
-            <!--&lt;!&ndash; android:name="android.support.PARENT_ACTIVITY" &ndash;&gt;-->
-            <!--&lt;!&ndash; android:value="com.planera.mis.planera2.AdminPanelActivity" /> &ndash;&gt;-->
-        <!--</activity>-->
         <activity
             android:name=".activities.SingleListActivity"
             android:label="@string/title_activity_single_list"
@@ -121,6 +114,7 @@
         <activity
             android:name=".activities.ActivityAdminReports"
             android:label="@string/title_activity_admin_reports"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.BaseActivity" />
         <activity

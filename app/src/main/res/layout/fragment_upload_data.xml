@@ -95,6 +95,7 @@
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:id="@+id/card_send_file_to_mail"
         style="@style/material_card_style"

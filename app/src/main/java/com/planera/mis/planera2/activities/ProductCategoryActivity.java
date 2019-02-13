@@ -21,6 +21,7 @@ import com.planera.mis.planera2.adapters.GiftsAdapter;
 import com.planera.mis.planera2.adapters.PODAdapter;
 import com.planera.mis.planera2.adapters.SampleListAdapter;
 import com.planera.mis.planera2.controller.DataController;
+import com.planera.mis.planera2.fragments.PODFragment;
 import com.planera.mis.planera2.models.DataItem;
 import com.planera.mis.planera2.models.Input;
 import com.planera.mis.planera2.models.InputGift;
@@ -87,7 +88,12 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
             if (dataForUpdate.getChemistsId().equals("0")) {
                 doctorTabsPagerAdapter = new DoctorTabsPagerAdapter(fragmentManager, ProductCategoryActivity.this, bundle);
                 pager.setAdapter(doctorTabsPagerAdapter);
+
+
             } else {
+//                tabLayout.setVisibility(View.GONE);
+//                PODFragment podFragment = new PODFragment();
+//                podFragment.setArguments(bundle);
                 chemistTabsPagerAdapter = new ChemistTabsPagerAdapter(fragmentManager, ProductCategoryActivity.this, bundle);
                 pager.setAdapter(chemistTabsPagerAdapter);
             }
@@ -99,6 +105,9 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                 doctorTabsPagerAdapter = new DoctorTabsPagerAdapter(fragmentManager, ProductCategoryActivity.this);
                 pager.setAdapter(doctorTabsPagerAdapter);
             } else {
+//                tabLayout.setVisibility(View.GONE);
+//                PODFragment podFragment = new PODFragment();
+//                fragmentManager.beginTransaction().replace(R.id.swiper, podFragment).commit();
                 chemistTabsPagerAdapter = new ChemistTabsPagerAdapter(fragmentManager, ProductCategoryActivity.this);
                 pager.setAdapter(chemistTabsPagerAdapter);
             }
@@ -116,6 +125,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
         buttonConfirm = findViewById(R.id.button_confirm_product);
         tabLayout = findViewById(R.id.tabLayout);
         pager = findViewById(R.id.swiper);
+        pager.setOffscreenPageLimit(3);
         setSupportActionBar(toolbarProduct);
         toolbarProduct.setNavigationIcon(R.drawable.back_arrow_whit);
 

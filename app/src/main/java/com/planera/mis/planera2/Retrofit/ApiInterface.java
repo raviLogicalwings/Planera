@@ -263,6 +263,9 @@ public interface ApiInterface {
     @POST(AppConstants.IMPORT_USER_DATA)
     Call<MainResponse> importDoctorFromExcel (@Header("Authorization") String token,
                                               @Body UserImport userImport);
+
+    @POST(AppConstants.SEND_TO_EMAIL)
+    Call<MainResponse> sendFileToEmail (@Header("Authorization") String token, @Body ObtainReport obtainReport);
     //Google  Places api Call
     @GET(AppConstants.FIND_PALCE)
     Call<GooglePlaces> getPlaceLatLong(@Query("input") String input,

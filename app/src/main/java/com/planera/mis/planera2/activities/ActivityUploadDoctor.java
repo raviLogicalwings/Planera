@@ -240,7 +240,6 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
                 Row row = sheet.getRow(r);
                 int cellsCount = row.getPhysicalNumberOfCells();
                 doctors = new DoctorImportItems();
-                //inner loop, loops through columns
                 if (isCellNull) {
 //
                     processDialog.dismissDialog();
@@ -429,7 +428,7 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
                     assert response.body() != null;
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                         processDialog.dismissDialog();
-                        Toasty.success(ActivityUploadDoctor.this, new Gson().toJson(response.body()), Toast.LENGTH_LONG).show();
+                        Toasty.success(ActivityUploadDoctor.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
                    }
                 }
             }

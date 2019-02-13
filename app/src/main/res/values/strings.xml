@@ -149,4 +149,11 @@
     <string name="enter_code_you_received">Enter code you received</string>
     <string name="submit">Submit</string>
     <string name="forgot_password">Forgot Password</string>
+    <string name="territory">Territory:</string>
+    <string name="role">Role:</string>
+    <string name="patch">Patch:</string>
+    <string name="chemist">Chemist:</string>
+    <string name="doctor">Doctor:</string>
+    <string name="user">User:</string>
+    <string name="send_to">Send To:</string>
 </resources>

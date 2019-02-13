@@ -57,6 +57,7 @@
                     android:text="@string/dr_aman_kashyap" />
 
                 <RatingBar
+                    android:visibility="gone"
                     android:id="@+id/rating_bar_doctor"
                     style="@style/rating_bar_doc" />
 

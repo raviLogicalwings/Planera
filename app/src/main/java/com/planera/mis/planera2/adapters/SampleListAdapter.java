@@ -69,8 +69,10 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
     @Override
     public long getItemId(int position)
     {
-        return super.getItemId(position);
+        return position;
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -81,6 +83,12 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
         }
     }
 
+
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
     private void bindItemsWithView(MySampleHolder holder) {
 

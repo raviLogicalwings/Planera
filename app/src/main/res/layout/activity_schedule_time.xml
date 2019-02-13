@@ -105,6 +105,7 @@
                 android:textColor="@color/colorGray" />
 
             <EditText
+
                 android:focusable="false"
                 android:id="@+id/edit_start_time"
                 style="@style/MediumText"
@@ -154,6 +155,7 @@
         </LinearLayout>
 
         <EditText
+            android:imeOptions="actionDone"
             android:padding="3dp"
             android:background="@drawable/bg_input_box"
             android:id="@+id/edit_feedback"
@@ -185,6 +187,7 @@
         </LinearLayout>
 
         <EditText
+            android:imeOptions="actionDone"
             android:padding="3dp"
             android:background="@drawable/bg_input_box"
             android:id="@+id/edit_earlier_feedback"

@@ -71,6 +71,12 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
         }
     }
 
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     private void setGiftsData(int position, MyGiftHolder holder, List<GiftsData> giftsData, GiftsData giftsDataObj, DataItem previousInputUpdate) {
         holder.textGift.setText(giftsDataObj.getName());
         if (previousInputUpdate != null && previousInputUpdate.getGiftDetails() != null) {

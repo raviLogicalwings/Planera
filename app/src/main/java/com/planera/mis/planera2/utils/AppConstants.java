@@ -68,6 +68,7 @@ public class AppConstants {
     public static final String IMPORT_USER_DATA = "Importrecords/usersData";
     public static final String IMPORT_PATCH_DATA = "Importrecords/patchData";
     public static final String IMPORT_TERRITORY_DATA = "Importrecords/territoryData";
+    public static final String SEND_TO_EMAIL = "Inputreport/createXLS";
     //User's Constant
     public static final String EXPERIENCE_YEAR = "experience_year";
     public static final String UPDATE_USER_KEY = "update_user";
@@ -82,9 +83,9 @@ public class AppConstants {
     public static final String USER_TYPE = "type";
 
     //User's Plan constants
-    public static final int ROLE_DOCTOR = 1;
-    public static final int ROLE_CHEMIST = 2;
-    public static final int ROLE_USER = 3;
+    static final int ROLE_DOCTOR = 1;
+    static final int ROLE_CHEMIST = 2;
+    static final int ROLE_USER = 3;
     public static final String KEY_ROLE = "role";
 
     public static final String KEY_ROLE_DOCTOR = "role_doctor";

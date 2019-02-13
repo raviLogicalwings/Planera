@@ -28,13 +28,13 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.MyStateHolde
         this.onItemClickListener = onItemClickListener;
     }
     @Override
-    public MyStateHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyStateHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         view = LayoutInflater.from(context).inflate(R.layout.item_states_list, parent, false);
         return new MyStateHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(MyStateHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull MyStateHolder holder, final int position) {
         String stateStr = stateList.get(position).getName();
         Log.e(TAG, "onBindViewHolder: "+stateStr);
         holder.textState.setText(stateStr);

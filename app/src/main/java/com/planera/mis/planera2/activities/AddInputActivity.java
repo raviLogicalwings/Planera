@@ -177,8 +177,10 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
     public void loadFormIntent(Intent intent) {
         isUpdateInput = intent.getBooleanExtra(AppConstants.IS_INPUT_UPDATE, false);
         if (isUpdateInput){
+
             previousInputStr = intent.getStringExtra(AppConstants.PASS_UPDATE_INPUT);
             DataItem previousInputObj = new Gson().fromJson(previousInputStr, DataItem.class);
+            Log.e("OP", new Gson().toJson(previousInputObj));
             input.setLatitude(previousInputObj.getLatitude());
             input.setLongitude(previousInputObj.getLongitude());
             input.setIsInLocation(previousInputObj.getIsInLocation());
@@ -188,8 +190,8 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
 
             //set to this class
             textVisitDate.setText(convertIntoDD_MM_YYYY(previousInputObj.getVisitDate()));
-            editStartTime.setText(time24To12Hour(previousInputObj.getStartTime()));
-            editEndTime.setText(time24To12Hour(previousInputObj.getEndTime()));
+            editStartTime.setText(previousInputObj.getStartTime());
+            editEndTime.setText(previousInputObj.getEndTime());
             editFeedback.setText(previousInputObj.getComment());
 
             if (previousInputObj.getChemistsId().equals("0")){

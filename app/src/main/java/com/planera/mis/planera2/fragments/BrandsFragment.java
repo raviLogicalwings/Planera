@@ -29,6 +29,7 @@ import com.planera.mis.planera2.utils.AppConstants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -71,7 +72,7 @@ public class BrandsFragment extends BaseFragment implements ProductCategoryActiv
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view= inflater.inflate(R.layout.fragment_brands, container, false);
         initUi();
@@ -83,7 +84,7 @@ public class BrandsFragment extends BaseFragment implements ProductCategoryActiv
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((ProductCategoryActivity) getActivity()).setDataReceivedListener(this);
+        ((ProductCategoryActivity) Objects.requireNonNull(getActivity())).setDataReceivedListener(this);
     }
 
     @Override
@@ -110,11 +111,9 @@ public class BrandsFragment extends BaseFragment implements ProductCategoryActiv
     @Override
     public void onPause() {
         super.onPause();
-//        Toast.makeText(mContext, "On Pause", Toast.LENGTH_LONG).show();
     }
 
     public void apiAddInputBrands(String token){
-
 
         Log.e("Inputs", new Gson().toJson(orders));
       processDialog.showDialog(mContext, false);
@@ -122,8 +121,9 @@ public class BrandsFragment extends BaseFragment implements ProductCategoryActiv
 
         call.enqueue(new Callback<MainResponse>() {
             @Override
-            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+            public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
                 processDialog.dismissDialog();
+                assert response.body() != null;
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                 }
@@ -133,7 +133,7 @@ public class BrandsFragment extends BaseFragment implements ProductCategoryActiv
             }
 
             @Override
-            public void onFailure(Call<MainResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MainResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 Snackbar.make(rootView, t.getMessage(), Snackbar.LENGTH_LONG).show();
             }
@@ -145,20 +145,19 @@ public class BrandsFragment extends BaseFragment implements ProductCategoryActiv
         Call<BrandsListResponse> call = apiInterface.brandsListApi(token, isBrand);
         call.enqueue(new Callback<BrandsListResponse>() {
             @Override
-            public void onResponse(Call<BrandsListResponse> call, Response<BrandsListResponse> response) {
-                if (response!= null){
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-                        listOfBrands = response.body().getData();
-                        initAdapter(listOfBrands, brandsListView, brandLevelList);
-                    }
-                    else{
-                        Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
+            public void onResponse(@NonNull Call<BrandsListResponse> call, Response<BrandsListResponse> response) {
+                assert response.body() != null;
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                    listOfBrands = response.body().getData();
+                    initAdapter(listOfBrands, brandsListView, brandLevelList);
+                }
+                else{
+                    Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<BrandsListResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<BrandsListResponse> call, @NonNull Throwable t) {
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -175,12 +174,7 @@ public class BrandsFragment extends BaseFragment implements ProductCategoryActiv
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+
     }
 
     @Override

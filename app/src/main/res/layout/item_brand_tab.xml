@@ -12,21 +12,25 @@
         android:weightSum="1"
         android:layout_height="wrap_content">
 
-
+        <ImageView
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/bg_circle_image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"/>
 
 
         <TextView
-            android:text="Ranbaxy"
+
             android:id="@+id/text_brand_name"
             style="@style/LargeTextBlack"
             android:textColor="@color/colorPrimary"
             android:layout_width="0dp"
-            android:layout_weight=".6"
+            android:layout_weight=".5"
             android:layout_height="wrap_content" />
         <Spinner
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
-            android:layout_weight=".2"
+            android:layout_weight="0.5"
             android:id="@+id/brands_dropdown"
             android:layout_height="wrap_content"
             />
