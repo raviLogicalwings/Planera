@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dimen_8dp">
+
+    <RadioButton
+        android:id="@+id/radio_joint_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/colorPrimary"/>
+
+    <TextView
+        android:id="@+id/text_user_name_joint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/radio_joint_user"
+        android:layout_centerInParent="true"
+        android:text="Ravi Goshai" />
+
+
+    <View
+        android:padding="@dimen/dimen_8dp"
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:layout_below="@id/radio_joint_user"
+        android:background="@color/colorGray"
+        android:layout_marginStart="@dimen/dimen_4dp"
+        android:layout_marginEnd="@dimen/dimen_4dp"
+
+        />
+
+
+</RelativeLayout>

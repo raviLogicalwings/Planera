@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="2"
+    android:padding="@dimen/dimen_4dp">
+
+    <LinearLayout
+        android:id="@+id/layout_medical_rep_s"
+        android:layout_width="match_parent"
+        android:layout_weight="0.8"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        >
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Select MR"
+            style="@style/LargeTextBold"
+            android:layout_margin="@dimen/dimen_4dp"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_users"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/items_joint_users">
+
+        </android.support.v7.widget.RecyclerView>
+        </ScrollView>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/layout_area_managers"
+        android:layout_width="match_parent"
+        android:layout_weight="0.8"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/dimen_10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/LargeTextBold"
+            android:gravity="center"
+            android:layout_margin="@dimen/dimen_4dp"
+            android:text="Select Area Manager" />
+
+        <ScrollView
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_area_managers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/items_joint_users">
+
+
+        </android.support.v7.widget.RecyclerView>
+        </ScrollView>
+    </LinearLayout>
+
+    <Button
+
+        android:id="@+id/button_select"
+        style="@style/normalButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:text="Select"
+        android:layout_margin="@dimen/dimen_18dp"
+        />
+
+</LinearLayout>
+
+
