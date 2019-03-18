@@ -30,12 +30,13 @@ import retrofit2.Response;
 public class ActivityChangePassword extends BaseActivity implements View.OnClickListener{
     private Toolbar toolbarChangePassword;
     private TextInputLayout inputLayoutOldPassword;
-    private EditText editOldPassword;
     private TextInputLayout inputLayoutConfirmPassword;
-    private EditText editConfirmPassword;
     private TextInputLayout inputLayoutNewPassword;
     private EditText editNewPassword;
+    private EditText editOldPassword;
+    private EditText editConfirmPassword;
     private Button buttonChangePassword;
+
     private UserData userData;
 
     @Override
@@ -67,7 +68,7 @@ public class ActivityChangePassword extends BaseActivity implements View.OnClick
         toolbarChangePassword.setNavigationOnClickListener(view ->
                 onBackPressed()
         );
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Change Password");
+        Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.title_change_password));
     }
 
     @Override
@@ -120,7 +121,8 @@ public class ActivityChangePassword extends BaseActivity implements View.OnClick
             public void onResponse(@NonNull Call<ChemistResponse> call, @NonNull Response<ChemistResponse> response) {
                 processDialog.dismissDialog();
 
-                if (response.body().getStatusCode() == 1) {
+                assert response.body() != null;
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     Toast.makeText(ActivityChangePassword.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
                     backToLogin();
                 } else {

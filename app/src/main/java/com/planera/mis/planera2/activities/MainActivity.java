@@ -26,36 +26,43 @@ import java.util.Objects;
 public class MainActivity extends BaseActivity implements
         View.OnClickListener {
 
-    private TextView mTextMessage;
-    private  BottomNavigationView navigation;
-    public FragmentManager manager;
-    private Fragment fragment;
-    private AppBarLayout appBar;
-    private Toolbar toolbarProduct;
     private ImageView imageAddPlan;
+    private BottomNavigationView navigation;
+    private Toolbar toolbarProduct;
+    private Fragment fragment;
+
+    private AppBarLayout appBar;
+    public FragmentManager manager;
+    private Intent intent;
 
 
+    @Override
+    public void initData() {
+        super.initData();
+        manager = getSupportFragmentManager();
+        loadFragment(AppConstants.HOME_FRAGMENT);
+    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = item -> {
-                switch (item.getItemId()) {
-                    case R.id.navigation_home:
-                      loadFragment(AppConstants.HOME_FRAGMENT);
-                      getSupportActionBar().setTitle("Visit Plan");
-                        return true;
-                    case R.id.navigation_meeting:
-                        Intent intent = new Intent(MainActivity.this, SearchDateWiseInputActivity.class);
-                        startActivity(intent);
-                        return true;
-                    case R.id.navigation_profile:
-                     loadFragment(AppConstants.PROFILE_FRAGMENT);
-                        return true;
-                    case R.id.navigation_logout:
-                        popupDialog();
-                        return true;
-                }
-                return false;
-            };
+        switch (item.getItemId()) {
+            case R.id.navigation_home:
+                loadFragment(AppConstants.HOME_FRAGMENT);
+                Objects.requireNonNull(getSupportActionBar()).setTitle("Visit Plan");
+                return true;
+            case R.id.navigation_meeting:
+                Intent intent = new Intent(MainActivity.this, SearchDateWiseInputActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.navigation_profile:
+                loadFragment(AppConstants.PROFILE_FRAGMENT);
+                return true;
+            case R.id.navigation_logout:
+                popupDialog();
+                return true;
+        }
+        return false;
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,12 +77,14 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onBackPressed() {
-      super.onBackPressed();
+        if (getSupportFragmentManager().getBackStackEntryCount()>0){
+          getFragmentManager().popBackStack();
         }
+        super.onBackPressed();
+    }
 
-
-    public void loadFragment(int type){
-        switch (type){
+    public void loadFragment(int type) {
+        switch (type) {
 
             case AppConstants.HOME_FRAGMENT:
                 fragment = new HomeFragment();
@@ -90,21 +99,24 @@ public class MainActivity extends BaseActivity implements
 
         }
 
-        manager.beginTransaction().replace(R.id.container, fragment).commit();
+        manager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
     }
+
+
+
     @Override
     public void initUi() {
         super.initUi();
-        navigation  = findViewById(R.id.navigation);
-        BottomNavigationViewHelper.removeShiftMode(navigation);
-        mTextMessage = findViewById(R.id.message);
+        navigation = findViewById(R.id.navigation);
         imageAddPlan = findViewById(R.id.img_action_add);
-
-        appBar = findViewById(R.id.appBar);
         toolbarProduct = findViewById(R.id.toolbarProduct);
+        appBar = findViewById(R.id.appBar);
+
+
         setSupportActionBar(toolbarProduct);
-        getSupportActionBar().setTitle("Visit Plan");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Visit Plan");
         imageAddPlan.setOnClickListener(this);
+        BottomNavigationViewHelper.removeShiftMode(navigation);
 
     }
 
@@ -117,14 +129,15 @@ public class MainActivity extends BaseActivity implements
         }
     }
 
-    public void backToLogin(){
+    public void backToLogin() {
+        connector.clearValue(AppConstants.USER_TYPE);
         connector.setBoolean(AppConstants.IS_LOGIN, false);
-        Intent intentLogin = new Intent(MainActivity.this, LoginActivity.class);
-        startActivity(intentLogin);
+        intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
         finish();
     }
 
-    public void popupDialog(){
+    public void popupDialog() {
         AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
 
         alertDialog.setMessage("Are you sure you want to logout?");
@@ -141,22 +154,15 @@ public class MainActivity extends BaseActivity implements
         alertDialog.show();
 
     }
-    @Override
-    public void initData() {
-        super.initData();
-        manager = getSupportFragmentManager();
-       loadFragment(AppConstants.HOME_FRAGMENT);
-    }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.img_action_add:
-                if (InternetConnection.isNetworkAvailable(MainActivity.this)){
-                    Intent intent = new Intent(MainActivity.this, ActivityUserPlanCreate.class);
+                if (InternetConnection.isNetworkAvailable(MainActivity.this)) {
+                    intent = new Intent(MainActivity.this, ActivityUserPlanCreate.class);
                     startActivity(intent);
-                }
-                else{
+                } else {
                     Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_SHORT).show();
                 }
                 break;

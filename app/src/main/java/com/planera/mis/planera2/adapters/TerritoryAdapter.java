@@ -55,12 +55,12 @@ private OnItemClickListener onItemClickListener;
         private ImageView imgEdit;
 
 
-        public MyTerritoryHolder(View itemView) {
+        MyTerritoryHolder(View itemView) {
             super(itemView);
             textTerritory = itemView.findViewById(R.id.text_territory);
             textState = itemView.findViewById(R.id.text_state);
-            imgDelete = itemView.findViewById(R.id.img_delete);
-            imgEdit = itemView.findViewById(R.id.img_edit);
+            imgDelete = itemView.findViewById(R.id.img_delete_territory);
+            imgEdit = itemView.findViewById(R.id.img_edit_territory);
             textTerritory.setVisibility(View.VISIBLE);
 
             imgDelete.setOnClickListener(this);
@@ -71,10 +71,10 @@ private OnItemClickListener onItemClickListener;
         @Override
         public void onClick(View view) {
             switch (view.getId()){
-                case R.id.img_delete:
+                case R.id.img_delete_territory:
                     onItemClickListener.onItemClick(view, getAdapterPosition());
                     break;
-                case R.id.img_edit:
+                case R.id.img_edit_territory:
                     onItemClickListener.onItemClick(imgEdit,getAdapterPosition());
                     break;
             }

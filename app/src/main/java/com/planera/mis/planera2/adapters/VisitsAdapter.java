@@ -7,18 +7,22 @@ import android.location.Location;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.models.UserPlan;
+import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.PreferenceConnector;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,10 +31,12 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
     private Context mContext;
     private Location location;
     private List<UserPlan> planList;
+    private PreferenceConnector connector;
     private View view;
+    private VisitItemHolder holder;
     private OnVisitAdapterClickListener onVisitAdapterClickListener;
     boolean isDoctor;
-    float dist;
+    double dist;
     boolean decideRole;
 
 
@@ -38,6 +44,7 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
         mContext = context;
         this.location = location;
         this.onVisitAdapterClickListener = onVisitAdapterClickListener;
+        connector  = new PreferenceConnector(context);
 
     }
 
@@ -51,7 +58,6 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
     @Override
     public void onBindViewHolder(@NonNull VisitItemHolder holder, int position) {
 
-        Log.e("Api Response", new Gson().toJson(planList));
         onBindItems(holder, position);
     }
 
@@ -68,18 +74,25 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
 
     @SuppressLint("SetTextI18n")
     private void onBindItems(VisitItemHolder viewHolder, int position) {
+        dist = planList.get(position).getDist();
+        holder = viewHolder;
+
+        if (connector.getInteger(AppConstants.USER_TYPE) == AppConstants.MR)
+        {
+            viewHolder.textJointworking.setVisibility(View.GONE);
+        }
+        else{
+            viewHolder.textJointworking.setVisibility(View.VISIBLE);
+        }
 
         if(planList.get(position).getChemistsId().equals("0")){
+
             if (planList.get(position).getDoctorFirstName() != null) {
                 viewHolder.textName.setText(planList.get(position).getDoctorFirstName()
                         + " " + planList.get(position).getDoctorMiddleName() + " " +
                         planList.get(position).getDoctorLastName());
             String firstChar = getFirstName(planList.get(position).getDoctorFirstName());
             viewHolder.textNameFirstLetter.setText(firstChar.toUpperCase());
-//
-//                dist = calculateDistance(location,
-//                        planList.get(position).getDoctorLatitude(),
-//                        planList.get(position).getDoctorLongitude());
                 viewHolder.textDistance.setText(Math.round(planList.get(position).getDist()) + " KM");
             }
         }
@@ -101,6 +114,14 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
         viewHolder.textAddress.setText(planList.get(position).getPatchName() + ", " +
                 planList.get(position).getTerritoryName());
 
+//        notifyJointUiUpdate();
+
+    }
+
+    public void notifyJointUiUpdate() {
+        holder.imageJointSuccess.setVisibility(View.VISIBLE);
+        holder.textJointworking.setVisibility(View.GONE);
+
     }
 
 
@@ -112,7 +133,10 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
         private Button buttonCheckIn;
         private TextView textDistance;
         private ImageView imageCurrentLocationStatus;
+        private ImageView imageJointSuccess;
         private RatingBar ratingBarDoctor;
+        private TextView textJointworking;
+        private LinearLayout layoutIsJoint;
 
 
         VisitItemHolder(View itemView) {
@@ -126,8 +150,13 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
             buttonCheckIn = itemView.findViewById(R.id.button_check_in);
             textDistance = itemView.findViewById(R.id.text_distance);
             imageCurrentLocationStatus = itemView.findViewById(R.id.image_current_location_status);
+            imageJointSuccess = itemView.findViewById(R.id.icon_joint_success);
+            textJointworking = itemView.findViewById(R.id.text_joint);
+            layoutIsJoint = itemView.findViewById(R.id.layout_is_joint);
             imageCurrentLocationStatus.setOnClickListener(this);
             buttonCheckIn.setOnClickListener(this);
+            textJointworking.setOnClickListener(this);
+
         }
 
         @Override
@@ -139,6 +168,10 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
                     break;
                 case R.id.image_current_location_status:
                     showOnMap(getAdapterPosition());
+                    break;
+
+                case R.id.text_joint:
+                    onVisitAdapterClickListener.onJointClick(getAdapterPosition());
                     break;
             }
 
@@ -200,6 +233,7 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
 
 
     public interface OnVisitAdapterClickListener {
-        void onVisitClick(View view, int position, boolean isDoctor, float dist);
+        void onVisitClick(View view, int position, boolean isDoctor, double dist);
+        void onJointClick(int position);
     }
 }

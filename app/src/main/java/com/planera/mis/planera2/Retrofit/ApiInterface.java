@@ -25,6 +25,7 @@ import com.planera.mis.planera2.models.Plans;
 import com.planera.mis.planera2.models.PlansListResponce;
 import com.planera.mis.planera2.models.RegistrationResponse;
 import com.planera.mis.planera2.models.ReportListResponce;
+import com.planera.mis.planera2.models.RoleWiseUsersResponse;
 import com.planera.mis.planera2.models.StateListResponse;
 import com.planera.mis.planera2.models.TerritoryListResponse;
 import com.planera.mis.planera2.models.UserData;
@@ -101,6 +102,9 @@ public interface ApiInterface {
 
     @GET(AppConstants.USER_LIST)
     Call<UserListResponse> usersList(@Header("Authorization") String token);
+
+    @GET(AppConstants.USER_LIST_BY_PATCHES)
+    Call<RoleWiseUsersResponse> userListByPathches(@Header("Authorization") String token, @Query("PatchId") int patchId);
 
 
     @GET(AppConstants.PLAN_LIST)

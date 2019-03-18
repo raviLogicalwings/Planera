@@ -40,6 +40,7 @@ import com.planera.mis.planera2.utils.InternetConnection;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,7 +48,7 @@ import retrofit2.Response;
 
 import static android.content.ContentValues.TAG;
 
-public class ActivityUpdatePlan extends BaseActivity implements View.OnClickListener{
+public class ActivityUpdatePlan extends BaseActivity implements View.OnClickListener {
     private Spinner spinnerPlanDoctor;
     private Spinner spinnerPlanChemist;
     private Spinner spinnerPlanUser;
@@ -58,27 +59,40 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
     private EditText textPlanCall;
     private EditText textPlanRemark;
     private LinearLayout doctorSpinnerLayout;
-    private LinearLayout chemistSpinnerLayout, linearNoInternet;
+    private LinearLayout chemistSpinnerLayout;
+    private LinearLayout linearNoInternet;
+    private RadioGroup radioGroupSelect;
+    protected RadioButton radioDoctor;
+    protected RadioButton radioChemist;
+    protected Button buttonAddPlan;
+    private Button buttonRetry;
+    private CardView cardView;
+
     private List<Patches> patchesList;
     private List<UserData> usersList;
     private List<Chemists> chemistsList;
     private List<Doctors> doctorsList;
-    private RadioGroup radioGroupSelect;
-    private RadioButton radioDoctor;
-    private RadioButton radioChemist;
-    private Button buttonAddPlan, buttonRetry;
-    private Plans plans;
-    private List<String> months;
-    private boolean isDoctorRadioChecked = true;
-    int  patchId,  selectedMonth, planId;
-    String chemistId, doctorId;
-    String  userId,status;
-    String  yearStr, callStr, remarkStr;
-    private int runningYear;
-    private CardView cardView;
+    protected List<String> months;
     private List<String> years;
     private List<Territories> territoriesList;
+
+    protected Plans plans;
+
+    private int patchId;
+    private int selectedMonth;
+    private int planId;
+    protected int runningYear;
     private int territoryId;
+
+    protected String chemistId;
+    protected String doctorId;
+    protected String userId;
+    protected String status;
+    protected String yearStr;
+    protected String callStr;
+    protected String remarkStr;
+
+    private boolean isDoctorRadioChecked = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +100,6 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
         setContentView(R.layout.activity_crete_plan);
         initUi();
         initData();
-//        loadSpinners();
     }
 
     @Override
@@ -94,43 +107,38 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
         super.onStart();
     }
 
-    public void uiValidation(){
+    public void uiValidation() {
         callStr = textPlanCall.getText().toString().trim();
         remarkStr = textPlanRemark.getText().toString().trim();
         plans = new Plans();
-        if (isDoctorRadioChecked){
-            doctorId = doctorsList.get(spinnerPlanDoctor.getSelectedItemPosition()).getDoctorId()+"";
+        if (isDoctorRadioChecked) {
+            doctorId = doctorsList.get(spinnerPlanDoctor.getSelectedItemPosition()).getDoctorId() + "";
             chemistId = null;
-        }
-        else if(!isDoctorRadioChecked){
-            chemistId = chemistsList.get(spinnerPlanChemist.getSelectedItemPosition()).getChemistId()+"";
+        } else {
+            chemistId = chemistsList.get(spinnerPlanChemist.getSelectedItemPosition()).getChemistId() + "";
             doctorId = null;
         }
-       if (TextUtils.isEmpty(callStr)){
+        if (TextUtils.isEmpty(callStr)) {
             textPlanCall.requestFocus();
             textPlanCall.setError(getString(R.string.invalid_input));
-        }
-        else if (TextUtils.isEmpty(remarkStr)){
+        } else if (TextUtils.isEmpty(remarkStr)) {
             textPlanRemark.requestFocus();
             textPlanRemark.setError(getString(R.string.invalid_input));
-        }
-
-        else{
-            plans.setPlanId(planId+"");
+        } else {
+            plans.setPlanId(planId + "");
             plans.setCalls(callStr);
             plans.setChemistsId(chemistId);
             plans.setDoctorId(doctorId);
-            plans.setUserId(userId+"");
-            plans.setPatchId(patchId+"");
+            plans.setUserId(userId + "");
+            plans.setPatchId(patchId + "");
             plans.setYear(yearStr);
-            plans.setMonth(selectedMonth+"");
+            plans.setMonth(selectedMonth + "");
             plans.setRemark(remarkStr);
             plans.setStatus(status);
 
-            if (InternetConnection.isNetworkAvailable(ActivityUpdatePlan.this)){
+            if (InternetConnection.isNetworkAvailable(ActivityUpdatePlan.this)) {
                 updatePlanDetailsApi(token, plans);
-            }
-            else{
+            } else {
                 Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
             }
 
@@ -162,43 +170,38 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
         linearNoInternet = findViewById(R.id.linear_no_internet);
         cardView = findViewById(R.id.card_view);
         buttonAddPlan.setText(getString(R.string.update));
-        if(isDoctorRadioChecked) {
-            radioDoctor.setChecked(isDoctorRadioChecked);
+        if (isDoctorRadioChecked) {
+            radioDoctor.setChecked(true);
             chemistSpinnerLayout.setVisibility(View.GONE);
         }
         buttonAddPlan.setOnClickListener(this);
-        getSupportActionBar().setTitle("Update Plan");
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.title_update_plan);
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
         loadFormIntent(intent);
 
-        buttonRetry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                startActivity(getIntent());
-            }
+        buttonRetry.setOnClickListener(v -> {
+            finish();
+            startActivity(getIntent());
         });
     }
 
 
-    public void updatePlanDetailsApi(String token, Plans plans){
-        Log.e("Update Responce", new Gson().toJson(plans));
+    public void updatePlanDetailsApi(String token, Plans plans) {
         processDialog.showDialog(ActivityUpdatePlan.this, false);
         Call<MainResponse> call = apiInterface.updatePlanDetails(token, plans);
 
         call.enqueue(new Callback<MainResponse>() {
             @Override
             public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
-                Log.e("Update Responce", new Gson().toJson(response.body()));
                 processDialog.dismissDialog();
-                if(response.isSuccessful()){
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                if (response.isSuccessful()) {
+                    assert response.body() != null;
+                    if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                         Intent intent = new Intent(ActivityUpdatePlan.this, SingleListActivity.class);
                         intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.PLAN_FRAGMENT);
                         startActivity(intent);
                         finish();
-                    }
-                    else{
+                    } else {
                         Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_SHORT).show();
                     }
                 }
@@ -206,8 +209,7 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
             }
 
             @Override
-            public void onFailure(Call<MainResponse> call, Throwable t) {
-                Log.e("Log ", t.getMessage());
+            public void onFailure(@NonNull Call<MainResponse> call, @NonNull Throwable t) {
                 Snackbar.make(rootView, t.getMessage(), Snackbar.LENGTH_LONG).show();
 
             }
@@ -258,11 +260,11 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
         runningYear = Calendar.getInstance().get(Calendar.YEAR);
 
         years = new ArrayList<>();
-        years.add(runningYear+"");
-        years.add(runningYear+1+"");
-        years.add(runningYear+2+"");
-        years.add(runningYear+3+"");
-        years.add(runningYear+4+"");
+        years.add(runningYear + "");
+        years.add(runningYear + 1 + "");
+        years.add(runningYear + 2 + "");
+        years.add(runningYear + 3 + "");
+        years.add(runningYear + 4 + "");
         setArrayAdapter(years, spinnerPlanYear);
 
         spinnerPlanYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -279,7 +281,7 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
         spinnerPlanMonth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedMonth = position+1;
+                selectedMonth = position + 1;
             }
 
             @Override
@@ -301,8 +303,12 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 territoryId = territoriesList.get(position).getTerritoryId();
-                if (territoryId != 0){
-                    getPatchList(token, territoryId);
+                if (territoryId != 0) {
+                    if (InternetConnection.isNetworkAvailable(ActivityUpdatePlan.this)) {
+                        getPatchList(token, territoryId);
+                    } else {
+                        Snackbar.make(rootView, R.string.no_internet, Snackbar.LENGTH_LONG).show();
+                    }
                 }
             }
 
@@ -316,14 +322,32 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 patchId = patchesList.get(position).getPatchId();
 
-                if (isDoctorRadioChecked){
-                    getDoctorsList(token, patchId);
+                if (isDoctorRadioChecked) {
+                    if (InternetConnection.isNetworkAvailable(ActivityUpdatePlan.this)) {
+                        getDoctorsList(token, patchId);
+                    } else {
+                        Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+                    }
+                } else {
+
+                    if (InternetConnection.isNetworkAvailable(ActivityUpdatePlan.this)) {
+                        getChemistList(token, patchId);
+                    } else {
+                        Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+                    }
+
                 }
-                else{
-                    getChemistList(token, patchId);
+                /**
+                 * *
+                 getting user's list after filling chemist/doctor's spinner./
+                 */
+                if (InternetConnection.isNetworkAvailable(ActivityUpdatePlan.this)){
+                    getUsersList(token);
                 }
-                /// getting user's list after filling chemist/doctor's spinner.
-                getUsersList(token);
+                else
+                {
+                    Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+                }
             }
 
             @Override
@@ -332,7 +356,7 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
         });
 
         radioGroupSelect.setOnCheckedChangeListener((group, checkedId) -> {
-            switch (checkedId){
+            switch (checkedId) {
                 case R.id.radio_chemist:
                     isDoctorRadioChecked = false;
                     chemistSpinnerLayout.setVisibility(View.VISIBLE);
@@ -352,7 +376,11 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
 
 
     private void loadSpinners() {
-        getTerritoryList(token);
+        if (InternetConnection.isNetworkAvailable(ActivityUpdatePlan.this)) {
+            getTerritoryList(token);
+        } else {
+            Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+        }
 
     }
 
@@ -361,27 +389,26 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
         Call<TerritoryListResponse> call = apiInterface.territoryList(token);
         call.enqueue(new Callback<TerritoryListResponse>() {
             @Override
-            public void onResponse(Call<TerritoryListResponse> call, Response<TerritoryListResponse> response) {
+            public void onResponse(@NonNull Call<TerritoryListResponse> call, @NonNull Response<TerritoryListResponse> response) {
                 processDialog.dismissDialog();
-                if (response != null) {
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
-                        territoriesList = response.body().getTerritorysList();
-                        List<String> stringTerritoryList = new ArrayList<>();
-                        stringTerritoryList.add(getString(R.string.select));
-                        for (int i = 0; i < territoriesList.size(); i++) {
-                            stringTerritoryList.add(territoriesList.get(i).getTerritoryName());
-                        }
-                        setArrayAdapter(stringTerritoryList, spinnerTerritory);
-
-                    } else {
-                        Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
+                assert response.body() != null;
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
+                    territoriesList = response.body().getTerritorysList();
+                    List<String> stringTerritoryList = new ArrayList<>();
+                    stringTerritoryList.add(getString(R.string.select));
+                    for (int i = 0; i < territoriesList.size(); i++) {
+                        stringTerritoryList.add(territoriesList.get(i).getTerritoryName());
                     }
+                    setArrayAdapter(stringTerritoryList, spinnerTerritory);
 
+                } else {
+                    Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                 }
+
             }
 
             @Override
-            public void onFailure(Call<TerritoryListResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<TerritoryListResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 cardView.setVisibility(View.GONE);
                 linearNoInternet.setVisibility(View.VISIBLE);
@@ -391,61 +418,56 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
         });
 
     }
-    public void getPatchList(String token, int terId){
-//        DataController.getmInstance().showProcessDialog(ActivityUpdatePlan.this, false);
+
+    public void getPatchList(String token, int terId) {
         Call<PatchListResponse> call = apiInterface.patchListByTerritory(token, terId);
         call.enqueue(new Callback<PatchListResponse>() {
             @Override
-            public void onResponse(Call<PatchListResponse> call, Response<PatchListResponse> response) {
-//               DataController.getmInstance().dismissProcessDialog();
-                Log.e(TAG, "onResponse: PatchesList"+new Gson().toJson(response.body()));
-                if (response != null) {
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
-                        patchesList = response.body().getPatchesList();
-                        List<String> stringPatchesList = new ArrayList<>();
-                        for (int i=0; i<patchesList.size(); i++){
-                            stringPatchesList.add(patchesList.get(i).getPatchName());
-                        }
-                        setArrayAdapter(stringPatchesList, spinnerPlanPatch);
-
-
-                    } else {
-                        Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
+            public void onResponse(@NonNull Call<PatchListResponse> call, @NonNull Response<PatchListResponse> response) {
+                assert response.body() != null;
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK)
+                {
+                    patchesList = response.body().getPatchesList();
+                    List<String> stringPatchesList = new ArrayList<>();
+                    for (int i = 0; i < patchesList.size(); i++)
+                    {
+                        stringPatchesList.add(patchesList.get(i).getPatchName());
                     }
+                    setArrayAdapter(stringPatchesList, spinnerPlanPatch);
+
+
+                } else
+                    {
+                    Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<PatchListResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<PatchListResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 cardView.setVisibility(View.GONE);
                 linearNoInternet.setVisibility(View.VISIBLE);
                 buttonRetry.setVisibility(View.VISIBLE);
-//                DataController.getmInstance().dismissProcessDialog();
-
                 Toast.makeText(ActivityUpdatePlan.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
     }
 
-    public void getDoctorsList(String token, int patchId){
-//        DataController.getmInstance().showProcessDialog(ActivityUpdatePlan.this, false);
-        Call<DoctorsListResponce> call = apiInterface.patchesWiseDoctorList(token,patchId);
+    public void getDoctorsList(String token, int patchId) {
+        Call<DoctorsListResponce> call = apiInterface.patchesWiseDoctorList(token, patchId);
         call.enqueue(new Callback<DoctorsListResponce>() {
             @Override
-            public void onResponse(Call<DoctorsListResponce> call, Response<DoctorsListResponce> response) {
-//               DataController.getmInstance().dismissProcessDialog();
-                Log.e(TAG, "onResponse: DoctorsList"+new Gson().toJson(response.body()));
+            public void onResponse(@NonNull Call<DoctorsListResponce> call, @NonNull Response<DoctorsListResponce> response) {
+                assert response.body() != null;
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     doctorsList = response.body().getData();
                     List<String> stringDoctorsList = new ArrayList<>();
-                    for (int i=0; i<doctorsList.size(); i++){
-                        stringDoctorsList.add(doctorsList.get(i).getFirstName()+" "+doctorsList.get(i).getLastName());
+                    for (int i = 0; i < doctorsList.size(); i++) {
+                        stringDoctorsList.add(doctorsList.get(i).getFirstName() + " " + doctorsList.get(i).getLastName());
                     }
                     setArrayAdapter(stringDoctorsList, spinnerPlanDoctor);
-                }
-                else{
+                } else {
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                 }
 
@@ -453,7 +475,7 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
             }
 
             @Override
-            public void onFailure(Call<DoctorsListResponce> call, Throwable t) {
+            public void onFailure(@NonNull Call<DoctorsListResponce> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 cardView.setVisibility(View.GONE);
                 linearNoInternet.setVisibility(View.VISIBLE);
@@ -465,23 +487,22 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
 
     }
 
-    public void getUsersList(String token){
+    public void getUsersList(String token) {
 //        DataController.getmInstance().showProcessDialog(ActivityUpdatePlan.this, false);
         Call<UserListResponse> call = apiInterface.usersList(token);
         call.enqueue(new Callback<UserListResponse>() {
             @Override
-            public void onResponse(Call<UserListResponse> call, Response<UserListResponse> response) {
+            public void onResponse(@NonNull Call<UserListResponse> call, Response<UserListResponse> response) {
 //                DataController.getmInstance().dismissProcessDialog();
-                Log.e(TAG, "onResponse: "+new Gson().toJson(response.body()));
-                if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                Log.e(TAG, "onResponse: " + new Gson().toJson(response.body()));
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     usersList = response.body().getData();
                     List<String> stringUserList = new ArrayList<>();
-                    for (int i=0; i<usersList.size(); i++){
-                        stringUserList.add(usersList.get(i).getFirstName()+" "+usersList.get(i).getLastName());
+                    for (int i = 0; i < usersList.size(); i++) {
+                        stringUserList.add(usersList.get(i).getFirstName() + " " + usersList.get(i).getLastName());
                     }
                     setArrayAdapter(stringUserList, spinnerPlanUser);
-                }
-                else{
+                } else {
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                 }
 
@@ -501,30 +522,27 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
 
     }
 
-    public void loadFormIntent(Intent intent){
+    public void loadFormIntent(Intent intent) {
         textPlanCall.setText(intent.getStringExtra(AppConstants.CALLS));
         textPlanRemark.setText(intent.getStringExtra(AppConstants.REMARK));
         planId = intent.getIntExtra(AppConstants.UPDATE_PLAN_KEY, 0);
         status = intent.getStringExtra(AppConstants.STATUS);
     }
 
-    public void getChemistList(String token, int patchId){
-//        DataController.getmInstance().showProcessDialog(ActivityUpdatePlan.this, false);
+    public void getChemistList(String token, int patchId) {
         Call<ChemistListResponse> call = apiInterface.patchesWiseChemistList(token, patchId);
         call.enqueue(new Callback<ChemistListResponse>() {
             @Override
-            public void onResponse(Call<ChemistListResponse> call, Response<ChemistListResponse> response) {
-//                DataController.getmInstance().dismissProcessDialog();
-                Log.e(TAG, "onResponse: ChemistList"+new Gson().toJson(response.body()));
-                if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+            public void onResponse(@NonNull Call<ChemistListResponse> call, @NonNull Response<ChemistListResponse> response) {
+                Log.e(TAG, "onResponse: ChemistList" + new Gson().toJson(response.body()));
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     chemistsList = response.body().getData();
                     List<String> stringChemistList = new ArrayList<>();
-                    for (int i=0; i<chemistsList.size(); i++){
-                        stringChemistList.add(chemistsList.get(i).getFirstName()+" "+chemistsList.get(i).getLastName());
+                    for (int i = 0; i < chemistsList.size(); i++) {
+                        stringChemistList.add(chemistsList.get(i).getFirstName() + " " + chemistsList.get(i).getLastName());
                     }
                     setArrayAdapter(stringChemistList, spinnerPlanChemist);
-                }
-                else{
+                } else {
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
                 }
 
@@ -553,9 +571,10 @@ public class ActivityUpdatePlan extends BaseActivity implements View.OnClickList
         spinner.setAdapter(spinnerArrayAdapter);
 
     }
+
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.button_create_plan:
                 uiValidation();
                 break;

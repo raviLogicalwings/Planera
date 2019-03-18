@@ -3,6 +3,7 @@ package com.planera.mis.planera2.FragmentDialog.addDialogs;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
@@ -19,9 +20,11 @@ import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.FragmentDialog.BaseDialogFragment;
 import com.planera.mis.planera2.models.MainResponse;
 import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.InternetConnection;
 
 import java.util.Objects;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -88,8 +91,14 @@ public class AddStateDialog  extends BaseDialogFragment implements View.OnClickL
           editTextName.requestFocus();
         }
         else{
-
-            addStateApi(token, strState);
+            if (InternetConnection.isNetworkAvailable(mContext))
+            {
+                addStateApi(token, strState);
+            }
+            else
+            {
+                Toasty.warning(mContext, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -159,6 +168,6 @@ public class AddStateDialog  extends BaseDialogFragment implements View.OnClickL
     }
 
     public interface OnStateDialogDismissListener {
-        public void onDialogDismiss();
+        void onDialogDismiss();
     }
 }

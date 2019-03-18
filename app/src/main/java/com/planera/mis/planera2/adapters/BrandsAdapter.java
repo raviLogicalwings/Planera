@@ -74,7 +74,7 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyBrandsHo
     @Override
     public int getItemCount() {
         if (brandsList != null) {
-            Log.e("BrandLIst", brandsList.size()+""+new Gson().toJson(brandsList));
+//            Log.e("BrandLIst", brandsList.size()+""+new Gson().toJson(brandsList));
             return brandsList.size();
         } else {
             return 0;

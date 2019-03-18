@@ -8,12 +8,26 @@
 
     <!--Text Size-->
     <dimen name="edit_text_size">15sp</dimen>
-
     <dimen name="extra_large_text_size">22sp</dimen>
     <dimen name="large_text_size">18sp</dimen>
-    <dimen name="tiny_text">10sp</dimen>
     <dimen name="medium_text_size">16sp</dimen>
     <dimen name="normal_text_size">10sp</dimen>
-
+    <dimen name="tiny_text">10sp</dimen>
     <dimen name="small_padding">5dp</dimen>
+
+    <dimen name="dimen_2dp">2dp</dimen>
+    <dimen name="dimen_4dp">4dp</dimen>
+    <dimen name="dimen_8dp">8dp</dimen>
+    <dimen name="dimen_10dp">10dp</dimen>
+    <dimen name="dimen_12dp">12dp</dimen>
+    <dimen name="dimen_14dp">14dp</dimen>
+    <dimen name="dimen_18dp">18dp</dimen>
+    <dimen name="dimen_20dp">20dp</dimen>
+    <dimen name="dimen_24dp">24dp</dimen>
+    <dimen name="dimen_28dp">28dp</dimen>
+    <dimen name="dimen_32dp">32dp</dimen>
+    <dimen name="dimen_36dp">36dp</dimen>
+    <dimen name="dimen_40dp">40dp</dimen>
+    <dimen name="dimen_44dp">44dp</dimen>
+    <dimen name="dimen_48dp">48dp</dimen>
 </resources>

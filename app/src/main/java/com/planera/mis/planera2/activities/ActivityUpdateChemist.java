@@ -1,9 +1,8 @@
 package com.planera.mis.planera2.activities;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -16,12 +15,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.fragments.ChemistFragment;
 import com.planera.mis.planera2.models.Chemists;
-import com.planera.mis.planera2.models.DoctorResponse;
-import com.planera.mis.planera2.models.Doctors;
 import com.planera.mis.planera2.models.GooglePlacesModel.GooglePlaces;
 import com.planera.mis.planera2.models.MainResponse;
 import com.planera.mis.planera2.models.PatchListResponse;
@@ -31,20 +27,16 @@ import com.planera.mis.planera2.utils.InternetConnection;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ActivityUpdateChemist extends BaseActivity implements View.OnClickListener{
-    private Chemists chemists;
-    private List<String> prefferdMeetTime;
-    private List<String> meetFequrency;
-    private List<Patches> patches;
-    private AppBarLayout appBar;
-    private Toolbar toolbarChemist;
+
+    protected Toolbar toolbarChemist;
     private EditText textChemistCompanyName;
     private EditText textChemistMonthlyVolume;
     private EditText textChemistShopSize;
@@ -52,8 +44,6 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
     private EditText textChemistMiddleName;
     private EditText textChemistLastName;
     private EditText textChemistEmail;
-    private Spinner spinnerMeetTime;
-    private Spinner spinnerPatchId;
     private EditText textChemistPhone;
     private EditText textChemistAddress1;
     private EditText textChemistAddress2;
@@ -67,16 +57,42 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
     private EditText textChemistBillingPhone2;
     private EditText textChemistBillingEmail;
     private EditText textChemistRating;
-    private Button buttonAddChemist;
-    private String dateOfBirthString;
+    private Spinner spinnerMeetTime;
+    private Spinner spinnerPatchId;
+    protected Button buttonAddChemist;
+
+    private List<String> prefrredMeetTime;
+    protected List<String> meetFrequency;
+    private List<Patches> patches;
+
+    private Chemists chemists;
+
     int meetTime;
-    int meetFreq;
     int patchId;
     int chemistId;
-    private boolean isUpdateCall;
-    String firstNameStr, middleNameStr, lastNameStr, emailStr, dobStr, companyNameStr, monthtlyVolumeStr,shopSizeStr,  billingEmailStr, billingPhone2Str, billingPhone1Str, ratingStr ,specializationStr, phoneStr,
-            address1Str, address2Str, address3Str, address4Str, districtStr, cityStr, stateStr, pincodeStr;
-    private String previousPatchId;
+
+    protected String firstNameStr;
+    protected String middleNameStr;
+    protected String lastNameStr;
+    protected String emailStr;
+    protected String companyNameStr;
+    protected String monthlyVolumeStr;
+    protected String shopSizeStr;
+    protected String billingEmailStr;
+    protected String billingPhone2Str;
+    protected String billingPhone1Str;
+    protected String ratingStr;
+    protected String phoneStr;
+    protected String address1Str;
+    protected String address2Str;
+    protected String address3Str;
+    protected String address4Str;
+    protected String districtStr;
+    protected String cityStr;
+    protected String stateStr;
+    protected String pinCodeStr;
+    protected String previousPatchId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,11 +107,11 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
     public void initUi() {
         super.initUi();
         Intent intent = getIntent();
-        appBar = findViewById(R.id.appBar);
+
         toolbarChemist = findViewById(R.id.toolbar);
         textChemistCompanyName = findViewById(R.id.text_chemist_company_name);
         textChemistMonthlyVolume = findViewById(R.id.text_chemist_monthly_volume);
-        textChemistShopSize = findViewById(R.id.text_chemist_shop_size);
+        textChemistShopSize = findViewById(R.id.text_chemist_shop);
         textChemistFirstName = findViewById(R.id.text_chemist_first_name);
         textChemistMiddleName = findViewById(R.id.text_chemist_middle_name);
         textChemistLastName = findViewById(R.id.text_chemist_last_name);
@@ -121,18 +137,18 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
 
         buttonAddChemist.setOnClickListener(this);
         setSupportActionBar(toolbarChemist);
-        getSupportActionBar().setTitle("Update Chemist's Detail");
-        prefferdMeetTime = new ArrayList<>();
-        prefferdMeetTime.add("Morning");
-        prefferdMeetTime.add("Evening");
-        meetFequrency = new ArrayList<>();
-        meetFequrency.add("1");
-        meetFequrency.add("2");
-        meetFequrency.add("3");
-        meetFequrency.add("4");
-        meetFequrency.add("5");
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.title_update_chemist);
+        prefrredMeetTime = new ArrayList<>();
+        prefrredMeetTime.add("Morning");
+        prefrredMeetTime.add("Evening");
+        meetFrequency = new ArrayList<>();
+        meetFrequency.add("1");
+        meetFrequency.add("2");
+        meetFrequency.add("3");
+        meetFrequency.add("4");
+        meetFrequency.add("5");
 
-        setArrayAdapter(prefferdMeetTime, spinnerMeetTime);
+        setArrayAdapter(prefrredMeetTime, spinnerMeetTime);
 
         if (intent != null) {
             loadFromIntent(intent);
@@ -144,13 +160,18 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
     @Override
     public void initData() {
         super.initData();
-
-        getPatchList(token);
+        if (InternetConnection.isNetworkAvailable(ActivityUpdateChemist.this)){
+            getPatchList(token);
+        }
+        else
+        {
+            Snackbar.make(rootView, R.string.no_internet, Snackbar.LENGTH_LONG).show();
+        }
         chemists = new Chemists();
         spinnerMeetTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (prefferdMeetTime.get(i).equals(AppConstants.KEY_MORNING_TIME)) {
+                if (prefrredMeetTime.get(i).equals(AppConstants.KEY_MORNING_TIME)) {
                     meetTime = AppConstants.MORNING;
                 } else {
                     meetTime = AppConstants.EVENING;
@@ -160,7 +181,7 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                if (prefferdMeetTime.get(adapterView.getSelectedItemPosition()).equals(AppConstants.KEY_MORNING_TIME)) {
+                if (prefrredMeetTime.get(adapterView.getSelectedItemPosition()).equals(AppConstants.KEY_MORNING_TIME)) {
                     meetTime = AppConstants.MORNING;
                 } else {
                     meetTime = AppConstants.EVENING;
@@ -204,7 +225,7 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
         billingPhone2Str = textChemistBillingPhone2.getText().toString().trim();
         shopSizeStr = textChemistShopSize.getText().toString().trim();
         companyNameStr = textChemistCompanyName.getText().toString().trim();
-        monthtlyVolumeStr = textChemistMonthlyVolume.getText().toString().trim();
+        monthlyVolumeStr = textChemistMonthlyVolume.getText().toString().trim();
         phoneStr = textChemistPhone.getText().toString().trim();
         address1Str = textChemistAddress1.getText().toString().trim();
         address2Str = textChemistAddress2.getText().toString().trim();
@@ -213,34 +234,27 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
         districtStr = textChemistDistrict.getText().toString().trim();
         stateStr = textChemistState.getText().toString().trim();
         cityStr = textChemistCity.getText().toString().trim();
-        pincodeStr = textChemistPincode.getText().toString().trim();
+        pinCodeStr = textChemistPincode.getText().toString().trim();
 
 
         if (TextUtils.isEmpty(firstNameStr)) {
             textChemistFirstName.requestFocus();
             textChemistFirstName.setError(getString(R.string.first_name_invalid));
         }
-        /*else if (TextUtils.isEmpty(middleNameStr)) {
-            textChemistMiddleName.requestFocus();
-            textChemistMiddleName.setError(getString(R.string.invalid_input));
-        }*/
+
         else if (TextUtils.isEmpty(lastNameStr)) {
             textChemistLastName.requestFocus();
             textChemistLastName.setError(getString(R.string.last_name));
         } else if (TextUtils.isEmpty(shopSizeStr)) {
             textChemistShopSize.requestFocus();
             textChemistShopSize.setError(getString(R.string.shop_size));
-        } else if (TextUtils.isEmpty(monthtlyVolumeStr)) {
+        } else if (TextUtils.isEmpty(monthlyVolumeStr)) {
             textChemistMonthlyVolume.requestFocus();
             textChemistMonthlyVolume.setError(getString(R.string.monthly_potential));
         } else if (TextUtils.isEmpty(companyNameStr)) {
             textChemistCompanyName.requestFocus();
             textChemistCompanyName.setError(getString(R.string.company_name));
         }
-        /*else if (TextUtils.isEmpty(middleNameStr)) {
-            textChemistMiddleName.requestFocus();
-            textChemistMiddleName.setError(getString(R.string.invalid_input));
-        }*/
         else if (TextUtils.isEmpty(emailStr)) {
             textChemistEmail.requestFocus();
             textChemistEmail.setError(getString(R.string.email_invalid));
@@ -272,10 +286,6 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
             textChemistBillingEmail.requestFocus();
             textChemistBillingEmail.setError(getString(R.string.billing_email));
         }
-        /*else if (TextUtils.isEmpty(phoneStr)) {
-            textChemistPincode.requestFocus();
-            textChemistPincode.setError(getString(R.string.invalid_input));
-        }*/
 
         else if (TextUtils.isEmpty(billingPhone1Str)) {
             textChemistBillingPhone1.requestFocus();
@@ -303,7 +313,7 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
             chemists.setBillingPhone1(billingPhone1Str);
             chemists.setBillingPhone2(billingPhone2Str);
             chemists.setRating(ratingStr);
-            chemists.setMonthlyVolumePotential(monthtlyVolumeStr);
+            chemists.setMonthlyVolumePotential(monthlyVolumeStr);
             chemists.setCompanyName(companyNameStr);
             chemists.setPreferredMeetTime(meetTime + "");
             chemists.setFirstName(firstNameStr);
@@ -318,7 +328,7 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
             chemists.setAddress4(address4Str);
             chemists.setCity(cityStr);
             chemists.setDistrict(districtStr);
-            chemists.setPincode(pincodeStr);
+            chemists.setPincode(pinCodeStr);
             chemists.setState(stateStr);
             chemists.setPatchId(patchId + "");
             chemists.setStatus("1");
@@ -326,7 +336,7 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
 
             if (InternetConnection.isNetworkAvailable(ActivityUpdateChemist.this)) {
 
-                getAddressLatLong(address1Str + ", " + pincodeStr);
+                getAddressLatLong(address1Str + ", " + pinCodeStr);
 
             } else {
                 Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
@@ -337,56 +347,26 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
 
     }
 
-    public void addDoctorsApi(String token, Doctors chemists) {
-        processDialog.showDialog(mContext, false);
-        Call<DoctorResponse> call = apiInterface.addDoctor(token, chemists);
-        call.enqueue(new Callback<DoctorResponse>() {
-            @Override
-            public void onResponse(Call<DoctorResponse> call, Response<DoctorResponse> response) {
-                processDialog.dismissDialog();
-                Log.e("Add Doctor", "onResponse: " + new Gson().toJson(response.body()));
-                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
-                    Intent intent = new Intent(ActivityUpdateChemist.this, SingleListActivity.class);
-                    intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.DOCTOR_FRAGMENT);
-                    intent.putExtra(AppConstants.IS_CHANGES, true);
-                    startActivity(intent);
-                    Toast.makeText(ActivityUpdateChemist.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                    finish();
-                } else {
-                    Toast.makeText(ActivityUpdateChemist.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DoctorResponse> call, Throwable t) {
-                processDialog.dismissDialog();
-                Toast.makeText(ActivityUpdateChemist.this, t.getMessage(), Toast.LENGTH_LONG).show();
-
-            }
-        });
-    }
-
     public void getPatchList(String token) {
         Call<PatchListResponse> call = apiInterface.patchList(token);
         call.enqueue(new Callback<PatchListResponse>() {
             @Override
-            public void onResponse(Call<PatchListResponse> call, Response<PatchListResponse> response) {
-                if (response != null) {
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
-                        List<String> tempList = new ArrayList<>();
-                        patches = response.body().getPatchesList();
-                        for (int i = 0; i < patches.size(); i++) {
-                            tempList.add(patches.get(i).getPatchName() + ", " + patches.get(i).getTerritoryName());
-                        }
-
-                        setArrayAdapter(tempList, spinnerPatchId);
-
+            public void onResponse(@NonNull Call<PatchListResponse> call, @NonNull Response<PatchListResponse> response) {
+                assert response.body() != null;
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
+                    List<String> tempList = new ArrayList<>();
+                    patches = response.body().getPatchesList();
+                    for (int i = 0; i < patches.size(); i++) {
+                        tempList.add(patches.get(i).getPatchName() + ", " + patches.get(i).getTerritoryName());
                     }
+
+                    setArrayAdapter(tempList, spinnerPatchId);
+
                 }
             }
 
             @Override
-            public void onFailure(Call<PatchListResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<PatchListResponse> call, @NonNull Throwable t) {
                 Toast.makeText(ActivityUpdateChemist.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
@@ -398,11 +378,12 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
         Call<MainResponse> call = apiInterface.updateChemist(token, chemists);
         call.enqueue(new Callback<MainResponse>() {
             @Override
-            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+            public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
                 processDialog.dismissDialog();
                 if (response.code()==400){
 
                     try {
+                        assert response.errorBody() != null;
                         Toast.makeText(mContext, response.errorBody().string(), Toast.LENGTH_LONG).show();
                         getSupportFragmentManager().beginTransaction().detach(ChemistFragment.newInstance()).attach(ChemistFragment.newInstance()).commitAllowingStateLoss();
                     } catch (IOException e) {
@@ -413,8 +394,8 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
                 else{
 
 
+                    assert response.body() != null;
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-                        Log.e("Chemsit Update fragment", new Gson().toJson(response.body()));
                         Intent intent = new Intent(ActivityUpdateChemist.this, SingleListActivity.class);
                         intent.putExtra(AppConstants.KEY_TOUCHED_FRAGMENT, AppConstants.CHEMIST_FRAGMENT);
                         startActivity(intent);
@@ -422,14 +403,13 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
                     }
                     else{
                         Toast.makeText(ActivityUpdateChemist.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
-
                     }
 
                 }
             }
 
             @Override
-            public void onFailure(Call<MainResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MainResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 Toast.makeText(ActivityUpdateChemist.this, t.getMessage(), Toast.LENGTH_LONG).show();
 
@@ -442,28 +422,34 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
         Call<GooglePlaces> call = apbInterfaceForGooglePlaces.getPlaceLatLong(input, AppConstants.INPUT_TYPE, AppConstants.FIELDS, AppConstants.KEY_GOOGLE_PLACES);
         call.enqueue(new Callback<GooglePlaces>() {
             @Override
-            public void onResponse(Call<GooglePlaces> call, Response<GooglePlaces> response) {
+            public void onResponse(@NonNull Call<GooglePlaces> call, @NonNull Response<GooglePlaces> response) {
                 processDialog.dismissDialog();
-                Log.e("AddDoctorActivity", "onResponse: " + new Gson().toJson(response.body()));
-                if (response.body().getStatus().equals(AppConstants.STATUS_OK)) {
-                    if (chemists != null) {
-                        chemists.setLatitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLat() + "");
-                        chemists.setLongitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLng() + "");
-                        Log.e("Doctors Object", "onResponse: " + new Gson().toJson(chemists));
+                assert response.body() != null;
+                switch (response.body().getStatus()) {
+                    case AppConstants.STATUS_OK:
+                        if (chemists != null) {
+                            chemists.setLatitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLat() + "");
+                            chemists.setLongitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLng() + "");
 
-                            updateChemistDetails(token, chemists);
+                            if (InternetConnection.isNetworkAvailable(ActivityUpdateChemist.this)) {
+                                updateChemistDetails(token, chemists);
+                            } else {
+                                Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+                            }
 
-                    }
-                } else if (response.body().getStatus().equals(AppConstants.STATUS_ZERO_RESULTS)) {
-                    Snackbar.make(rootView, "Address not found, Please Try again", Snackbar.LENGTH_LONG).show();
-                } else {
-                    Snackbar.make(rootView, "Query Over Limit ! You have exceeded your daily request quota for this API. " +
-                            "If you did not set a custom daily request quota, verify your project has an active billing account: http://g.co/dev/maps-no-account", Snackbar.LENGTH_LONG).show();
+                        }
+                        break;
+                    case AppConstants.STATUS_ZERO_RESULTS:
+                        Snackbar.make(rootView, getString(R.string.not_found_address), Snackbar.LENGTH_LONG).show();
+                        break;
+                    default:
+                        Snackbar.make(rootView, getString(R.string.query_over_limit), Snackbar.LENGTH_LONG).show();
+                        break;
                 }
             }
 
             @Override
-            public void onFailure(Call<GooglePlaces> call, Throwable t) {
+            public void onFailure(@NonNull Call<GooglePlaces> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 Log.e("AddDoctorActivity", "onFailure: " + t.getMessage());
                 Toast.makeText(ActivityUpdateChemist.this, t.getMessage(), Toast.LENGTH_SHORT).show();
@@ -516,20 +502,6 @@ public class ActivityUpdateChemist extends BaseActivity implements View.OnClickL
 
     }
 
-    public void getDateFromDialog() {
-        Calendar dateOfBirth = Calendar.getInstance();
-        int year = dateOfBirth.get(Calendar.YEAR);
-        int month = dateOfBirth.get(Calendar.MONTH);
-        int day = dateOfBirth.get(Calendar.DATE);
-        DatePickerDialog.OnDateSetListener listener = (view, year1, monthOfYear, dayOfMonth) -> {
-            monthOfYear++;
-            dateOfBirthString = year1 + "-" + monthOfYear + "-" + dayOfMonth;
-//            text.setText(dateOfBirthString);
-        };
-        DatePickerDialog dpDialog = new DatePickerDialog(ActivityUpdateChemist.this, listener, year, month, day);
-        dpDialog.show();
-
-    }
 
     @Override
     public void onClick(View view) {

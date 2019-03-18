@@ -25,8 +25,8 @@ public class BaseDialogFragment extends DialogFragment {
     }
 
     protected void initData(){
-        connector = PreferenceConnector.getInstance(getActivity());
-        mContext = getActivity();
+        connector = PreferenceConnector.getInstance(getContext());
+        mContext = getContext();
         apiInterface = ApiClient.getInstance();
         token = connector.getString(AppConstants.TOKEN);
         processDialog= new ProcessDialog();

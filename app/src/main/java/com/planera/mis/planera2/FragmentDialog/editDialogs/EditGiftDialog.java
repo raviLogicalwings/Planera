@@ -21,6 +21,7 @@ import com.planera.mis.planera2.models.MainResponse;
 import com.planera.mis.planera2.utils.AppConstants;
 import com.planera.mis.planera2.utils.InternetConnection;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -87,6 +88,7 @@ public class EditGiftDialog extends BaseDialogFragment implements View.OnClickLi
             }
             else
             {
+                Toasty.warning(mContext, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
 
             }
         }

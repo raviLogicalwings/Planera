@@ -27,6 +27,7 @@ import com.planera.mis.planera2.utils.InternetConnection;
 
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -171,7 +172,13 @@ public class AddTerritoryDialog extends BaseDialogFragment implements View.OnCli
     protected void initData() {
         super.initData();
         getDialog().setTitle("Add Territory");
-        getStateList(token);
+        if (InternetConnection.isNetworkAvailable(mContext)){
+            getStateList(token);
+            }
+        else
+        {
+            Toasty.warning(mContext, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
+        }
         onSpinerItemClicked();
 
     }
@@ -201,6 +208,6 @@ public class AddTerritoryDialog extends BaseDialogFragment implements View.OnCli
     }
 
     public interface OnAddTerritoryDialogDismissListener{
-        public void onAddTerritoryDialogDismiss();
+        void onAddTerritoryDialogDismiss();
     }
 }

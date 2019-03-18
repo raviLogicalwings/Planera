@@ -59,6 +59,7 @@ public class ChemistListAdapter extends RecyclerView.Adapter<ChemistListAdapter.
         private TextView textChemistEmail;
         private TextView textQualification;
         private TextView textChemistContact;
+        private TextView textPatchName;
         private ImageView imageDelete;
         private ImageView imageEdit;
 

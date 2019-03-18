@@ -27,14 +27,14 @@
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.2"
+                android:layout_weight="0.1"
                 app:srcCompat="@drawable/icon_user_name"
                 tools:ignore="VectorDrawableCompat"
                 android:contentDescription="@string/todo"/>
 
             <TextView
                 android:id="@+id/text_user_name"
-                style="@style/LargeTextBlack"
+                android:textSize="@dimen/medium_text_size"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -53,19 +53,22 @@
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.2"
+                android:layout_weight="0.1"
                 app:srcCompat="@drawable/icon_email"
                 tools:ignore="VectorDrawableCompat"
                 android:contentDescription="@string/todo"/>
 
             <TextView
                 android:id="@+id/text_user_email"
-                style="@style/LargeTextBlack"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.8"
-                android:text="@string/vika123_gmail_com" />
+                android:text="@string/vika123_gmail_com"
+                android:maxLines="1"
+                android:textSize="@dimen/medium_text_size"
+                android:ellipsize="end"
+               />
 
 
         </LinearLayout>
@@ -80,14 +83,14 @@
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.2"
+                android:layout_weight="0.1"
                 app:srcCompat="@drawable/icon_phone"
                 tools:ignore="VectorDrawableCompat"
                 android:contentDescription="@string/todo"/>
 
             <TextView
                 android:id="@+id/text_user_phone"
-                style="@style/LargeTextBlack"
+                android:textSize="@dimen/medium_text_size"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,16 +37,21 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.gson.Gson;
+import com.planera.mis.planera2.FragmentDialog.UsersListDialog;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.Retrofit.ApiClient;
 import com.planera.mis.planera2.Retrofit.ApiInterface;
 import com.planera.mis.planera2.activities.AddInputActivity;
 import com.planera.mis.planera2.activities.ProductCategoryActivity;
 import com.planera.mis.planera2.adapters.VisitsAdapter;
+import com.planera.mis.planera2.models.AMs;
+import com.planera.mis.planera2.models.MRs;
 import com.planera.mis.planera2.models.UserPlan;
 import com.planera.mis.planera2.models.UserPlanListRespnce;
 import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.InternetConnection;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -55,56 +61,71 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.view.View.GONE;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
+import static com.planera.mis.planera2.utils.AppConstants.JOINT_WORKING;
+import static com.planera.mis.planera2.utils.AppConstants.KEY_JOINT_USER;
+import static com.planera.mis.planera2.utils.AppConstants.PATCH_ID;
 
-public class HomeFragment extends BaseFragment implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
-    public static HomeFragment instance;
+public class HomeFragment extends BaseFragment implements View.OnClickListener,
+        GoogleApiClient.OnConnectionFailedListener,
+        GoogleApiClient.ConnectionCallbacks,
+        LocationListener, UsersListDialog.OnSelectUserListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
-    private OnFragmentInteractionListener mListener;
-    private RecyclerView visitList;
-    private View mainView;
-    private ApiInterface apiInterface;
-    private List<UserPlan> plansList;
-    private LocationRequest mLocationRequest;
+
     private final static int REQUEST_CHECK_SETTINGS_GPS = 0x1;
-    private Location mLocation;
     public static final int INTERVAL = 1000 * 60;
-    public static final int FASTEST_INTERVAL = 1000 * 30;
-    int isInLocation;
-    double lat;
-    double lng;
-    private GoogleApiClient googleApiClient;
-    private Integer patchId;
-    private boolean isPermissionCancelled = false;
-    private LinearLayout linearHomeNoInternet;
+    public static final int FASTEST_INTERVAL = 1000 * 60;
+
+    private RecyclerView visitList;
     private Button buttonHomeRetry;
-    BottomNavigationView navigationView;
+    private BottomNavigationView navigationView;
+    private LinearLayout linearHomeNoInternet;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private View mainView;
+
+    private List<MRs> jointUserList;
+    private List<UserPlan> plansList;
+
+
+    private ApiInterface apiInterface;
+    public  HomeFragment instance;
+    private VisitsAdapter adapter;
+    private UsersListDialog.OnSelectUserListener listener;
+    private GoogleApiClient googleApiClient;
+    private Location mLocation;
+    private LocationRequest mLocationRequest;
+    private Bundle bundle;
+
+
+    private int isInLocation;
+    private double lat;
+    private double lng;
+    private boolean isPermissionCancelled = false;
+    private int isJoint;
+
 
     public HomeFragment() {
     }
 
-//    public static HomeFragment getInstance() {
-//        if (instance == null) {
-//            instance = new HomeFragment();
-//        }
-//        return instance;
-//    }
 
     @Override
     protected void initUi() {
         super.initUi();
+
         visitList = mainView.findViewById(R.id.visitList);
         linearHomeNoInternet = mainView.findViewById(R.id.linear_home_no_internet);
         buttonHomeRetry = mainView.findViewById(R.id.button_home_retry);
         navigationView = Objects.requireNonNull(getActivity()).findViewById(R.id.navigation);
-        navigationView.setVisibility(View.VISIBLE);
+        swipeRefreshLayout = mainView.findViewById(R.id.pullToRefresh);
 
-        buttonHomeRetry.setOnClickListener(v -> {
-            if (getFragmentManager() != null) {
-                getFragmentManager().beginTransaction().detach(HomeFragment.this).attach(HomeFragment.this).commit();
-            }
-        });
+
+        swipeRefreshLayout.setRefreshing(true);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        buttonHomeRetry.setOnClickListener(this);
+
+
+        navigationView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -112,32 +133,30 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         super.initData();
         apiInterface = ApiClient.getInstance();
         mLocationRequest = new LocationRequest();
-        patchId = connector.getInteger(AppConstants.KEY_PATCH_ID);
+        jointUserList = new ArrayList<>();
+        bundle = new Bundle();
         setUpGClient();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-        }
     }
 
     public void getAllPlansList(String token) {
 
-        processDialog.showDialog(mContext, false);
+
         Call<UserPlanListRespnce> call = apiInterface.userPlanList(token);
 
         call.enqueue(new Callback<UserPlanListRespnce>() {
             @Override
             public void onResponse(@NonNull Call<UserPlanListRespnce> call, @NonNull Response<UserPlanListRespnce> response) {
-                processDialog.dismissDialog();
+                swipeRefreshLayout.setRefreshing(false);
                 assert response.body() != null;
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     plansList = response.body().getData();
-                    Log.e(" UserPlanList : ", new Gson().toJson(plansList));
                     if (plansList != null) {
+                        Log.e("Plans", new Gson().toJson(response.body().getData()));
                         initAdapter((ArrayList<UserPlan>) plansList, visitList);
 
                     } else {
@@ -152,18 +171,17 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
             @Override
             public void onFailure(@NonNull Call<UserPlanListRespnce> call, @NonNull Throwable t) {
+                swipeRefreshLayout.setRefreshing(false);
                 linearHomeNoInternet.setVisibility(View.VISIBLE);
                 buttonHomeRetry.setVisibility(View.VISIBLE);
                 visitList.setVisibility(View.GONE);
                 navigationView.setVisibility(View.GONE);
-                processDialog.dismissDialog();
             }
         });
     }
 
 
     public void initAdapter(ArrayList<UserPlan> plansData, RecyclerView recyclerView) {
-        // Calculating distance here
         for (UserPlan plans : plansData)
         {
             if (!plans.getChemistsId().equals("0")){
@@ -174,12 +192,26 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             }
         }
 
-        VisitsAdapter adapter = new VisitsAdapter(mContext, mLocation, (view, position, isDoctor, dist) -> {
-            switch (view.getId()) {
+     adapter = new VisitsAdapter(mContext, mLocation, new VisitsAdapter.OnVisitAdapterClickListener() {
+            @Override
+            public void onVisitClick(View view, int position, boolean isDoctor, double dist) {
+                switch (view.getId()) {
                 case R.id.button_check_in:
                     gotoScheduleTimeActivity(position, isDoctor, dist);
                     break;
 
+            }
+            }
+
+            @Override
+            public void onJointClick(int position) {
+                UsersListDialog dialog = new UsersListDialog();
+                bundle.putInt(PATCH_ID, plansList.get(position).getPatchId());
+                dialog.setArguments(bundle);
+                dialog.setTargetFragment(HomeFragment.this, 1);
+                if (getFragmentManager() != null) {
+                    dialog.show(getFragmentManager(),"Select User");
+                }
             }
         });
 
@@ -199,6 +231,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
     }
 
     @Override
@@ -217,7 +250,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
         getFusedLocationProviderClient(mContext).removeLocationUpdates(new LocationCallback());
 
     }
@@ -272,8 +304,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             final Status status = result1.getStatus();
             switch (status.getStatusCode()) {
                 case LocationSettingsStatusCodes.SUCCESS:
-                    // All location settings are satisfied.
-                    // You can initialize location requests here.
+
+
                     int permissionLocation = ContextCompat
                             .checkSelfPermission(mContext,
                                     Manifest.permission.ACCESS_FINE_LOCATION);
@@ -282,24 +314,16 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                     }
                     break;
                 case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                    // Location settings are not satisfied.
-                    // But could be fixed by showing the user a dialog.
                     try {
-                        // Show the dialog by calling startResolutionForResult(),
-                        // and check the result in onActivityResult().
-                        // Ask to turn on GPS automatically
+
                         status.startResolutionForResult(getActivity(),
                                 REQUEST_CHECK_SETTINGS_GPS);
                     } catch (IntentSender.SendIntentException e) {
-                        Log.e("Location Setting", e.getMessage());
+                        Toasty.error(mContext, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                     break;
                 case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                    // Location settings are not satisfied.
-                    // However, we have no way
-                    // to fix the
-                    // settings so we won't show the dialog.
-                    // finish();
+
                     break;
             }
         });
@@ -323,9 +347,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         }
     }
 
-    public void gotoScheduleTimeActivity(int pos, boolean isDoctor, float dist) {
+    public void gotoScheduleTimeActivity(int pos, boolean isDoctor, double dist) {
 
-        if (Math.round(dist) <= 1) {
+        if (Math.round(dist) <= 1.0) {
             isInLocation = AppConstants.USER_IN_LOCATION;
         } else {
             isInLocation = AppConstants.USER_NOT_IN_LOCATION;
@@ -342,6 +366,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         intent.putExtra(AppConstants.LONGITUDE, lng);
         intent.putExtra(AppConstants.KEY_PLAN_ID, plansList.get(pos).getPlanId());
         intent.putExtra(AppConstants.KEY_USER_ID, plansList.get(pos).getUserId());
+        intent.putExtra(AppConstants.KEY_IS_JOINT, isJoint);
+        bundle.putSerializable(KEY_JOINT_USER, (Serializable) jointUserList);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 
@@ -350,13 +377,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         switch (view.getId()) {
             case R.id.button_check_in:
                 Intent intent = new Intent(getContext(), ProductCategoryActivity.class);
-                getActivity().startActivity(intent);
+                mContext.startActivity(intent);
                 break;
 
-//            case R.id.button_home_retry:
-//                processDialog.showDialog(mContext, true);
-//                getAllPlansList(token);
-//                break;
+            case R.id.button_home_retry:
+                if (getFragmentManager() != null) {
+                    getFragmentManager().beginTransaction().detach(HomeFragment.this).attach(HomeFragment.this).commit();
+                }
+                break;
+
         }
 
     }
@@ -380,9 +409,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             lng = listPlans.get(pos).getDoctorLongitude();
 
         } else {
-            customerName = listPlans.get(pos).getChemistFirstName()
-                    + " " + listPlans.get(pos).getChemistMiddleName()
-                    + " " + listPlans.get(pos).getChemistLastName();
+            customerName = String.valueOf(listPlans.get(pos).getChemistFirstName())
+                    + String.valueOf( listPlans.get(pos).getChemistMiddleName() )
+                    +String.valueOf( listPlans.get(pos).getChemistLastName() );
             lat = listPlans.get(pos).getChemistLatitude();
             lng = listPlans.get(pos).getChemistLongitude();
 
@@ -411,12 +440,34 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onLocationChanged(Location location) {
         mLocation = location;
-        Log.e("Current Location", mLocation.getLatitude() + " " + mLocation.getLongitude());
-        getAllPlansList(token);
+        if (InternetConnection.isNetworkAvailable(mContext)){
+            getAllPlansList(token);
+        }
+        else
+        {
+            Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onSelectUser(List<MRs>  mrs) {
+        if (mrs != null && mrs.size() > 0){
+//            adapter.notifyJointUiUpdate();
+//            adapter.notifyDataSetChanged();
+            isJoint = JOINT_WORKING;
+            jointUserList = mrs;
+        }
+
+    }
+
+    // TODO: Update argument type and name
+    @Override
+    public void onRefresh() {
+    getAllPlansList(token);
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         void onFragmentInteraction(Uri uri);
     }
 }

@@ -75,7 +75,13 @@ public class PatchListFragment extends BaseFragment implements EditPatchDialog.O
         super.initData();
         apiInterface = ApiClient.getInstance();
         if(token!=null){
-            getPatchList(token);
+            if (InternetConnection.isNetworkAvailable(mContext)){
+                getPatchList(token);
+            }
+            else
+            {
+                Snackbar.make(rootView, R.string.no_internet, Snackbar.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -152,7 +158,7 @@ public class PatchListFragment extends BaseFragment implements EditPatchDialog.O
     public void initAdapter(List<Patches> territorysList, RecyclerView recyclerView){
         PatchAdapter adapter = new PatchAdapter(getContext(), territorysList, (View view, int position) -> {
             switch (view.getId()){
-                case R.id.img_delete:
+                case R.id.img_delete_patch:
                     if (InternetConnection.isNetworkAvailable(mContext)){
                         popupDialog(token, patchesList.get(position).getPatchId());
                     }
@@ -162,7 +168,7 @@ public class PatchListFragment extends BaseFragment implements EditPatchDialog.O
 
                     break;
 
-                case R.id.img_edit:
+                case R.id.img_edit_patch:
                     EditPatchDialog dialog = new EditPatchDialog();
                     Bundle bundle = new Bundle();
                     bundle.putInt(AppConstants.KEY_TERRITORY_ID, patchesList.get(position).getTerritoryId());
@@ -210,7 +216,15 @@ public class PatchListFragment extends BaseFragment implements EditPatchDialog.O
 
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", (dialogInterface, i) -> {
             dialogInterface.cancel();
-            deletePatchApi(token, patchId );
+
+            if (InternetConnection.isNetworkAvailable(mContext))
+            {
+                deletePatchApi(token, patchId );
+            }
+            else
+            {
+                Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+            }
         });
 
 

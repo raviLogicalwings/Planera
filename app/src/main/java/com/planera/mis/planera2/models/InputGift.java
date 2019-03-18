@@ -22,6 +22,9 @@ public class InputGift{
 	@SerializedName("GiftQty")
 	private String giftQuantity;
 
+	@SerializedName("isJoint")
+	private int isJoint = 0;
+
 
 	public String getGiftName() {
 		return giftName;
@@ -69,6 +72,14 @@ public class InputGift{
 
 	public String getQuantity(){
 		return quantity;
+	}
+
+	public int getIsJoint() {
+		return isJoint;
+	}
+
+	public void setIsJoint(int isJoint) {
+		this.isJoint = isJoint;
 	}
 
 	@Override

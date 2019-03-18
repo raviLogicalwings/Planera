@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Planera  App</string>
+    <string name="app_name">Planera</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="user_name">User Name</string>
     <string name="password">Password</string>
@@ -70,8 +70,8 @@
     <string name="title_activity_crete_plan">ActivityCretePlan</string>
     <string name="title_activity_update_plan">ActivityUpdatePlan</string>
     <string name="title_activity_admin_reports">ActivityAdminReports</string>
-    <string name="sample_fargemt">SAMPLE</string>
-    <string name="title_activity_changepassword">ActivityChangepassword</string>
+    <string name="sample_fragment">SAMPLE</string>
+    <string name="title_activity_change_password">ActivityChangepassword</string>
     <string name="old_password">Old Password</string>
     <string name="new_password">New Password</string>
     <string name="title_activity_user_plan_create">ActivityUserPlanCreate</string>
@@ -79,7 +79,7 @@
     <string name="title_activity_user_input_list">UserInputListActivity</string>
     <string name="title_activity_search_date_wise_input">SearchDateWiseInputActivity</string>
     <string name="no_data_available">No data available !</string>
-    <string name="update">Update</string>
+
     <string name="title_activity_upload_chemist">ActivityUploadChemist</string>
     <string name="select_file">Select File</string>
     <string name="file_name">File Name</string>
@@ -96,7 +96,7 @@
     <string name="specialization">Invalid Specialization</string>
     <string name="phone">Invalid Phone</string>
     <string name="address">Invalid Address</string>
-    <string name="pincode">Invalid Pincode</string>
+    <string name="pin_code">Invalid Pincode</string>
     <string name="district">Invalid District</string>
     <string name="state">Invalid State</string>
     <string name="city">Invalid City</string>
@@ -156,4 +156,34 @@
     <string name="doctor">Doctor:</string>
     <string name="user">User:</string>
     <string name="send_to">Send To:</string>
+    <string name="middle_name">Middle Name</string>
+    <string name="preffered_meet_time">Preferred Meet Time</string>
+    <string name="address_line_1">Address Line 1</string>
+    <string name="address_line_2">Address Line 2</string>
+    <string name="address_line_3">Address Line 3</string>
+    <string name="address_line_4">Address Line 4</string>
+    <string name="billing_phone1">Billing Phone1</string>
+    <string name="billing_phone2">Billing Phone2</string>
+
+
+    <!--==============================================-->
+    <string name = "add_chemist_details">Add Chemist\'s Detail</string>
+    <string name="morning">Morning</string>
+    <string name="evening">Evening</string>
+    <string name="set_details">Set Details</string>
+    <string name="_1">1</string>
+    <string name="logo">Logo</string>
+    <string name="update">Update</string>
+    <string name="enter_product_name">Enter Product Name</string>
+    <string name="enter_territory_name">Enter Territory Name</string>
+    <string name="rajsthan">Rajsthan</string>
+    <string name="joint">Joint</string>
+    <string name="not_found_address">Address not found, Please Try again</string>
+    <string name="query_over_limit">Query Over Limit ! You have exceeded your daily request quota for this API. If you did not set a custom daily request quota, verify your project has an active billing account: http://g.co/dev/maps-no-account</string>
+    <string name="title_change_password">Change Password</string>
+    <string name="title_add_plan">Add Plan</string>
+    <string name="title_update_chemist">Update Chemist\'s Detail</string>
+    <string name="title_update_detail">Update Doctor\'s Detail</string>
+    <string name="title_update_plan">Update Plan</string>
+    <string name="title_user_input_list">User Input List</string>
 </resources>

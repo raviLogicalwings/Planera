@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +25,7 @@ import com.planera.mis.planera2.models.DataItem;
 import com.planera.mis.planera2.models.InputOrders;
 import com.planera.mis.planera2.models.MainResponse;
 import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.InternetConnection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,23 +36,21 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class BrandsFragment extends BaseFragment implements ProductCategoryActivity.DataReceivedListener{
+    public static final String TAG = BrandsFragment.class.getSimpleName();
+
+    private List<Brands> listOfBrands;
+    public List<String> brandLevelList;
+    public List<InputOrders> orderList;
+
     private View view;
-    public static final String TAG = "BrandsFragment.TAG";
     private BrandsAdapter adapter;
     private RecyclerView brandsListView;
     private ApiInterface apiInterface;
-    private List<Brands> listOfBrands;
-    private String token;
-    public List<String> brandLevelList;
-    public List<InputOrders> orderList;
-    private InputOrders orders;
-    int productId;
-    private String strPreviousInput;
     private DataItem dataItemForUpdate;
-    List<Integer> itemsPositions;
 
 
-
+    private String token;
+    protected String strPreviousInput;
 
 
     public BrandsFragment() {
@@ -92,8 +90,6 @@ public class BrandsFragment extends BaseFragment implements ProductCategoryActiv
         super.initData();
         initInterestedList();
         apiInterface = ApiClient.getInstance();
-        itemsPositions = new ArrayList<>();
-        orders = new InputOrders();
         orderList = new ArrayList<>();
         token = connector.getString(AppConstants.TOKEN);
         if (token!=null){
@@ -115,7 +111,7 @@ public class BrandsFragment extends BaseFragment implements ProductCategoryActiv
 
     public void apiAddInputBrands(String token){
 
-        Log.e("Inputs", new Gson().toJson(orders));
+//        Log.e("Inputs", new Gson().toJson(orders));
       processDialog.showDialog(mContext, false);
         Call<MainResponse> call = apiInterface.addInputProductList(token, adapter.getOrderListSelected());
 
@@ -145,13 +141,13 @@ public class BrandsFragment extends BaseFragment implements ProductCategoryActiv
         Call<BrandsListResponse> call = apiInterface.brandsListApi(token, isBrand);
         call.enqueue(new Callback<BrandsListResponse>() {
             @Override
-            public void onResponse(@NonNull Call<BrandsListResponse> call, Response<BrandsListResponse> response) {
+            public void onResponse(@NonNull Call<BrandsListResponse> call, @NonNull Response<BrandsListResponse> response) {
+
                 assert response.body() != null;
-                if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     listOfBrands = response.body().getData();
                     initAdapter(listOfBrands, brandsListView, brandLevelList);
-                }
-                else{
+                } else {
                     Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -200,7 +196,13 @@ public class BrandsFragment extends BaseFragment implements ProductCategoryActiv
 
     @Override
     public void onReceived() {
-      apiAddInputBrands(token);
+        if (InternetConnection.isNetworkAvailable(mContext)){
+            apiAddInputBrands(token);
+        }
+        else
+        {
+            Snackbar.make(rootView, R.string.no_internet, Snackbar.LENGTH_LONG).show();
+        }
     }
 
 

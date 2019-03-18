@@ -23,25 +23,26 @@ import com.planera.mis.planera2.models.MainResponse;
 import com.planera.mis.planera2.models.Territories;
 import com.planera.mis.planera2.models.TerritoryListResponse;
 import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.InternetConnection;
 
 
 import java.util.List;
 import java.util.Objects;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.ContentValues.TAG;
 
-public class AddPatchDialog extends BaseDialogFragment implements View.OnClickListener{
+public class AddPatchDialog extends BaseDialogFragment implements View.OnClickListener {
     public OnAddPatchDialogDismissListener onAddPatchDialogDismissListener;
     private View view;
     private Spinner spinnerTerritory;
-    private Dialog dialog;
     private TextInputLayout inputLayoutUserName;
     private EditText editTextPatch;
-    private Button buttonPatchAdd;
+    protected Button buttonPatchAdd;
     private CustomSpinnerPatchAdapter spinnerPatchAdapter;
     private List<Territories> patchesList;
     int patchId;
@@ -55,13 +56,13 @@ public class AddPatchDialog extends BaseDialogFragment implements View.OnClickLi
         super.onCreate(savedInstanceState);
         try {
             onAddPatchDialogDismissListener = (OnAddPatchDialogDismissListener) getActivity();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ClassCastException("Calling Fragment must implement onAddPatchDialogDismissListener");
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.dialog_add_state, container, false);
         initUi();
         initData();
@@ -69,16 +70,19 @@ public class AddPatchDialog extends BaseDialogFragment implements View.OnClickLi
     }
 
 
-    public void uiValidation(){
+    public void uiValidation() {
         inputLayoutUserName.setError(null);
         String strTerritory = editTextPatch.getText().toString().trim();
 
-        if (TextUtils.isEmpty(strTerritory)){
+        if (TextUtils.isEmpty(strTerritory)) {
             inputLayoutUserName.setError("Patch name is required.");
             editTextPatch.requestFocus();
-        }
-        else{
-            addPatchApi(token, strTerritory, patchId);
+        } else {
+            if (InternetConnection.isNetworkAvailable(mContext)) {
+                addPatchApi(token, strTerritory, patchId);
+            } else {
+                Toasty.warning(mContext, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
+            }
         }
 
     }
@@ -90,6 +94,7 @@ public class AddPatchDialog extends BaseDialogFragment implements View.OnClickLi
         return dialog;
 
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -102,21 +107,20 @@ public class AddPatchDialog extends BaseDialogFragment implements View.OnClickLi
     }
 
 
-    public void addPatchApi(String token, String name, int territoryId){
+    public void addPatchApi(String token, String name, int territoryId) {
         processDialog.showDialog(mContext, false);
         Call<MainResponse> call = apiInterface.addPatch(token, name, territoryId);
         call.enqueue(new Callback<MainResponse>() {
             @Override
             public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
-               processDialog.dismissDialog();
-                if (response!= null){
+                processDialog.dismissDialog();
+                if (response != null) {
                     if (response.body() != null) {
-                        if (Objects.requireNonNull(response.body()).getStatusCode() == AppConstants.RESULT_OK){
-                            Log.e(TAG, "onResponse: "+ Objects.requireNonNull(response.body()).getMessage() );
+                        if (Objects.requireNonNull(response.body()).getStatusCode() == AppConstants.RESULT_OK) {
+                            Log.e(TAG, "onResponse: " + Objects.requireNonNull(response.body()).getMessage());
                             onAddPatchDialogDismissListener.onAddPatchPatchDialogDismiss();
                             dismiss();
-                        }
-                        else{
+                        } else {
                             Toast.makeText(mContext, Objects.requireNonNull(response.body()).getMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
@@ -124,7 +128,7 @@ public class AddPatchDialog extends BaseDialogFragment implements View.OnClickLi
             }
 
             @Override
-            public void onFailure(Call<MainResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MainResponse> call, Throwable t) {
                 Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_LONG).show();
 
             }
@@ -143,20 +147,19 @@ public class AddPatchDialog extends BaseDialogFragment implements View.OnClickLi
     }
 
 
-    public void getTerritoryList(String token){
+    public void getTerritoryList(String token) {
         processDialog.showDialog(mContext, false);
         Call<TerritoryListResponse> call = apiInterface.territoryList(token);
         call.enqueue(new Callback<TerritoryListResponse>() {
             @Override
             public void onResponse(Call<TerritoryListResponse> call, Response<TerritoryListResponse> response) {
                 processDialog.dismissDialog();
-                if (Objects.requireNonNull(response.body()).getStatusCode()== AppConstants.RESULT_OK){
+                if (Objects.requireNonNull(response.body()).getStatusCode() == AppConstants.RESULT_OK) {
                     patchesList = Objects.requireNonNull(response.body()).getTerritorysList();
                     spinnerPatchAdapter = new CustomSpinnerPatchAdapter(mContext, patchesList);
                     spinnerTerritory.setAdapter(spinnerPatchAdapter);
 
-                }
-                else{
+                } else {
                     Toast.makeText(mContext, Objects.requireNonNull(response.body()).getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
@@ -167,6 +170,7 @@ public class AddPatchDialog extends BaseDialogFragment implements View.OnClickLi
             }
         });
     }
+
     @Override
     protected void initData() {
         super.initData();
@@ -177,13 +181,13 @@ public class AddPatchDialog extends BaseDialogFragment implements View.OnClickLi
     }
 
 
-    public int onSpinnerItemClicked(){
+    public int onSpinnerItemClicked() {
 
         spinnerTerritory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.e("You select ","=====> "+patchesList.get(i).getStateId());
-                patchId= patchesList.get(i).getTerritoryId();
+                Log.e("You select ", "=====> " + patchesList.get(i).getStateId());
+                patchId = patchesList.get(i).getTerritoryId();
             }
 
             @Override
@@ -192,9 +196,10 @@ public class AddPatchDialog extends BaseDialogFragment implements View.OnClickLi
         });
         return patchId;
     }
+
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.button_state_add:
                 uiValidation();
                 break;

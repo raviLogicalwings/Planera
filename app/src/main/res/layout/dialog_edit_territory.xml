@@ -5,13 +5,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
         <TextView
-            android:layout_marginTop="@dimen/layout_margin_top"
+            android:layout_marginTop="@dimen/dimen_10dp"
             android:padding="5dp"
             android:layout_width="wrap_content"
             android:id="@+id/text_state_edit"
-            android:text="Rajsthan"
+            android:text="@string/rajsthan"
             style="@style/MediumTextBlack"
             android:textColor="@color/colorGray"
+            android:layout_gravity="center"
             android:layout_height="wrap_content" />
 
         <android.support.design.widget.TextInputLayout
@@ -29,7 +30,7 @@
                 android:padding="5dp"
                 style="@style/InputEditTextStyle"
                 android:layout_width="match_parent"
-                android:hint="Enter Territory Name"
+                android:hint="@string/enter_territory_name"
                 android:id="@+id/edit_text_name"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
@@ -45,8 +46,8 @@
             style="@style/ButtonText"
             android:background="@color/colorPrimary"
             android:layout_marginTop="30dp"
-            android:layout_gravity="right"
-            android:text="Update"
+            android:layout_gravity="end"
+            android:text="@string/update"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

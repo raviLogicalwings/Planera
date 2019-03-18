@@ -7,12 +7,9 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
-import android.util.Log;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +23,7 @@ import com.planera.mis.planera2.utils.AppConstants;
 import com.planera.mis.planera2.utils.InternetConnection;
 import com.planera.mis.planera2.utils.PreferenceConnector;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,11 +33,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     private EditText editUserName;
     private TextInputLayout inputLayoutPassword;
     private EditText editPassword;
+
     private PreferenceConnector connector;
     private ApiInterface apiInterface;
     private UserData userData;
+    private Intent intent;
+
     public boolean isUserLogin;
     public static final String TAG = LoginActivity.class.getSimpleName();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        initUi();
+        initData();
+    }
 
     @Override
     public void initData() {
@@ -53,7 +62,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     @Override
     public void initUi() {
         super.initUi();
-        ImageView appIcon = findViewById(R.id.appIcon);
         inputLayoutUserName = findViewById(R.id.input_layout_user_name);
         editUserName = findViewById(R.id.edit_user_name);
         inputLayoutPassword = findViewById(R.id.input_layout_password);
@@ -61,6 +69,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         Button buttonSignIn = findViewById(R.id.button_sign_in);
         TextView textSignUp = findViewById(R.id.text_sign_up);
         TextView textForgetPassword = findViewById(R.id.text_forget_password);
+
         buttonSignIn.setOnClickListener(this);
         textForgetPassword.setOnClickListener(this);
         textSignUp.setOnClickListener(this);
@@ -101,62 +110,57 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
 
     }
-    
+
 
     public void callUserLoginApi(UserData userData){
+
         processDialog.showDialog(LoginActivity.this, false);
         Call<LoginResponse> call = apiInterface.userLoginApi(userData);
         call.enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
                 processDialog.dismissDialog();
-                Log.e(TAG, "onResponse: "+ new Gson().toJson(response.body()));
+
 
                 assert response.body() != null;
-                if (response.body().getStatusCode()== AppConstants.RESULT_OK){
+                if (response.body().getStatusCode()== AppConstants.RESULT_OK)
+                {
                     connector.setString(AppConstants.TOKEN, response.body().getData().getToken());
                     connector.setString(AppConstants.USER_ID, response.body().getData().getUserId());
                     connector.setBoolean(AppConstants.IS_LOGIN, true);
 
-                    if(response.body().getData().getType() == AppConstants.MR_USER_TYPE ||
-                            response.body().getData().getType() == AppConstants.DEFAULT_MR_USER_TYPE) {
-                            UserData userDetails = response.body().getData();
-                        connector.setBoolean(AppConstants.IS_USER, true);
-                        connector.setString(AppConstants.USER_PROFILE, new Gson().toJson(userDetails));
-                        Intent intentHome = new Intent(LoginActivity.this, MainActivity.class);
-                        ActivityCompat.finishAffinity(LoginActivity.this);
-                        startActivity(intentHome);
+                    if(response.body().getData().getType() == AppConstants.MR ||
+                            response.body().getData().getType() == AppConstants.ZM ||
+                            response.body().getData().getType() == AppConstants.AM)
+                    {
+                           UserData userDetails = response.body().getData();
+                           updateUi(userDetails);
                     }
-                    else{
+                    else
+                        {
                         connector.setBoolean(AppConstants.IS_USER, false);
                         Intent intentHome = new Intent(LoginActivity.this, AdminPanelActivity.class);
                         startActivity(intentHome);
                     }
                 }
                 else{
-                    Toast.makeText(LoginActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    Toasty.error(LoginActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
                 }
 
             }
 
             @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<LoginResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 Snackbar mSnackbar = Snackbar.make(rootView, "Unable to connect", Snackbar.LENGTH_LONG)
-                        .setAction("RETRY", view ->   callUserLoginApi(userData));
+                        .setAction("RETRY", view ->
+                                callUserLoginApi(userData));
                 mSnackbar.show();
 
             }
         });
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        initUi();
-        initData();
-    }
 
     @Override
     public void onBackPressed() {
@@ -167,18 +171,29 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.text_sign_up:
-                Intent intentSignup = new Intent(LoginActivity.this, SignupActivity.class);
-                startActivity(intentSignup);
+                intent = new Intent(LoginActivity.this, SignupActivity.class);
+                startActivity(intent);
                 break;
             case R.id.button_sign_in:
                uiValidation();
                 break;
 
             case R.id.text_forget_password:
-                Intent intentForget = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
-                startActivity(intentForget);
+                intent  = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+                startActivity(intent);
                 break;
         }
 
+    }
+
+
+    private void updateUi(UserData data){
+
+        connector.setBoolean(AppConstants.IS_USER, true);
+        connector.setInteger(AppConstants.USER_TYPE, data.getType());
+        connector.setString(AppConstants.USER_PROFILE, new Gson().toJson(data));
+        intent = new Intent(LoginActivity.this, MainActivity.class);
+        ActivityCompat.finishAffinity(LoginActivity.this);
+        startActivity(intent);
     }
 }

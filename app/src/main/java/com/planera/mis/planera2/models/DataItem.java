@@ -2,6 +2,7 @@ package com.planera.mis.planera2.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DataItem{
@@ -10,7 +11,7 @@ public class DataItem{
 	private String comment;
 
 	@SerializedName("IsInLocation")
-	private String isInLocation;
+	private int isInLocation;
 
 	@SerializedName("ProductName")
 	private String productName;
@@ -29,6 +30,8 @@ public class DataItem{
 
 	@SerializedName("UserName")
 	private String userName;
+
+
 
 	@SerializedName("DoctorName")
 	private String doctorName;
@@ -96,14 +99,36 @@ public class DataItem{
 	@SerializedName("EndTime")
 	private String endTime;
 
-	@SerializedName("product_detail")
-    private List<InputOrders> productDetails;
 
 	@SerializedName("gift_detail")
 	private List<InputGift> giftDetails;
 
+	@SerializedName("isJoint")
+	private int isJoint;
+
+	@SerializedName("PatchId")
+	private int patchId;
+
+	@SerializedName("jointMember")
+	private List<MRs> jointUserList = new ArrayList<>();
+
+	public int getPatchId() {
+		return patchId;
+	}
+
+	public void setPatchId(int patchId) {
+		this.patchId = patchId;
+	}
+
+	@SerializedName("product_detail")
+	private List<InputOrders> productDetails;
+
 	public List<InputOrders> getProductDetails() {
 		return productDetails;
+	}
+
+	public void setProductDetails(List<InputOrders> productDetails) {
+		this.productDetails = productDetails;
 	}
 
 	public String getStartTime() {
@@ -120,10 +145,6 @@ public class DataItem{
 
 	public void setEndTime(String endTime) {
 		this.endTime = endTime;
-	}
-
-	public void setProductDetails(List<InputOrders> productDetails) {
-		this.productDetails = productDetails;
 	}
 
 	public List<InputGift> getGiftDetails() {
@@ -150,11 +171,11 @@ public class DataItem{
 		return comment;
 	}
 
-	public void setIsInLocation(String isInLocation){
+	public void setIsInLocation(int isInLocation){
 		this.isInLocation = isInLocation;
 	}
 
-	public String getIsInLocation(){
+	public int getIsInLocation(){
 		return isInLocation;
 	}
 
@@ -349,6 +370,22 @@ public class DataItem{
 
 	public Object getGiftQty(){
 		return giftQty;
+	}
+
+	public int getIsJoint() {
+		return isJoint;
+	}
+
+	public void setIsJoint(int isJoint) {
+		this.isJoint = isJoint;
+	}
+
+	public List<MRs> getJointUserList() {
+		return jointUserList;
+	}
+
+	public void setJointUserList(List<MRs> jointUserList) {
+		this.jointUserList = jointUserList;
 	}
 
 	@Override

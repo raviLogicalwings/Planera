@@ -21,11 +21,13 @@ import com.planera.mis.planera2.models.Patches;
 import com.planera.mis.planera2.models.Territories;
 import com.planera.mis.planera2.models.TerritoryListResponse;
 import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.InternetConnection;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -103,7 +105,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 if (position != 0) {
                     territoryStr = stringTerritoryList.get(position);
                     territoryId = territoryList.get(position - DEFAULT_SELECT_VALUE).getTerritoryId();
-                    getPatchList(token, territoryId);
+                    if (InternetConnection.isNetworkAvailable(HomeActivity.this)){
+                        getPatchList(token, territoryId);
+                    }
+                    else
+                    {
+                        Snackbar.make(rootView, R.string.no_internet, Snackbar.LENGTH_LONG).show();
+                    }
                 }
                 else{
                     buttonSubmitQuery.setVisibility(View.GONE);
@@ -173,7 +181,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
             @Override
             public void onFailure(@NonNull Call<TerritoryListResponse> call, @NonNull Throwable t) {
-                Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                Toasty.error(HomeActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 

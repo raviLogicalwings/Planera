@@ -2,6 +2,7 @@ package com.planera.mis.planera2.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
@@ -21,6 +22,7 @@ public class BaseFragment extends Fragment {
     public String token;
     public Context mContext;
     public ApiInterface apiInterface;
+    public Bundle bundle;
 
     protected void initData() {
         manager = getFragmentManager();
@@ -30,6 +32,7 @@ public class BaseFragment extends Fragment {
         mContext = getContext();
         processDialog = new ProcessDialog();
         apiInterface = ApiClient.getInstance();
+        bundle = new Bundle();
     }
 
     protected void initUi() {

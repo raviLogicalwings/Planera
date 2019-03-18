@@ -103,6 +103,9 @@ public class UserData {
 	@SerializedName("OldPassword")
 	private String OldPassword;
 
+	@SerializedName("PatchId")
+	private String patchId;
+
 	public String getOldPassword() {
 		return OldPassword;
 	}
@@ -366,6 +369,15 @@ public class UserData {
 
 	public void setOtp(String otp) {
 		this.otp = otp;
+	}
+
+
+	public String getPatchId() {
+		return patchId;
+	}
+
+	public void setPatchId(String patchId) {
+		this.patchId = patchId;
 	}
 
 	@Override

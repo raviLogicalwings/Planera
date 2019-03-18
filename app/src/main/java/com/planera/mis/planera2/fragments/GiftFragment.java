@@ -23,6 +23,7 @@ import com.planera.mis.planera2.models.GiftListResponse;
 import com.planera.mis.planera2.models.GiftsData;
 import com.planera.mis.planera2.models.InputGiftResponce;
 import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.InternetConnection;
 
 import java.util.List;
 
@@ -81,7 +82,14 @@ public class GiftFragment extends BaseFragment{
             dataItemForUpdate = new Gson().fromJson(strPreviousInput, DataItem.class);
         }
         if(token!=null){
-            getGiftListApi(token);
+            if (InternetConnection.isNetworkAvailable(mContext))
+            {
+                getGiftListApi(token);
+            }
+            else
+            {
+                Snackbar.make(rootView, R.string.no_internet, Snackbar.LENGTH_LONG).show();
+            }
         }
 
     }

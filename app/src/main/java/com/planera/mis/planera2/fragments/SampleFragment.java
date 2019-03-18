@@ -25,9 +25,11 @@ import com.planera.mis.planera2.models.DataItem;
 import com.planera.mis.planera2.models.InputOrders;
 import com.planera.mis.planera2.models.MainResponse;
 import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.InternetConnection;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -92,7 +94,13 @@ public class SampleFragment extends BaseFragment {
         orderList = new ArrayList<>();
         token = connector.getString(AppConstants.TOKEN);
         if (token!=null){
-            getBrandsListApi(token, AppConstants.BRAND);
+            if(InternetConnection.isNetworkAvailable(mContext)){
+                getBrandsListApi(token, AppConstants.BRAND);
+            }
+            else
+            {
+                Snackbar.make(rootView, R.string.no_internet, Snackbar.LENGTH_LONG).show();
+            }
         }
 
     }
@@ -112,13 +120,13 @@ public class SampleFragment extends BaseFragment {
     public void apiAddInputBrands(String token, List<InputOrders> sampleListSelected){
 
 
-        Log.e("Inputs", new Gson().toJson(orders));
+//        Log.e("Inputs", new Gson().toJson(orders));
         processDialog.showDialog(mContext, false);
         Call<MainResponse> call = apiInterface.addInputProductList(token, sampleListSelected);
 
         call.enqueue(new Callback<MainResponse>() {
             @Override
-            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+            public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                     Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
@@ -129,7 +137,7 @@ public class SampleFragment extends BaseFragment {
             }
 
             @Override
-            public void onFailure(Call<MainResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MainResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 Snackbar.make(rootView, t.getMessage(), Snackbar.LENGTH_LONG).show();
             }
@@ -142,19 +150,19 @@ public class SampleFragment extends BaseFragment {
         call.enqueue(new Callback<BrandsListResponse>() {
             @Override
             public void onResponse(@NonNull Call<BrandsListResponse> call, @NonNull Response<BrandsListResponse> response) {
-                if (response!= null){
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-                        listOfBrands = response.body().getData();
-                        initAdapter(listOfBrands, brandsListView, brandLevelList, dataItemForUpdate);
-                    }
-                    else{
-                        Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
+                if (Objects.requireNonNull(response.body()).getStatusCode() == AppConstants.RESULT_OK){
+
+
+                    listOfBrands = removeNonBrandItems(response.body().getData());
+                    initAdapter(listOfBrands, brandsListView, brandLevelList, dataItemForUpdate);
+                }
+                else{
+                    Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<BrandsListResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<BrandsListResponse> call, @NonNull Throwable t) {
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -189,6 +197,20 @@ public class SampleFragment extends BaseFragment {
         recyclerView.hasFixedSize();
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+    }
+
+    public List<Brands> removeNonBrandItems(List<Brands> brandsList){
+        if (brandsList != null &&brandsList.size()>0){
+            for (int i=0 ; i<brandsList.size() ; i++)
+            {
+                if (brandsList.get(i).getIsBrand().equals(String.valueOf(AppConstants.NOT_BRAND))){
+                    brandsList.remove(i);
+                }
+            }
+        }
+
+//        Log.e("Filtered List", new Gson().toJson(brandsList));
+       return brandsList;
     }
 
     public void initInterestedList() {

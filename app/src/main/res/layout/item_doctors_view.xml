@@ -12,7 +12,7 @@
         android:weightSum="3"
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:baselineAligned="false">
 
         <LinearLayout
@@ -20,8 +20,8 @@
             android:layout_marginLeft="@dimen/layout_margin_top"
             android:orientation="vertical"
             android:layout_width="0dp"
-            android:layout_weight="1.4"
-            android:layout_height="wrap_content"
+            android:layout_weight="2.2"
+            android:layout_height="match_parent"
             android:layout_marginStart="@dimen/layout_margin_top">
 
             <TextView
@@ -37,6 +37,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/john_deo123_gmail_com"/>
+
+            <TextView
+                android:id="@+id/text_doctor_contact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_9669893930"/>
+
             <TextView
                 android:id="@+id/text_qualification"
                 style="@style/NormalText"
@@ -44,15 +51,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
+            <TextView
+                android:id="@+id/text_patch_name_doctors"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dimen_4dp"
+                android:background="@drawable/bg_green_joint"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:padding="@dimen/dimen_4dp"
+                android:text="patchId" />
+
         </LinearLayout>
 
-        <View
 
-            android:layout_width="0dp"
-            android:layout_weight="0.8"
-            android:layout_height="wrap_content">
-
-        </View>
 
         <LinearLayout
             android:orientation="vertical"
@@ -61,11 +75,7 @@
             android:layout_weight=".8"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/text_doctor_contact"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/_9669893930"/>
+
 
 
             <ImageView

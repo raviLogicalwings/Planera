@@ -7,7 +7,7 @@ public class AppConstants {
 
     //Retrofit
     public static final int RESULT_OK = 1;
-    public static final long REQUEST_TIMEOUT = 10;
+    public static final long REQUEST_TIMEOUT = 90;
     public static final String BASE_URL = "http://soleralife.com/apimrapp/";
     public static final String LOGIN = "login/login";
     public static final String USER_REGISTRATION = "newregister/registerUserdetails";
@@ -24,6 +24,7 @@ public class AppConstants {
     public static final String PRODUCT_LIST = "product/getAllProducts";
     public static final String CHEMIST_LIST = "chemist/getAllChemists";
     public static final String USER_LIST = "user/getAllUsers";
+    public static final String USER_LIST_BY_PATCHES = "Plan/getUsersDataWithPatchId";
     public static final String PLAN_LIST ="plan/getAllPlansForAdmin" ;
     public static final String USER_PLAN_LIST = "plan/getUserPlans";
     public static final String TERRITORY_WISE_PATCHES = "patch/getTerritoryWisePatches";
@@ -88,8 +89,6 @@ public class AppConstants {
     static final int ROLE_USER = 3;
     public static final String KEY_ROLE = "role";
 
-    public static final String KEY_ROLE_DOCTOR = "role_doctor";
-    public static final String KEY_ROLE_CHEMIST = "role_chemsit";
 
 
     // Plan's Constant
@@ -130,7 +129,7 @@ public class AppConstants {
     public static final String PHONE = "PHONE";
     public static final String DOB = "dob";
     public static final String QUALIFICATION = "qualification";
-    public static  final String SPECIALIZATION = "specialization";
+    public static final String SPECIALIZATION = "specialization";
     public static final String ADDRESS1 = "address1";
     public static final String ADDRESS2 = "address2";
     public static final String ADDRESS3 = "address3";
@@ -142,7 +141,7 @@ public class AppConstants {
 
 
     public static final int BRAND = 1;
-    public static final int NOT_BRAND = 2;
+    public static final int NOT_BRAND = 0;
 
     //Google Palces Api
     public static final String GOOGLE_PLACES_URL = "https://maps.googleapis.com/maps/api/";
@@ -244,8 +243,6 @@ public class AppConstants {
     //Shared Preference Constants
     public static final String IS_LOGIN = "is_login";
     public static final String TOKEN = "token";
-    public static final int ACTIVE_USER = 1;
-    public static final int INACTIVE_USER = 2;
 
     // Pager fragment count
     public static final int FRAGMENT_COUNT_FOR_DOCTOR = 3;
@@ -270,8 +267,12 @@ public class AppConstants {
 
     public static final String IS_CHANGES = "is_changes";
 
-
-    public static final String USER = "0";
+    /**
+     Role type constants
+     **/
+    public static final int MR = 1;
+    public static final int ZM = 2;
+    public static final int AM = 3;
     public static final String IS_USER = "isUser" ;
     public static final String CUSTOMER_NAME ="customer_name" ;
     public static final String VISIT_DATE = "visit_date";
@@ -294,10 +295,6 @@ public class AppConstants {
     public static final int AM_USER_TYPE = 3;
 
 
-    //interested Levels
-    public static final String LOW = "3";
-    public static final String REGULAR = "2";
-    public static final String SUPER = "1";
     public static final String KEY_INPUT_ID = "input_id";
     public static final String KEY_REVERT_FRAGMENT = "revert_fragment";
     public static final String PASS_INPUT = "pass_input";
@@ -305,4 +302,10 @@ public class AppConstants {
     public static final String IS_INPUT_UPDATE = "is_update";
     public static final String PASS_UPDATE_INPUT = "pass_update_input";
     public static String USER_PROFILE = "user_profile_key";
+    public static String KEY_JOINT_USER = "joint_user";
+
+    //
+    public static final int JOINT_WORKING = 1;
+    public static final int SINGLE_WORKING = 0;
+    public static String KEY_IS_JOINT = "key_is_joint";
 }

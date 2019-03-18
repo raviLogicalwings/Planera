@@ -25,6 +25,9 @@ public class ObtainReport{
 	@SerializedName("EmailId")
 	private String emailSendTo;
 
+	@SerializedName("isJoint")
+	private int isJoint;
+
 	public String getEmailSendTo() {
 		return emailSendTo;
 	}
@@ -79,6 +82,14 @@ public class ObtainReport{
 
 	public void setChemistId(String id) {
 		this.chemistId = id;
+	}
+
+	public int getIsJoint() {
+		return isJoint;
+	}
+
+	public void setIsJoint(int isJoint) {
+		this.isJoint = isJoint;
 	}
 
 	@Override

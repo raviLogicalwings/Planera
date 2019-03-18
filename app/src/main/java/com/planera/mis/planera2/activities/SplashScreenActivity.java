@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -21,8 +22,6 @@ import static com.planera.mis.planera2.utils.RuntimePermissionCheck.REQUEST_ID_M
 
 
 public class SplashScreenActivity extends BaseActivity {
-    //public RuntimePermissionCheck permissionCheck;
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     public boolean isUserLogin;
     public boolean isUser;
     public String userToken = "";
@@ -37,12 +36,7 @@ public class SplashScreenActivity extends BaseActivity {
         initData();
 
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                goToNextScreen();
-            }
-        }, AppConstants.SPLASH_TIME_OUT);
+        new Handler().postDelayed(this::goToNextScreen, AppConstants.SPLASH_TIME_OUT);
 
     }
 
@@ -89,7 +83,7 @@ public class SplashScreenActivity extends BaseActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+                                           @NonNull String permissions[], int[] grantResults) {
         switch (requestCode) {
             case REQUEST_ID_MULTIPLE_PERMISSIONS: {
                 // If request is cancelled, the result arrays are empty.

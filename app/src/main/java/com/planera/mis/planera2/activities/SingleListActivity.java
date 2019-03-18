@@ -36,10 +36,10 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
         AddPatchDialog.OnAddPatchDialogDismissListener, AddTerritoryDialog.OnAddTerritoryDialogDismissListener{
     int comingFragment;
     private Fragment fragment;
-    public static final int REQUEST_CODE_DOCTOR = 101;
-    public static final int REQUEST_CODE_CHEMIST = 102;
-    public static final int REQUEST_CODE_PLAN = 103;
-    private int revertFragment;
+    private MenuInflater inflater;
+    private MenuItem menuItem;
+    private Menu menu;
+    private Toolbar toolbar;
 
 
     @Override
@@ -54,7 +54,8 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+        this.menu = menu;
+       inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_menu, menu);
         return true;
     }
@@ -63,7 +64,9 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+
             case R.id.actiion_add:
+                menuItem = item;
                if(comingFragment == AppConstants.STATE_FRAGMENT){
                    AddStateDialog dialog = new AddStateDialog();
                    dialog.show(getSupportFragmentManager(), "States");
@@ -125,11 +128,9 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
     @Override
     public void initUi() {
         super.initUi();
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(view -> {
-            onBackPressed();
-        });
+        toolbar.setNavigationOnClickListener(view -> onBackPressed());
     }
 
     @Override
@@ -213,48 +214,51 @@ public class SingleListActivity extends BaseActivity implements View.OnClickList
 
             case AppConstants.STATE_FRAGMENT:
                 fragment =  new StateListFragment();
-                getSupportActionBar().setTitle("States");
+                Objects.requireNonNull(getSupportActionBar()).setTitle("States");
                 break;
 
             case AppConstants.TERRITORY_FRAGMENT:
                 fragment = new TerritoryListFragment();
-                getSupportActionBar().setTitle("Territory");
+                Objects.requireNonNull(getSupportActionBar()).setTitle("Territory");
                 break;
 
             case AppConstants.GIFT_FRAGMENT:
                 fragment = new GiftListFragment();
-                getSupportActionBar().setTitle("Gift");
+                Objects.requireNonNull(getSupportActionBar()).setTitle("Gift");
                 break;
 
             case AppConstants.PATCH_FRAGMENT:
                 fragment = new PatchListFragment();
-                getSupportActionBar().setTitle("Patch");
+                Objects.requireNonNull(getSupportActionBar()).setTitle("Patch");
                 break;
 
 
             case AppConstants.DOCTOR_FRAGMENT:
                 fragment  = new DoctorsFragment();
-                getSupportActionBar().setTitle("Doctors");
+                Objects.requireNonNull(getSupportActionBar()).setTitle("Doctors");
                 break;
 
             case AppConstants.PRODUCT_FRAGMENT:
                 fragment = new ProductFragment();
-                getSupportActionBar().setTitle("Products");
+                Objects.requireNonNull(getSupportActionBar()).setTitle("Products");
                 break;
 
             case AppConstants.CHEMIST_FRAGMENT:
                 fragment = new ChemistFragment();
-                getSupportActionBar().setTitle("Chemists");
+                Objects.requireNonNull(getSupportActionBar()).setTitle("Chemists");
                 break;
 
             case AppConstants.USER_FRAGMENT:
+
                 fragment = new UsersFragment();
-                getSupportActionBar().setTitle("Users");
+                Objects.requireNonNull(getSupportActionBar()).setTitle("Users");
+
                 break;
 
             case AppConstants.PLAN_FRAGMENT:
                 fragment = new PlansFragment();
                 Objects.requireNonNull(getSupportActionBar()).setTitle("Plans");
+
                 break;
         }
 

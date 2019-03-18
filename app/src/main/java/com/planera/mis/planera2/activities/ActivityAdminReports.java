@@ -19,10 +19,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -46,7 +48,6 @@ import com.planera.mis.planera2.models.TerritoryListResponse;
 import com.planera.mis.planera2.models.UserData;
 import com.planera.mis.planera2.models.UserListResponse;
 import com.planera.mis.planera2.utils.AppConstants;
-import com.planera.mis.planera2.utils.FileCreation;
 import com.planera.mis.planera2.utils.InternetConnection;
 
 import java.io.File;
@@ -60,10 +61,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.content.ContentValues.TAG;
 
+public class ActivityAdminReports
+        extends BaseActivity
+        implements View.OnClickListener,
+        Switch.OnCheckedChangeListener,
+        AdapterView.OnItemSelectedListener
+{
 
-public class ActivityAdminReports extends BaseActivity implements View.OnClickListener {
+    public static final int DEFAULT_SELECT_VALUE = 1;
+
     private Spinner spinnerRoleType;
     private EditText editStartTime;
     private EditText editEndTime;
@@ -78,28 +85,37 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     private TextInputLayout inputLayoutDoctorReport;
     private TextInputLayout inputLayoutUserReport;
     private EditText editSendTo;
-    private LinearLayout layoutChemistReport, layoutDoctorReport, layoutUserReport;
+    private LinearLayout layoutChemistReport;
+    private LinearLayout layoutDoctorReport;
+    private LinearLayout layoutUserReport;
     private RecyclerView reportsListView;
+    protected Switch switchIsJoint;
+
+
     private List<Patches> patchesList;
     private List<Territories> territoriesList;
     private List<Chemists> chemistsList;
     private List<Doctors> doctorsList;
     private List<UserData> usersList;
     private List<DataItem> dataItemsList;
-    public static final int DEFAULT_SELECT_VALUE = 1;
-    public ObtainReport obtainReport;
-    public int COLUMN_ID = 0;
-
-
-    private String strPickedDate;
-    private int territoryId;
-    private int patchId;
-    private String selectedRole;
     private List<String> stringDoctorsList;
     private List<String> stringChemistList;
     private List<String> stringUserList;
     private List<String> stringPatchesList;
     private List<String> stringTerritoryList;
+
+
+    public ObtainReport obtainReport;
+
+
+    public int COLUMN_ID = 0;
+    protected int territoryId;
+    protected int patchId;
+    private String strPickedDate;
+    private String selectedRole;
+    private int isJointWorking;
+
+
     private TableLayout mainTableLayout;
     private TableRow tr_head;
 
@@ -142,6 +158,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         layoutUserReport = findViewById(R.id.layout_user_report);
         FloatingActionButton buttonExport = findViewById(R.id.button_export);
         mainTableLayout = findViewById(R.id.main_table);
+        switchIsJoint = findViewById(R.id.switch_is_joint);
 
         tr_head = new TableRow(this);
         tr_head.setBackgroundResource(R.drawable.bg_input_box);
@@ -152,8 +169,14 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         buttonSubmitReport.setOnClickListener(this);
         editEndTime.setOnClickListener(this);
         editStartTime.setOnClickListener(this);
-
+        spinnerTerritoryReport.setOnItemSelectedListener(this);
+        spinnerPatchReport.setOnItemSelectedListener(this);
+        spinnerChemistReport.setOnItemSelectedListener(this);
+        spinnerDoctorReport.setOnItemSelectedListener(this);
+        spinnerUserReport.setOnItemSelectedListener(this);
+        spinnerRoleType.setOnItemSelectedListener(this);
         buttonExport.setOnClickListener(this);
+        switchIsJoint.setOnCheckedChangeListener(this);
         setSupportActionBar(toolbarReport);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Reports");
         toolbarReport.setNavigationOnClickListener(view -> onBackPressed());
@@ -169,122 +192,11 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         patchesList = new ArrayList<>();
         usersList = new ArrayList<>();
 
+        isJointWorking = AppConstants.SINGLE_WORKING;
 
-        spinnerTerritoryReport.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    territoryId = territoriesList.get(position - DEFAULT_SELECT_VALUE).getTerritoryId();
-                    inputLayoutTerritoryReport.setError(null);
-                    getPatchList(token, territoryId);
-                }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
 
-        spinnerPatchReport.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    inputLayoutPatchReport.setError(null);
-                    patchId = patchesList.get(position - DEFAULT_SELECT_VALUE).getPatchId();
-                    if (selectedRole.equals("1")) {
-                        getDoctorsList(token, patchId);
-
-                    }
-                    if (selectedRole.equals("2")) {
-
-                        getChemistList(token, patchId);
-                    }
-                    if (selectedRole.equals("3")) {
-
-                        getUsersList(token);
-                    }
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        spinnerDoctorReport.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    inputLayoutDoctorReport.setError(null);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spinnerChemistReport.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    inputLayoutChemistReport.setError(null);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spinnerUserReport.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    inputLayoutUserReport.setError(null);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        spinnerRoleType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                getTerritoryList(token);
-                spinnerPatchReport.setAdapter(null);
-                spinnerDoctorReport.setAdapter(null);
-                spinnerUserReport.setAdapter(null);
-                spinnerChemistReport.setAdapter(null);
-                if (position == DEFAULT_SELECT_VALUE - 1) {
-                    selectedRole = "1";
-                    layoutDoctorReport.setVisibility(View.VISIBLE);
-                    layoutChemistReport.setVisibility(View.GONE);
-                    layoutUserReport.setVisibility(View.GONE);
-                } else if (position == DEFAULT_SELECT_VALUE) {
-                    selectedRole = "2";
-                    layoutChemistReport.setVisibility(View.VISIBLE);
-                    layoutUserReport.setVisibility(View.GONE);
-                    layoutDoctorReport.setVisibility(View.GONE);
-                } else {
-                    selectedRole = "3";
-                    layoutUserReport.setVisibility(View.VISIBLE);
-                    layoutChemistReport.setVisibility(View.GONE);
-                    layoutDoctorReport.setVisibility(View.GONE);
-                }
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
 
@@ -311,23 +223,26 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
             editEndTime.setError(getString(R.string.invalid_input));
             editEndTime.requestFocus();
 
-        }
-        else if(TextUtils.isEmpty(strSendTo)){
+        } else if (TextUtils.isEmpty(strSendTo)) {
             editSendTo.setError("Please enter email address");
             editSendTo.requestFocus();
-        }
-        else {
+        } else {
             if (InternetConnection.isNetworkAvailable(ActivityAdminReports.this)) {
                 obtainReport.setStartDate(strStartDate);
                 obtainReport.setEndDate(strEndDate);
                 obtainReport.setEmailSendTo(strSendTo);
+                obtainReport.setIsJoint(isJointWorking);
                 if (selectedRole.equals("1")) {
                     if (doctorsList != null) {
                         String doctorId = doctorsList.get(spinnerDoctorReport.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getDoctorId() + "";
                         obtainReport.setDoctorId(doctorId);
                         obtainReport.setChemistId("0");
                         obtainReport.setUserId("0");
-                        getDoctorsReport(token, obtainReport);
+                        if (InternetConnection.isNetworkAvailable(ActivityAdminReports.this)) {
+                            getDoctorsReport(token, obtainReport);
+                        } else {
+                            Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+                        }
                     }
                 }
 
@@ -336,7 +251,11 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                     obtainReport.setChemistId(chemistId);
                     obtainReport.setUserId("0");
                     obtainReport.setDoctorId("0");
-                    getChemistReportList(token, obtainReport);
+                    if (InternetConnection.isNetworkAvailable(ActivityAdminReports.this)) {
+                        getChemistReportList(token, obtainReport);
+                    } else {
+                        Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+                    }
                 }
 
                 if (selectedRole.equals("3")) {
@@ -344,7 +263,11 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                     obtainReport.setUserId(userId);
                     obtainReport.setDoctorId("0");
                     obtainReport.setChemistId("0");
-                    getUserReport(token, obtainReport);
+                    if (InternetConnection.isNetworkAvailable(ActivityAdminReports.this)) {
+                        getUserReport(token, obtainReport);
+                    } else {
+                        Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+                    }
                 }
 
 
@@ -359,14 +282,11 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         int mMonth = mCurrentTime.get(Calendar.MONTH);
         int mDay = mCurrentTime.get(Calendar.DATE);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(ActivityAdminReports.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                strPickedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
+        DatePickerDialog datePickerDialog = new DatePickerDialog(ActivityAdminReports.this, (view, year, month, dayOfMonth) -> {
+            strPickedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
 
-                editText.setText(strPickedDate);
+            editText.setText(strPickedDate);
 
-            }
         }, mYear, mMonth, mDay);
 
         //code for select on current date and onwards.
@@ -432,7 +352,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         Call<UserListResponse> call = apiInterface.usersList(token);
         call.enqueue(new Callback<UserListResponse>() {
             @Override
-            public void onResponse(Call<UserListResponse> call, Response<UserListResponse> response) {
+            public void onResponse(@NonNull Call<UserListResponse> call, Response<UserListResponse> response) {
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     usersList = response.body().getData();
@@ -466,16 +386,16 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     }
 
 
-    public void apiSendToEmail(String token, ObtainReport obtainReport){
+    public void apiSendToEmail(String token, ObtainReport obtainReport) {
         processDialog.showDialog(ActivityAdminReports.this, false);
         Call<MainResponse> call = apiInterface.sendFileToEmail(token, obtainReport);
         call.enqueue(new Callback<MainResponse>() {
             @Override
             public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
                 processDialog.dismissDialog();
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     assert response.body() != null;
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                    if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                         Toasty.success(ActivityAdminReports.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -498,7 +418,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
             @Override
             public void onResponse(@NonNull Call<TerritoryListResponse> call, @NonNull Response<TerritoryListResponse> response) {
                 processDialog.dismissDialog();
-                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
+                if ((response.body() != null ? response.body().getStatusCode() : 0) == AppConstants.RESULT_OK) {
                     territoriesList = response.body().getTerritorysList();
                     stringTerritoryList = new ArrayList<>();
                     stringTerritoryList.add(getString(R.string.select));
@@ -564,7 +484,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
             @Override
             public void onResponse(@NonNull Call<DoctorsListResponce> call, @NonNull Response<DoctorsListResponce> response) {
                 processDialog.dismissDialog();
-                Log.e(TAG, "onResponse: DoctorsList" + new Gson().toJson(response.body()));
+//                Log.e(TAG, "onResponse: DoctorsList" + new Gson().toJson(response.body()));
                 assert response.body() != null;
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                     doctorsList = response.body().getData();
@@ -626,7 +546,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
             }
 
             @Override
-            public void onFailure(Call<ChemistListResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<ChemistListResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 Snackbar.make(rootView, t.getMessage(), Snackbar.LENGTH_LONG).show();
             }
@@ -635,7 +555,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     }
 
     public void getChemistReportList(String token, ObtainReport report) {
-        Log.e("Obtain Report", new Gson().toJson(report));
+//        Log.e("Obtain Report", new Gson().toJson(report));
         processDialog.showDialog(ActivityAdminReports.this, false);
 
 
@@ -653,11 +573,9 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                     }
                     assert response.body() != null;
                     if (response.body().getStatuscode() == AppConstants.RESULT_OK) {
-                        Log.e("Data of Items", new Gson().toJson(response.body()));
                         dataItemsList = response.body().getData();
                         if (dataItemsList != null) {
                             chemistDataTable(dataItemsList);
-//                            initAdapter(dataItemsList, reportsListView);
                         }
 
 
@@ -677,7 +595,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
 
 
     public void getDoctorsReport(String token, ObtainReport report) {
-        Log.e("Obtain Report Doctor", new Gson().toJson(report));
+//        Log.e("Obtain Report Doctor", new Gson().toJson(report));
         processDialog.showDialog(ActivityAdminReports.this, false);
 
 
@@ -693,7 +611,6 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                     }
                     assert response.body() != null;
                     if (response.body().getStatuscode() == AppConstants.RESULT_OK) {
-                        Log.e("Data of Doctor Report", new Gson().toJson(response.body()));
                         dataItemsList = response.body().getData();
 
                         if (dataItemsList != null) {
@@ -726,14 +643,14 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
         if (call != null) {
             call.enqueue(new Callback<ReportListResponce>() {
                 @Override
-                public void onResponse(Call<ReportListResponce> call, Response<ReportListResponce> response) {
+                public void onResponse(@NonNull Call<ReportListResponce> call, @NonNull Response<ReportListResponce> response) {
                     processDialog.dismissDialog();
 
                     if (response.code() == 400) {
                         Toast.makeText(ActivityAdminReports.this, "Error Code", Toast.LENGTH_LONG).show();
                     }
                     if (response.body().getStatuscode() == AppConstants.RESULT_OK) {
-                        Log.e("Data of Items", new Gson().toJson(response.body()));
+//                        Log.e("Data of Items", new Gson().toJson(response.body()));
                         dataItemsList = response.body().getData();
 
                         if (dataItemsList != null) {
@@ -1013,7 +930,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
     }
 
     public void userDataTable(List<DataItem> dataItemsList) {
-        Log.e("User input report", new Gson().toJson(dataItemsList));
+//        Log.e("User input report", new Gson().toJson(dataItemsList));
         TextView label_number = new TextView(this);
         label_number.setText("S. No.");
         label_number.setId(COLUMN_ID + 11);
@@ -1145,7 +1062,7 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
 
             textArray[5] = new TextView(this);
             textArray[5].setId(i + 111);
-            if (dataItemsList.get(i).getIsInLocation().equals("1")) {
+            if (dataItemsList.get(i).getIsInLocation() == 1) {
                 textArray[5].setText("Yes");
             } else {
                 textArray[5].setText("No");
@@ -1239,8 +1156,13 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
                 pickDateFromDialog(editEndTime);
                 break;
             case R.id.button_export:
-                Log.e("ObtainREe", new Gson().toJson(obtainReport));
-                apiSendToEmail(token, obtainReport);
+//                Log.e("ObtainREe", new Gson().toJson(obtainReport));
+
+                if (InternetConnection.isNetworkAvailable(ActivityAdminReports.this)) {
+                    apiSendToEmail(token, obtainReport);
+                } else {
+                    Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+                }
 
 //                if (dataItemsList != null) {
 //
@@ -1253,6 +1175,113 @@ public class ActivityAdminReports extends BaseActivity implements View.OnClickLi
 //                }
                 break;
         }
+
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        switch (compoundButton.getId()) {
+            case R.id.switch_is_joint:
+                if (b)
+                    isJointWorking = AppConstants.JOINT_WORKING;
+                else
+                    isJointWorking = AppConstants.SINGLE_WORKING;
+                break;
+        }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        switch (adapterView.getId()) {
+            case R.id.spinner_role_type:
+                if (InternetConnection.isNetworkAvailable(ActivityAdminReports.this)) {
+                    getTerritoryList(token);
+                } else {
+                    Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+                }
+                spinnerPatchReport.setAdapter(null);
+                spinnerDoctorReport.setAdapter(null);
+                spinnerUserReport.setAdapter(null);
+                spinnerChemistReport.setAdapter(null);
+                if (i == DEFAULT_SELECT_VALUE - 1) {
+                    selectedRole = "1";
+                    layoutDoctorReport.setVisibility(View.VISIBLE);
+                    layoutChemistReport.setVisibility(View.GONE);
+                    layoutUserReport.setVisibility(View.GONE);
+                } else if (i == DEFAULT_SELECT_VALUE) {
+                    selectedRole = "2";
+                    layoutChemistReport.setVisibility(View.VISIBLE);
+                    layoutUserReport.setVisibility(View.GONE);
+                    layoutDoctorReport.setVisibility(View.GONE);
+                } else {
+                    selectedRole = "3";
+                    layoutUserReport.setVisibility(View.VISIBLE);
+                    layoutChemistReport.setVisibility(View.GONE);
+                    layoutDoctorReport.setVisibility(View.GONE);
+                }
+                break;
+            case R.id.spinner_territory_report:
+                if (i != 0) {
+                    territoryId = territoriesList.get(i - DEFAULT_SELECT_VALUE).getTerritoryId();
+                    inputLayoutTerritoryReport.setError(null);
+                    if (InternetConnection.isNetworkAvailable(ActivityAdminReports.this)) {
+                        getPatchList(token, territoryId);
+                    } else {
+                        Snackbar.make(rootView, R.string.no_internet, Snackbar.LENGTH_LONG).show();
+                    }
+                }
+                break;
+            case R.id.spinner_patch_report:
+                if (i != 0) {
+                    inputLayoutPatchReport.setError(null);
+                    patchId = patchesList.get(i - DEFAULT_SELECT_VALUE).getPatchId();
+                    if (selectedRole.equals("1")) {
+                        if (InternetConnection.isNetworkAvailable(ActivityAdminReports.this)) {
+                            getDoctorsList(token, patchId);
+                        } else {
+                            Snackbar.make(rootView, R.string.no_internet, Snackbar.LENGTH_LONG).show();
+                        }
+
+                    }
+                    if (selectedRole.equals("2")) {
+                        if (InternetConnection.isNetworkAvailable(ActivityAdminReports.this)) {
+                            getChemistList(token, patchId);
+                        } else {
+                            Snackbar.make(rootView, R.string.no_internet, Snackbar.LENGTH_LONG).show();
+                        }
+
+
+                    }
+                    if (selectedRole.equals("3")) {
+                        if (InternetConnection.isNetworkAvailable(ActivityAdminReports.this)) {
+                            getUsersList(token);
+                        } else {
+                            Snackbar.make(rootView, R.string.no_internet, Snackbar.LENGTH_LONG).show();
+                        }
+                    }
+                }
+                break;
+            case R.id.spinner_chemist_report:
+                if (i != 0) {
+                    inputLayoutChemistReport.setError(null);
+                }
+                break;
+            case R.id.spinner_doctor_report:
+                if (i != 0) {
+                    inputLayoutDoctorReport.setError(null);
+                }
+                break;
+            case R.id.spinner_user_report:
+                if (i != 0) {
+                    inputLayoutUserReport.setError(null);
+                }
+                break;
+
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
 }

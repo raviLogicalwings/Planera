@@ -107,7 +107,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
                             if (Integer.parseInt(d.getGiftId()) == giftsDataObj.getGiftId()) {
                                 inputGiftList.get(i).setGiftId(giftsDataObj.getGiftId() + "");
                                 if (!quantityGift.equals("")) {
-                                    inputGiftList.get(i).setQuantity(quantityGift);
+                                    inputGiftList.get(i).setGiftQuantity(quantityGift);
                                 }
                                 else{
                                     inputGiftList.remove(i);
@@ -122,7 +122,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
                         if (!isUpdated) {
                             if (!quantityGift.equals("")) {
                                 inputGift = new InputGift();
-                                inputGift.setQuantity(quantityGift);
+                                inputGift.setGiftQuantity(quantityGift);
                                 inputGift.setGiftId(giftsDataObj.getGiftId() + "");
                                 inputGiftList.add(inputGift);
                             }
@@ -132,7 +132,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<GiftsAdapter.MyGiftHolder
                 else {
                     if (!quantityGift.equals("")) {
                         inputGift = new InputGift();
-                        inputGift.setQuantity(quantityGift);
+                        inputGift.setGiftQuantity(quantityGift);
                         inputGift.setGiftId(giftsDataObj.getGiftId() + "");
                         inputGiftList.add(inputGift);
                     }

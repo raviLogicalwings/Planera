@@ -191,7 +191,7 @@ public class FileCreation {
                     sheet.addCell(new Label(2, i+1, reportList.get(i).getStartDate()));
                     sheet.addCell(new Label(3, i+1, reportList.get(i).getEndDate()));
 
-                    sheet.addCell(new Label(8, i+1, reportList.get(i).getIsInLocation()));
+                    sheet.addCell(new Label(8, i+1, reportList.get(i).getIsInLocation()+""));
 
 
                 }

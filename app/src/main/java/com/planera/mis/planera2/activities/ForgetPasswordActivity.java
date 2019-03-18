@@ -3,6 +3,7 @@ package com.planera.mis.planera2.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,10 +14,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.planera.mis.planera2.FragmentDialog.ResetPasswordDialog;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.models.MainResponse;
 import com.planera.mis.planera2.models.UserData;
 import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.InternetConnection;
 
 import org.apache.xmlbeans.InterfaceExtension;
 
@@ -35,6 +38,8 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
     private Button buttonSubmitReqForForget, buttonSubmitOtp;
     private UserData userData;
     private LinearLayout layoutOtpForget, layoutEmailForget;
+
+    private ResetPasswordDialog resetPasswordDialog;
     String strEditEmail;
     String strOTP;
 
@@ -55,21 +60,20 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
         editOtp = findViewById(R.id.edit_otp);
         editNewPassword = findViewById(R.id.edit_new_password);
         editConfirmPassword = findViewById(R.id.edit_confirm_password);
-        buttonSubmitOtp = findViewById(R.id.button_submit_otp);
         layoutEmailForget = findViewById(R.id.layoutEmailForget);
-        layoutOtpForget = findViewById(R.id.layoutOtpForget);
         buttonSubmitReqForForget= findViewById(R.id.button_submit_req_for_forget);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.back_arrow_whit));
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
         buttonSubmitReqForForget.setOnClickListener(this);
-        buttonSubmitOtp.setOnClickListener(this);
+
 
     }
 
     @Override
     public void initData() {
         super.initData();
+        resetPasswordDialog = new ResetPasswordDialog();
     }
 
     public void callForgetPasswordApi(String email){
@@ -81,11 +85,10 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                 processDialog.dismissDialog();
                 if (response.isSuccessful()){
                     assert response.body() != null;
-                    Log.e("Api Response", response.body().toString());
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-                        layoutOtpForget.setVisibility(View.VISIBLE);
-                        layoutEmailForget.setVisibility(View.GONE);
                         Toasty.success(ForgetPasswordActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+                        resetPasswordDialog.show(getSupportFragmentManager(), "Reset password");
                     }
                     else{
                         Toasty.error(ForgetPasswordActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -97,6 +100,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
             @Override
             public void onFailure(@NonNull Call<MainResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
+                Log.e("Error", t.getMessage());
                 Toasty.error(ForgetPasswordActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -110,7 +114,14 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
     public void uiValidation(){
       strEditEmail = editEmail.getText().toString().trim();
       if (!TextUtils.isEmpty(strEditEmail) && isEmailValid(strEditEmail)){
-          callForgetPasswordApi(strEditEmail);
+          if (InternetConnection.isNetworkAvailable(ForgetPasswordActivity.this)){
+
+              callForgetPasswordApi(strEditEmail);
+          }
+          else
+          {
+              Snackbar.make(rootView, R.string.no_internet, Snackbar.LENGTH_LONG).show();
+          }
       }
       if (TextUtils.isEmpty(strEditEmail)){
           Toasty.error(ForgetPasswordActivity.this, "Email Can't be empty.", Toast.LENGTH_SHORT).show();
@@ -122,75 +133,8 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
     }
 
 
-    public void validateOtp(){
-        String newPasswordStr = editNewPassword.getText().toString().trim();
-        String confirmPasswordStr = editConfirmPassword.getText().toString().trim();
-        String otpStr=  editOtp.getText().toString().trim();
-        if (TextUtils.isEmpty(otpStr)){
-            Toasty.error(ForgetPasswordActivity.this, "OTP can't be empty.", Toast.LENGTH_SHORT).show();
 
-        }
-        else if(otpStr.length() < 6){
 
-            Toasty.error(ForgetPasswordActivity.this, "Please enter correct OTP.", Toast.LENGTH_SHORT).show();
-
-        }
-
-        else if(TextUtils.isEmpty(newPasswordStr)){
-            Toasty.error(ForgetPasswordActivity.this, "New password field can't be empty.", Toast.LENGTH_SHORT).show();
-
-        }
-        else if (newPasswordStr.length() <8){
-            Toasty.error(ForgetPasswordActivity.this, "Minimum 8 characters.", Toast.LENGTH_SHORT).show();
-
-        }
-        else if(TextUtils.isEmpty(confirmPasswordStr)){
-            Toasty.error(ForgetPasswordActivity.this, "Confirm password field can't be empty.", Toast.LENGTH_SHORT).show();
-
-        }
-        else if (confirmPasswordStr.length() <8){
-            Toasty.error(ForgetPasswordActivity.this, "Minimum 8 characters.", Toast.LENGTH_SHORT).show();
-
-        }
-        else{
-            userData = new UserData();
-            userData.setOtp(otpStr);
-            userData.setPassword(newPasswordStr);
-            userData.setConfirmPassword(confirmPasswordStr);
-            callSetPasswordApi(token, userData);
-
-        }
-
-    }
-
-    public void callSetPasswordApi(String token, UserData userData){
-        processDialog.showDialog(ForgetPasswordActivity.this, false);
-        Call<MainResponse> call = apiInterface.setPassword(token, userData);
-        call.enqueue(new Callback<MainResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
-                processDialog.dismissDialog();
-                if (response.isSuccessful()){
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-                        Intent intent = new Intent(ForgetPasswordActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        Toasty.success(ForgetPasswordActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                    else{
-                        Toasty.error(ForgetPasswordActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MainResponse> call, Throwable t) {
-                processDialog.dismissDialog();
-                Toasty.error(ForgetPasswordActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-
-            }
-        });
-    }
 
     @Override
     public void onClick(View view) {
@@ -199,7 +143,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
              uiValidation();
              break;
             case R.id.button_submit_otp:
-                validateOtp();
+//                validateOtp();
              break;
         }
 

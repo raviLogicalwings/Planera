@@ -27,6 +27,7 @@ import com.planera.mis.planera2.models.ChemistListResponse;
 import com.planera.mis.planera2.models.Chemists;
 import com.planera.mis.planera2.models.MainResponse;
 import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.InternetConnection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +82,12 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
         super.initData();
         apiInterface = ApiClient.getInstance();
         if(token!=null){
-            getChemistsList(token);
+            if (InternetConnection.isNetworkAvailable(mContext)){
+                getChemistsList(token);
+            }
+            else{
+                Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -232,7 +238,14 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
 
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", (dialogInterface, i) -> {
             dialogInterface.cancel();
-            deleteChemistApi(token, ChemistId );
+
+            if (InternetConnection.isNetworkAvailable(mContext)){
+                deleteChemistApi(token, ChemistId );
+            }
+            else
+            {
+                Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+            }
         });
 
 
@@ -253,8 +266,12 @@ public class ChemistFragment extends BaseFragment implements SearchView.OnQueryT
                 processDialog.dismissDialog();
                 assert response.body() != null;
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-//                    getFragmentManager().beginTransaction().detach(ChemistFragment.this).attach(ChemistFragment.this).commit();
-                    getChemistsList(token);
+                    if (InternetConnection.isNetworkAvailable(mContext)){
+                        getChemistsList(token);
+                    }
+                    else{
+                        Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+                    }
                     Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
                 }
                 else{

@@ -5,7 +5,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardElevation="6dp"
+        app:cardElevation="@dimen/dimen_4dp"
         app:cardUseCompatPadding="true">
 
         <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -17,7 +17,7 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             style="@style/BaseMargin"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
@@ -29,8 +29,9 @@
                     android:id="@+id/text_chemist_company_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Company Name"
-                    android:inputType="textCapWords" />
+                    android:hint="@string/company_name"
+                    android:inputType="textCapWords"
+                   />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -44,7 +45,7 @@
                     android:id="@+id/text_chemist_monthly_volume"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Monthly Volume Potential"
+                    android:hint="@string/monthly_potential"
                     android:inputType="textCapWords" />
 
             </android.support.design.widget.TextInputLayout>
@@ -56,10 +57,11 @@
                 android:id="@+id/input_layout_shop_size_chemist">
 
                 <EditText
-                    android:id="@+id/text_chemist_shop_size"
+
+                    android:id="@+id/text_chemist_shop"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Shop Size"
+                    android:hint="@string/shop_size"
                     android:inputType="textCapWords" />
 
             </android.support.design.widget.TextInputLayout>
@@ -89,7 +91,7 @@
                     android:id="@+id/text_chemist_middle_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Middle Name"
+                    android:hint="@string/middle_name"
                     android:inputType="textCapWords" />
 
             </android.support.design.widget.TextInputLayout>
@@ -103,7 +105,7 @@
                     android:id="@+id/text_chemist_last_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Last Name"
+                    android:hint="@string/last_name"
                     android:inputType="textCapWords" />
 
             </android.support.design.widget.TextInputLayout>
@@ -136,7 +138,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:text="Preferred Meet Time" />
+                    android:text="@string/preffered_meet_time" />
 
                 <Spinner
                     android:id="@+id/spinner_meet_time"
@@ -159,13 +161,13 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:text="Patch" />
+                    android:text="@string/patch" />
 
                 <Spinner
                     android:id="@+id/spinner_patch_id"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"></Spinner>
+                    android:layout_weight="1"/>
             </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -177,7 +179,7 @@
                     android:id="@+id/text_chemist_phone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Phone"
+                    android:hint="@string/phone"
                     android:inputType="phone"
                     android:maxLength="10" />
 
@@ -193,7 +195,7 @@
                     android:id="@+id/text_chemist_address1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Address Line 1"
+                    android:hint="@string/address_line_1"
                     android:inputType="textCapWords" />
 
             </android.support.design.widget.TextInputLayout>
@@ -207,7 +209,7 @@
                     android:id="@+id/text_chemist_address2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Address Line 2"
+                    android:hint="@string/address_line_2"
                     android:inputType="textCapWords" />
 
             </android.support.design.widget.TextInputLayout>
@@ -221,7 +223,7 @@
                     android:id="@+id/text_chemist_address3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Address Line 3"
+                    android:hint="@string/address_line_3"
                     android:inputType="textCapWords" />
 
             </android.support.design.widget.TextInputLayout>
@@ -235,7 +237,7 @@
                     android:id="@+id/text_chemist_address4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Address Line 4"
+                    android:hint="@string/address_line_4"
                     android:inputType="textCapWords" />
 
             </android.support.design.widget.TextInputLayout>
@@ -250,7 +252,7 @@
                     android:id="@+id/text_chemist_district"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="District"
+                    android:hint="@string/district"
                     android:inputType="textCapWords" />
 
             </android.support.design.widget.TextInputLayout>
@@ -264,7 +266,7 @@
                     android:id="@+id/text_chemist_city"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="City"
+                    android:hint="@string/city"
                     android:inputType="textCapWords" />
 
             </android.support.design.widget.TextInputLayout>
@@ -278,7 +280,7 @@
                     android:id="@+id/text_chemist_state"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="State"
+                    android:hint="@string/state"
                     android:inputType="textCapWords" />
 
             </android.support.design.widget.TextInputLayout>
@@ -292,7 +294,7 @@
                     android:id="@+id/text_chemist_pincode"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Pincode"
+                    android:hint="@string/pin_code"
                     android:inputType="number"
                     android:maxLength="6" />
 
@@ -306,7 +308,7 @@
                     android:id="@+id/text_chemist_billing_phone1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Billing Phone1"
+                    android:hint="@string/billing_phone1"
                     android:inputType="phone"
                     android:maxLength="10" />
 
@@ -321,7 +323,7 @@
                     android:id="@+id/text_chemist_billing_phone2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Billing Phone2"
+                    android:hint="@string/billing_phone2"
                     android:inputType="phone"
                     android:maxLength="10" />
 
@@ -336,8 +338,9 @@
                     android:id="@+id/text_chemist_billing_email"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Billing Email"
-                    android:inputType="textEmailAddress" />
+                    android:hint="@string/billing_email"
+                    android:inputType="textEmailAddress"
+                    android:autofillHints="@string/billing_email"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -350,7 +353,7 @@
                     android:id="@+id/text_chemist_rating"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Ratting"
+                    android:hint="@string/rating"
                     android:inputType="numberDecimal" />
 
             </android.support.design.widget.TextInputLayout>
@@ -362,7 +365,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
                 android:background="@color/colorPrimary"
-                android:text="Submit" />
+                android:text="@string/submit" />
         </LinearLayout>
 
 

@@ -1,6 +1,7 @@
 package com.planera.mis.planera2.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,13 +29,15 @@ public class PatchAdapter extends RecyclerView.Adapter<PatchAdapter.MyPatchHolde
     }
     @Override
     public MyPatchHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        view = LayoutInflater.from(mContext).inflate(R.layout.item_territory_list, parent, false);
+        view = LayoutInflater.from(mContext).inflate(R.layout.item_patch_list, parent, false);
         return new MyPatchHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(MyPatchHolder holder, int position) {
-        holder.textPatch.setText(patchesList.get(position).getPatchName());
+    public void onBindViewHolder(@NonNull MyPatchHolder holder, int position) {
+        String patchInfo = patchesList.get(position).getPatchName()+"("+patchesList.get(position).getPatchId()+")";
+
+        holder.textPatch.setText(patchInfo);
         holder.textTerritory.setText(patchesList.get(position).getTerritoryName());
 
     }
@@ -58,10 +61,10 @@ public class PatchAdapter extends RecyclerView.Adapter<PatchAdapter.MyPatchHolde
 
         public MyPatchHolder(View itemView) {
             super(itemView);
-            textPatch = itemView.findViewById(R.id.text_territory);
-            textTerritory = itemView.findViewById(R.id.text_state);
-            imgDelete = itemView.findViewById(R.id.img_delete);
-            imgEdit = itemView.findViewById(R.id.img_edit);
+            textPatch = itemView.findViewById(R.id.text_patch);
+            textTerritory = itemView.findViewById(R.id.text_territory);
+            imgDelete = itemView.findViewById(R.id.img_delete_patch);
+            imgEdit = itemView.findViewById(R.id.img_edit_patch);
             textPatch.setVisibility(View.VISIBLE);
 
             imgDelete.setOnClickListener(this);
@@ -72,10 +75,10 @@ public class PatchAdapter extends RecyclerView.Adapter<PatchAdapter.MyPatchHolde
         @Override
         public void onClick(View view) {
             switch (view.getId()){
-                case R.id.img_delete:
+                case R.id.img_delete_patch:
                     onItemClickListener.onItemView(view, getAdapterPosition());
                     break;
-                case R.id.img_edit:
+                case R.id.img_edit_patch:
                     onItemClickListener.onItemView(view, getAdapterPosition());
                     break;
             }
@@ -83,6 +86,6 @@ public class PatchAdapter extends RecyclerView.Adapter<PatchAdapter.MyPatchHolde
     }
 
     public interface OnItemClickListener{
-        public void onItemView(View view, int position);
+        void onItemView(View view, int position);
     }
 }

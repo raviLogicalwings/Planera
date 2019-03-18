@@ -4,8 +4,7 @@
     style="@style/BaseMargin"
     android:layout_marginTop="?attr/actionBarSize"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"

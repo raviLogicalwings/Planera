@@ -81,7 +81,13 @@ public class PlansFragment extends BaseFragment{
         super.initData();
         apiInterface = ApiClient.getInstance();
         if (token != null) {
-            getPlanList(token);
+            if (InternetConnection.isNetworkAvailable(mContext)){
+                getPlanList(token);
+            }
+            else
+            {
+                Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -123,7 +129,6 @@ public class PlansFragment extends BaseFragment{
             @Override
             public void onFailure(@NonNull Call<AdminPlanResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
-                linearNoInternet.setVisibility(View.VISIBLE);
                 buttonRetry.setVisibility(View.VISIBLE);
             }
         });
@@ -188,7 +193,13 @@ public class PlansFragment extends BaseFragment{
                     assert response.body() != null;
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                         Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
-                        getPlanList(token);
+                        if (InternetConnection.isNetworkAvailable(mContext)){
+                            getPlanList(token);
+                        }
+                        else
+                        {
+                            Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+                        }
                     }
                     else{
                         Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_LONG).show();
@@ -225,7 +236,14 @@ public class PlansFragment extends BaseFragment{
 
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", (dialogInterface, i) -> {
             dialogInterface.cancel();
-            deletePlanApi(token, patchId );
+            if (InternetConnection.isNetworkAvailable(mContext))
+            {
+                deletePlanApi(token, patchId );
+            }
+             else
+            {
+                Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+            }
         });
 
 

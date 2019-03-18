@@ -2,6 +2,7 @@ package com.planera.mis.planera2.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Input{
@@ -19,7 +20,7 @@ public class Input{
 	private String comment;
 
 	@SerializedName("IsInLocation")
-	private String isInLocation;
+	private int isInLocation;
 
 	@SerializedName("UserId")
 	private String userId;
@@ -45,18 +46,25 @@ public class Input{
 	@SerializedName("VisitDate")
 	private String visitDate;
 
+	@SerializedName("isJoint")
+	private int isJoint;
+
+
 	@SerializedName("productdetail")
 	private List<InputOrders> productDetalis;
 
 	@SerializedName("giftdetail")
 	private List<InputGift> giftDetails;
 
+	@SerializedName("jointMember")
+	private List<MRs> jointUserList = new ArrayList<>();
+
 	public List<InputOrders> getProductDetalis() {
 		return productDetalis;
 	}
 
-	public void setProductDetalis(List<InputOrders> productDetalis) {
-		this.productDetalis = productDetalis;
+	public void setProductDetalis(List<InputOrders> productDetails) {
+		this.productDetalis = productDetails;
 	}
 
 	public List<InputGift> getGiftDetails() {
@@ -115,11 +123,11 @@ public class Input{
 		return comment;
 	}
 
-	public void setIsInLocation(String isInLocation){
+	public void setIsInLocation(int isInLocation){
 		this.isInLocation = isInLocation;
 	}
 
-	public String getIsInLocation(){
+	public int getIsInLocation(){
 		return isInLocation;
 	}
 
@@ -169,6 +177,23 @@ public class Input{
 
 	public String getLongitude(){
 		return longitude;
+	}
+
+	public int getIsJoint() {
+		return isJoint;
+	}
+
+	public void setIsJoint(int isJoint) {
+		this.isJoint = isJoint;
+	}
+
+
+	public List<MRs> getJointUserList() {
+		return jointUserList;
+	}
+
+	public void setJointUserList(List<MRs> jointUserList) {
+		this.jointUserList = jointUserList;
 	}
 
 	@Override

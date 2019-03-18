@@ -37,7 +37,7 @@ public class AddProductDialog extends BaseDialogFragment implements View.OnClick
     private TextInputLayout inputLayoutUserName;
     private EditText editTextName;
     private Button buttonAddProduct;
-    int isBrand;
+    int isBrand = 0;
 
     public AddProductDialog() {
     }

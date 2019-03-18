@@ -1,21 +1,17 @@
 package com.planera.mis.planera2.fragments;
 
-import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,19 +24,12 @@ import android.widget.Toast;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.activities.ActivityUploadChemist;
 import com.planera.mis.planera2.activities.ActivityUploadDoctor;
-import com.planera.mis.planera2.mailSender.GMail;
 import com.planera.mis.planera2.mailSender.SendMailTask;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Objects;
-
-import javax.mail.MessagingException;
 
 import es.dmoral.toasty.Toasty;
-
-import static android.app.Activity.RESULT_OK;
 
 public class UploadDataFragment extends BaseFragment implements View.OnClickListener {
     public View view;

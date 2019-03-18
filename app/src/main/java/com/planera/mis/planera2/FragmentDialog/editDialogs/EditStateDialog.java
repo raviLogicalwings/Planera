@@ -4,6 +4,8 @@ package com.planera.mis.planera2.FragmentDialog.editDialogs;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import com.planera.mis.planera2.models.States;
 import com.planera.mis.planera2.utils.AppConstants;
 import com.planera.mis.planera2.utils.InternetConnection;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,7 +54,7 @@ public class EditStateDialog  extends BaseDialogFragment implements View.OnClick
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.dialog_edit_state, container, false);
         initUi();
         initData();
@@ -73,7 +76,7 @@ public class EditStateDialog  extends BaseDialogFragment implements View.OnClick
             }
             else
             {
-
+                Toasty.warning(mContext, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -92,22 +95,20 @@ public class EditStateDialog  extends BaseDialogFragment implements View.OnClick
         Call<MainResponse> call = apiInterface.updateStateDetails   (token, id, name);
         call.enqueue(new Callback<MainResponse>() {
             @Override
-            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+            public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
                 processDialog.dismissDialog();
-                if (response!= null){
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-                        Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                        onDismissEditDialogListener.onDismissEditDialog();
-                        dismiss();
-                    }
-                    else{
-                        Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                    }
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                    Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    onDismissEditDialogListener.onDismissEditDialog();
+                    dismiss();
+                }
+                else{
+                    Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<MainResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MainResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_LONG).show();
 
@@ -161,6 +162,6 @@ public class EditStateDialog  extends BaseDialogFragment implements View.OnClick
     }
 
     public interface OnDismissEditDialogListener{
-        public void onDismissEditDialog();
+        void onDismissEditDialog();
     }
 }

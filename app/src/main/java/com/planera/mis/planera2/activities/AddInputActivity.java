@@ -21,11 +21,13 @@ import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.models.DataItem;
 import com.planera.mis.planera2.models.Input;
+import com.planera.mis.planera2.models.MRs;
 import com.planera.mis.planera2.utils.AppConstants;
 import com.planera.mis.planera2.utils.InternetConnection;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
@@ -33,6 +35,7 @@ import java.util.Objects;
 import es.dmoral.toasty.Toasty;
 
 public class  AddInputActivity extends BaseActivity implements View.OnClickListener {
+    public static final String TAG = AddInputActivity.class.getSimpleName();
     private TextView textCustomerName;
     private TextView textVisitDate;
     private EditText editStartTime;
@@ -40,9 +43,12 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
     private EditText editFeedback;
     private EditText editEarlierFeedback;
     private TextInputLayout inputLayoutVisitDate;
+    private TextInputLayout inputLayoutReason;
     private LinearLayout layoutEarlierEntryFeedBack;
     private String startTimeStr, endTimeStr, feedbackStr;
-    public static final String TAG = AddInputActivity.class.getSimpleName();
+
+    private ArrayList<MRs> jointUserList;
+
     protected double longitude;
     protected double latitude;
     protected int isInLocation;
@@ -58,6 +64,8 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
     private String earlierFeedbackStr;
     private boolean isUpdateInput;
     private String previousInputStr;
+    private int jointUserId;
+    private int isJoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +86,7 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
         editStartTime = findViewById(R.id.edit_start_time);
         editEndTime = findViewById(R.id.edit_end_time);
         editFeedback = findViewById(R.id.edit_feedback);
+        inputLayoutReason = findViewById(R.id.text_input_layout_reason);
         inputLayoutVisitDate = findViewById(R.id.input_layout_visit_date);
         Button buttonSubmitInput = findViewById(R.id.button_submit_input);
         editEarlierFeedback = findViewById(R.id.edit_earlier_feedback);
@@ -85,7 +94,7 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
         editStartTime.setFocusable(false);
         editEndTime.setFocusable(false);
         layoutEarlierEntryFeedBack.setVisibility(View.GONE);
-        editEarlierFeedback.setVisibility(View.GONE);
+        inputLayoutReason.setVisibility(View.GONE);
         setSupportActionBar(toolbarTime);
         toolbarTime.setNavigationIcon(R.drawable.back_arrow_whit);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Input");
@@ -101,6 +110,7 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
         super.initData();
         Intent intent = getIntent();
         input = new Input();
+        jointUserId = 0;
         loadFormIntent(intent);
         getCurrentDate();
 
@@ -126,14 +136,14 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
             editEndTime.requestFocus();
             editEndTime.setError(getString(R.string.invalid_input));
         }
-        else if (editEarlierFeedback.getVisibility() != View.VISIBLE) {
+        else if (inputLayoutReason.getVisibility() != View.VISIBLE) {
             earlierFeedbackStr = null;
             proceedInput();
         }
         else {
                if (TextUtils.isEmpty(earlierFeedbackStr)){
-                   editEarlierFeedback.requestFocus();
-                   editEarlierFeedback.setError("Please enter a reason.");
+                   inputLayoutReason.requestFocus();
+                   inputLayoutReason.setError("Please enter a reason.");
                }
                else{
                    proceedInput();
@@ -219,16 +229,22 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
             chemistId = intent.getStringExtra(AppConstants.CHEMIST_ID);
             userId = intent.getIntExtra(AppConstants.KEY_USER_ID, 0);
             planId = intent.getIntExtra(AppConstants.KEY_PLAN_ID, 0);
+            isJoint = intent.getIntExtra(AppConstants.KEY_IS_JOINT, 0);
+            jointUserList  = (ArrayList<MRs>)intent.getExtras().getSerializable(AppConstants.KEY_JOINT_USER);
+           if (jointUserList != null) {
+               input.setJointUserList(jointUserList);
+           }
             input.setLatitude(Double.toString(latitude));
             input.setLongitude(longitude + "");
-            input.setIsInLocation(isInLocation + "");
+            input.setIsInLocation(isInLocation);
+            input.setIsJoint(isJoint);
+            input.setPlanId(planId + "");
+            input.setUserId(userId + "");
             if (isDoctor) {
                 input.setDoctorId(doctorId + "");
             } else {
                 input.setChemistsId(chemistId);
             }
-            input.setPlanId(planId + "");
-            input.setUserId(userId + "");
         }
 
 
@@ -276,11 +292,11 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
 
                 if (date1.compareTo(date2) != 0) {
                     layoutEarlierEntryFeedBack.setVisibility(View.VISIBLE);
-                    editEarlierFeedback.setVisibility(View.VISIBLE);
+                    inputLayoutReason.setVisibility(View.VISIBLE);
 
                 } else {
                     layoutEarlierEntryFeedBack.setVisibility(View.GONE);
-                    editEarlierFeedback.setVisibility(View.GONE);
+                    inputLayoutReason.setVisibility(View.GONE);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -313,16 +329,25 @@ public class  AddInputActivity extends BaseActivity implements View.OnClickListe
     }
 
     public void isTimeAfter() {
-        startTimeStr = editStartTime.getText().toString().trim().replaceAll("[^0-9]+", "");
-        endTimeStr = editEndTime.getText().toString().trim().replaceAll("[^0-9]+", "");
-        String stTime = "2" + startTimeStr;
-        String edTime = "2" + endTimeStr;
-        Date inTime = new Date(Long.parseLong(stTime));
-        Date outTime = new Date(Long.parseLong(edTime));
-        if (outTime.before(inTime)) {
-            Toasty.error(AddInputActivity.this, "End time should be greater than start time", Toast.LENGTH_LONG).show();
-        } else {
-            uiValidation();
+        startTimeStr = editStartTime.getText().toString().trim();
+        endTimeStr = editEndTime.getText().toString().trim();
+
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat displayFormat = new SimpleDateFormat("hh:mm a");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat fullFormet = new SimpleDateFormat("HH:mm");
+        try {
+            Date inTime = displayFormat.parse(startTimeStr);
+            Date outTime = displayFormat.parse(endTimeStr);
+            String tempTimeStr = fullFormet.format(inTime).substring(0,2);
+            String tempTimeEnd = fullFormet.format(outTime).substring(0, 2);
+
+
+            if (Integer.parseInt(tempTimeEnd)<Integer.parseInt(tempTimeStr)) {
+                Toasty.error(AddInputActivity.this, "End time should be greater than start time", Toast.LENGTH_LONG).show();
+            } else {
+                uiValidation();
+            }
+        }catch (ParseException e){
+            Log.e("Parse Exception", e.getMessage());
         }
 
     }

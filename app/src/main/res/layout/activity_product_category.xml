@@ -37,7 +37,8 @@
         android:layout_below="@id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/swiper"/>
+        android:id="@+id/swiper"
+        android:layout_above="@id/button_confirm_product"/>
 
     <Button
         android:id="@+id/button_confirm_product"

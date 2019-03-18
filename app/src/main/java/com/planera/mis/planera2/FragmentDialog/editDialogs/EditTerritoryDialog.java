@@ -4,6 +4,7 @@ package com.planera.mis.planera2.FragmentDialog.editDialogs;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.planera.mis.planera2.models.Territories;
 import com.planera.mis.planera2.utils.AppConstants;
 import com.planera.mis.planera2.utils.InternetConnection;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,7 +34,8 @@ public class EditTerritoryDialog extends BaseDialogFragment implements View.OnCl
     private TextInputLayout inputLayoutUserName;
     private EditText editTextName;
     private Button buttonTerritoryUpdate;
-    public int territoryId, stateId ;
+    public int territoryId;
+    public int stateId ;
     private Territories territories;
     public OnDismissEditTerritoryDialogListener onDismissEditDialogListener;
 
@@ -52,7 +55,7 @@ public class EditTerritoryDialog extends BaseDialogFragment implements View.OnCl
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.dialog_edit_territory, container, false);
         initUi();
         initData();
@@ -85,10 +88,13 @@ public class EditTerritoryDialog extends BaseDialogFragment implements View.OnCl
             }
             else
             {
-
+                Toasty.warning(mContext, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
             }
         }
     }
+
+
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -103,7 +109,7 @@ public class EditTerritoryDialog extends BaseDialogFragment implements View.OnCl
         Call<MainResponse> call = apiInterface.updateTerritoryDetails   (token,territoryId, stateId, name);
         call.enqueue(new Callback<MainResponse>() {
             @Override
-            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+            public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK){
                         Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();

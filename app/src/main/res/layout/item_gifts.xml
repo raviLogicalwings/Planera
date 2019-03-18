@@ -2,7 +2,8 @@
 <LinearLayout
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    >
     <LinearLayout
         android:layout_marginTop="@dimen/layout_margin_top"
         style="@style/BaseMargin"
@@ -12,14 +13,15 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_gravity="center_vertical"
             android:id="@+id/text_gift"
-            android:text="Pencil BOx"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
             style="@style/LargeTextBlack"
             android:textColor="@color/colorPrimary"
-            android:layout_width="0dp"
-            android:layout_weight=".5"
-            android:layout_height="wrap_content" />
+            android:text="Pencil BOx"
+            android:layout_gravity="center_vertical"
+            />
         <EditText
             android:inputType="number"
             android:background="@drawable/bg_input_box"

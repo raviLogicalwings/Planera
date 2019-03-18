@@ -2,12 +2,14 @@ package com.planera.mis.planera2.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -21,7 +23,6 @@ import com.planera.mis.planera2.adapters.GiftsAdapter;
 import com.planera.mis.planera2.adapters.PODAdapter;
 import com.planera.mis.planera2.adapters.SampleListAdapter;
 import com.planera.mis.planera2.controller.DataController;
-import com.planera.mis.planera2.fragments.PODFragment;
 import com.planera.mis.planera2.models.DataItem;
 import com.planera.mis.planera2.models.Input;
 import com.planera.mis.planera2.models.InputGift;
@@ -42,19 +43,19 @@ import retrofit2.Response;
 
 public class ProductCategoryActivity extends BaseActivity implements View.OnClickListener {
     private String INPUT_ID = null;
-    private DoctorTabsPagerAdapter doctorTabsPagerAdapter;
-    private ChemistTabsPagerAdapter chemistTabsPagerAdapter;
-    private FragmentManager fragmentManager;
+    protected DoctorTabsPagerAdapter doctorTabsPagerAdapter;
+    protected ChemistTabsPagerAdapter chemistTabsPagerAdapter;
+    protected FragmentManager fragmentManager;
     private TabLayout tabLayout;
     private ViewPager pager;
-    private Toolbar toolbarProduct;
-    private Button buttonConfirm;
+    protected Toolbar toolbarProduct;
+    protected Button buttonConfirm;
     private Input input;
-    DataReceivedListener listener;
+    protected DataReceivedListener listener;
     private boolean isDoctor;
     public static final String TAG = ProductCategoryActivity.class.getSimpleName();
     private boolean isUpdateInput;
-    private DataItem dataForUpdate;
+    protected DataItem dataForUpdate;
 
     @Override
     protected void onStart() {
@@ -75,6 +76,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
         isDoctor = connector.getBoolean(AppConstants.KEY_ROLE);
         fragmentManager = getSupportFragmentManager();
         String getInput = getIntent().getStringExtra(AppConstants.PASS_INPUT);
+//        Log.e("Input", getInput);
         input = new Gson().fromJson(getInput, Input.class);
         isUpdateInput = getIntent().getBooleanExtra(AppConstants.IS_INPUT_UPDATE, false);
 
@@ -156,7 +158,14 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                             input.getProductDetalis().get(i).setInputId(inputId);
                         }
                     }
-                    apiUpdateMrInput(token, input);
+                    if (InternetConnection.isNetworkAvailable(ProductCategoryActivity.this))
+                    {
+                        input.setJointUserList(dataForUpdate.getJointUserList());
+                        apiUpdateMrInput(token, input);
+                    }
+                    else {
+                        Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+                    }
 
                 }
                 else if (InternetConnection.isNetworkAvailable(ProductCategoryActivity.this)) {
@@ -181,11 +190,8 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         if (Objects.requireNonNull(response.body()).getStatusCode() == AppConstants.RESULT_OK) {
-                            // Set Array Lis to null
-                            //----------
                             new GiftsAdapter().setInputGiftList(null);
                             DataController.getmInstance().setInputGiftList(null);
-                            //---------------Call Samples Add Api after getting responce
 
                             Intent startMainActivity = new Intent(ProductCategoryActivity.this, MainActivity.class);
                             startActivity(startMainActivity);
@@ -200,9 +206,9 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
             }
 
             @Override
-            public void onFailure(Call<InputGiftResponce> call, Throwable t) {
+            public void onFailure(@NonNull Call<InputGiftResponce> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
-                Snackbar.make(rootView, t.getMessage(), Snackbar.LENGTH_LONG).show();
+               Toasty.error(ProductCategoryActivity.this, t.getMessage(), Snackbar.LENGTH_LONG).show();
 
             }
         });
@@ -247,6 +253,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
 
 
     public void apiUpdateMrInput(String token, Input input){
+        Log.e("Update Input", new Gson().toJson(input));
         processDialog.showDialog(ProductCategoryActivity.this, false);
         Call<MainResponse> call = apiInterface.updateMrInput(token, input);
         call.enqueue(new Callback<MainResponse>() {
@@ -305,7 +312,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
             }
 
             @Override
-            public void onFailure(Call<MainResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MainResponse> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
                 Snackbar.make(rootView, t.getMessage(), Snackbar.LENGTH_LONG).show();
             }
@@ -322,8 +329,17 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                     if (inputB.size() > 0) {
                         for (int i = 0; i < inputB.size(); i++) {
                             inputB.get(i).setInputId(INPUT_ID);
+                            inputB.get(i).setIsJoint(input.getIsJoint());
+//                            Log.e("Brands", new Gson().toJson(inputB));
                         }
-                        apiAddInputBrands(token, inputB);
+                        if(InternetConnection.isNetworkAvailable(mContext))
+                        {
+                            apiAddInputBrands(token, inputB);
+                        }
+                        else
+                        {
+                            Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+                        }
                     }
                 }
 
@@ -333,8 +349,17 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                     if (inputGifts.size() > 0) {
                         for (int i = 0; i < inputGifts.size(); i++) {
                             inputGifts.get(i).setInputId(INPUT_ID);
+                            inputGifts.get(i).setIsJoint(input.getIsJoint());
                         }
-                        addInputGiftApi(token, inputGifts);
+
+                        if (InternetConnection.isNetworkAvailable(ProductCategoryActivity.this))
+                        {
+                            addInputGiftApi(token, inputGifts);
+                        }
+                        else
+                        {
+                            Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+                        }
                     }
                 }
 
@@ -343,8 +368,16 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                     if (inputSamples.size() > 0) {
                         for (int i = 0; i < inputSamples.size(); i++) {
                             inputSamples.get(i).setInputId(INPUT_ID);
+                            inputSamples.get(i).setIsJoint(input.getIsJoint());
+
                         }
-                        apiAddInputSamples(token, inputSamples);
+                        if (InternetConnection.isNetworkAvailable(ProductCategoryActivity.this)){
+                            apiAddInputSamples(token, inputSamples);
+                        }
+                        else
+                        {
+                            Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+                        }
                     }
                 }
 
@@ -355,6 +388,8 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                 if (inputOrders.size() > 0) {
                     for (int i = 0; i < inputOrders.size(); i++) {
                         inputOrders.get(i).setInputId(INPUT_ID);
+                        inputOrders.get(i).setIsJoint(input.getIsJoint());
+
                     }
                     apiAddInputBrands(token, inputOrders);
                 }
@@ -363,6 +398,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
     }
 
     public void addInputApi(String token, Input input) {
+        Log.e(TAG, new Gson().toJson(input));
         processDialog.showDialog(ProductCategoryActivity.this, false);
         Call<InputResponce> call = apiInterface.addInput(token, input);
         call.enqueue(new Callback<InputResponce>() {
@@ -375,7 +411,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
                         if (Objects.requireNonNull(response.body()).getStatusCode() == AppConstants.RESULT_OK) {
                             // Calling all api, product, gift, and Pod
                             INPUT_ID = response.body().getData().getInputId();
-                            callingAllApi();
+                            new Handler().postDelayed(() -> callingAllApi(), 3000);
                         } else {
                             Snackbar.make(rootView, response.body().getMessage(), Snackbar.LENGTH_INDEFINITE).show();
 

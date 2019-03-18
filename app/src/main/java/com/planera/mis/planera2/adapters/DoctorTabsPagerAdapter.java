@@ -65,7 +65,7 @@ public class DoctorTabsPagerAdapter extends FragmentPagerAdapter {
             case GIFT_FRAGMENT:
                 return mContext.getString(R.string.gift_fragment);
             case SAMPLE_FRAGMENT:
-                return mContext.getString(R.string.sample_fargemt);
+                return mContext.getString(R.string.sample_fragment);
             default:
                 return null;
         }

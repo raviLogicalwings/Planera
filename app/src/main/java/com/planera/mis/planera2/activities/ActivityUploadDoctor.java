@@ -9,10 +9,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
@@ -31,6 +31,7 @@ import com.planera.mis.planera2.models.DoctorImport;
 import com.planera.mis.planera2.models.DoctorImportItems;
 import com.planera.mis.planera2.models.MainResponse;
 import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.InternetConnection;
 import com.planera.mis.planera2.utils.RuntimePermissionCheck;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -49,6 +50,8 @@ import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.planera.mis.planera2.utils.AppConstants.PATCH_ID_CHEMIST_EXCEL;
 
 public class ActivityUploadDoctor extends BaseActivity implements View.OnClickListener{
 
@@ -241,24 +244,25 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
                 int cellsCount = row.getPhysicalNumberOfCells();
                 doctors = new DoctorImportItems();
                 if (isCellNull) {
-//
                     processDialog.dismissDialog();
                     break;
                 }
+
                 for (int c = 0; c < cellsCount; c++) {
                     String value = getCellAsString(row, c, formulaEvaluator);
 
-                    if (c == 0 && value.isEmpty()) {
+                    if (c == PATCH_ID_CHEMIST_EXCEL && value.isEmpty()) {
                         isCellNull = true;
+                    }
+                    if (isCellNull) {
+                        processDialog.dismissDialog();
                         break;
                     }
                     if (c == AppConstants.DOCTOR_ID_DOCTOR_EXCEL) {
                         doctors.setDocId(value);
                     }
-                    if (c == AppConstants.PATCH_ID_CHEMIST_EXCEL) {
-                        if (!value.isEmpty()) {
-                            doctors.setPatchId(value);
-                        }
+                    if (c == PATCH_ID_CHEMIST_EXCEL) {
+                        doctors.setPatchId(value);
                     }
                     if (c == AppConstants.FIRST_NAME_DOCTOR_EXCEL) {
                         if (!value.isEmpty()) {
@@ -385,7 +389,14 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
                 }
                 doctorImport.setOverride(isOverride);
                 doctorImport.setDoctorImportList(listDoctorsItems);
-                apiImportDoctorsFromExcel(token,  doctorImport);
+
+                if (InternetConnection.isNetworkAvailable(ActivityUploadDoctor.this)){
+                    apiImportDoctorsFromExcel(token,  doctorImport);
+                }
+                else {
+                    Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+                }
+
 
             }
 
@@ -419,17 +430,22 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
 
 
     public void apiImportDoctorsFromExcel(String token,  DoctorImport doctorImport){
+        processDialog.showDialog(ActivityUploadDoctor.this, false);
         Log.e("Import Doctors params", new Gson().toJson(doctorImport));
         Call<MainResponse> call = apiInterface.importDoctorFromExcel(token,  doctorImport);
         call.enqueue(new Callback<MainResponse>() {
             @Override
             public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
+                processDialog.dismissDialog();
                 if (response.isSuccessful()){
                     assert response.body() != null;
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-                        processDialog.dismissDialog();
+
                         Toasty.success(ActivityUploadDoctor.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
                    }
+                   else{
+                        Toasty.error(ActivityUploadDoctor.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 
@@ -483,7 +499,7 @@ public class ActivityUploadDoctor extends BaseActivity implements View.OnClickLi
             super.onPostExecute(onlineVersion);
 
             if (onlineVersion.equals("Success") && listDoctorsItems != null) {
-                new Handler().postDelayed(() -> uploadDoctorsDataApi(listDoctorsItems), 3000);
+                new Handler().postDelayed(() -> uploadDoctorsDataApi(listDoctorsItems), 500);
 
             }
             else{

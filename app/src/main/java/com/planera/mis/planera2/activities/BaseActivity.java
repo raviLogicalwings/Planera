@@ -3,10 +3,7 @@ package com.planera.mis.planera2.activities;
 import android.content.Context;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.util.Patterns;
 import android.view.View;
-
 import com.crashlytics.android.Crashlytics;
 import com.planera.mis.planera2.Retrofit.ApiClient;
 import com.planera.mis.planera2.Retrofit.ApiInterface;
@@ -23,7 +20,6 @@ public class BaseActivity extends AppCompatActivity {
     public PreferenceConnector connector;
     public ProcessDialog processDialog;
     public View rootView;
-    //public RuntimePermissionCheck permissionCheck;
 
     public ApiInterface apiInterface;
     public String token;
@@ -35,7 +31,6 @@ public class BaseActivity extends AppCompatActivity {
         Fabric.with(this, new Crashlytics());
         rootView = getWindow().getDecorView().getRootView();
         connector = PreferenceConnector.getInstance(this);
-        //permissionCheck = new RuntimePermissionCheck(getBaseContext());
         apiInterface  = ApiClient.getInstance();
         token = connector.getString(AppConstants.TOKEN);
         apbInterfaceForGooglePlaces = ApiClient.getInstanceForLocation();
@@ -63,30 +58,6 @@ public class BaseActivity extends AppCompatActivity {
         this.token = token;
     }
 
-    //    public void showProgressDialog(String title, String message){
-//        if(progressDialog!=null && progressDialog.isShowing()){
-//            progressDialog.dismiss();
-//        }
-
-//        progressDialog = new ProgressDialog(getApplication());
-//
-//        if(title!= null){
-//            new Handler().postDelayed(() -> {
-//                progressDialog.setTitle(title);
-//                progressDialog.setMessage(message);
-//                progressDialog.setCancelable(false);
-//                progressDialog.show();
-//            },100);
-//
-//        }
-//    }
-//
-//
-//    public void dismissProgressDialog(){
-//        if(progressDialog!=null && progressDialog.isShowing()){
-//            progressDialog.dismiss();
-//        }
-//    }
 
 
 }

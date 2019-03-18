@@ -6,6 +6,13 @@
     android:padding="5dp"
     >
 
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Switch" />
+
     <android.support.v7.widget.CardView
         android:foreground="?android:attr/selectableItemBackground"
         android:clickable="true"
@@ -16,6 +23,8 @@
         app:cardElevation="2dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp">
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,6 +48,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/name"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:textColor="@color/colorBlack"
                     android:textStyle="bold" />
                 <LinearLayout
@@ -68,31 +79,71 @@
                         android:maxLines="2"
                         android:text="@string/date"
                         android:textColor="@color/colorGray" />
+
+
                 </LinearLayout>
 
 
 
+
+                <TextView
+                    android:id="@+id/text_replace_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Replace User"
+                    android:textColor="@color/colorPrimary"
+                    android:paddingTop="@dimen/dimen_8dp"
+                   />
+                <TextView
+                    android:id="@+id/text_joint_mr_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MR : Name"
+                    android:textColor="@color/colorPrimary"
+                    android:paddingTop="@dimen/dimen_8dp"
+                    />
+                <TextView
+                    android:id="@+id/text_joint_am_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AM : Name"
+                    android:textColor="@color/colorPrimary"
+                    android:paddingTop="@dimen/dimen_8dp"
+                    />
+
+                <TextView
+                    android:id="@+id/text_joint_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_green_joint"
+                    android:gravity="center"
+                    android:textColor="@color/colorWhite"
+                    android:layout_marginTop="@dimen/dimen_8dp"
+                    android:text="Joint"/>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_weight="1"
                 android:layout_width="0dp"
-                android:gravity="center"
+                android:gravity="end"
+                android:layout_gravity="bottom"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/visit_1"
-                    android:padding="@dimen/fab_margin"
+                    android:paddingRight="@dimen/fab_margin"
                     android:id="@+id/text_visit_counter"/>
                 <Button
                     android:id="@+id/button_edit_input"
                     android:background="@drawable/button_back"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/dimen_28dp"
                     android:text="@string/edit"
+                    android:padding="@dimen/dimen_4dp"
+                    android:gravity="center"
                     android:textColor="@color/colorPrimary"
                     android:textAllCaps="false" />
 

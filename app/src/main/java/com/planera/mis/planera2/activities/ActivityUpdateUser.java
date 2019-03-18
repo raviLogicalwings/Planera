@@ -3,6 +3,7 @@ package com.planera.mis.planera2.activities;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -27,7 +28,9 @@ import com.planera.mis.planera2.utils.InternetConnection;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -57,10 +60,29 @@ public class ActivityUpdateUser extends BaseActivity implements View.OnClickList
     private Button buttonAddUser;
     private LinearLayout layoutUserUpdate;
     private Spinner spinnerUserType;
-    String firstNameStr, middleNameStr, lastNameStr, email1Str, email2Str, dobStr, qualificationStr, dojStr, phone1Str, phone2Str,
-            experienceStr, panStr, address1Str, address2Str, address3Str, address4Str, districtStr, cityStr, stateStr, pincodeStr,
-            strLoginId;
-    int userid;
+    
+    private String firstNameStr;
+    private String middleNameStr;
+    private String lastNameStr;
+    private String email1Str;
+    private String email2Str;
+    private String dobStr;
+    private String qualificationStr;
+    private String dojStr;
+    private String phone1Str;
+    private String phone2Str;
+    private String experienceStr;
+    private String panStr;
+    private String address1Str;
+    private String address2Str;
+    private String address3Str;
+    private String address4Str;
+    private String districtStr;
+    private String cityStr;
+    private String stateStr;
+    private String pincodeStr;
+    private String strLoginId;
+    private int userid;
     private UserData userData;
 
     @Override
@@ -292,14 +314,13 @@ public class ActivityUpdateUser extends BaseActivity implements View.OnClickList
         Call<GooglePlaces> call = apbInterfaceForGooglePlaces.getPlaceLatLong(input, AppConstants.INPUT_TYPE, AppConstants.FIELDS, AppConstants.KEY_GOOGLE_PLACES);
         call.enqueue(new Callback<GooglePlaces>() {
             @Override
-            public void onResponse(Call<GooglePlaces> call, Response<GooglePlaces> response) {
+            public void onResponse(@NonNull Call<GooglePlaces> call, @NonNull Response<GooglePlaces> response) {
                 processDialog.dismissDialog();
-                Log.e("AddDoctorActivity", "onResponse: " + new Gson().toJson(response.body()));
+
                 if (response.body().getStatus().equals(AppConstants.STATUS_OK)) {
                     if (userData != null) {
                         userData.setLatitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLat() + "");
                         userData.setLatitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLng() + "");
-                        Log.e("Doctors Object", "onResponse: " + new Gson().toJson(userData));
                         updateUserApi(token, userData);
                     }
                 } else if (response.body().getStatus().equals(AppConstants.STATUS_ZERO_RESULTS)) {
@@ -311,10 +332,9 @@ public class ActivityUpdateUser extends BaseActivity implements View.OnClickList
             }
 
             @Override
-            public void onFailure(Call<GooglePlaces> call, Throwable t) {
+            public void onFailure(@NonNull Call<GooglePlaces> call, @NonNull Throwable t) {
                 processDialog.dismissDialog();
-                Log.e("AddDoctorActivity", "onFailure: " + t.getMessage());
-                Toast.makeText(ActivityUpdateUser.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toasty.error(ActivityUpdateUser.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -326,13 +346,13 @@ public class ActivityUpdateUser extends BaseActivity implements View.OnClickList
         Call<MainResponse> call = apiInterface.updateUserDetails(token, data);
         call.enqueue(new Callback<MainResponse>() {
             @Override
-            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+            public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
                 processDialog.dismissDialog();
                 if (response.code()== 400){
                     try {
-                        Toast.makeText(mContext, response.errorBody().string(), Toast.LENGTH_LONG).show();
+                        Toasty.error(mContext, Objects.requireNonNull(response.errorBody()).string(), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
-                        Log.e(" ", "onResponse: "+ e.getMessage());
+                        Toasty.error(mContext, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
                 else{

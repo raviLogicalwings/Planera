@@ -22,6 +22,7 @@ import static com.planera.mis.planera2.utils.AppConstants.USER_PROFILE;
 
 
 public class ProfileFragment extends BaseFragment implements View.OnClickListener{
+    private static final String CONTACT_PREFIX = "+91-";
     private View view;
     private TextView textUserName;
     private TextView textUserEmail;
@@ -87,7 +88,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         if (userDetails != null){
             textUserName.setText(userDetails.getFirstName());
             textUserEmail.setText(userDetails.getEmail1());
-            textUserPhone.setText(userDetails.getPhone1());
+            textUserPhone.setText(CONTACT_PREFIX+userDetails.getPhone1());
         }
     }
 

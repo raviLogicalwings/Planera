@@ -47,6 +47,7 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
         this.brandsList = brandsList;
         this.dataItemForUpdate = dataItemForUpdate;
 
+
     }
 
     @NonNull
@@ -77,6 +78,7 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
     @Override
     public int getItemCount() {
         if (brandsList.size() > 0) {
+
             return brandsList.size();
         } else {
             return 0;
@@ -92,11 +94,11 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
 
     private void bindItemsWithView(MySampleHolder holder) {
 
-        if(brandsList.size()!=0) {
+        if(brandsList != null && brandsList.size()>0) {
             if (brandsList.get(holder.getAdapterPosition()).getIsBrand().equals(AppConstants.BRAND + NULL_STRING)) {
                 holder.textBrandSampleName.setText(brandsList.get(holder.getAdapterPosition()).getName());
 
-            }
+
             Brands brands = brandsList.get(holder.getAdapterPosition());
 
             if (dataItemForUpdate != null && dataItemForUpdate.getProductDetails() != null) {
@@ -170,6 +172,9 @@ public class SampleListAdapter extends RecyclerView.Adapter<SampleListAdapter.My
                     setSampleListSelected(sampleListSelected);
                 }
           });
+
+            }
+
         }
     }
 

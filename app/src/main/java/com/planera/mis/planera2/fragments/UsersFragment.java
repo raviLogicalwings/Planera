@@ -1,6 +1,5 @@
 package com.planera.mis.planera2.fragments;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,15 +8,16 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.Retrofit.ApiClient;
 import com.planera.mis.planera2.Retrofit.ApiInterface;
@@ -27,6 +27,7 @@ import com.planera.mis.planera2.models.MainResponse;
 import com.planera.mis.planera2.models.UserData;
 import com.planera.mis.planera2.models.UserListResponse;
 import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.InternetConnection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +36,6 @@ import java.util.Objects;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.content.ContentValues.TAG;
 
 public class UsersFragment extends BaseFragment implements SearchView.OnQueryTextListener{
 
@@ -64,8 +63,14 @@ public class UsersFragment extends BaseFragment implements SearchView.OnQueryTex
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(false);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+    }
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -80,7 +85,13 @@ public class UsersFragment extends BaseFragment implements SearchView.OnQueryTex
         super.initData();
         apiInterface = ApiClient.getInstance();
         if(token!=null){
-            getUsersList(token);
+            if (InternetConnection.isNetworkAvailable(mContext)){
+                getUsersList(token);
+            }
+            else
+            {
+                Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -230,7 +241,15 @@ public class UsersFragment extends BaseFragment implements SearchView.OnQueryTex
 
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", (dialogInterface, i) -> {
             dialogInterface.cancel();
-            deleteUserApi(token, userId+"" );
+
+            if (InternetConnection.isNetworkAvailable(mContext)){
+                deleteUserApi(token, userId+"" );
+            }
+            else
+            {
+                Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+            }
+
         });
 
 
@@ -255,7 +274,13 @@ public class UsersFragment extends BaseFragment implements SearchView.OnQueryTex
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK){
 //                    getFragmentManager().beginTransaction().detach(UsersFragment.this).attach(UsersFragment.this).commit();
                     Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                    getUsersList(token);
+                    if (InternetConnection.isNetworkAvailable(mContext)){
+                        getUsersList(token);
+                    }
+                    else
+                    {
+                        Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+                    }
                 }
                 else{
                     Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();

@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
@@ -30,6 +31,7 @@ import com.planera.mis.planera2.models.ChemistImport;
 import com.planera.mis.planera2.models.ChemistImportItems;
 import com.planera.mis.planera2.models.MainResponse;
 import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.InternetConnection;
 import com.planera.mis.planera2.utils.RuntimePermissionCheck;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -48,6 +50,8 @@ import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.planera.mis.planera2.utils.AppConstants.PATCH_ID_CHEMIST_EXCEL;
 
 public class ActivityUploadChemist extends BaseActivity implements View.OnClickListener {
 
@@ -153,8 +157,6 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
                 if (resultCode == RESULT_OK) {
                     processDialog.showDialog(ActivityUploadChemist.this, false);
 
-                    // Get the Uri of the selected file
-
                     if (data != null) {
                         uri = data.getData();
                     }
@@ -187,7 +189,6 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
                         displayName = myFile.getName();
                         toggleView(displayName);
 
-//                        Toast.makeText(this, displayName, Toast.LENGTH_LONG).show();
                     }
                     processDialog.dismissDialog();
                 }
@@ -229,9 +230,8 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
         }
     }
     private void readExcelData(Uri uri) {
-//        processDialog.showDialog(ActivityUploadChemist.this, false);
         try {
-//            File fileB = new File(filePath);
+
             InputStream inputStream = getContentResolver().openInputStream(uri);
             assert inputStream != null;
             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
@@ -251,17 +251,15 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
                 for (int c = 0; c < cellsCount; c++) {
                     String value = getCellAsString(row, c, formulaEvaluator);
 
-                    if (c==0 && value.isEmpty()){
+                    if (c== PATCH_ID_CHEMIST_EXCEL && value.isEmpty()){
                         isCellNull = true;
                         break;
                     }
                     if (c == AppConstants.CHEMIST_ID_EXCEL){
                         chemists.setChemistId(value);
                     }
-                    if (c == AppConstants.PATCH_ID_CHEMIST_EXCEL){
-                        if (!value.isEmpty()){
-                            chemists.setPatchId(value);
-                        }
+                    if (c == PATCH_ID_CHEMIST_EXCEL){
+                        chemists.setPatchId(value);
                     }
                     if (c == AppConstants.ACTIVE_CHEMIST_EXCEL){
                         if (!value.isEmpty()){
@@ -424,12 +422,18 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
     public void callChemistImportApi(String token, ChemistImport chemistImports){
 
         if (chemistImports != null){
-            apiImportChemistFromExcel(token,   chemistImports);
+            if (InternetConnection.isNetworkAvailable(ActivityUploadChemist.this)){
+                apiImportChemistFromExcel(token,   chemistImports);
+            }
+            else {
+                Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+            }
     }
     }
 
 
     public void apiImportChemistFromExcel(String token,  ChemistImport chemistImportList){
+        processDialog.showDialog(ActivityUploadChemist.this, false);
         Log.e("Import Doctors params", new Gson().toJson(chemistImportList));
         Call<MainResponse> call = apiInterface.importChemistFromExcel(token,   chemistImportList);
         call.enqueue(new Callback<MainResponse>() {
@@ -515,7 +519,7 @@ public class ActivityUploadChemist extends BaseActivity implements View.OnClickL
                         chemistImport.setIsOverride(isOverride);
                         callChemistImportApi(token, chemistImport);
                     }
-                }, 3000);
+                }, 500);
 
             }
             else{

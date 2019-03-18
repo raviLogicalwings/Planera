@@ -202,7 +202,13 @@ public class ActivityUserPlanCreate extends BaseActivity implements View.OnClick
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position!= 0) {
                     territoryId = territorysList.get(position- DEFAULT_SELECT_VALUE).getTerritoryId();
-                    getPatchList(token, territoryId);
+                    if (InternetConnection.isNetworkAvailable(ActivityUserPlanCreate.this)){
+                        getPatchList(token, territoryId);
+                    }
+                    else
+                    {
+                        Snackbar.make(rootView, R.string.no_internet, Snackbar.LENGTH_LONG).show();
+                    }
                 }
             }
 
@@ -435,8 +441,9 @@ public class ActivityUserPlanCreate extends BaseActivity implements View.OnClick
 
         call.enqueue(new Callback<MainResponse>() {
             @Override
-            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+            public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
                 Log.e(TAG, new Gson().toJson(response.body()));
+                processDialog.dismissDialog();
                 if (response.code() == 400) {
                     try {
                         Toast.makeText(ActivityUserPlanCreate.this, response.errorBody().string(), Toast.LENGTH_LONG).show();
@@ -455,6 +462,7 @@ public class ActivityUserPlanCreate extends BaseActivity implements View.OnClick
 
             @Override
             public void onFailure(Call<MainResponse> call, Throwable t) {
+                processDialog.dismissDialog();
                 Snackbar.make(rootView, t.getMessage(), Snackbar.LENGTH_LONG).show();
 
             }
@@ -463,9 +471,13 @@ public class ActivityUserPlanCreate extends BaseActivity implements View.OnClick
 
 
     private void loadSpinners() {
-//        getChemistList(token);
-          getTerritoryList(token);
-//        getPatchList(token);
+        if (InternetConnection.isNetworkAvailable(ActivityUserPlanCreate.this)){
+            getTerritoryList(token);
+        }
+        else{
+            Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+        }
+
 
 
     }

@@ -1,17 +1,15 @@
 package com.planera.mis.planera2.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.models.Doctors;
-
-
 import java.util.List;
 
 public class DoctorsListAdapter extends RecyclerView.Adapter<DoctorsListAdapter.MyDoctorsHolder> {
@@ -26,14 +24,15 @@ public class DoctorsListAdapter extends RecyclerView.Adapter<DoctorsListAdapter.
         this.onItemClickListener = onItemClickListener;
     }
 
+    @NonNull
     @Override
-    public MyDoctorsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyDoctorsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         view = LayoutInflater.from(mContext).inflate(R.layout.item_doctors_view, parent, false);
         return new MyDoctorsHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(MyDoctorsHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyDoctorsHolder holder, int position) {
         loadItems(position, holder);
 
     }
@@ -53,10 +52,11 @@ public class DoctorsListAdapter extends RecyclerView.Adapter<DoctorsListAdapter.
         private TextView textDoctorEmail;
         private TextView textQualification;
         private TextView textDoctorContact;
+        private TextView textPatchName;
         private ImageView imageDelete;
         private ImageView imageEdit;
 
-        public MyDoctorsHolder(View itemView) {
+        MyDoctorsHolder(View itemView) {
             super(itemView);
             imageDelete = itemView.findViewById(R.id.img_doctor_delete);
             imageEdit = itemView.findViewById(R.id.img_doctor_edit);
@@ -64,6 +64,7 @@ public class DoctorsListAdapter extends RecyclerView.Adapter<DoctorsListAdapter.
             textDoctorEmail = itemView.findViewById(R.id.text_doctor_email);
             textQualification = itemView.findViewById(R.id.text_qualification);
             textDoctorContact = itemView.findViewById(R.id.text_doctor_contact);
+            textPatchName = itemView.findViewById(R.id.text_patch_name_doctors);
 
             imageEdit.setOnClickListener(this);
             imageDelete.setOnClickListener(this);
@@ -94,11 +95,12 @@ public class DoctorsListAdapter extends RecyclerView.Adapter<DoctorsListAdapter.
 
 
 
-    public void loadItems(int position, MyDoctorsHolder holder){
+    private void loadItems(int position, MyDoctorsHolder holder){
         holder.textDoctorContact.setText(doctorsList.get(position).getPhone());
         holder.textDoctorEmail.setText(doctorsList.get(position).getEmail());
         holder.textDoctorName.setText(doctorsList.get(position).getFirstName()+" "+
         doctorsList.get(position).getMiddleName()+ " " +doctorsList.get(position).getLastName());
+        holder.textPatchName.setText(doctorsList.get(position).getPatchName());
         holder.textQualification.setText(doctorsList.get(position).getQualifications());
 
     }

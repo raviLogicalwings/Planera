@@ -1,4 +1,4 @@
-<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
     android:orientation="vertical"
     style="@style/BaseMargin"
     android:layout_width="match_parent"
@@ -36,10 +36,9 @@
             android:layout_height="wrap_content">
 
             <EditText
-
                 style="@style/InputEditTextStyle"
                 android:layout_width="match_parent"
-                android:hint="Enter Product Name"
+                android:hint="@string/enter_product_name"
                 android:id="@+id/edit_text_name"
                 android:layout_height="wrap_content"
                 android:inputType="textCapWords" />
@@ -54,8 +53,8 @@
             style="@style/ButtonText"
             android:background="@color/colorPrimary"
             android:layout_marginTop="30dp"
-            android:layout_gravity="right"
-            android:text="Update"
+            android:layout_gravity="end"
+            android:text="@string/update"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

@@ -3,6 +3,7 @@ package com.planera.mis.planera2.FragmentDialog.editDialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,6 +23,7 @@ import com.planera.mis.planera2.models.MainResponse;
 import com.planera.mis.planera2.utils.AppConstants;
 import com.planera.mis.planera2.utils.InternetConnection;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -86,7 +88,7 @@ public class EditPatchDialog extends BaseDialogFragment implements View.OnClickL
             }
             else
             {
-
+                Toasty.warning(mContext, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -105,7 +107,7 @@ public class EditPatchDialog extends BaseDialogFragment implements View.OnClickL
         Call<MainResponse> call = apiInterface.updatePatchDetails   (token,  patchId, name, territoryId);
         call.enqueue(new Callback<MainResponse>() {
             @Override
-            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+            public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
                 processDialog.dismissDialog();
                 if (response!= null){
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK){

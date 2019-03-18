@@ -98,6 +98,7 @@ public class AdminPanelActivity extends BaseActivity {
         alertDialog.show();
 
     }
+
     public void loadFragment(int type){
         currentFragment = type;
         switch (currentFragment){

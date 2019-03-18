@@ -26,6 +26,7 @@ import com.planera.mis.planera2.models.Doctors;
 import com.planera.mis.planera2.models.DoctorsListResponce;
 import com.planera.mis.planera2.models.MainResponse;
 import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.InternetConnection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +82,12 @@ public class DoctorsFragment extends BaseFragment implements SearchView.OnQueryT
         super.initData();
         apiInterface = ApiClient.getInstance();
         if (token != null) {
-            getDoctorsList(token);
+            if (InternetConnection.isNetworkAvailable(mContext)){
+                getDoctorsList(token);
+            }
+            else{
+                Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -218,6 +224,10 @@ public class DoctorsFragment extends BaseFragment implements SearchView.OnQueryT
             if((d.getFirstName()+" "+d.getLastName()).toLowerCase().contains(text.toLowerCase())){
                 temp.add(d);
             }
+
+            if(d.getPatchName().toLowerCase().contains(text.toLowerCase())){
+                temp.add(d);
+            }
         }
         adapter.updateList(temp);
     }
@@ -230,7 +240,15 @@ public class DoctorsFragment extends BaseFragment implements SearchView.OnQueryT
 
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", (dialogInterface, i) -> {
             dialogInterface.cancel();
-            deleteDoctorApi(token, doctorId);
+
+            if (InternetConnection.isNetworkAvailable(mContext))
+            {
+                deleteDoctorApi(token, doctorId);
+            }
+            else
+            {
+                Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+            }
         });
 
 
@@ -251,8 +269,13 @@ public class DoctorsFragment extends BaseFragment implements SearchView.OnQueryT
             public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
                 processDialog.dismissDialog();
                 if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
-//                    getFragmentManager().beginTransaction().detach(DoctorsFragment.this).attach(DoctorsFragment.this).commit();
-                    getDoctorsList(token);
+                    if (InternetConnection.isNetworkAvailable(mContext)){
+                        getDoctorsList(token);
+                    }
+                    else
+                        {
+                        Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+                    }
                     Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();

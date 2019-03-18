@@ -23,6 +23,7 @@ import com.planera.mis.planera2.utils.AppConstants;
 import com.planera.mis.planera2.utils.InternetConnection;
 
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -90,7 +91,7 @@ public class EditProductDialog extends BaseDialogFragment implements View.OnClic
             }
             else
             {
-
+                Toasty.warning(mContext, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
             }
         }
     }

@@ -142,11 +142,11 @@ public class TerritoryListFragment extends BaseFragment implements EditTerritory
     public void initAdapter(List<Territories> territorysList, RecyclerView recyclerView){
         TerritoryAdapter adapter = new TerritoryAdapter(getContext(), territorysList, (view, position) -> {
             switch (view.getId()){
-                case R.id.img_delete:
+                case R.id.img_delete_territory:
                     popupDialog(token, territorysList.get(position).getTerritoryId());
                     break;
 
-                case R.id.img_edit:
+                case R.id.img_edit_territory:
                     EditTerritoryDialog editTerritoryDialog = new EditTerritoryDialog();
                     Bundle bundle= new Bundle();
                     bundle.putInt(AppConstants.KEY_STATE_ID, territorysList.get(position).getStateId());

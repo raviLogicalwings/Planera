@@ -195,8 +195,14 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
 
             }
         });
+        if (InternetConnection.isNetworkAvailable(ActivityAddDoctor.this)){
 
-        getPatchList(token);
+            getPatchList(token);
+        }
+        else
+        {
+            Snackbar.make(rootView, R.string.no_internet, Snackbar.LENGTH_LONG).show();
+        }
         spinnerPatchId.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -393,7 +399,13 @@ public class ActivityAddDoctor extends BaseActivity implements View.OnClickListe
                             doctors.setLatitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLat() + "");
                             doctors.setLongitude(response.body().getCandidates().get(0).getGeometry().getLocation().getLng() + "");
                             Log.e("Doctors Object", "onResponse: " + new Gson().toJson(doctors));
-                            addDoctorsApi(token, doctors);
+                            if (InternetConnection.isNetworkAvailable(ActivityAddDoctor.this)){
+                                addDoctorsApi(token, doctors);
+                            }
+                            else
+                            {
+                                Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+                            }
                         }
                         break;
                     case AppConstants.STATUS_ZERO_RESULTS:

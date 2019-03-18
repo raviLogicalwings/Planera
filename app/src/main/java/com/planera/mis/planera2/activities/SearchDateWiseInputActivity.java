@@ -9,9 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
@@ -22,26 +20,33 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 public class SearchDateWiseInputActivity extends BaseActivity implements View.OnClickListener {
-    Toolbar toolbar;
-    private EditText editStartTime;
+    private static final String DD_MM_YY = "dd-MM-yyyy";
+    private static final String HH_MM_SS = "yyyy-MM-dd HH-mm-ss";
+
+    protected Button buttonSubmitForList;
+    protected Toolbar toolbar;
     private EditText editEndTime;
-    private Button buttonSubmitForList;
-    public ObtainReport obtainReport;
-    private String strPickedDate;
-    private String userId;
-    String objectToString;
+    private EditText editStartTime;
     private TextInputLayout inputLayoutStartDate;
     private TextInputLayout inputLayoutEndDate;
+
+    public ObtainReport obtainReport;
+
+    private String strPickedDate;
+    private String userId;
+    private  String TAG;
+    protected String objectToString;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_date_wise_input);
-        initUi();
+
         initData();
 
-
+        initUi();
     }
 
     @Override
@@ -59,8 +64,8 @@ public class SearchDateWiseInputActivity extends BaseActivity implements View.On
         editStartTime.setOnClickListener(this);
         buttonSubmitForList.setOnClickListener(this);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Set Details");
-
+        Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.set_details));
+        TAG = SearchDateWiseInputActivity.class.getSimpleName();
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
@@ -90,8 +95,10 @@ public class SearchDateWiseInputActivity extends BaseActivity implements View.On
             obtainReport.setUserId(userId);
             objectToString = new Gson().toJson(obtainReport);
             Intent intent = new Intent(SearchDateWiseInputActivity.this, UserInputListActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(AppConstants.OBTAIN_REPORT, objectToString);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -106,37 +113,29 @@ public class SearchDateWiseInputActivity extends BaseActivity implements View.On
     public void pickDateFromDialog(EditText editText){
         Calendar mCurrentTime = Calendar.getInstance();
         int mYear = mCurrentTime.get(Calendar.YEAR);
-        // need to add one because month's initial index is 0.
         int mMonth = mCurrentTime.get(Calendar.MONTH);
         int mDay = mCurrentTime.get(Calendar.DATE);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(SearchDateWiseInputActivity.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(SearchDateWiseInputActivity.this, (view, year, month, dayOfMonth) -> {
 
-                strPickedDate = dayOfMonth+"-"+(month+1)+"-"+year;
-                editText.setText(strPickedDate);
+            strPickedDate = dayOfMonth+"-"+(month+1)+"-"+year;
+            editText.setText(strPickedDate);
 
-            }
         },mYear, mMonth, mDay );
 
-        //code for select on current date and onwards.
-        // datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
-//        Toast.makeText(ActivityAdminReports.this, System.currentTimeMillis()+"", Toast.LENGTH_LONG).show();
-//        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         datePickerDialog.show();
 
     }
 
     public String formatDate(String date){
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");//yyyy-MM-dd'T'HH:mm:ss
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+        SimpleDateFormat sdf = new SimpleDateFormat(DD_MM_YY);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(HH_MM_SS);
         Date data = null;
         try {
             data = sdf.parse(date);
         } catch (ParseException e) {
-            Log.e("Exp", e.getMessage());
+            Log.e(TAG, e.getMessage());
         }
         return dateFormat.format(data);
     }

@@ -19,6 +19,8 @@ import com.planera.mis.planera2.FragmentDialog.BaseDialogFragment;
 import com.planera.mis.planera2.models.MainResponse;
 import com.planera.mis.planera2.utils.AppConstants;
 
+import java.util.Objects;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -78,14 +80,15 @@ public class AddGiftDialog  extends BaseDialogFragment implements View.OnClickLi
         if (dialog != null) {
             int width = ViewGroup.LayoutParams.MATCH_PARENT;
             int height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            dialog.getWindow().setLayout(width, height);
+            Objects.requireNonNull(dialog.getWindow()).setLayout(width, height);
         }
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
        Dialog dialog = super.onCreateDialog(savedInstanceState);
-        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        Objects.requireNonNull(dialog.getWindow()).requestFeature(Window.FEATURE_NO_TITLE);
         return dialog;
     }
 
@@ -95,18 +98,17 @@ public class AddGiftDialog  extends BaseDialogFragment implements View.OnClickLi
         Call<MainResponse> call = apiInterface.addGift(token, gift);
         call.enqueue(new Callback<MainResponse>() {
             @Override
-            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+            public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
                 processDialog.dismissDialog();
-                if (response!= null){
-                    if (response.body().getStatusCode() == AppConstants.RESULT_OK){
-                        Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                        onAddGiftDialogDismissListener.onAddGiftDialogDismiss();
-                        dismiss();
+                assert response.body() != null;
+                if (response.body().getStatusCode() == AppConstants.RESULT_OK){
+                    Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    onAddGiftDialogDismissListener.onAddGiftDialogDismiss();
+                    dismiss();
 
-                    }
-                    else{
-                        Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                    }
+                }
+                else{
+                    Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
 

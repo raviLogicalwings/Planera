@@ -24,6 +24,10 @@ public class PreferenceConnector {
         preferences.edit().putString(key, value).apply();
     }
 
+    public void clearValue(String key){
+        preferences.edit().remove(key).apply();
+    }
+
     public String getString(String key){
        return preferences.getString(key, null);
     }

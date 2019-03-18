@@ -27,6 +27,9 @@ public class InputOrders {
 	@SerializedName("IsSample")
 	private String isSample;
 
+	@SerializedName("isJoint")
+	private int isJoint = 0;
+
 	public void setInputId(String inputId){
 		this.inputId = inputId;
 	}
@@ -91,6 +94,14 @@ public class InputOrders {
 		this.isBrand = isBrand;
 	}
 
+
+	public int getIsJoint() {
+		return isJoint;
+	}
+
+	public void setIsJoint(int isJoint) {
+		this.isJoint = isJoint;
+	}
 
 	@Override
  	public String toString(){

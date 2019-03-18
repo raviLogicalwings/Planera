@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="wrap_content">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <LinearLayout
+        android:id="@+id/text_coloumn_info"
         style="@style/BaseMargin"
         android:layout_width="match_parent"
         android:orientation="horizontal"
@@ -30,10 +30,16 @@
 
     </LinearLayout>
 
+    <ScrollView
+        android:layout_below="@id/text_coloumn_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_view_pob"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/item_pob_detalis" />
-
-</LinearLayout>
+        tools:listitem="@layout/item_pob_detalis"
+        android:layout_marginBottom="?attr/actionBarSize"
+       />
+   </ScrollView>
+</RelativeLayout>

@@ -103,6 +103,10 @@ public class PODFragment extends BaseFragment implements ProductCategoryActivity
             orders = new InputOrders();
             ordersList = new ArrayList<>();
         }
+        else
+        {
+            Snackbar.make(rootView, R.string.no_internet, Snackbar.LENGTH_LONG).show();
+        }
     }
 
     public void setAdapter(RecyclerView recyclerView, PODAdapter adapter){
@@ -121,7 +125,7 @@ public class PODFragment extends BaseFragment implements ProductCategoryActivity
             call.enqueue(new Callback<BrandsListResponse>() {
                 @Override
                 public void onResponse(Call<BrandsListResponse> call, Response<BrandsListResponse> response) {
-                    Log.e(TAG, "getAllProducts: "+new Gson().toJson(response.body()));
+//                    Log.e(TAG, "getAllProducts: "+new Gson().toJson(response.body()));
                     processDialog.dismissDialog();
                     if (response.isSuccessful()){
                         if (response.body().getStatusCode() == AppConstants.RESULT_OK){
@@ -213,6 +217,13 @@ public class PODFragment extends BaseFragment implements ProductCategoryActivity
 
     @Override
     public void onReceived() {
-        uploadProduct(token, ordersList);
+        if (InternetConnection.isNetworkAvailable(mContext))
+        {
+            uploadProduct(token, ordersList);
+        }
+        else
+        {
+            Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+        }
     }
 }

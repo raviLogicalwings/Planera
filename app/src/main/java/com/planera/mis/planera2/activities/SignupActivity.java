@@ -1,6 +1,5 @@
 package com.planera.mis.planera2.activities;
 
-import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -43,7 +42,11 @@ public class SignupActivity extends BaseActivity implements View.OnClickListener
     private Button buttonSignIn;
     private TextView textSignUp;
     private ApiInterface apiInterface;
-    private String userNameStr, passwordStr, confirmPasswordStr, phoneStr, emailStr;
+    private String userNameStr;
+    private String passwordStr;
+    private String confirmPasswordStr;
+    private String phoneStr;
+    private String emailStr;
     public UserData user;
     public static int ON_HOLD = 1;
     @Override
@@ -85,11 +88,6 @@ public class SignupActivity extends BaseActivity implements View.OnClickListener
     }
 
     public void inputValidation(){
-        inputLayoutUserName.setError(null);
-        inputLayoutPassword.setError(null);
-        inputLayoutConfirmPassword.setError(null);
-        inputLayoutEmail.setError(null);
-        inputLayoutMobile.setError(null);
         userNameStr = editUserName.getText().toString();
         emailStr = editEmail.getText().toString();
         phoneStr = editMobile.getText().toString();

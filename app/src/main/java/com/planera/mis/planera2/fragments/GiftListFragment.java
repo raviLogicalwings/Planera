@@ -3,6 +3,7 @@ package com.planera.mis.planera2.fragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +25,7 @@ import com.planera.mis.planera2.models.GiftListResponse;
 import com.planera.mis.planera2.models.GiftsData;
 import com.planera.mis.planera2.models.MainResponse;
 import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.InternetConnection;
 
 import java.util.List;
 
@@ -169,8 +171,14 @@ public class GiftListFragment extends BaseFragment implements EditGiftDialog.OnD
                 if (response != null) {
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                         Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
-//                        manager.beginTransaction().detach(GiftListFragment.this).attach(GiftListFragment.this).commit();
-                        getGiftList(token);
+                        if (InternetConnection.isNetworkAvailable(mContext)){
+                            getGiftList(token);
+                        }
+                        else
+                        {
+                            Snackbar.make(rootView, R.string.no_internet, Snackbar.LENGTH_LONG).show();
+                        }
+
                     } else {
                         Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
 
@@ -219,7 +227,14 @@ public class GiftListFragment extends BaseFragment implements EditGiftDialog.OnD
 
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", (dialogInterface, i) -> {
             dialogInterface.cancel();
-            deleteGiftApi(token, giftId);
+
+            if (InternetConnection.isNetworkAvailable(mContext)){
+                deleteGiftApi(token, giftId);
+            }
+            else
+            {
+                Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+            }
         });
 
 

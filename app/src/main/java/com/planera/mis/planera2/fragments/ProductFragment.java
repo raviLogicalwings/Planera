@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.planera.mis.planera2.models.Brands;
 import com.planera.mis.planera2.models.BrandsListResponse;
 import com.planera.mis.planera2.models.MainResponse;
 import com.planera.mis.planera2.utils.AppConstants;
+import com.planera.mis.planera2.utils.InternetConnection;
 
 import java.util.List;
 
@@ -65,7 +67,13 @@ public class ProductFragment extends BaseFragment implements EditProductDialog.O
         super.initData();
         apiInterface = ApiClient.getInstance();
         if (token != null) {
-            getProductsListApi(token);
+            if (InternetConnection.isNetworkAvailable(mContext)){
+                getProductsListApi(token);
+            }
+            else
+            {
+                Snackbar.make(rootView, R.string.no_internet, Snackbar.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -150,8 +158,14 @@ public class ProductFragment extends BaseFragment implements EditProductDialog.O
                 if (response != null) {
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
                         Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
-//                        refreshFragment(ProductFragment.this);
-                        getProductsListApi(token);
+//
+                        if (InternetConnection.isNetworkAvailable(mContext)){
+                            getProductsListApi(token);
+                        }
+                        else
+                        {
+                            Snackbar.make(rootView, R.string.no_internet, Snackbar.LENGTH_LONG).show();
+                        }
                     } else {
                         Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
 
@@ -200,8 +214,19 @@ public class ProductFragment extends BaseFragment implements EditProductDialog.O
         alertDialog.setMessage("Are you sure you want to delete this?");
 
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", (dialogInterface, i) -> {
+
             dialogInterface.cancel();
-            deleteProductApi(token, productId );
+
+            if (InternetConnection.isNetworkAvailable(mContext))
+            {
+                deleteProductApi(token, productId );
+            }
+            else
+            {
+                Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+            }
+
+
         });
 
 
