@@ -60,12 +60,26 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
     private EditText textDoctorPinCode;
     protected Button buttonAddDoctor;
     private String dateOfBirthString;
-    int meetTime;
-    int meetFreq;
-    int patchId;
-    int doctorId;
-    String firstNameStr, middleNameStr, lastNameStr, emailStr, dobStr, qualificationStr, specializationStr, phoneStr,
-            address1Str, address2Str, address3Str, address4Str, districtStr, cityStr, stateStr, pincodeStr;
+    private int meetTime;
+    private int meetFreq;
+    private int patchId;
+    private int doctorId;
+    private String firstNameStr;
+    private String middleNameStr;
+    private String lastNameStr;
+    private String emailStr;
+    private String dobStr;
+    private String qualificationStr;
+    private String specializationStr;
+    private String phoneStr;
+    private String address1Str;
+    private String address2Str;
+    private String address3Str;
+    private String address4Str;
+    private String districtStr;
+    private String cityStr;
+    private String stateStr;
+    private String pinCodeStr;
     private String previousPatchId;
 
     @Override
@@ -212,7 +226,7 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
         districtStr = textDoctorDistrict.getText().toString().trim();
         stateStr = textDoctorState.getText().toString().trim();
         cityStr = textDoctorCity.getText().toString().trim();
-        pincodeStr = textDoctorPinCode.getText().toString().trim();
+        pinCodeStr = textDoctorPinCode.getText().toString().trim();
         dobStr = textDoctorDob.getText().toString().trim();
 
 
@@ -295,7 +309,7 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
             doctors.setDistrict(districtStr);
             doctors.setQualifications(qualificationStr);
             doctors.setSpecializations(specializationStr);
-            doctors.setPincode(pincodeStr);
+            doctors.setPincode(pinCodeStr);
             doctors.setState(stateStr);
             doctors.setPatchId(patchId + "");
             doctors.setStatus("1");
@@ -303,7 +317,7 @@ public class ActivityUpdateDoctor extends BaseActivity implements View.OnClickLi
 
             if (InternetConnection.isNetworkAvailable(ActivityUpdateDoctor.this)) {
 
-                getAddressLatLong(address1Str + ", " + pincodeStr);
+                getAddressLatLong(address1Str + ", " + pinCodeStr);
 
             } else {
                 Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();

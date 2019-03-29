@@ -50,6 +50,11 @@ public class PlanListAdapter  extends RecyclerView.Adapter<PlanListAdapter.MyPla
         }
     }
 
+    public void updateList(List<AdminPlan> plansList) {
+        this.plansList = plansList;
+        notifyDataSetChanged();
+    }
+
     public class MyPlansHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView textPlanPatchName;
         private TextView textPlanTerritoryName;

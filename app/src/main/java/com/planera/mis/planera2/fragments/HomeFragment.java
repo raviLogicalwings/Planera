@@ -42,9 +42,11 @@ import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.Retrofit.ApiClient;
 import com.planera.mis.planera2.Retrofit.ApiInterface;
 import com.planera.mis.planera2.activities.AddInputActivity;
+import com.planera.mis.planera2.activities.MainActivity;
 import com.planera.mis.planera2.activities.ProductCategoryActivity;
 import com.planera.mis.planera2.adapters.VisitsAdapter;
 import com.planera.mis.planera2.models.AMs;
+import com.planera.mis.planera2.models.AdminPlan;
 import com.planera.mis.planera2.models.MRs;
 import com.planera.mis.planera2.models.UserPlan;
 import com.planera.mis.planera2.models.UserPlanListRespnce;
@@ -70,7 +72,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks,
         LocationListener, UsersListDialog.OnSelectUserListener,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener ,
+        MainActivity.OnSearchQueryListener {
 
 
     private final static int REQUEST_CHECK_SETTINGS_GPS = 0x1;
@@ -86,12 +89,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
     private List<MRs> jointUserList;
     private List<UserPlan> plansList;
+    private List<UserPlan> tempPlanList;
 
 
     private ApiInterface apiInterface;
     public  HomeFragment instance;
     private VisitsAdapter adapter;
     private UsersListDialog.OnSelectUserListener listener;
+    private MainActivity.OnSearchQueryListener searchQueryListener;
     private GoogleApiClient googleApiClient;
     private Location mLocation;
     private LocationRequest mLocationRequest;
@@ -141,6 +146,18 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        try {
+            ((MainActivity) getActivity()).setSearchQueryListener(this);
+
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Calling Fragment must implement OnAddFriendListener");
+        }
     }
 
     public void getAllPlansList(String token) {
@@ -460,10 +477,31 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
     }
 
+    private void filter(String s) {
+        tempPlanList = new ArrayList<>();
+
+        for(UserPlan up : plansList){
+            if ((up.getDoctorFirstName()
+                    + " " +up.getDoctorMiddleName() + " " +
+                    up.getDoctorLastName()).toLowerCase().contains(s.toLowerCase())){
+                tempPlanList.add(up);
+            }
+
+            adapter.updateList(tempPlanList);
+
+        }
+
+    }
+
     // TODO: Update argument type and name
     @Override
     public void onRefresh() {
     getAllPlansList(token);
+    }
+
+    @Override
+    public void onSearchQuery(String query) {
+        filter(query);
     }
 
     public interface OnFragmentInteractionListener {

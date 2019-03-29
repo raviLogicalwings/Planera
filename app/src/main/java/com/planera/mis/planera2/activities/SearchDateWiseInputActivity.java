@@ -1,5 +1,6 @@
 package com.planera.mis.planera2.activities;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -129,8 +130,8 @@ public class SearchDateWiseInputActivity extends BaseActivity implements View.On
 
     public String formatDate(String date){
 
-        SimpleDateFormat sdf = new SimpleDateFormat(DD_MM_YY);
-        SimpleDateFormat dateFormat = new SimpleDateFormat(HH_MM_SS);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat(DD_MM_YY);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat(HH_MM_SS);
         Date data = null;
         try {
             data = sdf.parse(date);

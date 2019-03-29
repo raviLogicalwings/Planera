@@ -124,6 +124,11 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
 
     }
 
+    public void updateList(List<UserPlan> planList) {
+        this.planList = planList;
+        notifyDataSetChanged();
+    }
+
 
     class VisitItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView textNameFirstLetter;
@@ -150,7 +155,6 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitItemH
             buttonCheckIn = itemView.findViewById(R.id.button_check_in);
             textDistance = itemView.findViewById(R.id.text_distance);
             imageCurrentLocationStatus = itemView.findViewById(R.id.image_current_location_status);
-            imageJointSuccess = itemView.findViewById(R.id.icon_joint_success);
             textJointworking = itemView.findViewById(R.id.text_joint);
             layoutIsJoint = itemView.findViewById(R.id.layout_is_joint);
             imageCurrentLocationStatus.setOnClickListener(this);

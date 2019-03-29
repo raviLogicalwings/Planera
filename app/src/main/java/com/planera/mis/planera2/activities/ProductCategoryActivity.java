@@ -253,7 +253,7 @@ public class ProductCategoryActivity extends BaseActivity implements View.OnClic
 
 
     public void apiUpdateMrInput(String token, Input input){
-        Log.e("Update Input", new Gson().toJson(input));
+//        Log.e("Update Input", new Gson().toJson(input));
         processDialog.showDialog(ProductCategoryActivity.this, false);
         Call<MainResponse> call = apiInterface.updateMrInput(token, input);
         call.enqueue(new Callback<MainResponse>() {

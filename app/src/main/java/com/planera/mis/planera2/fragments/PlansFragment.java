@@ -2,7 +2,6 @@ package com.planera.mis.planera2.fragments;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -15,38 +14,42 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.Retrofit.ApiClient;
 import com.planera.mis.planera2.Retrofit.ApiInterface;
-import com.planera.mis.planera2.activities.ActivityUpdatePlan;
 import com.planera.mis.planera2.adapters.PlanListAdapter;
 import com.planera.mis.planera2.models.AdminPlan;
 import com.planera.mis.planera2.models.AdminPlanResponse;
 import com.planera.mis.planera2.models.MainResponse;
-import com.planera.mis.planera2.models.Plans;
-import com.planera.mis.planera2.models.PlansListResponce;
 import com.planera.mis.planera2.utils.AppConstants;
 import com.planera.mis.planera2.utils.InternetConnection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.content.ContentValues.TAG;
-
-public class PlansFragment extends BaseFragment{
+public class PlansFragment extends BaseFragment implements SearchView.OnQueryTextListener{
     public static PlansFragment instance;
     private View view;
-    private ApiInterface apiInterface;
-    private List<AdminPlan> plansList = null;
     private RecyclerView listViewPlans;
-    private int selectedPlan;
-    private LinearLayout linearNoData, linearNoInternet;
     private Button buttonRetry;
+    private LinearLayout linearNoData;
+    private LinearLayout linearNoInternet;
+    private SearchView serchViewPlans;
+
+    private List<AdminPlan> plansList = null;
+    private List<AdminPlan> tempPlanList;
+
+    private ApiInterface apiInterface;
+    private PlanListAdapter adapter;
+
+    private int selectedPlan;
 
     public PlansFragment() {
 
@@ -97,8 +100,16 @@ public class PlansFragment extends BaseFragment{
         listViewPlans = view.findViewById(R.id.list_plans);
         linearNoData = view.findViewById(R.id.linear_no_data);
         linearNoInternet = view.findViewById(R.id.linear_no_internet);
+        serchViewPlans = view.findViewById(R.id.search_view_plans);
         buttonRetry = view.findViewById(R.id.button_retry);
 
+
+        serchViewPlans.setActivated(true);
+        serchViewPlans.onActionViewExpanded();
+        serchViewPlans.setIconified(false);
+        serchViewPlans.clearFocus();
+
+        serchViewPlans.setOnQueryTextListener(this);
         buttonRetry.setOnClickListener(v -> {
             if (getFragmentManager() != null) {
                 getFragmentManager().beginTransaction().detach(PlansFragment.this).attach(PlansFragment.this).commit();
@@ -137,7 +148,7 @@ public class PlansFragment extends BaseFragment{
 
     public void initAdapter(List<AdminPlan> plansData, RecyclerView recyclerView) {
 
-        PlanListAdapter adapter;
+
         adapter = new PlanListAdapter(getContext(), plansData, (postion, view) -> {
             switch (view.getId()) {
                 case R.id.img_plan_delete:
@@ -182,13 +193,13 @@ public class PlansFragment extends BaseFragment{
     }
 
     public void deletePlanApi(String token , int patchId){
+        Log.e("Delete By patch", patchId+"");
         processDialog.showDialog(mContext, false);
         Call<MainResponse> call = apiInterface.deletePlan(token, patchId);
         call.enqueue(new Callback<MainResponse>() {
             @Override
             public void onResponse(@NonNull Call<MainResponse> call, @NonNull Response<MainResponse> response) {
                 processDialog.dismissDialog();
-                Log.e(TAG, "onResponse: "+ new Gson().toJson(response.body()));
                 if (response.isSuccessful()){
                     assert response.body() != null;
                     if (response.body().getStatusCode() == AppConstants.RESULT_OK){
@@ -256,6 +267,32 @@ public class PlansFragment extends BaseFragment{
     }
 
 
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        filter(s);
+        return false;
+    }
 
+    @Override
+    public boolean onQueryTextChange(String s) {
+        filter(s);
+        return false;
+    }
 
+    private void filter(String s) {
+        tempPlanList = new ArrayList<>();
+
+        for(AdminPlan ap : plansList){
+            if (ap.getPatchName().toLowerCase().contains(s.toLowerCase())){
+                tempPlanList.add(ap);
+            }
+            if (ap.getUserName().toLowerCase().contains(s.toLowerCase())){
+                tempPlanList.add(ap);
+            }
+
+            adapter.updateList(tempPlanList);
+
+        }
+
+    }
 }

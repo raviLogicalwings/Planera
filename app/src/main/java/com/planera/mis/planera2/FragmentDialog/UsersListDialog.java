@@ -5,13 +5,16 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.planera.mis.planera2.R;
@@ -27,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+import info.hoang8f.android.segmented.SegmentedGroup;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,15 +38,22 @@ import retrofit2.Response;
 import static com.planera.mis.planera2.utils.AppConstants.JOINT_WORKING;
 import static com.planera.mis.planera2.utils.AppConstants.PATCH_ID;
 
-public class UsersListDialog extends BaseDialogFragment implements View.OnClickListener {
+public class UsersListDialog extends BaseDialogFragment implements View.OnClickListener,
+        RadioGroup.OnCheckedChangeListener {
 
     private View view;
     protected RecyclerView recyclerViewUsers;
     protected RecyclerView recyclerViewAreaManager;
-    protected Button buttonSelectJoint;
+    protected FloatingActionButton buttonSelectJoint;
+    private ScrollView scrollMR;
+    private ScrollView scrollAreaManager;
+    private SegmentedGroup segmentedGroup;
+    private RadioButton rbMr;
+    private RadioButton rbAM;
 
     private AreaManagersAdapter areaManagersAdapter;
     private UserListPatchesAdapter adapterMr;
+
 
     private List<MRs> mRsList;
     private List<AMs> listAM;
@@ -102,7 +113,9 @@ public class UsersListDialog extends BaseDialogFragment implements View.OnClickL
         switch (view.getId()){
             case R.id.button_select:
                 if (selectedMrPos != -1){
-                    jointMembersList.add(mRsList.get(selectedMrPos));
+                    if (mRsList != null) {
+                        jointMembersList.add(mRsList.get(selectedMrPos));
+                    }
                 }
                 if (selectedAMPos != -1 && listAM != null && listAM.size()>0)
                 {
@@ -171,10 +184,19 @@ public class UsersListDialog extends BaseDialogFragment implements View.OnClickL
         recyclerViewUsers = view.findViewById(R.id.recycler_view_users);
         recyclerViewAreaManager = view.findViewById(R.id.recycler_view_area_managers);
         buttonSelectJoint = view.findViewById(R.id.button_select);
+        scrollMR = view.findViewById(R.id.layout_mr);
+        scrollAreaManager = view.findViewById(R.id.layout_area_manager);
+        segmentedGroup = view.findViewById(R.id.segmented2);
+        rbMr = view.findViewById(R.id.rb_mr);
+        rbAM = view.findViewById(R.id.rb_am);
+
+        rbMr.setChecked(true);
+        segmentedGroup.setOnCheckedChangeListener(this);
+
         buttonSelectJoint.setOnClickListener(this);
 
         /**
-         * set adapter to recyclerview
+         * set adapter to recyclerView
          * */
         areaManagersAdapter = new AreaManagersAdapter(mContext, position -> selectedAMPos = position);
         adapterMr = new UserListPatchesAdapter(mContext, pos -> selectedMrPos = pos);
@@ -208,7 +230,7 @@ public class UsersListDialog extends BaseDialogFragment implements View.OnClickL
     public void getUserListForJointWorking(String token, int patchId)
     {
 
-        Call<RoleWiseUsersResponse> call = apiInterface.userListByPathches(token, patchId);
+        Call<RoleWiseUsersResponse> call = apiInterface.userListByPatches(token, patchId);
         call.enqueue(new Callback<RoleWiseUsersResponse>() {
 
             @Override
@@ -234,6 +256,21 @@ public class UsersListDialog extends BaseDialogFragment implements View.OnClickL
                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+        switch (i){
+            case R.id.rb_mr:
+                scrollMR.setVisibility(View.VISIBLE);
+                scrollAreaManager.setVisibility(View.GONE);
+                break;
+            case R.id.rb_am:
+                scrollMR.setVisibility(View.GONE);
+                scrollAreaManager.setVisibility(View.VISIBLE);
+                break;
+        }
 
     }
 

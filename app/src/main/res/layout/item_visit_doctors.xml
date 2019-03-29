@@ -129,13 +129,6 @@
                      />
 
 
-                    <ImageView
-                        android:id="@+id/icon_joint_success"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_correct_icon"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_check_white_24dp"/>
 
 
                 </LinearLayout>

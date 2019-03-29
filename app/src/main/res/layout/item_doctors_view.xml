@@ -9,97 +9,104 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:weightSum="3"
         android:layout_width="match_parent"
-        android:orientation="horizontal"
         android:layout_height="match_parent"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:weightSum="3">
 
         <LinearLayout
-            android:padding="@dimen/layout_margin_top"
-            android:layout_marginLeft="@dimen/layout_margin_top"
-            android:orientation="vertical"
             android:layout_width="0dp"
-            android:layout_weight="2.2"
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/layout_margin_top">
+            android:layout_marginStart="@dimen/layout_margin_top"
+            android:layout_marginLeft="@dimen/layout_margin_top"
+            android:layout_weight="2.2"
+            android:orientation="vertical"
+            android:padding="@dimen/layout_margin_top">
+
 
             <TextView
                 android:id="@+id/text_doctor_name"
-                android:layout_width="match_parent"
-                android:text="@string/john_deo"
                 style="@style/LargeTextBlack"
-                android:layout_height="wrap_content" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/john_deo"
+                android:maxLines="1"
+                android:ellipsize="end"/>
 
             <TextView
                 android:id="@+id/text_doctor_email"
                 style="@style/NormalTextBlack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/john_deo123_gmail_com"/>
+                android:text="@string/john_deo123_gmail_com" />
 
             <TextView
                 android:id="@+id/text_doctor_contact"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/_9669893930"/>
+                android:text="@string/_9669893930" />
 
-            <TextView
-                android:id="@+id/text_qualification"
-                style="@style/NormalText"
-                android:text="@string/mbbs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/text_qualification"
+                    style="@style/NormalText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mbbs" />
+                <TextView
+                    android:id="@+id/text_patch_name_doctors"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dimen_4dp"
+                    android:background="@drawable/bg_green_joint"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="patchId"
+                    android:layout_alignParentEnd="true"
+                    android:padding="@dimen/dimen_4dp"
+                    android:textColor="@color/colorWhite"
+                    android:layout_alignParentRight="true" />
 
-            <TextView
-                android:id="@+id/text_patch_name_doctors"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dimen_4dp"
-                android:background="@drawable/bg_green_joint"
-                android:gravity="center"
-                android:textColor="@color/colorWhite"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:padding="@dimen/dimen_4dp"
-                android:text="patchId" />
+            </RelativeLayout>
+
+
 
         </LinearLayout>
 
 
-
         <LinearLayout
-            android:orientation="vertical"
-            android:padding="@dimen/layout_margin_top"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight=".8"
-            android:layout_height="wrap_content">
-
-
+            android:orientation="vertical"
+            android:padding="@dimen/layout_margin_top">
 
 
             <ImageView
                 android:id="@+id/img_doctor_delete"
-                android:padding="8dp"
-                android:layout_gravity="center_horizontal"
-                app:srcCompat="@drawable/icon_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/todo"
+                android:padding="8dp"
+                app:srcCompat="@drawable/icon_delete"
                 tools:ignore="VectorDrawableCompat" />
 
             <ImageView
                 android:id="@+id/img_doctor_edit"
-                android:padding="8dp"
-                android:layout_gravity="center_horizontal"
-                app:srcCompat="@drawable/icon_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/todo"
+                android:padding="8dp"
+                app:srcCompat="@drawable/icon_edit"
                 tools:ignore="VectorDrawableCompat" />
 
         </LinearLayout>
-
 
 
     </LinearLayout>

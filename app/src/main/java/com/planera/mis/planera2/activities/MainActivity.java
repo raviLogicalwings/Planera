@@ -9,10 +9,14 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.fragments.HomeFragment;
@@ -23,13 +27,17 @@ import com.planera.mis.planera2.utils.InternetConnection;
 
 import java.util.Objects;
 
+import es.dmoral.toasty.Toasty;
+
 public class MainActivity extends BaseActivity implements
-        View.OnClickListener {
+        SearchView.OnQueryTextListener {
 
     private ImageView imageAddPlan;
     private BottomNavigationView navigation;
     private Toolbar toolbarProduct;
     private Fragment fragment;
+    private SearchView searchView;
+    private OnSearchQueryListener searchQueryListener;
 
     private AppBarLayout appBar;
     public FragmentManager manager;
@@ -74,6 +82,32 @@ public class MainActivity extends BaseActivity implements
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+       getMenuInflater().inflate(R.menu.main_menu, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        searchView = (SearchView) item.getActionView();
+
+        searchView.setOnQueryTextListener(this);
+       return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_add:
+                if (InternetConnection.isNetworkAvailable(MainActivity.this)) {
+                    intent = new Intent(MainActivity.this, ActivityUserPlanCreate.class);
+                    startActivity(intent);
+                } else {
+                    Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_SHORT).show();
+                }
+                break;
+
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onBackPressed() {
@@ -108,14 +142,12 @@ public class MainActivity extends BaseActivity implements
     public void initUi() {
         super.initUi();
         navigation = findViewById(R.id.navigation);
-        imageAddPlan = findViewById(R.id.img_action_add);
         toolbarProduct = findViewById(R.id.toolbarProduct);
         appBar = findViewById(R.id.appBar);
 
 
         setSupportActionBar(toolbarProduct);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Visit Plan");
-        imageAddPlan.setOnClickListener(this);
         BottomNavigationViewHelper.removeShiftMode(navigation);
 
     }
@@ -156,17 +188,23 @@ public class MainActivity extends BaseActivity implements
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.img_action_add:
-                if (InternetConnection.isNetworkAvailable(MainActivity.this)) {
-                    intent = new Intent(MainActivity.this, ActivityUserPlanCreate.class);
-                    startActivity(intent);
-                } else {
-                    Snackbar.make(rootView, getString(R.string.no_internet), Snackbar.LENGTH_SHORT).show();
-                }
-                break;
-        }
+    public boolean onQueryTextSubmit(String query) {
+        searchQueryListener.onSearchQuery(query);
+        return false;
     }
 
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        searchQueryListener.onSearchQuery(newText);
+        return false;
+    }
+
+
+    public void setSearchQueryListener(OnSearchQueryListener searchQueryListener)
+    {
+        this.searchQueryListener =searchQueryListener;
+    }
+    public interface OnSearchQueryListener{
+        void onSearchQuery(String query);
+    }
 }

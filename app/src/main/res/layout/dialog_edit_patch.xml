@@ -2,17 +2,20 @@
     style="@style/BaseMargin"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
 
-        <TextView
-            android:layout_marginTop="@dimen/layout_margin_top"
-            android:padding="5dp"
-            android:layout_width="wrap_content"
-            android:id="@+id/text_territory_patch"
-            android:text="Ahmedabad"
-            style="@style/MediumTextBlack"
-            android:textColor="@color/colorGray"
-            android:layout_height="wrap_content" />
+
+
+    <Spinner
+        android:id="@+id/spinner_territory_update_patch"
+        android:layout_margin="@dimen/dimen_14dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:soundEffectsEnabled="true"
+        />
+
+
 
         <android.support.design.widget.TextInputLayout
             android:padding="5dp"

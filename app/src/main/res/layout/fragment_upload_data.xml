@@ -31,7 +31,9 @@
         android:layout_width="match_parent"
         android:id="@+id/card_upload_doctor"
         style="@style/material_card_style"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:clickable="true"
+        android:focusable="true">
 
         <LinearLayout
             android:gravity="center_vertical"
@@ -135,7 +137,9 @@
         android:id="@+id/card_email_content"
         style="@style/material_card_style"
         android:layout_marginBottom="@dimen/standerd_top_margin"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clickable= "true"
+        android:focusable="true">
 
         <LinearLayout
             android:padding="@dimen/layout_margin_top"

@@ -22,7 +22,6 @@ import com.planera.mis.planera2.models.MainResponse;
 import com.planera.mis.planera2.models.ObtainReport;
 import com.planera.mis.planera2.models.PatchListResponse;
 import com.planera.mis.planera2.models.Plans;
-import com.planera.mis.planera2.models.PlansListResponce;
 import com.planera.mis.planera2.models.RegistrationResponse;
 import com.planera.mis.planera2.models.ReportListResponce;
 import com.planera.mis.planera2.models.RoleWiseUsersResponse;
@@ -34,14 +33,10 @@ import com.planera.mis.planera2.models.UserListResponse;
 import com.planera.mis.planera2.models.UserPlanListRespnce;
 import com.planera.mis.planera2.utils.AppConstants;
 
-import org.apache.log4j.chainsaw.Main;
-
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -104,7 +99,7 @@ public interface ApiInterface {
     Call<UserListResponse> usersList(@Header("Authorization") String token);
 
     @GET(AppConstants.USER_LIST_BY_PATCHES)
-    Call<RoleWiseUsersResponse> userListByPathches(@Header("Authorization") String token, @Query("PatchId") int patchId);
+    Call<RoleWiseUsersResponse> userListByPatches(@Header("Authorization") String token, @Query("PatchId") int patchId);
 
 
     @GET(AppConstants.PLAN_LIST)
@@ -242,34 +237,34 @@ public interface ApiInterface {
                                         @Query("Name") String name);
 
     @POST(AppConstants.UPDATE_CHEMIST)
-    Call<MainResponse> updateChemist (@Header("Authorization") String token,
+    Call<MainResponse> updateChemist(@Header("Authorization") String token,
                                      @Body Chemists chemists);
 
     @POST(AppConstants.UPDATE_USER)
-    Call<MainResponse> updateUserDetails (@Header("Authorization")String token,
+    Call<MainResponse> updateUserDetails(@Header("Authorization")String token,
                                          @Body UserData userData);
 
     @POST(AppConstants.UPDATE_PLAN)
-    Call<MainResponse>  updatePlanDetails (@Header("Authorization") String token,
+    Call<MainResponse>  updatePlanDetails(@Header("Authorization") String token,
                                           @Body Plans plans);
 
     @POST(AppConstants.UPDATE_MR_INPUT)
-    Call<MainResponse> updateMrInput (@Header("Authorization") String token, @Body Input input);
+    Call<MainResponse> updateMrInput(@Header("Authorization") String token, @Body Input input);
 
 
     @POST(AppConstants.IMPORT_DOCTORS_DATA)
-    Call<MainResponse> importDoctorFromExcel (@Header("Authorization") String token,
+    Call<MainResponse> importDoctorFromExcel(@Header("Authorization") String token,
                                               @Body DoctorImport doctorImport);
 
     @POST(AppConstants.IMPORT_CHEMIST_DATA)
-    Call<MainResponse> importChemistFromExcel (@Header("Authorization") String token,
+    Call<MainResponse> importChemistFromExcel(@Header("Authorization") String token,
                                                @Body ChemistImport chemistImports);
     @POST(AppConstants.IMPORT_USER_DATA)
-    Call<MainResponse> importDoctorFromExcel (@Header("Authorization") String token,
+    Call<MainResponse> importDoctorFromExcel(@Header("Authorization") String token,
                                               @Body UserImport userImport);
 
     @POST(AppConstants.SEND_TO_EMAIL)
-    Call<MainResponse> sendFileToEmail (@Header("Authorization") String token, @Body ObtainReport obtainReport);
+    Call<MainResponse> sendFileToEmail(@Header("Authorization") String token, @Body ObtainReport obtainReport);
     //Google  Places api Call
     @GET(AppConstants.FIND_PALCE)
     Call<GooglePlaces> getPlaceLatLong(@Query("input") String input,

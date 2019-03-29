@@ -123,16 +123,16 @@ public class DoctorsFragment extends BaseFragment implements SearchView.OnQueryT
             public void onResponse(Call<DoctorsListResponce> call, Response<DoctorsListResponce> response) {
                 processDialog.dismissDialog();
                 Log.e(TAG, "onResponse: " + new Gson().toJson(response.body()));
-                if (response.body().getStatusCode() == AppConstants.RESULT_OK) {
+                if (response.body().getStatusCode() != AppConstants.RESULT_OK) {
+                    linearNoData.setVisibility(View.VISIBLE);
+                    visibleLayout.setVisibility(View.GONE);
+                } else {
                     doctorsList = response.body().getData();
                     if (doctorsList != null) {
                         visibleLayout.setVisibility(View.VISIBLE);
                         System.out.println(doctorsList.size());
                         initAdapter(doctorsList, listViewDoctors);
                     }
-                } else {
-                    linearNoData.setVisibility(View.VISIBLE);
-                    visibleLayout.setVisibility(View.GONE);
                 }
 
             }
@@ -293,6 +293,7 @@ public class DoctorsFragment extends BaseFragment implements SearchView.OnQueryT
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        filter(query);
         return false;
     }
 

@@ -14,12 +14,14 @@
 
     <TextView
         android:id="@+id/text_user_name_joint"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/radio_joint_user"
         android:layout_centerInParent="true"
-        android:textSize="@dimen/large_text_size"
-        android:text="@string/dr_aman_kashyap" />
+        android:textSize="@dimen/normal_text_size"
+        android:text="@string/dr_aman_kashyap"
+        android:ellipsize="end"
+        android:maxLines="1"/>
 
 
     <View

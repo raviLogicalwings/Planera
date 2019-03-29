@@ -4,6 +4,7 @@ package com.planera.mis.planera2.FragmentDialog.editDialogs;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,31 +12,45 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.planera.mis.planera2.R;
 import com.planera.mis.planera2.FragmentDialog.BaseDialogFragment;
+import com.planera.mis.planera2.adapters.CustomSpinnerPatchAdapter;
 import com.planera.mis.planera2.models.MainResponse;
+import com.planera.mis.planera2.models.Territories;
+import com.planera.mis.planera2.models.TerritoryListResponse;
 import com.planera.mis.planera2.utils.AppConstants;
 import com.planera.mis.planera2.utils.InternetConnection;
+
+import java.util.List;
+import java.util.Objects;
 
 import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EditPatchDialog extends BaseDialogFragment implements View.OnClickListener{
+public class EditPatchDialog extends BaseDialogFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     private static final String TAG = EditPatchDialog.class.getSimpleName() ;
-    private View view;
     public OnDismissEditPatchDialogListener listener;
+
+
+    private View view;
     private TextInputLayout inputLayoutUserName;
     private EditText editTextName;
-    private TextView textTerritoryPatch;
     private Button buttonUpdatePatch;
+    private Spinner spinnerTerritory;
+
+    private List<Territories> territoryList;
+    private CustomSpinnerPatchAdapter spinnerPatchAdapter;
+
     private int patchId;
     private int territoryId ;
     private String patchName;
@@ -66,7 +81,7 @@ public class EditPatchDialog extends BaseDialogFragment implements View.OnClickL
         }
     }
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.dialog_edit_patch, container, false);
         initUi();
         initData();
@@ -123,7 +138,7 @@ public class EditPatchDialog extends BaseDialogFragment implements View.OnClickL
             }
 
             @Override
-            public void onFailure(Call<MainResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MainResponse> call, Throwable t) {
                 processDialog.dismissDialog();
                 Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_LONG).show();
 
@@ -131,14 +146,46 @@ public class EditPatchDialog extends BaseDialogFragment implements View.OnClickL
         });
     }
 
+
+    public void getTerritoryList(String token) {
+        processDialog.showDialog(mContext, false);
+        Call<TerritoryListResponse> call = apiInterface.territoryList(token);
+        call.enqueue(new Callback<TerritoryListResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<TerritoryListResponse> call, @NonNull Response<TerritoryListResponse> response) {
+                processDialog.dismissDialog();
+                if (Objects.requireNonNull(response.body()).getStatusCode() == AppConstants.RESULT_OK) {
+                    territoryList = Objects.requireNonNull(response.body()).getTerritorysList();
+                    spinnerPatchAdapter = new CustomSpinnerPatchAdapter(mContext, territoryList);
+                    spinnerTerritory.setAdapter(spinnerPatchAdapter);
+                    for (int i = 0 ; i< territoryList.size(); i++)
+                    {
+                        if (territoryList.get(i).getTerritoryId() == territoryId){
+                            spinnerTerritory.setSelection(i);
+                        }
+                    }
+
+                } else {
+                    Toast.makeText(mContext, Objects.requireNonNull(response.body()).getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<TerritoryListResponse> call, Throwable t) {
+                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     @Override
     protected void initUi() {
         super.initUi();
-        textTerritoryPatch = view.findViewById(R.id.text_territory_patch);
         inputLayoutUserName = view.findViewById(R.id.input_layout_user_name);
         editTextName = view.findViewById(R.id.edit_text_name);
         buttonUpdatePatch = view.findViewById(R.id.button_update_patch);
-        textTerritoryPatch.setVisibility(View.GONE);
+        spinnerTerritory = view.findViewById(R.id.spinner_territory_update_patch);
+
+        spinnerTerritory.setOnItemSelectedListener(this);
 
         buttonUpdatePatch.setOnClickListener(this);
 
@@ -156,6 +203,9 @@ public class EditPatchDialog extends BaseDialogFragment implements View.OnClickL
             editTextName.setText(patchName);
             editTextName.setSelection(editTextName.getText().length());
         }
+        if (InternetConnection.isNetworkAvailable(mContext)){
+            getTerritoryList(token);
+        }
 
 
     }
@@ -167,6 +217,16 @@ public class EditPatchDialog extends BaseDialogFragment implements View.OnClickL
                 uiValidation();
                 break;
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        territoryId = territoryList.get(i).getTerritoryId();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 
     public interface OnDismissEditPatchDialogListener {

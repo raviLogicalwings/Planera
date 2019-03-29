@@ -1,66 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:weightSum="2"
     android:padding="@dimen/dimen_4dp">
 
-    <LinearLayout
-        android:id="@+id/layout_medical_rep_s"
+    <info.hoang8f.android.segmented.SegmentedGroup
+        xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/segmented2"
         android:layout_width="match_parent"
-        android:layout_weight="0.8"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        >
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:weightSum="2"
+        android:orientation="horizontal"
+        segmentedgroup:sc_border_width="2dp"
+        segmentedgroup:sc_corner_radius="10dp">
 
-        <TextView
-
-            android:layout_width="wrap_content"
+        <RadioButton
+            android:id="@+id/rb_mr"
+            style="@style/RadioButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="@dimen/large_text_size"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Select MR"
-            style="@style/LargeTextBold"
-            android:layout_margin="@dimen/dimen_4dp"/>
+            android:text="Medical Representative" />
+
+        <RadioButton
+            android:id="@+id/rb_am"
+            style="@style/RadioButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="@dimen/large_text_size"
+
+            android:text="Area Manager" />
+    </info.hoang8f.android.segmented.SegmentedGroup>
+
+
 
         <ScrollView
+            android:id="@+id/layout_mr"
+            android:layout_below="@id/segmented2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view_users"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             tools:listitem="@layout/items_joint_users">
 
         </android.support.v7.widget.RecyclerView>
         </ScrollView>
 
-    </LinearLayout>
 
 
-    <LinearLayout
-        android:id="@+id/layout_area_managers"
-        android:layout_width="match_parent"
-        android:layout_weight="0.8"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/dimen_10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/LargeTextBold"
-            android:gravity="center"
-            android:layout_margin="@dimen/dimen_4dp"
-            android:text="Select Area Manager" />
 
         <ScrollView
-
+            android:id="@+id/layout_area_manager"
+            android:layout_below="@id/segmented2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="gone">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view_area_managers"
@@ -71,19 +79,21 @@
 
         </android.support.v7.widget.RecyclerView>
         </ScrollView>
-    </LinearLayout>
 
-    <Button
+    <android.support.design.widget.FloatingActionButton
 
         android:id="@+id/button_select"
         style="@style/normalButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:text="Select"
+        android:layout_alignParentEnd="true"
+        app:fabSize="normal"
+        android:src="@drawable/ic_check_white_24dp"
+        app:layout_anchorGravity="bottom|end"
         android:layout_margin="@dimen/dimen_18dp"
-        />
+        android:text="Select"
+        android:layout_alignParentBottom="true"/>
 
-</LinearLayout>
+</RelativeLayout>
 
 

@@ -14,7 +14,7 @@
         <SearchView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:queryHint="Type doctor name...."
+            android:queryHint="search by doctor/patch name...."
             android:id="@+id/search_view_doctor"
             android:layout_above="@+id/list_doctors"/>
 

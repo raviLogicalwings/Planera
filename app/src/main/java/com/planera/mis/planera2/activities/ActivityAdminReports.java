@@ -69,7 +69,14 @@ public class ActivityAdminReports
         AdapterView.OnItemSelectedListener
 {
 
-    public static final int DEFAULT_SELECT_VALUE = 1;
+    private static final int DEFAULT_SELECT_VALUE = 1;
+    private static final String DATE_POST_FIX = " 23:59:59";
+    private static final String ZERO_STR = "0";
+    private static final String ONE_STR = "1";
+    private static final String TWO_STR = "2";
+    private static final String THREE_STR = "3";
+
+
 
     private Spinner spinnerRoleType;
     private EditText editStartTime;
@@ -229,15 +236,15 @@ public class ActivityAdminReports
         } else {
             if (InternetConnection.isNetworkAvailable(ActivityAdminReports.this)) {
                 obtainReport.setStartDate(strStartDate);
-                obtainReport.setEndDate(strEndDate);
+                obtainReport.setEndDate(strEndDate+ DATE_POST_FIX);
                 obtainReport.setEmailSendTo(strSendTo);
                 obtainReport.setIsJoint(isJointWorking);
-                if (selectedRole.equals("1")) {
+                if (selectedRole.equals(ONE_STR)) {
                     if (doctorsList != null) {
                         String doctorId = doctorsList.get(spinnerDoctorReport.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getDoctorId() + "";
                         obtainReport.setDoctorId(doctorId);
-                        obtainReport.setChemistId("0");
-                        obtainReport.setUserId("0");
+                        obtainReport.setChemistId(ZERO_STR);
+                        obtainReport.setUserId(ZERO_STR);
                         if (InternetConnection.isNetworkAvailable(ActivityAdminReports.this)) {
                             getDoctorsReport(token, obtainReport);
                         } else {
@@ -246,11 +253,11 @@ public class ActivityAdminReports
                     }
                 }
 
-                if (selectedRole.equals("2")) {
+                if (selectedRole.equals(TWO_STR)) {
                     String chemistId = chemistsList.get(spinnerChemistReport.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getChemistId() + "";
                     obtainReport.setChemistId(chemistId);
-                    obtainReport.setUserId("0");
-                    obtainReport.setDoctorId("0");
+                    obtainReport.setUserId(ZERO_STR);
+                    obtainReport.setDoctorId(ZERO_STR);
                     if (InternetConnection.isNetworkAvailable(ActivityAdminReports.this)) {
                         getChemistReportList(token, obtainReport);
                     } else {
@@ -258,11 +265,11 @@ public class ActivityAdminReports
                     }
                 }
 
-                if (selectedRole.equals("3")) {
+                if (selectedRole.equals(THREE_STR)) {
                     String userId = usersList.get(spinnerUserReport.getSelectedItemPosition() - DEFAULT_SELECT_VALUE).getUserId();
                     obtainReport.setUserId(userId);
-                    obtainReport.setDoctorId("0");
-                    obtainReport.setChemistId("0");
+                    obtainReport.setDoctorId(ZERO_STR);
+                    obtainReport.setChemistId(ZERO_STR);
                     if (InternetConnection.isNetworkAvailable(ActivityAdminReports.this)) {
                         getUserReport(token, obtainReport);
                     } else {
@@ -625,7 +632,7 @@ public class ActivityAdminReports
                 }
 
                 @Override
-                public void onFailure(Call<ReportListResponce> call, Throwable t) {
+                public void onFailure(@NonNull Call<ReportListResponce> call, Throwable t) {
                     processDialog.dismissDialog();
                     Toast.makeText(ActivityAdminReports.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
